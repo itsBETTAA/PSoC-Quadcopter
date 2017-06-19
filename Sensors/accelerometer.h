@@ -1,6 +1,6 @@
 
-#ifndef FXOS8700_H
-#define FXOS8700_H
+#ifndef ACCELEROMETER_H
+#define ACCELEROMETER_H
 
 #include <stdint.h>
     

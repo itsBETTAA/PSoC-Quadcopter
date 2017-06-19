@@ -3,7 +3,7 @@
  * to support the PSoC Version of our project
 */
 
-#include "FXOS8700.h" /*include header files*/
+#include "accelerometer.h" /*include header files*/
 #include "twi.h"
 #include "project.h"
 
