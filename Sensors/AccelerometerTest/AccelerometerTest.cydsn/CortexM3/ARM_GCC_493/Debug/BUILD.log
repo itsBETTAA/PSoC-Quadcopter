@@ -1,0 +1,9 @@
+--------------- Build Started: 06/19/2017 13:04:11 Project: Design01, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+The code generation step is up to date.
+arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c main.c -o .\CortexM3\ARM_GCC_493\Debug\main.o
+main.c:16:27: fatal error: accelerometer.h: No such file or directory
+ #include "accelerometer.h"
+                           ^
+compilation terminated.
+The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
+--------------- Build Failed: 06/19/2017 13:04:11 ---------------

@@ -44,7 +44,7 @@ fxos8700RawData_t magnetic;     /*  values from last sensor read in (uTesla) */
 /**************************************************************************/
 
 
-void write8(byte Reg, byte value)
+void accel_write8(byte Reg, byte value)
 {
     
 //to write, you want to write 2 values: (1) The registeraddress you want to write to
@@ -54,13 +54,13 @@ void write8(byte Reg, byte value)
     Write_Buf[0] = (uint8_t)Reg;
     Write_Buf[1] = (uint8_t)value;
     
-    I2C_I2CMasterWriteBuf(FXOS8700_ADDRESS, (uint8 *)Write_Buf, 2, I2C_I2C_MODE_COMPLETE_XFER);
-    while((I2C_I2CMasterStatus() & I2C_I2C_MSTAT_WR_CMPLT)==0){}
+    I2C_MasterWriteBuf(FXOS8700_ADDRESS, (uint8 *)Write_Buf, 2, I2C_MODE_COMPLETE_XFER);
+    while((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT)==0){}
     
     return;                //return 1 if everything was successful
 }
 
-uint8_t read8(uint8_t Reg)
+uint8_t accel_read8(uint8_t Reg)
 {
     
 //to read:  (1)Write the register address you want to read from to the slave device 
@@ -71,11 +71,11 @@ uint8_t read8(uint8_t Reg)
     
     uint8 Read_Buf[1] = {0};
     
-    I2C_I2CMasterWriteBuf(FXOS8700_ADDRESS, (uint8 *)Write_Buf, 1, I2C_I2C_MODE_NO_STOP);
-    while((I2C_I2CMasterStatus() & I2C_I2C_MSTAT_WR_CMPLT) == 0){} //wait till Master status indicates that write is complete
-    
-    I2C_I2CMasterReadBuf(FXOS8700_ADDRESS, (uint8 *) Read_Buf, 1, I2C_I2C_MODE_REPEAT_START);
-    while((I2C_I2CMasterStatus() & I2C_I2C_MSTAT_RD_CMPLT)==0){}   //wait till Master status indicates read is complete
+    I2C_MasterWriteBuf(FXOS8700_ADDRESS, (uint8 *)Write_Buf, 1, I2C_MODE_NO_STOP);
+    while((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT) == 0){} //wait till Master status indicates that write is complete
+   
+    I2C_MasterReadBuf(FXOS8700_ADDRESS, (uint8 *) Read_Buf, 1, I2C_MODE_REPEAT_START);
+    while((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT)==0){}   //wait till Master status indicates read is complete
 
     return Read_Buf[0];
 }
@@ -86,7 +86,7 @@ uint8_t read8(uint8_t Reg)
 */
 /**************************************************************************/
 
-uint8_t FXOS8700_begin(fxos8700AccelRange_t rng){
+uint8_t accel_begin(fxos8700AccelRange_t rng){
     /* Enable I2C */
     Wire_begin();
     /* Set the range the an appropriate value */
@@ -102,43 +102,43 @@ uint8_t FXOS8700_begin(fxos8700AccelRange_t rng){
 
     /* Make sure we have the correct chip ID since this checks
      for correct address and that the IC is properly connected */
-    uint32_t id = read8(FXOS8700_REGISTER_WHO_AM_I);
+    uint32_t id = accel_read8(FXOS8700_REGISTER_WHO_AM_I);
     if (id != FXOS8700_ID)
     {
         return false;
     }
 
     /* Set to standby mode (required to make changes to this register) */
-    write8(FXOS8700_REGISTER_CTRL_REG1, 0);
+    accel_write8(FXOS8700_REGISTER_CTRL_REG1, 0);
 
     /* Configure the accelerometer */
     switch (_range)
     {
     case (ACCEL_RANGE_2G):
-        write8(FXOS8700_REGISTER_XYZ_DATA_CFG, 0x00);
+        accel_write8(FXOS8700_REGISTER_XYZ_DATA_CFG, 0x00);
         break;
     case (ACCEL_RANGE_4G):
-        write8(FXOS8700_REGISTER_XYZ_DATA_CFG, 0x01);
+        accel_write8(FXOS8700_REGISTER_XYZ_DATA_CFG, 0x01);
         break;
     case (ACCEL_RANGE_8G):
-        write8(FXOS8700_REGISTER_XYZ_DATA_CFG, 0x02);
+        accel_write8(FXOS8700_REGISTER_XYZ_DATA_CFG, 0x02);
         break;
     }
     /* High resolution */
-    write8(FXOS8700_REGISTER_CTRL_REG2, 0x02);
+    accel_write8(FXOS8700_REGISTER_CTRL_REG2, 0x02);
     /* Active, Normal Mode, Low Noise, 100Hz in Hybrid Mode */
-    write8(FXOS8700_REGISTER_CTRL_REG1, 0x15);
+    accel_write8(FXOS8700_REGISTER_CTRL_REG1, 0x15);
 
     /* Configure the magnetometer */
     /* Hybrid Mode, Over Sampling Rate = 16 */
-    write8(FXOS8700_REGISTER_MCTRL_REG1, 0x1F);
+    accel_write8(FXOS8700_REGISTER_MCTRL_REG1, 0x1F);
     /* Jump to reg 0x33 after reading 0x06 */
-    write8(FXOS8700_REGISTER_MCTRL_REG2, 0x20);
+    accel_write8(FXOS8700_REGISTER_MCTRL_REG2, 0x20);
 
     return true;
 }
 
-uint8_t FXOS8700_getData()
+uint8_t accel_getData()
 {
 
     /* Clear the raw data placeholder */
@@ -172,11 +172,11 @@ uint8_t FXOS8700_getData()
     
     uint8_t Read_Buf[14] = {0}; //create an array that will store the data read
     
-    I2C_I2CMasterWriteBuf(FXOS8700_ADDRESS, (uint8 *)Write_Buf, 1, I2C_I2C_MODE_NO_STOP);
-    while((I2C_I2CMasterStatus() & I2C_I2C_MSTAT_WR_CMPLT) == 0){} //wait till Master status indicates that write is complete
+    I2C_MasterWriteBuf(FXOS8700_ADDRESS, (uint8 *)Write_Buf, 1, I2C_MODE_NO_STOP);
+    while((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT) == 0){} //wait till Master status indicates that write is complete
     
-    I2C_I2CMasterReadBuf(FXOS8700_ADDRESS, (uint8 *) Read_Buf, sizeof(Read_Buf), I2C_I2C_MODE_REPEAT_START);
-    while((I2C_I2CMasterStatus() & I2C_I2C_MSTAT_RD_CMPLT)==0){}   //wait till Master status indicates read is complete
+    I2C_MasterReadBuf(FXOS8700_ADDRESS, (uint8 *) Read_Buf, sizeof(Read_Buf), I2C_MODE_REPEAT_START);
+    while((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT)==0){}   //wait till Master status indicates read is complete
     
     
     
@@ -185,7 +185,7 @@ uint8_t FXOS8700_getData()
     
     //serial_UartPutString("here 4\r\n");
     
-    //uint8_t status = Read_Buf[0];
+    //uint8_t status = Read_Buf[0]; //Status not used
     uint8_t axhi = Read_Buf[1];
     uint8_t axlo = Read_Buf[2];
     uint8_t ayhi = Read_Buf[3];
@@ -245,10 +245,10 @@ uint8_t FXOS8700_getData()
     return true;
 }
 
-void FXOS8700_readData(fxos8700RawData_t *accel, fxos8700RawData_t *mag)
+void accel_readData(fxos8700RawData_t *accel, fxos8700RawData_t *mag)
 {
     //serial_UartPutString("here 1\r\n");
-    FXOS8700_getData();
+    accel_getData();
     //serial_UartPutString("here 6\r\n");
     accel->x = acceleration.x;
     accel->y = acceleration.y;

@@ -68,14 +68,12 @@
       int16_t z;
     } fxos8700RawData_t;
 /*=========================================================================*/
+void accel_write8 ( byte reg, byte value );
+uint8_t accel_read8( byte reg );
 
-void write8 ( byte reg, byte value );
-uint8_t  read8( byte reg );
-uint8_t FXOS8700_begin (fxos8700AccelRange_t rng);
-uint8_t FXOS8700_getData();
-void FXOS8700_readData(fxos8700RawData_t * accel, fxos8700RawData_t * mag);
-
-
+uint8_t accel_begin (fxos8700AccelRange_t rng);
+uint8_t accel_getData();
+void accel_readData(fxos8700RawData_t * accel, fxos8700RawData_t * mag);
 
 #endif
 

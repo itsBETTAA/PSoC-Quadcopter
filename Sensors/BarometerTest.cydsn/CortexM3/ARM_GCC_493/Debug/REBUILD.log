@@ -1,0 +1,3 @@
+--------------- Rebuild Started: 06/20/2017 10:06:51 Project: barometer.c, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I.. -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/barometer.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c ..\barometer.c -o .\CortexM3\ARM_GCC_493\Debug\barometer.o
+--------------- Rebuild Succeeded: 06/20/2017 10:06:51 ---------------
