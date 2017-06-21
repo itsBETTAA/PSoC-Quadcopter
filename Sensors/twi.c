@@ -16,7 +16,7 @@ void Wire_beginTransmission(uint8_t address, uint8_t R_nW)
         -uint8 slaveAddress: Right-justified 7-bit slave address (valid range 0 to 127). 
         -uint8 R_nW: Set to zero, send write command; set to nonzero, send read command. 
     */
-    I2C_I2CMasterSendStart(address, R_nW); 
+    I2C_MasterSendStart(address, R_nW); 
 }
 
 int Wire_write(uint8_t address, uint8_t* writeBuffer, uint8_t length, uint8_t type)
@@ -46,15 +46,15 @@ int Wire_write(uint8_t address, uint8_t* writeBuffer, uint8_t length, uint8_t ty
     int ret = 0;
 
     if(type == 1){
-        ret = I2C_I2CMasterWriteBuf(address, writeBuffer, length, I2C_I2C_MODE_COMPLETE_XFER);
+        ret = I2C_MasterWriteBuf(address, writeBuffer, length, I2C_MODE_COMPLETE_XFER);
     }
 
     else if(type == 2){
-        ret = I2C_I2CMasterWriteBuf(address, writeBuffer, length, I2C_I2C_MODE_REPEAT_START);
+        ret = I2C_MasterWriteBuf(address, writeBuffer, length, I2C_MODE_REPEAT_START);
     }
 
     else if(type == 3){
-        ret = I2C_I2CMasterWriteBuf(address, writeBuffer, length, I2C_I2C_MODE_NO_STOP);
+        ret = I2C_MasterWriteBuf(address, writeBuffer, length, I2C_MODE_NO_STOP);
     }
     else{
         ret = 0; //Signifies user inputed error
@@ -116,9 +116,9 @@ uint8_t Wire_requestFrom(uint8_t slaveAddress, uint8_t length, uint8_t *dataBuff
                 I2C_MODE_NO_STOP       = Execute transfer without a Stop    
     */
 
-    I2C_I2CMasterReadBuf(slaveAddress, dataBuffer, length, I2C_I2C_MODE_COMPLETE_XFER);
+    I2C_MasterReadBuf(slaveAddress, dataBuffer, length, I2C_MODE_COMPLETE_XFER);
 
-    while ((I2C_I2CMasterStatus() & I2C_I2C_MSTAT_RD_CMPLT)==0){}
+    while ((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT)==0){}
 
     return 1/*(I2C_I2CMasterGetReadBufSize())*/; /*Returns the byte count of data read since the 
                                            I2C_MasterClearReadBuf() function was called. */
@@ -126,6 +126,6 @@ uint8_t Wire_requestFrom(uint8_t slaveAddress, uint8_t length, uint8_t *dataBuff
 
 uint8_t Wire_endTransmission()
 {
-    uint8_t ret = I2C_I2CMasterSendStop();
+    uint8_t ret = I2C_MasterSendStop();
     return ret;
 }
