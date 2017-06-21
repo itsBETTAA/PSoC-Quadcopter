@@ -18,7 +18,7 @@ reading raw values of last sensor read */
 #define GYRO_MG_LSB_2G (0.000244F) 
 #define GYRO_MG_LSB_4G (0.000488F) 
 #define GYR0_MG_LSB_8G (0.000976F) 
-#define DPS_TO_RADS (0.1F) 
+#define DPS_TO_RADS (0.0174533F) 
 
 #define SENSORS_GRAVITY_EARTH (9.80665F) /**< Earth's gravity in m/s^2 */ 
 #define SENSORS_GRAVITY_MOON (1.6F)      /**< The moon's gravity in m/s^2 */ 
