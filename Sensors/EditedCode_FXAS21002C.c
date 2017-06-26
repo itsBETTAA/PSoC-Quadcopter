@@ -6,10 +6,11 @@
 #include <twi.h>
 #include <project.h>
 
-static FXAS21002CGyroRange_t _range; 
+static GyroRange_t _range; 
 
 FXAS21002CRawData_t gyro_raw; /* May need to adjust... Supposed to be
 reading raw values of last sensor read */ 
+FXAS21002CRawData_t gyro;
 
 #define _write I2C_I2C_WRITE_XFER_MODE 
 #define _read I2C_I2C_READ_XFER_MODE 
@@ -87,7 +88,7 @@ return Read_Buf[0];
     @brief  Setups the HW
 */
 /**************************************************************************/
-uint8_t FXAS21002C_begin(FXAS21002CGyroRange_t rng)
+uint8_t FXAS21002C_begin(GyroRange_t rng)
 {
   /* Enable I2C */
   Wire.begin();
