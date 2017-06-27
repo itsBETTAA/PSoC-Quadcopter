@@ -18,7 +18,7 @@
 // Variable declaration
 
 class Mahony {
-private:
+static // originally written here was "private:"
 	float twoKp;		// 2 * proportional gain (Kp)
 	float twoKi;		// 2 * integral gain (Ki)
 	float q0, q1, q2, q3;	// quaternion of sensor frame relative to auxiliary frame
@@ -32,7 +32,6 @@ private:
 //-------------------------------------------------------------------------------------------
 // Function declarations
 
-public:
 	Mahony();
 	void begin(float sampleFrequency) { invSampleFreq = 1.0f / sampleFrequency; }
 	void update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
@@ -63,4 +62,5 @@ public:
 	}
 };
 
-#endif
+
+
