@@ -3,19 +3,29 @@
 
 #include <stdint.h>
 
+#define GYROSCOPE_DEBUG 1
+#define GYROSCOPE_RAW_DEBUG 0
+
 /*=========================================================================
     I2C ADDRESS/BITS AND SETTINGS
     -----------------------------------------------------------------------*/
     #define FXAS21002C_ADDRESS       (0x21)       // 0100001
     #define FXAS21002C_ID            (0xD7)       // 1101 0111
-    #define GYRO_SENSITIVITY_250DPS  (0.0078125F) // Table 35 of datasheet
-    #define GYRO_SENSITIVITY_500DPS  (0.015625F)  // ..
-    #define GYRO_SENSITIVITY_1000DPS (0.03125F)   // ..
-    #define GYRO_SENSITIVITY_2000DPS (0.0625F)    // ..
+    
+    #define GYRO_SENSITIVITY_250DPS  (0.0078125f) // Table 35 of datasheet
+    #define GYRO_SENSITIVITY_500DPS  (0.015625f)  // ..
+    #define GYRO_SENSITIVITY_1000DPS (0.03125f)   // ..
+    #define GYRO_SENSITIVITY_2000DPS (0.0625f)    // ..
+    /*
+    #define GYRO_SENSITIVITY_250DPS  (200.0/8192.0) // Table 35 of datasheet
+    #define GYRO_SENSITIVITY_500DPS  (400.0/8192.0)  // ..
+    #define GYRO_SENSITIVITY_1000DPS (800.0/8192.0)   // ..
+    #define GYRO_SENSITIVITY_2000DPS (1600.0/8192.0)    // ..
+    */
     /*-----------------------------------------------------------------------
     CONSTANTS
     -----------------------------------------------------------------------*/
-    #define SENSORS_DPS_TO_RADS (0.017453293F)      /**< Degrees/s to rad/s multiplier */
+    #define SENSORS_DPS_TO_RADS (0.017453293)      /**< Degrees/s to rad/s multiplier */
     #define true 1
     #define false 0
 
@@ -61,13 +71,32 @@
       int16_t y;
       int16_t z;
     } gyroRawData_t;
+
+    typedef struct gyroData_s
+    {
+      float x;
+      float y;
+      float z;
+    } gyroData_t;
 /*=========================================================================*/
 
 void gyro_write8( uint8_t reg, uint8_t value );
 uint8_t gyro_read8 ( uint8_t reg );
 
+uint8_t gyro_initialize(gyroRange_t rng);
 uint8_t gyro_begin(gyroRange_t rng);
-uint8_t gyro_getData();
-void gyro_readData(gyroRawData_t * gyro);
+uint8_t gyro_update();
+void gyro_readData(gyroData_t * gyroscope);
+
+/*  These functions are provided to allow the user to extract
+ *  single pieces of data from the sensor readings safely
+ *  instead of just calling the sensor variables directly.
+ *  They should only be called after calling the update function 
+ *  since they don't fetch for new data. They just output the previously
+ *  read data.
+*/
+float gyro_getX(void);
+float gyro_getY(void);
+float gyro_getZ(void);
 
 #endif

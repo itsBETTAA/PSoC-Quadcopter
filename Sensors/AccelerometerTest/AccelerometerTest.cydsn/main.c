@@ -16,6 +16,7 @@
 #include <Sensors/accelerometer.h>
 #include <Sensors/twi.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 
 #define true 1
@@ -50,7 +51,7 @@ void initialize(){
 
 int main(void)
 {
-    
+    h = true;
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
 
     initialize();

@@ -1,0 +1,835 @@
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"SensorVal.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.comm	baro,40,8
+  19              		.comm	initial_relative_altitude,8,8
+  20              		.comm	initial_absolute_altitude,8,8
+  21              		.comm	initial_real_pressure,4,4
+  22              		.comm	initial_real_temprature,8,8
+  23              		.comm	initial_raw_pressure,4,4
+  24              		.comm	initial_raw_temperature,4,4
+  25              		.comm	reference_pressure,4,4
+  26              		.comm	gyro,12,4
+  27              		.comm	gyro_raw,6,4
+  28              		.comm	mag,12,4
+  29              		.comm	accel,12,4
+  30              		.comm	mag_raw,6,4
+  31              		.comm	accel_raw,6,4
+  32              	.Letext0:
+  33              		.file 1 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+  34              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+  35              		.file 3 "..\\../accel_mag.h"
+  36              		.file 4 "..\\../gyroscope.h"
+  37              		.file 5 "..\\../barometer.h"
+  38              		.file 6 "..\\..\\SensorVal.c"
+  39              		.section	.debug_info,"",%progbits
+  40              	.Ldebug_info0:
+  41 0000 CA020000 		.4byte	0x2ca
+  42 0004 0400     		.2byte	0x4
+  43 0006 00000000 		.4byte	.Ldebug_abbrev0
+  44 000a 04       		.byte	0x4
+  45 000b 01       		.uleb128 0x1
+  46 000c 74010000 		.4byte	.LASF43
+  47 0010 01       		.byte	0x1
+  48 0011 C9000000 		.4byte	.LASF44
+  49 0015 A8020000 		.4byte	.LASF45
+  50 0019 00000000 		.4byte	.Ldebug_line0
+  51 001d 02       		.uleb128 0x2
+  52 001e 01       		.byte	0x1
+  53 001f 06       		.byte	0x6
+  54 0020 03010000 		.4byte	.LASF0
+  55 0024 02       		.uleb128 0x2
+  56 0025 01       		.byte	0x1
+  57 0026 08       		.byte	0x8
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 2
+
+
+  58 0027 DB000000 		.4byte	.LASF1
+  59 002b 03       		.uleb128 0x3
+  60 002c 90020000 		.4byte	.LASF4
+  61 0030 01       		.byte	0x1
+  62 0031 29       		.byte	0x29
+  63 0032 36000000 		.4byte	0x36
+  64 0036 02       		.uleb128 0x2
+  65 0037 02       		.byte	0x2
+  66 0038 05       		.byte	0x5
+  67 0039 41000000 		.4byte	.LASF2
+  68 003d 02       		.uleb128 0x2
+  69 003e 02       		.byte	0x2
+  70 003f 07       		.byte	0x7
+  71 0040 61010000 		.4byte	.LASF3
+  72 0044 03       		.uleb128 0x3
+  73 0045 86020000 		.4byte	.LASF5
+  74 0049 01       		.byte	0x1
+  75 004a 3F       		.byte	0x3f
+  76 004b 4F000000 		.4byte	0x4f
+  77 004f 02       		.uleb128 0x2
+  78 0050 04       		.byte	0x4
+  79 0051 05       		.byte	0x5
+  80 0052 A3000000 		.4byte	.LASF6
+  81 0056 03       		.uleb128 0x3
+  82 0057 4B000000 		.4byte	.LASF7
+  83 005b 01       		.byte	0x1
+  84 005c 41       		.byte	0x41
+  85 005d 61000000 		.4byte	0x61
+  86 0061 02       		.uleb128 0x2
+  87 0062 04       		.byte	0x4
+  88 0063 07       		.byte	0x7
+  89 0064 46020000 		.4byte	.LASF8
+  90 0068 02       		.uleb128 0x2
+  91 0069 08       		.byte	0x8
+  92 006a 05       		.byte	0x5
+  93 006b 95000000 		.4byte	.LASF9
+  94 006f 02       		.uleb128 0x2
+  95 0070 08       		.byte	0x8
+  96 0071 07       		.byte	0x7
+  97 0072 0F010000 		.4byte	.LASF10
+  98 0076 04       		.uleb128 0x4
+  99 0077 04       		.byte	0x4
+ 100 0078 05       		.byte	0x5
+ 101 0079 696E7400 		.ascii	"int\000"
+ 102 007d 02       		.uleb128 0x2
+ 103 007e 04       		.byte	0x4
+ 104 007f 07       		.byte	0x7
+ 105 0080 2F010000 		.4byte	.LASF11
+ 106 0084 03       		.uleb128 0x3
+ 107 0085 1F020000 		.4byte	.LASF12
+ 108 0089 02       		.byte	0x2
+ 109 008a 20       		.byte	0x20
+ 110 008b 2B000000 		.4byte	0x2b
+ 111 008f 03       		.uleb128 0x3
+ 112 0090 17020000 		.4byte	.LASF13
+ 113 0094 02       		.byte	0x2
+ 114 0095 2C       		.byte	0x2c
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 3
+
+
+ 115 0096 44000000 		.4byte	0x44
+ 116 009a 03       		.uleb128 0x3
+ 117 009b 26010000 		.4byte	.LASF14
+ 118 009f 02       		.byte	0x2
+ 119 00a0 2D       		.byte	0x2d
+ 120 00a1 56000000 		.4byte	0x56
+ 121 00a5 05       		.uleb128 0x5
+ 122 00a6 06       		.byte	0x6
+ 123 00a7 03       		.byte	0x3
+ 124 00a8 42       		.byte	0x42
+ 125 00a9 CC000000 		.4byte	0xcc
+ 126 00ad 06       		.uleb128 0x6
+ 127 00ae 7800     		.ascii	"x\000"
+ 128 00b0 03       		.byte	0x3
+ 129 00b1 44       		.byte	0x44
+ 130 00b2 84000000 		.4byte	0x84
+ 131 00b6 00       		.byte	0
+ 132 00b7 06       		.uleb128 0x6
+ 133 00b8 7900     		.ascii	"y\000"
+ 134 00ba 03       		.byte	0x3
+ 135 00bb 45       		.byte	0x45
+ 136 00bc 84000000 		.4byte	0x84
+ 137 00c0 02       		.byte	0x2
+ 138 00c1 06       		.uleb128 0x6
+ 139 00c2 7A00     		.ascii	"z\000"
+ 140 00c4 03       		.byte	0x3
+ 141 00c5 46       		.byte	0x46
+ 142 00c6 84000000 		.4byte	0x84
+ 143 00ca 04       		.byte	0x4
+ 144 00cb 00       		.byte	0
+ 145 00cc 03       		.uleb128 0x3
+ 146 00cd 7D000000 		.4byte	.LASF15
+ 147 00d1 03       		.byte	0x3
+ 148 00d2 47       		.byte	0x47
+ 149 00d3 A5000000 		.4byte	0xa5
+ 150 00d7 05       		.uleb128 0x5
+ 151 00d8 0C       		.byte	0xc
+ 152 00d9 03       		.byte	0x3
+ 153 00da 49       		.byte	0x49
+ 154 00db FE000000 		.4byte	0xfe
+ 155 00df 06       		.uleb128 0x6
+ 156 00e0 7800     		.ascii	"x\000"
+ 157 00e2 03       		.byte	0x3
+ 158 00e3 4B       		.byte	0x4b
+ 159 00e4 FE000000 		.4byte	0xfe
+ 160 00e8 00       		.byte	0
+ 161 00e9 06       		.uleb128 0x6
+ 162 00ea 7900     		.ascii	"y\000"
+ 163 00ec 03       		.byte	0x3
+ 164 00ed 4C       		.byte	0x4c
+ 165 00ee FE000000 		.4byte	0xfe
+ 166 00f2 04       		.byte	0x4
+ 167 00f3 06       		.uleb128 0x6
+ 168 00f4 7A00     		.ascii	"z\000"
+ 169 00f6 03       		.byte	0x3
+ 170 00f7 4D       		.byte	0x4d
+ 171 00f8 FE000000 		.4byte	0xfe
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 4
+
+
+ 172 00fc 08       		.byte	0x8
+ 173 00fd 00       		.byte	0
+ 174 00fe 02       		.uleb128 0x2
+ 175 00ff 04       		.byte	0x4
+ 176 0100 04       		.byte	0x4
+ 177 0101 8F000000 		.4byte	.LASF16
+ 178 0105 03       		.uleb128 0x3
+ 179 0106 08020000 		.4byte	.LASF17
+ 180 010a 03       		.byte	0x3
+ 181 010b 4E       		.byte	0x4e
+ 182 010c D7000000 		.4byte	0xd7
+ 183 0110 07       		.uleb128 0x7
+ 184 0111 9A020000 		.4byte	.LASF19
+ 185 0115 06       		.byte	0x6
+ 186 0116 04       		.byte	0x4
+ 187 0117 44       		.byte	0x44
+ 188 0118 3B010000 		.4byte	0x13b
+ 189 011c 06       		.uleb128 0x6
+ 190 011d 7800     		.ascii	"x\000"
+ 191 011f 04       		.byte	0x4
+ 192 0120 46       		.byte	0x46
+ 193 0121 84000000 		.4byte	0x84
+ 194 0125 00       		.byte	0
+ 195 0126 06       		.uleb128 0x6
+ 196 0127 7900     		.ascii	"y\000"
+ 197 0129 04       		.byte	0x4
+ 198 012a 47       		.byte	0x47
+ 199 012b 84000000 		.4byte	0x84
+ 200 012f 02       		.byte	0x2
+ 201 0130 06       		.uleb128 0x6
+ 202 0131 7A00     		.ascii	"z\000"
+ 203 0133 04       		.byte	0x4
+ 204 0134 48       		.byte	0x48
+ 205 0135 84000000 		.4byte	0x84
+ 206 0139 04       		.byte	0x4
+ 207 013a 00       		.byte	0
+ 208 013b 03       		.uleb128 0x3
+ 209 013c 12030000 		.4byte	.LASF18
+ 210 0140 04       		.byte	0x4
+ 211 0141 49       		.byte	0x49
+ 212 0142 10010000 		.4byte	0x110
+ 213 0146 07       		.uleb128 0x7
+ 214 0147 08000000 		.4byte	.LASF20
+ 215 014b 0C       		.byte	0xc
+ 216 014c 04       		.byte	0x4
+ 217 014d 4B       		.byte	0x4b
+ 218 014e 71010000 		.4byte	0x171
+ 219 0152 06       		.uleb128 0x6
+ 220 0153 7800     		.ascii	"x\000"
+ 221 0155 04       		.byte	0x4
+ 222 0156 4D       		.byte	0x4d
+ 223 0157 FE000000 		.4byte	0xfe
+ 224 015b 00       		.byte	0
+ 225 015c 06       		.uleb128 0x6
+ 226 015d 7900     		.ascii	"y\000"
+ 227 015f 04       		.byte	0x4
+ 228 0160 4E       		.byte	0x4e
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 5
+
+
+ 229 0161 FE000000 		.4byte	0xfe
+ 230 0165 04       		.byte	0x4
+ 231 0166 06       		.uleb128 0x6
+ 232 0167 7A00     		.ascii	"z\000"
+ 233 0169 04       		.byte	0x4
+ 234 016a 4F       		.byte	0x4f
+ 235 016b FE000000 		.4byte	0xfe
+ 236 016f 08       		.byte	0x8
+ 237 0170 00       		.byte	0
+ 238 0171 03       		.uleb128 0x3
+ 239 0172 3C010000 		.4byte	.LASF21
+ 240 0176 04       		.byte	0x4
+ 241 0177 50       		.byte	0x50
+ 242 0178 46010000 		.4byte	0x146
+ 243 017c 05       		.uleb128 0x5
+ 244 017d 28       		.byte	0x28
+ 245 017e 05       		.byte	0x5
+ 246 017f 34       		.byte	0x34
+ 247 0180 CD010000 		.4byte	0x1cd
+ 248 0184 08       		.uleb128 0x8
+ 249 0185 00000000 		.4byte	.LASF22
+ 250 0189 05       		.byte	0x5
+ 251 018a 36       		.byte	0x36
+ 252 018b 9A000000 		.4byte	0x9a
+ 253 018f 00       		.byte	0
+ 254 0190 08       		.uleb128 0x8
+ 255 0191 66000000 		.4byte	.LASF23
+ 256 0195 05       		.byte	0x5
+ 257 0196 37       		.byte	0x37
+ 258 0197 9A000000 		.4byte	0x9a
+ 259 019b 04       		.byte	0x4
+ 260 019c 08       		.uleb128 0x8
+ 261 019d 70020000 		.4byte	.LASF24
+ 262 01a1 05       		.byte	0x5
+ 263 01a2 38       		.byte	0x38
+ 264 01a3 CD010000 		.4byte	0x1cd
+ 265 01a7 08       		.byte	0x8
+ 266 01a8 08       		.uleb128 0x8
+ 267 01a9 74000000 		.4byte	.LASF25
+ 268 01ad 05       		.byte	0x5
+ 269 01ae 39       		.byte	0x39
+ 270 01af 8F000000 		.4byte	0x8f
+ 271 01b3 10       		.byte	0x10
+ 272 01b4 08       		.uleb128 0x8
+ 273 01b5 5A010000 		.4byte	.LASF26
+ 274 01b9 05       		.byte	0x5
+ 275 01ba 3B       		.byte	0x3b
+ 276 01bb CD010000 		.4byte	0x1cd
+ 277 01bf 18       		.byte	0x18
+ 278 01c0 08       		.uleb128 0x8
+ 279 01c1 5F000000 		.4byte	.LASF27
+ 280 01c5 05       		.byte	0x5
+ 281 01c6 3C       		.byte	0x3c
+ 282 01c7 CD010000 		.4byte	0x1cd
+ 283 01cb 20       		.byte	0x20
+ 284 01cc 00       		.byte	0
+ 285 01cd 02       		.uleb128 0x2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 6
+
+
+ 286 01ce 08       		.byte	0x8
+ 287 01cf 04       		.byte	0x4
+ 288 01d0 69020000 		.4byte	.LASF28
+ 289 01d4 03       		.uleb128 0x3
+ 290 01d5 58020000 		.4byte	.LASF29
+ 291 01d9 05       		.byte	0x5
+ 292 01da 3D       		.byte	0x3d
+ 293 01db 7C010000 		.4byte	0x17c
+ 294 01df 09       		.uleb128 0x9
+ 295 01e0 7C020000 		.4byte	.LASF30
+ 296 01e4 06       		.byte	0x6
+ 297 01e5 0E       		.byte	0xe
+ 298 01e6 CC000000 		.4byte	0xcc
+ 299 01ea 05       		.uleb128 0x5
+ 300 01eb 03       		.byte	0x3
+ 301 01ec 00000000 		.4byte	accel_raw
+ 302 01f0 09       		.uleb128 0x9
+ 303 01f1 C1000000 		.4byte	.LASF31
+ 304 01f5 06       		.byte	0x6
+ 305 01f6 0F       		.byte	0xf
+ 306 01f7 CC000000 		.4byte	0xcc
+ 307 01fb 05       		.uleb128 0x5
+ 308 01fc 03       		.byte	0x3
+ 309 01fd 00000000 		.4byte	mag_raw
+ 310 0201 09       		.uleb128 0x9
+ 311 0202 02020000 		.4byte	.LASF32
+ 312 0206 06       		.byte	0x6
+ 313 0207 11       		.byte	0x11
+ 314 0208 05010000 		.4byte	0x105
+ 315 020c 05       		.uleb128 0x5
+ 316 020d 03       		.byte	0x3
+ 317 020e 00000000 		.4byte	accel
+ 318 0212 0A       		.uleb128 0xa
+ 319 0213 6D616700 		.ascii	"mag\000"
+ 320 0217 06       		.byte	0x6
+ 321 0218 12       		.byte	0x12
+ 322 0219 05010000 		.4byte	0x105
+ 323 021d 05       		.uleb128 0x5
+ 324 021e 03       		.byte	0x3
+ 325 021f 00000000 		.4byte	mag
+ 326 0223 09       		.uleb128 0x9
+ 327 0224 56000000 		.4byte	.LASF33
+ 328 0228 06       		.byte	0x6
+ 329 0229 16       		.byte	0x16
+ 330 022a 3B010000 		.4byte	0x13b
+ 331 022e 05       		.uleb128 0x5
+ 332 022f 03       		.byte	0x3
+ 333 0230 00000000 		.4byte	gyro_raw
+ 334 0234 09       		.uleb128 0x9
+ 335 0235 6F000000 		.4byte	.LASF34
+ 336 0239 06       		.byte	0x6
+ 337 023a 17       		.byte	0x17
+ 338 023b 71010000 		.4byte	0x171
+ 339 023f 05       		.uleb128 0x5
+ 340 0240 03       		.byte	0x3
+ 341 0241 00000000 		.4byte	gyro
+ 342 0245 09       		.uleb128 0x9
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 7
+
+
+ 343 0246 47010000 		.4byte	.LASF35
+ 344 024a 06       		.byte	0x6
+ 345 024b 1C       		.byte	0x1c
+ 346 024c 8F000000 		.4byte	0x8f
+ 347 0250 05       		.uleb128 0x5
+ 348 0251 03       		.byte	0x3
+ 349 0252 00000000 		.4byte	reference_pressure
+ 350 0256 09       		.uleb128 0x9
+ 351 0257 FA020000 		.4byte	.LASF36
+ 352 025b 06       		.byte	0x6
+ 353 025c 1F       		.byte	0x1f
+ 354 025d 9A000000 		.4byte	0x9a
+ 355 0261 05       		.uleb128 0x5
+ 356 0262 03       		.byte	0x3
+ 357 0263 00000000 		.4byte	initial_raw_temperature
+ 358 0267 09       		.uleb128 0x9
+ 359 0268 AC000000 		.4byte	.LASF37
+ 360 026c 06       		.byte	0x6
+ 361 026d 20       		.byte	0x20
+ 362 026e 9A000000 		.4byte	0x9a
+ 363 0272 05       		.uleb128 0x5
+ 364 0273 03       		.byte	0x3
+ 365 0274 00000000 		.4byte	initial_raw_pressure
+ 366 0278 09       		.uleb128 0x9
+ 367 0279 29000000 		.4byte	.LASF38
+ 368 027d 06       		.byte	0x6
+ 369 027e 23       		.byte	0x23
+ 370 027f CD010000 		.4byte	0x1cd
+ 371 0283 05       		.uleb128 0x5
+ 372 0284 03       		.byte	0x3
+ 373 0285 00000000 		.4byte	initial_real_temprature
+ 374 0289 09       		.uleb128 0x9
+ 375 028a 13000000 		.4byte	.LASF39
+ 376 028e 06       		.byte	0x6
+ 377 028f 24       		.byte	0x24
+ 378 0290 8F000000 		.4byte	0x8f
+ 379 0294 05       		.uleb128 0x5
+ 380 0295 03       		.byte	0x3
+ 381 0296 00000000 		.4byte	initial_real_pressure
+ 382 029a 09       		.uleb128 0x9
+ 383 029b 27020000 		.4byte	.LASF40
+ 384 029f 06       		.byte	0x6
+ 385 02a0 28       		.byte	0x28
+ 386 02a1 CD010000 		.4byte	0x1cd
+ 387 02a5 05       		.uleb128 0x5
+ 388 02a6 03       		.byte	0x3
+ 389 02a7 00000000 		.4byte	initial_absolute_altitude
+ 390 02ab 09       		.uleb128 0x9
+ 391 02ac E9000000 		.4byte	.LASF41
+ 392 02b0 06       		.byte	0x6
+ 393 02b1 29       		.byte	0x29
+ 394 02b2 CD010000 		.4byte	0x1cd
+ 395 02b6 05       		.uleb128 0x5
+ 396 02b7 03       		.byte	0x3
+ 397 02b8 00000000 		.4byte	initial_relative_altitude
+ 398 02bc 09       		.uleb128 0x9
+ 399 02bd 41020000 		.4byte	.LASF42
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 8
+
+
+ 400 02c1 06       		.byte	0x6
+ 401 02c2 37       		.byte	0x37
+ 402 02c3 D4010000 		.4byte	0x1d4
+ 403 02c7 05       		.uleb128 0x5
+ 404 02c8 03       		.byte	0x3
+ 405 02c9 00000000 		.4byte	baro
+ 406 02cd 00       		.byte	0
+ 407              		.section	.debug_abbrev,"",%progbits
+ 408              	.Ldebug_abbrev0:
+ 409 0000 01       		.uleb128 0x1
+ 410 0001 11       		.uleb128 0x11
+ 411 0002 01       		.byte	0x1
+ 412 0003 25       		.uleb128 0x25
+ 413 0004 0E       		.uleb128 0xe
+ 414 0005 13       		.uleb128 0x13
+ 415 0006 0B       		.uleb128 0xb
+ 416 0007 03       		.uleb128 0x3
+ 417 0008 0E       		.uleb128 0xe
+ 418 0009 1B       		.uleb128 0x1b
+ 419 000a 0E       		.uleb128 0xe
+ 420 000b 10       		.uleb128 0x10
+ 421 000c 17       		.uleb128 0x17
+ 422 000d 00       		.byte	0
+ 423 000e 00       		.byte	0
+ 424 000f 02       		.uleb128 0x2
+ 425 0010 24       		.uleb128 0x24
+ 426 0011 00       		.byte	0
+ 427 0012 0B       		.uleb128 0xb
+ 428 0013 0B       		.uleb128 0xb
+ 429 0014 3E       		.uleb128 0x3e
+ 430 0015 0B       		.uleb128 0xb
+ 431 0016 03       		.uleb128 0x3
+ 432 0017 0E       		.uleb128 0xe
+ 433 0018 00       		.byte	0
+ 434 0019 00       		.byte	0
+ 435 001a 03       		.uleb128 0x3
+ 436 001b 16       		.uleb128 0x16
+ 437 001c 00       		.byte	0
+ 438 001d 03       		.uleb128 0x3
+ 439 001e 0E       		.uleb128 0xe
+ 440 001f 3A       		.uleb128 0x3a
+ 441 0020 0B       		.uleb128 0xb
+ 442 0021 3B       		.uleb128 0x3b
+ 443 0022 0B       		.uleb128 0xb
+ 444 0023 49       		.uleb128 0x49
+ 445 0024 13       		.uleb128 0x13
+ 446 0025 00       		.byte	0
+ 447 0026 00       		.byte	0
+ 448 0027 04       		.uleb128 0x4
+ 449 0028 24       		.uleb128 0x24
+ 450 0029 00       		.byte	0
+ 451 002a 0B       		.uleb128 0xb
+ 452 002b 0B       		.uleb128 0xb
+ 453 002c 3E       		.uleb128 0x3e
+ 454 002d 0B       		.uleb128 0xb
+ 455 002e 03       		.uleb128 0x3
+ 456 002f 08       		.uleb128 0x8
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 9
+
+
+ 457 0030 00       		.byte	0
+ 458 0031 00       		.byte	0
+ 459 0032 05       		.uleb128 0x5
+ 460 0033 13       		.uleb128 0x13
+ 461 0034 01       		.byte	0x1
+ 462 0035 0B       		.uleb128 0xb
+ 463 0036 0B       		.uleb128 0xb
+ 464 0037 3A       		.uleb128 0x3a
+ 465 0038 0B       		.uleb128 0xb
+ 466 0039 3B       		.uleb128 0x3b
+ 467 003a 0B       		.uleb128 0xb
+ 468 003b 01       		.uleb128 0x1
+ 469 003c 13       		.uleb128 0x13
+ 470 003d 00       		.byte	0
+ 471 003e 00       		.byte	0
+ 472 003f 06       		.uleb128 0x6
+ 473 0040 0D       		.uleb128 0xd
+ 474 0041 00       		.byte	0
+ 475 0042 03       		.uleb128 0x3
+ 476 0043 08       		.uleb128 0x8
+ 477 0044 3A       		.uleb128 0x3a
+ 478 0045 0B       		.uleb128 0xb
+ 479 0046 3B       		.uleb128 0x3b
+ 480 0047 0B       		.uleb128 0xb
+ 481 0048 49       		.uleb128 0x49
+ 482 0049 13       		.uleb128 0x13
+ 483 004a 38       		.uleb128 0x38
+ 484 004b 0B       		.uleb128 0xb
+ 485 004c 00       		.byte	0
+ 486 004d 00       		.byte	0
+ 487 004e 07       		.uleb128 0x7
+ 488 004f 13       		.uleb128 0x13
+ 489 0050 01       		.byte	0x1
+ 490 0051 03       		.uleb128 0x3
+ 491 0052 0E       		.uleb128 0xe
+ 492 0053 0B       		.uleb128 0xb
+ 493 0054 0B       		.uleb128 0xb
+ 494 0055 3A       		.uleb128 0x3a
+ 495 0056 0B       		.uleb128 0xb
+ 496 0057 3B       		.uleb128 0x3b
+ 497 0058 0B       		.uleb128 0xb
+ 498 0059 01       		.uleb128 0x1
+ 499 005a 13       		.uleb128 0x13
+ 500 005b 00       		.byte	0
+ 501 005c 00       		.byte	0
+ 502 005d 08       		.uleb128 0x8
+ 503 005e 0D       		.uleb128 0xd
+ 504 005f 00       		.byte	0
+ 505 0060 03       		.uleb128 0x3
+ 506 0061 0E       		.uleb128 0xe
+ 507 0062 3A       		.uleb128 0x3a
+ 508 0063 0B       		.uleb128 0xb
+ 509 0064 3B       		.uleb128 0x3b
+ 510 0065 0B       		.uleb128 0xb
+ 511 0066 49       		.uleb128 0x49
+ 512 0067 13       		.uleb128 0x13
+ 513 0068 38       		.uleb128 0x38
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 10
+
+
+ 514 0069 0B       		.uleb128 0xb
+ 515 006a 00       		.byte	0
+ 516 006b 00       		.byte	0
+ 517 006c 09       		.uleb128 0x9
+ 518 006d 34       		.uleb128 0x34
+ 519 006e 00       		.byte	0
+ 520 006f 03       		.uleb128 0x3
+ 521 0070 0E       		.uleb128 0xe
+ 522 0071 3A       		.uleb128 0x3a
+ 523 0072 0B       		.uleb128 0xb
+ 524 0073 3B       		.uleb128 0x3b
+ 525 0074 0B       		.uleb128 0xb
+ 526 0075 49       		.uleb128 0x49
+ 527 0076 13       		.uleb128 0x13
+ 528 0077 3F       		.uleb128 0x3f
+ 529 0078 19       		.uleb128 0x19
+ 530 0079 02       		.uleb128 0x2
+ 531 007a 18       		.uleb128 0x18
+ 532 007b 00       		.byte	0
+ 533 007c 00       		.byte	0
+ 534 007d 0A       		.uleb128 0xa
+ 535 007e 34       		.uleb128 0x34
+ 536 007f 00       		.byte	0
+ 537 0080 03       		.uleb128 0x3
+ 538 0081 08       		.uleb128 0x8
+ 539 0082 3A       		.uleb128 0x3a
+ 540 0083 0B       		.uleb128 0xb
+ 541 0084 3B       		.uleb128 0x3b
+ 542 0085 0B       		.uleb128 0xb
+ 543 0086 49       		.uleb128 0x49
+ 544 0087 13       		.uleb128 0x13
+ 545 0088 3F       		.uleb128 0x3f
+ 546 0089 19       		.uleb128 0x19
+ 547 008a 02       		.uleb128 0x2
+ 548 008b 18       		.uleb128 0x18
+ 549 008c 00       		.byte	0
+ 550 008d 00       		.byte	0
+ 551 008e 00       		.byte	0
+ 552              		.section	.debug_aranges,"",%progbits
+ 553 0000 14000000 		.4byte	0x14
+ 554 0004 0200     		.2byte	0x2
+ 555 0006 00000000 		.4byte	.Ldebug_info0
+ 556 000a 04       		.byte	0x4
+ 557 000b 00       		.byte	0
+ 558 000c 0000     		.2byte	0
+ 559 000e 0000     		.2byte	0
+ 560 0010 00000000 		.4byte	0
+ 561 0014 00000000 		.4byte	0
+ 562              		.section	.debug_line,"",%progbits
+ 563              	.Ldebug_line0:
+ 564 0000 53010000 		.section	.debug_str,"MS",%progbits,1
+ 564      02004D01 
+ 564      00000201 
+ 564      FB0E0D00 
+ 564      01010101 
+ 565              	.LASF22:
+ 566 0000 72617754 		.ascii	"rawTemp\000"
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 11
+
+
+ 566      656D7000 
+ 567              	.LASF20:
+ 568 0008 6779726F 		.ascii	"gyroData_s\000"
+ 568      44617461 
+ 568      5F7300
+ 569              	.LASF39:
+ 570 0013 696E6974 		.ascii	"initial_real_pressure\000"
+ 570      69616C5F 
+ 570      7265616C 
+ 570      5F707265 
+ 570      73737572 
+ 571              	.LASF38:
+ 572 0029 696E6974 		.ascii	"initial_real_temprature\000"
+ 572      69616C5F 
+ 572      7265616C 
+ 572      5F74656D 
+ 572      70726174 
+ 573              	.LASF2:
+ 574 0041 73686F72 		.ascii	"short int\000"
+ 574      7420696E 
+ 574      7400
+ 575              	.LASF7:
+ 576 004b 5F5F7569 		.ascii	"__uint32_t\000"
+ 576      6E743332 
+ 576      5F7400
+ 577              	.LASF33:
+ 578 0056 6779726F 		.ascii	"gyro_raw\000"
+ 578      5F726177 
+ 578      00
+ 579              	.LASF27:
+ 580 005f 72656C41 		.ascii	"relAlt\000"
+ 580      6C7400
+ 581              	.LASF23:
+ 582 0066 72617750 		.ascii	"rawPress\000"
+ 582      72657373 
+ 582      00
+ 583              	.LASF34:
+ 584 006f 6779726F 		.ascii	"gyro\000"
+ 584      00
+ 585              	.LASF25:
+ 586 0074 70726573 		.ascii	"pressure\000"
+ 586      73757265 
+ 586      00
+ 587              	.LASF15:
+ 588 007d 66786F73 		.ascii	"fxos8700RawData_t\000"
+ 588      38373030 
+ 588      52617744 
+ 588      6174615F 
+ 588      7400
+ 589              	.LASF16:
+ 590 008f 666C6F61 		.ascii	"float\000"
+ 590      7400
+ 591              	.LASF9:
+ 592 0095 6C6F6E67 		.ascii	"long long int\000"
+ 592      206C6F6E 
+ 592      6720696E 
+ 592      7400
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 12
+
+
+ 593              	.LASF6:
+ 594 00a3 6C6F6E67 		.ascii	"long int\000"
+ 594      20696E74 
+ 594      00
+ 595              	.LASF37:
+ 596 00ac 696E6974 		.ascii	"initial_raw_pressure\000"
+ 596      69616C5F 
+ 596      7261775F 
+ 596      70726573 
+ 596      73757265 
+ 597              	.LASF31:
+ 598 00c1 6D61675F 		.ascii	"mag_raw\000"
+ 598      72617700 
+ 599              	.LASF44:
+ 600 00c9 2E2E5C2E 		.ascii	"..\\..\\SensorVal.c\000"
+ 600      2E5C5365 
+ 600      6E736F72 
+ 600      56616C2E 
+ 600      6300
+ 601              	.LASF1:
+ 602 00db 756E7369 		.ascii	"unsigned char\000"
+ 602      676E6564 
+ 602      20636861 
+ 602      7200
+ 603              	.LASF41:
+ 604 00e9 696E6974 		.ascii	"initial_relative_altitude\000"
+ 604      69616C5F 
+ 604      72656C61 
+ 604      74697665 
+ 604      5F616C74 
+ 605              	.LASF0:
+ 606 0103 7369676E 		.ascii	"signed char\000"
+ 606      65642063 
+ 606      68617200 
+ 607              	.LASF10:
+ 608 010f 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 608      206C6F6E 
+ 608      6720756E 
+ 608      7369676E 
+ 608      65642069 
+ 609              	.LASF14:
+ 610 0126 75696E74 		.ascii	"uint32_t\000"
+ 610      33325F74 
+ 610      00
+ 611              	.LASF11:
+ 612 012f 756E7369 		.ascii	"unsigned int\000"
+ 612      676E6564 
+ 612      20696E74 
+ 612      00
+ 613              	.LASF21:
+ 614 013c 6779726F 		.ascii	"gyroData_t\000"
+ 614      44617461 
+ 614      5F7400
+ 615              	.LASF35:
+ 616 0147 72656665 		.ascii	"reference_pressure\000"
+ 616      72656E63 
+ 616      655F7072 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 13
+
+
+ 616      65737375 
+ 616      726500
+ 617              	.LASF26:
+ 618 015a 61627341 		.ascii	"absAlt\000"
+ 618      6C7400
+ 619              	.LASF3:
+ 620 0161 73686F72 		.ascii	"short unsigned int\000"
+ 620      7420756E 
+ 620      7369676E 
+ 620      65642069 
+ 620      6E7400
+ 621              	.LASF43:
+ 622 0174 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 622      4320342E 
+ 622      392E3320 
+ 622      32303135 
+ 622      30333033 
+ 623 01a7 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 623      20726576 
+ 623      6973696F 
+ 623      6E203232 
+ 623      31323230 
+ 624 01da 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 624      66756E63 
+ 624      74696F6E 
+ 624      2D736563 
+ 624      74696F6E 
+ 625              	.LASF32:
+ 626 0202 61636365 		.ascii	"accel\000"
+ 626      6C00
+ 627              	.LASF17:
+ 628 0208 66786F73 		.ascii	"fxos8700Data_t\000"
+ 628      38373030 
+ 628      44617461 
+ 628      5F7400
+ 629              	.LASF13:
+ 630 0217 696E7433 		.ascii	"int32_t\000"
+ 630      325F7400 
+ 631              	.LASF12:
+ 632 021f 696E7431 		.ascii	"int16_t\000"
+ 632      365F7400 
+ 633              	.LASF40:
+ 634 0227 696E6974 		.ascii	"initial_absolute_altitude\000"
+ 634      69616C5F 
+ 634      6162736F 
+ 634      6C757465 
+ 634      5F616C74 
+ 635              	.LASF42:
+ 636 0241 6261726F 		.ascii	"baro\000"
+ 636      00
+ 637              	.LASF8:
+ 638 0246 6C6F6E67 		.ascii	"long unsigned int\000"
+ 638      20756E73 
+ 638      69676E65 
+ 638      6420696E 
+ 638      7400
+ 639              	.LASF29:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccWzScdu.s 			page 14
+
+
+ 640 0258 6261726F 		.ascii	"barometricData_t\000"
+ 640      6D657472 
+ 640      69634461 
+ 640      74615F74 
+ 640      00
+ 641              	.LASF28:
+ 642 0269 646F7562 		.ascii	"double\000"
+ 642      6C6500
+ 643              	.LASF24:
+ 644 0270 74656D70 		.ascii	"temperature\000"
+ 644      65726174 
+ 644      75726500 
+ 645              	.LASF30:
+ 646 027c 61636365 		.ascii	"accel_raw\000"
+ 646      6C5F7261 
+ 646      7700
+ 647              	.LASF5:
+ 648 0286 5F5F696E 		.ascii	"__int32_t\000"
+ 648      7433325F 
+ 648      7400
+ 649              	.LASF4:
+ 650 0290 5F5F696E 		.ascii	"__int16_t\000"
+ 650      7431365F 
+ 650      7400
+ 651              	.LASF19:
+ 652 029a 6779726F 		.ascii	"gyroRawData_s\000"
+ 652      52617744 
+ 652      6174615F 
+ 652      7300
+ 653              	.LASF45:
+ 654 02a8 433A5C55 		.ascii	"C:\\Users\\a85495\\Desktop\\PSoC-Quadcopter\\Sensor"
+ 654      73657273 
+ 654      5C613835 
+ 654      3439355C 
+ 654      4465736B 
+ 655 02d6 735C5365 		.ascii	"s\\Sensor Test\\All_sensor_test.cydsn\000"
+ 655      6E736F72 
+ 655      20546573 
+ 655      745C416C 
+ 655      6C5F7365 
+ 656              	.LASF36:
+ 657 02fa 696E6974 		.ascii	"initial_raw_temperature\000"
+ 657      69616C5F 
+ 657      7261775F 
+ 657      74656D70 
+ 657      65726174 
+ 658              	.LASF18:
+ 659 0312 6779726F 		.ascii	"gyroRawData_t\000"
+ 659      52617744 
+ 659      6174615F 
+ 659      7400
+ 660              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

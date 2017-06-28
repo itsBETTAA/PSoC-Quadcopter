@@ -1,0 +1,5 @@
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|375a075e-1774-42fe-bf0c-5604b2800a3f
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|b9510edf-7aee-4c69-928b-b4cda46ef2cd
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|82a5261d-0a20-4b2e-84de-e903e7cdbfcf
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|f6588853-c5e1-47fe-ab35-2d539112821a
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\All_sensor_test.cyprj|929c72a0-0272-4843-a7f1-b8647154a49a

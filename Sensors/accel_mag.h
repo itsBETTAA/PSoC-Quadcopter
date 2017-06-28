@@ -1,9 +1,11 @@
 
-#ifndef ACCELEROMETER_H
-#define ACCELEROMETER_H
+#ifndef ACCEL_MAG_H
+#define ACCEL_MAG_H
 
 #include <stdint.h>
     
+#define ACCEL_MAG_DEBUG 1
+
 #ifndef byte
 #define byte uint8_t
 #endif
@@ -67,13 +69,39 @@
       int16_t y;
       int16_t z;
     } fxos8700RawData_t;
-/*=========================================================================*/
-void accel_write8 ( byte reg, byte value );
-uint8_t accel_read8( byte reg );
 
-uint8_t accel_begin (fxos8700AccelRange_t rng);
-uint8_t accel_getData();
-void accel_readData(fxos8700RawData_t * accel, fxos8700RawData_t * mag);
+    typedef struct
+    {
+      float x;
+      float y;
+      float z;
+    } fxos8700Data_t;
+
+/*=========================================================================*/
+void accel_mag_write8 ( byte reg, byte value );
+uint8_t accel_mag_read8( byte reg );
+
+uint8_t accel_mag_initialize(fxos8700AccelRange_t rng);
+uint8_t accel_mag_begin (fxos8700AccelRange_t rng);
+uint8_t accel_mag_update();
+void accel_mag_readData(fxos8700Data_t * accel, fxos8700Data_t * mag);
+void accel_readData(fxos8700Data_t * _acceleration);
+void mag_readData(fxos8700Data_t * _magnetic);
+
+
+/*  These functions are provided to allow the user to extract
+ *  single pieces of data from the sensor readings safely
+ *  instead of just calling the sensor variables directly.
+ *  These should only be called after calling the update function
+ *  since they don't fetch for new readings. They just give the previous one
+*/
+int16_t accel_getX(void);
+int16_t accel_getY(void);
+int16_t accel_getZ(void);
+
+int16_t mag_getX(void);
+int16_t mag_getY(void);
+int16_t mag_getZ(void);
 
 #endif
 

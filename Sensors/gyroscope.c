@@ -6,19 +6,21 @@
 #include "gyroscope.h"
 #include "twi.h"
 #include "project.h"
+#include "SensorVal.h"
+#include "stdlib.h"
+#include <stdint.h>
+#include "Serial.h"
 
 static gyroRange_t _range;
-gyroRawData_t raw; /* Raw values from last sensor read */
-gyroRawData_t gyro; 
 
-void gyro_write8(uint8_t Reg, uint8_t value)
+void gyro_write8(uint8_t reg, uint8_t value)
 {
 
     //to write, you want to write 2 values: (1) The registeraddress you want to write to
     //                                      (2) The value you wish to write to the register
 
     uint8_t Write_Buf[2] = {0};  //create an array where we will store the things to be written
-    Write_Buf[0] = (uint8_t)Reg; //save the things to be sent in order in the array
+    Write_Buf[0] = (uint8_t)reg; //save the things to be sent in order in the array
     Write_Buf[1] = (uint8_t)value;
 
     //Make a complete transfer (I2C_MODE_COMPLETE_XFER) to the gyroscope
@@ -33,14 +35,14 @@ void gyro_write8(uint8_t Reg, uint8_t value)
     return; //return 1 if everything was successful
 }
 
-uint8_t gyro_read8(uint8_t Reg)
+uint8_t gyro_read8(uint8_t reg)
 {
 
     //to read:  (1)Write the register address you want to read from to the slave device
     //          (2)Use MasterReadBuf to store what is contained in the refister into the read buffer
 
     uint8_t Write_Buf[1];
-    Write_Buf[0] = (uint8_t)Reg;
+    Write_Buf[0] = (uint8_t)reg;
 
     uint8 Read_Buf[1] = {0};
 
@@ -73,9 +75,9 @@ uint8_t gyro_begin(gyroRange_t rng)
   _range = rng;
 
   /* Clear the raw sensor data */
-  raw.x = 0;
-  raw.y = 0;
-  raw.z = 0;
+  gyro_raw.x = 0;
+  gyro_raw.y = 0;
+  gyro_raw.z = 0;
 
   /* Make sure we have the correct chip ID since this checks
      for correct address and that the IC is properly connected */
@@ -83,8 +85,10 @@ uint8_t gyro_begin(gyroRange_t rng)
   // Serial.print("WHO AM I? 0x"); Serial.println(id, HEX);
   if (id != FXAS21002C_ID)
   {
+    serial_println("Incorrect ID, check wiring or code");
     return false;
   }
+  serial_println("Correct ID");
 
   /* Set CTRL_REG1 (0x13)
    ====================================================================
@@ -114,15 +118,15 @@ uint8_t gyro_begin(gyroRange_t rng)
   return true;
 }
 
-uint8_t gyro_getData()
+uint8_t gyro_update()
 {
   uint8_t readingValid = false;
 
 
   /* Clear the raw data placeholder */
-  raw.x = 0;
-  raw.y = 0;
-  raw.z = 0;
+  gyro_raw.x = 0;
+  gyro_raw.y = 0;
+  gyro_raw.z = 0;
 
   /* Read 7 bytes from the sensor */
   /*Wire.beginTransmission((byte)FXAS21002C_ADDRESS);
@@ -161,9 +165,20 @@ uint8_t gyro_getData()
   gyro.z = (int16_t)((zhi << 8) | zlo);
 
   /* Assign raw values in case someone needs them */
-  raw.x = gyro.x;
-  raw.y = gyro.y;
-  raw.z = gyro.z;
+  gyro_raw.x = gyro.x;
+  gyro_raw.y = gyro.y;
+  gyro_raw.z = gyro.z;
+
+  #if GYROSCOPE_RAW_DEBUG
+        serial_print("gyro_raw.x = ");
+        serial_printInt(gyro_raw.x);
+        serial_print(" || gyro_raw.y = ");
+        serial_printInt(gyro_raw.y);
+        serial_print("|| gyro_raw.z = ");
+        serial_printInt(gyro_raw.z);
+        serial_println(" rad/s");
+
+  #endif
 
   /* Compensate values depending on the resolution */
   switch(_range)
@@ -194,17 +209,47 @@ uint8_t gyro_getData()
   gyro.x *= SENSORS_DPS_TO_RADS;
   gyro.y *= SENSORS_DPS_TO_RADS;
   gyro.z *= SENSORS_DPS_TO_RADS;
-  readingValid = true;
 
+  #if GYROSCOPE_DEBUG
+        serial_print("gyro.x = ");
+        serial_printFloat(gyro.x);
+        serial_print(" || gyro.y = ");
+        serial_printFloat(gyro.y);
+        serial_print("  || gyro.z = ");
+        serial_printFloatln(gyro.z);
+  #endif
+  readingValid = true;
   return readingValid;
 }
 
-void gyro_readData(gyroRawData_t *gyroscope)
+void gyro_readData(gyroData_t *gyroscope)
 {
     //gets the gyroscope data
-    gyro_getData();
+    gyro_update();
     gyroscope->x = gyro.x;
     gyroscope->y = gyro.y;
     gyroscope->z = gyro.z;
 
+}
+
+uint8_t gyro_initialize(gyroRange_t rng){
+    uint8_t ret = 1;
+    ret = gyro_begin(rng);
+    return ret;
+}
+
+/*  These functions are provided to allow the user to extract
+ *  single pieces of data from the sensor readings safely
+ *  instead of just calling the sensor variables directly
+*/
+float gyro_getX(void){
+  return (gyro.x);
+}
+
+float gyro_getY(void){
+  return (gyro.y);
+}
+
+float gyro_getZ(void){
+  return (gyro.z);
 }
