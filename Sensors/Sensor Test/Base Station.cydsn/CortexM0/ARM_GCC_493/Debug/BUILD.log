@@ -1,0 +1,33 @@
+--------------- Build Started: 07/05/2017 09:28:04 Project: Base Station, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+The code generation step is up to date.
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb "-I..\..\..\..\PSoC Basestation\Base_station_src" -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c main.c -o .\CortexM0\ARM_GCC_493\Debug\main.o
+main.c: In function 'getBatteryStats':
+main.c:91:7: warning: unused variable 'health' [-Wunused-variable]
+   int health = lipo_soh(); // Read state-of-health (%)
+       ^
+main.c:90:7: warning: unused variable 'power' [-Wunused-variable]
+   int power = lipo_power(); // Read average power draw (mW)
+       ^
+main.c:88:16: warning: unused variable 'capacity' [-Wunused-variable]
+   unsigned int capacity = lipo_capacity(/*REMAIN*/); // Read remaining capacity (mAh)
+                ^
+main.c:85:16: warning: unused variable 'fullCapacity' [-Wunused-variable]
+   unsigned int fullCapacity = lipo_capacity(/*FULL*/); // Read full capacity (mAh)
+                ^
+main.c:82:7: warning: unused variable 'current' [-Wunused-variable]
+   int current = lipo_current(/*AVG*/); // Read average current (mA)
+       ^
+main.c:79:16: warning: unused variable 'volts' [-Wunused-variable]
+   unsigned int volts = lipo_voltage(); // Read battery voltage (mV)
+                ^
+main.c:78:16: warning: unused variable 'soc' [-Wunused-variable]
+   unsigned int soc = lipo_soc();  // Read state-of-charge (%)
+                ^
+arm-none-eabi-ar.exe -rs ".\CortexM0\ARM_GCC_493\Debug\Base Station.a" .\CortexM0\ARM_GCC_493\Debug\cyfitter_cfg.o .\CortexM0\ARM_GCC_493\Debug\I2C.o .\CortexM0\ARM_GCC_493\Debug\I2C_I2C_INT.o .\CortexM0\ARM_GCC_493\Debug\I2C_I2C.o .\CortexM0\ARM_GCC_493\Debug\I2C_I2C_BOOT.o .\CortexM0\ARM_GCC_493\Debug\I2C_I2C_MASTER.o .\CortexM0\ARM_GCC_493\Debug\I2C_PM.o .\CortexM0\ARM_GCC_493\Debug\I2C_BOOT.o .\CortexM0\ARM_GCC_493\Debug\I2C_SCBCLK.o .\CortexM0\ARM_GCC_493\Debug\I2C_sda.o .\CortexM0\ARM_GCC_493\Debug\I2C_sda_PM.o .\CortexM0\ARM_GCC_493\Debug\I2C_scl.o .\CortexM0\ARM_GCC_493\Debug\I2C_scl_PM.o .\CortexM0\ARM_GCC_493\Debug\I2C_SCB_IRQ.o .\CortexM0\ARM_GCC_493\Debug\CyFlash.o .\CortexM0\ARM_GCC_493\Debug\CyLib.o .\CortexM0\ARM_GCC_493\Debug\cyPm.o .\CortexM0\ARM_GCC_493\Debug\cyutils.o .\CortexM0\ARM_GCC_493\Debug\CyLFClk.o .\CortexM0\ARM_GCC_493\Debug\serial.o .\CortexM0\ARM_GCC_493\Debug\serial_SPI_UART.o .\CortexM0\ARM_GCC_493\Debug\serial_SPI_UART_INT.o .\CortexM0\ARM_GCC_493\Debug\serial_PM.o .\CortexM0\ARM_GCC_493\Debug\serial_UART.o .\CortexM0\ARM_GCC_493\Debug\serial_BOOT.o .\CortexM0\ARM_GCC_493\Debug\serial_UART_BOOT.o .\CortexM0\ARM_GCC_493\Debug\serial_SCBCLK.o .\CortexM0\ARM_GCC_493\Debug\serial_tx.o .\CortexM0\ARM_GCC_493\Debug\serial_tx_PM.o .\CortexM0\ARM_GCC_493\Debug\butt_pin.o .\CortexM0\ARM_GCC_493\Debug\butt_pin_PM.o .\CortexM0\ARM_GCC_493\Debug\read_battery.o .\CortexM0\ARM_GCC_493\Debug\LED.o .\CortexM0\ARM_GCC_493\Debug\LED_PM.o .\CortexM0\ARM_GCC_493\Debug\serial_SCB_IRQ.o .\CortexM0\ARM_GCC_493\Debug\CyBootAsmGnu.o
+arm-none-eabi-ar.exe: creating .\CortexM0\ARM_GCC_493\Debug\Base Station.a
+arm-none-eabi-gcc.exe -Wl,--start-group -o ".\CortexM0\ARM_GCC_493\Debug\Base Station.elf" .\CortexM0\ARM_GCC_493\Debug\main.o .\CortexM0\ARM_GCC_493\Debug\batteryMonitor.o .\CortexM0\ARM_GCC_493\Debug\sev_seg.o .\CortexM0\ARM_GCC_493\Debug\mySerial.o .\CortexM0\ARM_GCC_493\Debug\cymetadata.o .\CortexM0\ARM_GCC_493\Debug\Cm0Start.o ".\CortexM0\ARM_GCC_493\Debug\Base Station.a" "C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM0\ARM_GCC_493\Debug\CyComponentLibrary.a" -mcpu=cortex-m0 -mthumb -g -ffunction-sections -Og -ffat-lto-objects -L Generated_Source\PSoC4 "-Wl,-Map,.\CortexM0\ARM_GCC_493\Debug/Base Station.map" -T "C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\Generated_Source\PSoC4\cm0gcc.ld" -specs=nano.specs -Wl,--gc-sections -Wl,--end-group
+cyelftool.exe -C "C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\CortexM0\ARM_GCC_493\Debug\Base Station.elf" --flash_row_size 128 --flash_size 32768
+cyelftool.exe -S "C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\CortexM0\ARM_GCC_493\Debug\Base Station.elf"
+Flash used: 2752 of 32768 bytes (8.4 %).
+SRAM used: 1612 of 4096 bytes (39.4 %). Stack: 1024 bytes. Heap: 128 bytes.
+--------------- Build Succeeded: 07/05/2017 09:28:05 ---------------

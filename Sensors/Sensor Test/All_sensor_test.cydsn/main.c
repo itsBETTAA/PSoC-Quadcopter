@@ -21,51 +21,20 @@
 #include <math.h>
 
 
-void quad_init(void);
-void quad_sensor_init(void);
-void sensor_update(void);
-void imu_update(void);
+void quad_init(void);        //initializes all quadcopter 
+void quad_sensor_init(void); //initializes all of the quadcopter sensors
+void sensors_update(void);   //Updates all of the sensor data (values can be extracted when needed)
+void imu_update(void);       //Updates IMU roll pitch and yaw values
 
 int main(void)
 {
     quad_init();
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-    serial_println("Started");
+    serial_println("Quadcopter Sensors Initialized");
+    
     for(;;)
     {
-        /* Place your application code here. */
-        sensor_update();
-        //double i = pow((10.2),(2.7));
-        //serial_printDoubleln(i);
+        sensors_update();
         CyDelay(1000);
-            //update the Barometric Pressure and Temperature Sensor values
-    /*bar.rawTemp = baro_getRawTemperature();
-    bar.rawPress = baro_getRawPressure();
-    bar.temperature = baro_getTemperature();
-    bar.pressure = baro_getPressure();
-
-    bar.absAlt = baro_getAbsoluteAltitude(bar.pressure);
-    bar.relAlt = baro_getRelativeAltitude((bar.pressure), (initial_reference_pressure__));
-
-//if the macro DEBUG is true (value is not 0)
-    serial_print(" rawTemp = ");
-    serial_printInt(bar.rawTemp); //print an integer
-    serial_print(", realTemp = ");
-    serial_printInt(bar.temperature); //print a double
-    serial_print(" *C");
-
-    serial_print(" ||  rawPressure = ");
-    serial_printInt(bar.rawPress); //print an integer
-    serial_print(", realPressure = ");
-    serial_printInt(bar.pressure); //print an integer
-    serial_print(" Pa ");
-
-    serial_print(" ||  absoluteAltitude = ");
-    serial_printDouble(bar.absAlt); //print a double
-    serial_print(" m, relativeAltitude = ");
-    serial_printDouble(bar.relAlt); //print a double
-    serial_println(" m");
-    */
     }
      
 }
@@ -78,17 +47,16 @@ void quad_init(void){
 }
 
 void quad_sensor_init(void){
-    //accel_mag_initialize(ACCEL_RANGE_2G);
-    //gyro_initialize(GYRO_RANGE_250DPS);
+    accel_mag_initialize(ACCEL_RANGE_2G);
+    gyro_initialize(GYRO_RANGE_250DPS);
     baro_begin();
 }
 
-void sensor_update(void){
+void sensors_update(void){
     //serial_PutString("HELLO\r\n");
-    //accel_mag_update();
-    //gyro_update();
+    accel_mag_update();
+    gyro_update();
     baro_update();
-    
 }
 
 void imu_update(void){

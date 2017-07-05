@@ -1,0 +1,19 @@
+--------------- Rebuild Started: 07/03/2017 09:34:50 Project: main.c, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb "-I..\..\..\..\PSoC Basestation\Base_station_src" -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c main.c -o .\CortexM0\ARM_GCC_493\Debug\main.o
+main.c: In function 'printBatteryStats':
+main.c:94:7: warning: unused variable 'health' [-Wunused-variable]
+   int health = lipo_soh(); // Read state-of-health (%)
+       ^
+main.c:93:7: warning: unused variable 'power' [-Wunused-variable]
+   int power = lipo_power(); // Read average power draw (mW)
+       ^
+main.c:88:16: warning: unused variable 'fullCapacity' [-Wunused-variable]
+   unsigned int fullCapacity = lipo_capacity(/*FULL*/); // Read full capacity (mAh)
+                ^
+main.c:85:7: warning: unused variable 'current' [-Wunused-variable]
+   int current = lipo_current(/*AVG*/); // Read average current (mA)
+       ^
+main.c:82:16: warning: unused variable 'volts' [-Wunused-variable]
+   unsigned int volts = lipo_voltage(); // Read battery voltage (mV)
+                ^
+--------------- Rebuild Succeeded: 07/03/2017 09:34:51 ---------------

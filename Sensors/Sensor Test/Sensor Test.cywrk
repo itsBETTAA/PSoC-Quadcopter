@@ -3,11 +3,13 @@
 <!--This file is machine generated and read. It is not intended to be edited by hand.-->
 <!--Due to this, there is no schema for this file.-->
 <CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="Sensor Test" persistent="Sensor Test.cywrk" platform="NOT_USED">
-<current_project name=".\All_sensor_test.cydsn\All_sensor_test.cyprj" />
+<current_project name=".\Base Station.cydsn\Base Station.cyprj" />
 <wrkspc_folders />
 <files />
 <projects>
 <v>.\All_sensor_test.cydsn\All_sensor_test.cyprj</v>
+<v>.\Base Station.cydsn\Base Station.cyprj</v>
+<v>.\LED STRIP TEST.cydsn\LED STRIP TEST.cyprj</v>
 </projects>
 <workspace_id v="b1c18a38-7e0e-4ca1-a938-58bf525f4331" />
 <WriteAppVersionLastSavedWith v="4.0.0.432" />

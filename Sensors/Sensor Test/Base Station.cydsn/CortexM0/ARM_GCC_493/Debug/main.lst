@@ -1,0 +1,1748 @@
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.read_battery_Handler,"ax",%progbits
+  18              		.align	2
+  19              		.global	read_battery_Handler
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	read_battery_Handler, %function
+  23              	read_battery_Handler:
+  24              	.LFB34:
+  25              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright ARROW ELECTRONICS, 2017
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:main.c        ****  * WHICH IS THE PROPERTY OF your company.
+   9:main.c        ****  *
+  10:main.c        ****  * ========================================
+  11:main.c        **** */
+  12:main.c        **** 
+  13:main.c        **** /* ========================================
+  14:main.c        ****  *
+  15:main.c        ****  * This code will read the neccessary information from Battery Babysitter
+  16:main.c        ****  * And display the necessary information on a 4- 7 segment+dot display
+  17:main.c        ****  *
+  18:main.c        ****  * ========================================
+  19:main.c        **** */
+  20:main.c        **** #include "project.h"
+  21:main.c        **** #include <batteryMonitor.h>
+  22:main.c        **** #include <sev_seg.h>
+  23:main.c        **** #include <mySerial.h>
+  24:main.c        **** 
+  25:main.c        **** #define _DEBUG 0
+  26:main.c        **** 
+  27:main.c        **** // Set BATTERY_CAPACITY to the design capacity of your battery.
+  28:main.c        **** const unsigned int BATTERY_CAPACITY = 2000; // e.g. 2000mAh battery
+  29:main.c        **** 
+  30:main.c        **** void setupBQ27441(void);
+  31:main.c        **** void getBatteryStats();
+  32:main.c        **** CY_ISR(read_battery_Handler);
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 2
+
+
+  33:main.c        **** 
+  34:main.c        **** int i = 0;
+  35:main.c        **** 
+  36:main.c        **** CY_ISR(read_battery_Handler){
+  26              		.loc 1 36 0
+  27              		.cfi_startproc
+  28 0000 08B5     		push	{r3, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 3, -8
+  31              		.cfi_offset 14, -4
+  37:main.c        ****     
+  38:main.c        ****     CyDelay(50);
+  32              		.loc 1 38 0
+  33 0002 3220     		mov	r0, #50
+  34 0004 FFF7FEFF 		bl	CyDelay
+  35              	.LVL0:
+  39:main.c        ****     LED_Write(~LED_Read());
+  36              		.loc 1 39 0
+  37 0008 FFF7FEFF 		bl	LED_Read
+  38              	.LVL1:
+  39 000c C043     		mvn	r0, r0
+  40 000e C0B2     		uxtb	r0, r0
+  41 0010 FFF7FEFF 		bl	LED_Write
+  42              	.LVL2:
+  40:main.c        ****     butt_pin_ClearInterrupt();
+  43              		.loc 1 40 0
+  44 0014 FFF7FEFF 		bl	butt_pin_ClearInterrupt
+  45              	.LVL3:
+  41:main.c        **** }    
+  46              		.loc 1 41 0
+  47              		@ sp needed
+  48 0018 08BD     		pop	{r3, pc}
+  49              		.cfi_endproc
+  50              	.LFE34:
+  51              		.size	read_battery_Handler, .-read_battery_Handler
+  52 001a C046     		.section	.text.main,"ax",%progbits
+  53              		.align	2
+  54              		.global	main
+  55              		.code	16
+  56              		.thumb_func
+  57              		.type	main, %function
+  58              	main:
+  59              	.LFB35:
+  42:main.c        **** 
+  43:main.c        **** int main(void)
+  44:main.c        **** {
+  60              		.loc 1 44 0
+  61              		.cfi_startproc
+  62 0000 08B5     		push	{r3, lr}
+  63              		.cfi_def_cfa_offset 8
+  64              		.cfi_offset 3, -8
+  65              		.cfi_offset 14, -4
+  45:main.c        ****     CyGlobalIntEnable; /* Enable global interrupts. */    
+  66              		.loc 1 45 0
+  67              	@ 45 "main.c" 1
+  68 0002 62B6     		CPSIE   i
+  69              	@ 0 "" 2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 3
+
+
+  46:main.c        ****     read_battery_StartEx(read_battery_Handler);
+  70              		.loc 1 46 0
+  71              		.code	16
+  72 0004 0248     		ldr	r0, .L4
+  73 0006 FFF7FEFF 		bl	read_battery_StartEx
+  74              	.LVL4:
+  47:main.c        ****     //setupBQ27441();
+  48:main.c        ****     serial_Start();
+  75              		.loc 1 48 0
+  76 000a FFF7FEFF 		bl	serial_Start
+  77              	.LVL5:
+  78              	.L3:
+  49:main.c        ****     
+  50:main.c        ****     for(;;)
+  51:main.c        ****     {
+  52:main.c        ****         
+  53:main.c        ****     }
+  79              		.loc 1 53 0 discriminator 1
+  80 000e FEE7     		b	.L3
+  81              	.L5:
+  82              		.align	2
+  83              	.L4:
+  84 0010 00000000 		.word	read_battery_Handler
+  85              		.cfi_endproc
+  86              	.LFE35:
+  87              		.size	main, .-main
+  88              		.section	.text.setupBQ27441,"ax",%progbits
+  89              		.align	2
+  90              		.global	setupBQ27441
+  91              		.code	16
+  92              		.thumb_func
+  93              		.type	setupBQ27441, %function
+  94              	setupBQ27441:
+  95              	.LFB36:
+  54:main.c        **** }
+  55:main.c        **** 
+  56:main.c        **** void setupBQ27441(void)
+  57:main.c        **** {
+  96              		.loc 1 57 0
+  97              		.cfi_startproc
+  98 0000 08B5     		push	{r3, lr}
+  99              		.cfi_def_cfa_offset 8
+ 100              		.cfi_offset 3, -8
+ 101              		.cfi_offset 14, -4
+  58:main.c        ****   // Use lipo.begin() to initialize the BQ27441-G1A and confirm that it's
+  59:main.c        ****   // connected and communicating.
+  60:main.c        ****   if (!lipo_begin()) // begin() will return true if communication is successful
+ 102              		.loc 1 60 0
+ 103 0002 FFF7FEFF 		bl	lipo_begin
+ 104              	.LVL6:
+ 105 0006 0028     		cmp	r0, #0
+ 106 0008 09D1     		bne	.L7
+  61:main.c        ****   {
+  62:main.c        **** 	// If communication fails, print an error message and loop forever.
+  63:main.c        ****     serial_println("Error: Unable to communicate with BQ27441.");
+ 107              		.loc 1 63 0
+ 108 000a 0948     		ldr	r0, .L9
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 4
+
+
+ 109 000c FFF7FEFF 		bl	serial_println
+ 110              	.LVL7:
+  64:main.c        ****     serial_println("  Check wiring and try again.");
+ 111              		.loc 1 64 0
+ 112 0010 0848     		ldr	r0, .L9+4
+ 113 0012 FFF7FEFF 		bl	serial_println
+ 114              	.LVL8:
+  65:main.c        ****     serial_println("  (Battery must be plugged into Battery Babysitter!)");
+ 115              		.loc 1 65 0
+ 116 0016 0848     		ldr	r0, .L9+8
+ 117 0018 FFF7FEFF 		bl	serial_println
+ 118              	.LVL9:
+ 119              	.L8:
+  66:main.c        ****     while (1) ;
+ 120              		.loc 1 66 0 discriminator 1
+ 121 001c FEE7     		b	.L8
+ 122              	.L7:
+  67:main.c        ****   }
+  68:main.c        ****   serial_println("Connected to BQ27441!");
+ 123              		.loc 1 68 0
+ 124 001e 0748     		ldr	r0, .L9+12
+ 125 0020 FFF7FEFF 		bl	serial_println
+ 126              	.LVL10:
+  69:main.c        ****   
+  70:main.c        ****   // Uset lipo.setCapacity(BATTERY_CAPACITY) to set the design capacity
+  71:main.c        ****   // of your battery.
+  72:main.c        ****   lipo_setCapacity(BATTERY_CAPACITY);
+ 127              		.loc 1 72 0
+ 128 0024 FA20     		mov	r0, #250
+ 129 0026 C000     		lsl	r0, r0, #3
+ 130 0028 FFF7FEFF 		bl	lipo_setCapacity
+ 131              	.LVL11:
+  73:main.c        **** }
+ 132              		.loc 1 73 0
+ 133              		@ sp needed
+ 134 002c 08BD     		pop	{r3, pc}
+ 135              	.L10:
+ 136 002e C046     		.align	2
+ 137              	.L9:
+ 138 0030 00000000 		.word	.LC1
+ 139 0034 2C000000 		.word	.LC3
+ 140 0038 4C000000 		.word	.LC5
+ 141 003c 84000000 		.word	.LC7
+ 142              		.cfi_endproc
+ 143              	.LFE36:
+ 144              		.size	setupBQ27441, .-setupBQ27441
+ 145              		.section	.text.getBatteryStats,"ax",%progbits
+ 146              		.align	2
+ 147              		.global	getBatteryStats
+ 148              		.code	16
+ 149              		.thumb_func
+ 150              		.type	getBatteryStats, %function
+ 151              	getBatteryStats:
+ 152              	.LFB37:
+  74:main.c        **** 
+  75:main.c        **** void getBatteryStats()
+  76:main.c        **** {
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 5
+
+
+ 153              		.loc 1 76 0
+ 154              		.cfi_startproc
+ 155 0000 08B5     		push	{r3, lr}
+ 156              		.cfi_def_cfa_offset 8
+ 157              		.cfi_offset 3, -8
+ 158              		.cfi_offset 14, -4
+  77:main.c        ****   // Read battery stats from the BQ27441-G1A
+  78:main.c        ****   unsigned int soc = lipo_soc();  // Read state-of-charge (%)
+ 159              		.loc 1 78 0
+ 160 0002 FFF7FEFF 		bl	lipo_soc
+ 161              	.LVL12:
+  79:main.c        ****   unsigned int volts = lipo_voltage(); // Read battery voltage (mV)
+ 162              		.loc 1 79 0
+ 163 0006 FFF7FEFF 		bl	lipo_voltage
+ 164              	.LVL13:
+  80:main.c        **** 
+  81:main.c        ****   set_lipo_current_arg(AVG);
+ 165              		.loc 1 81 0
+ 166 000a 0020     		mov	r0, #0
+ 167 000c FFF7FEFF 		bl	set_lipo_current_arg
+ 168              	.LVL14:
+  82:main.c        ****   int current = lipo_current(/*AVG*/); // Read average current (mA)
+ 169              		.loc 1 82 0
+ 170 0010 FFF7FEFF 		bl	lipo_current
+ 171              	.LVL15:
+  83:main.c        **** 
+  84:main.c        ****   set_lipo_capacity_arg(FULL);
+ 172              		.loc 1 84 0
+ 173 0014 0120     		mov	r0, #1
+ 174 0016 FFF7FEFF 		bl	set_lipo_capacity_arg
+ 175              	.LVL16:
+  85:main.c        ****   unsigned int fullCapacity = lipo_capacity(/*FULL*/); // Read full capacity (mAh)
+ 176              		.loc 1 85 0
+ 177 001a FFF7FEFF 		bl	lipo_capacity
+ 178              	.LVL17:
+  86:main.c        **** 
+  87:main.c        ****   set_lipo_capacity_arg(REMAIN);
+ 179              		.loc 1 87 0
+ 180 001e 0020     		mov	r0, #0
+ 181 0020 FFF7FEFF 		bl	set_lipo_capacity_arg
+ 182              	.LVL18:
+  88:main.c        ****   unsigned int capacity = lipo_capacity(/*REMAIN*/); // Read remaining capacity (mAh)
+ 183              		.loc 1 88 0
+ 184 0024 FFF7FEFF 		bl	lipo_capacity
+ 185              	.LVL19:
+  89:main.c        **** 
+  90:main.c        ****   int power = lipo_power(); // Read average power draw (mW)
+ 186              		.loc 1 90 0
+ 187 0028 FFF7FEFF 		bl	lipo_power
+ 188              	.LVL20:
+  91:main.c        ****   int health = lipo_soh(); // Read state-of-health (%)
+ 189              		.loc 1 91 0
+ 190 002c FFF7FEFF 		bl	lipo_soh
+ 191              	.LVL21:
+  92:main.c        **** 
+  93:main.c        **** #if _DEBUG
+  94:main.c        ****   serial_print("SOC(%) = "); 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 6
+
+
+  95:main.c        ****   serial_printInt(soc);
+  96:main.c        ****   serial_print(" | Volt(mV) = "); 
+  97:main.c        ****   serial_printInt(volts);
+  98:main.c        ****   serial_print(" | Current(mA) = "); 
+  99:main.c        ****   serial_printInt(current);
+ 100:main.c        **** 
+ 101:main.c        ****   serial_print(" | Remaining(mAh) = "); 
+ 102:main.c        ****   serial_printInt(capacity);
+ 103:main.c        ****   serial_print(" / full(mAh) = "); 
+ 104:main.c        ****   serial_printInt(fullCapacity);
+ 105:main.c        ****   
+ 106:main.c        ****   serial_print(" | Power(mW) = "); 
+ 107:main.c        ****   serial_printInt(power);
+ 108:main.c        ****   serial_print(" | Health = "); 
+ 109:main.c        ****   serial_printIntln(health);
+ 110:main.c        **** #endif
+ 111:main.c        **** }
+ 192              		.loc 1 111 0
+ 193              		@ sp needed
+ 194 0030 08BD     		pop	{r3, pc}
+ 195              		.cfi_endproc
+ 196              	.LFE37:
+ 197              		.size	getBatteryStats, .-getBatteryStats
+ 198              		.global	i
+ 199              		.global	BATTERY_CAPACITY
+ 200 0032 C046     		.section	.rodata
+ 201              		.align	2
+ 202              		.type	BATTERY_CAPACITY, %object
+ 203              		.size	BATTERY_CAPACITY, 4
+ 204              	BATTERY_CAPACITY:
+ 205 0000 D0070000 		.word	2000
+ 206              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 207              		.align	2
+ 208              	.LC1:
+ 209 0000 4572726F 		.ascii	"Error: Unable to communicate with BQ27441.\000"
+ 209      723A2055 
+ 209      6E61626C 
+ 209      6520746F 
+ 209      20636F6D 
+ 210 002b 00       		.space	1
+ 211              	.LC3:
+ 212 002c 20204368 		.ascii	"  Check wiring and try again.\000"
+ 212      65636B20 
+ 212      77697269 
+ 212      6E672061 
+ 212      6E642074 
+ 213 004a 0000     		.space	2
+ 214              	.LC5:
+ 215 004c 20202842 		.ascii	"  (Battery must be plugged into Battery Babysitter!"
+ 215      61747465 
+ 215      7279206D 
+ 215      75737420 
+ 215      62652070 
+ 216 007f 2900     		.ascii	")\000"
+ 217 0081 000000   		.space	3
+ 218              	.LC7:
+ 219 0084 436F6E6E 		.ascii	"Connected to BQ27441!\000"
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 7
+
+
+ 219      65637465 
+ 219      6420746F 
+ 219      20425132 
+ 219      37343431 
+ 220 009a 0000     		.bss
+ 221              		.align	2
+ 222              		.type	i, %object
+ 223              		.size	i, 4
+ 224              	i:
+ 225 0000 00000000 		.space	4
+ 226              		.text
+ 227              	.Letext0:
+ 228              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 229              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 230              		.file 4 "Generated_Source\\PSoC4/cytypes.h"
+ 231              		.file 5 "..\\..\\..\\..\\PSoC Basestation\\Base_station_src/batteryMonitor.h"
+ 232              		.file 6 "Generated_Source\\PSoC4/CyLib.h"
+ 233              		.file 7 "Generated_Source\\PSoC4/LED.h"
+ 234              		.file 8 "Generated_Source\\PSoC4/butt_pin.h"
+ 235              		.file 9 "Generated_Source\\PSoC4/read_battery.h"
+ 236              		.file 10 "..\\..\\..\\..\\PSoC Basestation\\Base_station_src/mySerial.h"
+ 237              		.file 11 "Generated_Source\\PSoC4/serial.h"
+ 238              		.section	.debug_info,"",%progbits
+ 239              	.Ldebug_info0:
+ 240 0000 76040000 		.4byte	0x476
+ 241 0004 0400     		.2byte	0x4
+ 242 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 243 000a 04       		.byte	0x4
+ 244 000b 01       		.uleb128 0x1
+ 245 000c 7B010000 		.4byte	.LASF58
+ 246 0010 01       		.byte	0x1
+ 247 0011 24030000 		.4byte	.LASF59
+ 248 0015 00000000 		.4byte	.LASF60
+ 249 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 250 001d 00000000 		.4byte	0
+ 251 0021 00000000 		.4byte	.Ldebug_line0
+ 252 0025 02       		.uleb128 0x2
+ 253 0026 01       		.byte	0x1
+ 254 0027 06       		.byte	0x6
+ 255 0028 38020000 		.4byte	.LASF0
+ 256 002c 03       		.uleb128 0x3
+ 257 002d 6C010000 		.4byte	.LASF2
+ 258 0031 02       		.byte	0x2
+ 259 0032 1D       		.byte	0x1d
+ 260 0033 37000000 		.4byte	0x37
+ 261 0037 02       		.uleb128 0x2
+ 262 0038 01       		.byte	0x1
+ 263 0039 08       		.byte	0x8
+ 264 003a 09020000 		.4byte	.LASF1
+ 265 003e 03       		.uleb128 0x3
+ 266 003f 69030000 		.4byte	.LASF3
+ 267 0043 02       		.byte	0x2
+ 268 0044 29       		.byte	0x29
+ 269 0045 49000000 		.4byte	0x49
+ 270 0049 02       		.uleb128 0x2
+ 271 004a 02       		.byte	0x2
+ 272 004b 05       		.byte	0x5
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 8
+
+
+ 273 004c 83000000 		.4byte	.LASF4
+ 274 0050 03       		.uleb128 0x3
+ 275 0051 B0000000 		.4byte	.LASF5
+ 276 0055 02       		.byte	0x2
+ 277 0056 2B       		.byte	0x2b
+ 278 0057 5B000000 		.4byte	0x5b
+ 279 005b 02       		.uleb128 0x2
+ 280 005c 02       		.byte	0x2
+ 281 005d 07       		.byte	0x7
+ 282 005e B3020000 		.4byte	.LASF6
+ 283 0062 02       		.uleb128 0x2
+ 284 0063 04       		.byte	0x4
+ 285 0064 05       		.byte	0x5
+ 286 0065 41010000 		.4byte	.LASF7
+ 287 0069 02       		.uleb128 0x2
+ 288 006a 04       		.byte	0x4
+ 289 006b 07       		.byte	0x7
+ 290 006c 2B030000 		.4byte	.LASF8
+ 291 0070 02       		.uleb128 0x2
+ 292 0071 08       		.byte	0x8
+ 293 0072 05       		.byte	0x5
+ 294 0073 21010000 		.4byte	.LASF9
+ 295 0077 02       		.uleb128 0x2
+ 296 0078 08       		.byte	0x8
+ 297 0079 07       		.byte	0x7
+ 298 007a 4D020000 		.4byte	.LASF10
+ 299 007e 04       		.uleb128 0x4
+ 300 007f 04       		.byte	0x4
+ 301 0080 05       		.byte	0x5
+ 302 0081 696E7400 		.ascii	"int\000"
+ 303 0085 02       		.uleb128 0x2
+ 304 0086 04       		.byte	0x4
+ 305 0087 07       		.byte	0x7
+ 306 0088 64020000 		.4byte	.LASF11
+ 307 008c 03       		.uleb128 0x3
+ 308 008d F6000000 		.4byte	.LASF12
+ 309 0091 03       		.byte	0x3
+ 310 0092 15       		.byte	0x15
+ 311 0093 2C000000 		.4byte	0x2c
+ 312 0097 03       		.uleb128 0x3
+ 313 0098 F8020000 		.4byte	.LASF13
+ 314 009c 03       		.byte	0x3
+ 315 009d 20       		.byte	0x20
+ 316 009e 3E000000 		.4byte	0x3e
+ 317 00a2 03       		.uleb128 0x3
+ 318 00a3 71020000 		.4byte	.LASF14
+ 319 00a7 03       		.byte	0x3
+ 320 00a8 21       		.byte	0x21
+ 321 00a9 50000000 		.4byte	0x50
+ 322 00ad 05       		.uleb128 0x5
+ 323 00ae FE000000 		.4byte	.LASF15
+ 324 00b2 04       		.byte	0x4
+ 325 00b3 B901     		.2byte	0x1b9
+ 326 00b5 37000000 		.4byte	0x37
+ 327 00b9 05       		.uleb128 0x5
+ 328 00ba 1D030000 		.4byte	.LASF16
+ 329 00be 04       		.byte	0x4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 9
+
+
+ 330 00bf BB01     		.2byte	0x1bb
+ 331 00c1 69000000 		.4byte	0x69
+ 332 00c5 02       		.uleb128 0x2
+ 333 00c6 04       		.byte	0x4
+ 334 00c7 04       		.byte	0x4
+ 335 00c8 1B010000 		.4byte	.LASF17
+ 336 00cc 02       		.uleb128 0x2
+ 337 00cd 08       		.byte	0x8
+ 338 00ce 04       		.byte	0x4
+ 339 00cf 3D030000 		.4byte	.LASF18
+ 340 00d3 02       		.uleb128 0x2
+ 341 00d4 01       		.byte	0x1
+ 342 00d5 08       		.byte	0x8
+ 343 00d6 3C010000 		.4byte	.LASF19
+ 344 00da 05       		.uleb128 0x5
+ 345 00db 1E020000 		.4byte	.LASF20
+ 346 00df 04       		.byte	0x4
+ 347 00e0 7502     		.2byte	0x275
+ 348 00e2 E6000000 		.4byte	0xe6
+ 349 00e6 06       		.uleb128 0x6
+ 350 00e7 04       		.byte	0x4
+ 351 00e8 EC000000 		.4byte	0xec
+ 352 00ec 07       		.uleb128 0x7
+ 353 00ed 02       		.uleb128 0x2
+ 354 00ee 04       		.byte	0x4
+ 355 00ef 07       		.byte	0x7
+ 356 00f0 95000000 		.4byte	.LASF21
+ 357 00f4 06       		.uleb128 0x6
+ 358 00f5 04       		.byte	0x4
+ 359 00f6 D3000000 		.4byte	0xd3
+ 360 00fa 03       		.uleb128 0x3
+ 361 00fb 16010000 		.4byte	.LASF22
+ 362 00ff 05       		.byte	0x5
+ 363 0100 28       		.byte	0x28
+ 364 0101 A2000000 		.4byte	0xa2
+ 365 0105 08       		.uleb128 0x8
+ 366 0106 01       		.byte	0x1
+ 367 0107 05       		.byte	0x5
+ 368 0108 2B       		.byte	0x2b
+ 369 0109 20010000 		.4byte	0x120
+ 370 010d 09       		.uleb128 0x9
+ 371 010e 41564700 		.ascii	"AVG\000"
+ 372 0112 00       		.sleb128 0
+ 373 0113 0A       		.uleb128 0xa
+ 374 0114 76010000 		.4byte	.LASF23
+ 375 0118 01       		.sleb128 1
+ 376 0119 09       		.uleb128 0x9
+ 377 011a 4D415800 		.ascii	"MAX\000"
+ 378 011e 02       		.sleb128 2
+ 379 011f 00       		.byte	0
+ 380 0120 03       		.uleb128 0x3
+ 381 0121 07030000 		.4byte	.LASF24
+ 382 0125 05       		.byte	0x5
+ 383 0126 2F       		.byte	0x2f
+ 384 0127 05010000 		.4byte	0x105
+ 385 012b 08       		.uleb128 0x8
+ 386 012c 01       		.byte	0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 10
+
+
+ 387 012d 05       		.byte	0x5
+ 388 012e 32       		.byte	0x32
+ 389 012f 6A010000 		.4byte	0x16a
+ 390 0133 0A       		.uleb128 0xa
+ 391 0134 00030000 		.4byte	.LASF25
+ 392 0138 00       		.sleb128 0
+ 393 0139 0A       		.uleb128 0xa
+ 394 013a 7A020000 		.4byte	.LASF26
+ 395 013e 01       		.sleb128 1
+ 396 013f 0A       		.uleb128 0xa
+ 397 0140 51010000 		.4byte	.LASF27
+ 398 0144 02       		.sleb128 2
+ 399 0145 0A       		.uleb128 0xa
+ 400 0146 61000000 		.4byte	.LASF28
+ 401 014a 03       		.sleb128 3
+ 402 014b 0A       		.uleb128 0xa
+ 403 014c AA020000 		.4byte	.LASF29
+ 404 0150 04       		.sleb128 4
+ 405 0151 0A       		.uleb128 0xa
+ 406 0152 EE020000 		.4byte	.LASF30
+ 407 0156 05       		.sleb128 5
+ 408 0157 0A       		.uleb128 0xa
+ 409 0158 17020000 		.4byte	.LASF31
+ 410 015c 06       		.sleb128 6
+ 411 015d 0A       		.uleb128 0xa
+ 412 015e 8D000000 		.4byte	.LASF32
+ 413 0162 07       		.sleb128 7
+ 414 0163 0A       		.uleb128 0xa
+ 415 0164 4A010000 		.4byte	.LASF33
+ 416 0168 08       		.sleb128 8
+ 417 0169 00       		.byte	0
+ 418 016a 03       		.uleb128 0x3
+ 419 016b DA000000 		.4byte	.LASF34
+ 420 016f 05       		.byte	0x5
+ 421 0170 3C       		.byte	0x3c
+ 422 0171 2B010000 		.4byte	0x12b
+ 423 0175 0B       		.uleb128 0xb
+ 424 0176 95020000 		.4byte	.LASF35
+ 425 017a 01       		.byte	0x1
+ 426 017b 24       		.byte	0x24
+ 427 017c 00000000 		.4byte	.LFB34
+ 428 0180 1A000000 		.4byte	.LFE34-.LFB34
+ 429 0184 01       		.uleb128 0x1
+ 430 0185 9C       		.byte	0x9c
+ 431 0186 BA010000 		.4byte	0x1ba
+ 432 018a 0C       		.uleb128 0xc
+ 433 018b 08000000 		.4byte	.LVL0
+ 434 018f 80030000 		.4byte	0x380
+ 435 0193 9E010000 		.4byte	0x19e
+ 436 0197 0D       		.uleb128 0xd
+ 437 0198 01       		.uleb128 0x1
+ 438 0199 50       		.byte	0x50
+ 439 019a 02       		.uleb128 0x2
+ 440 019b 08       		.byte	0x8
+ 441 019c 32       		.byte	0x32
+ 442 019d 00       		.byte	0
+ 443 019e 0E       		.uleb128 0xe
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 11
+
+
+ 444 019f 0C000000 		.4byte	.LVL1
+ 445 01a3 91030000 		.4byte	0x391
+ 446 01a7 0E       		.uleb128 0xe
+ 447 01a8 14000000 		.4byte	.LVL2
+ 448 01ac 9C030000 		.4byte	0x39c
+ 449 01b0 0E       		.uleb128 0xe
+ 450 01b1 18000000 		.4byte	.LVL3
+ 451 01b5 AD030000 		.4byte	0x3ad
+ 452 01b9 00       		.byte	0
+ 453 01ba 0F       		.uleb128 0xf
+ 454 01bb AB000000 		.4byte	.LASF61
+ 455 01bf 01       		.byte	0x1
+ 456 01c0 2B       		.byte	0x2b
+ 457 01c1 7E000000 		.4byte	0x7e
+ 458 01c5 00000000 		.4byte	.LFB35
+ 459 01c9 14000000 		.4byte	.LFE35-.LFB35
+ 460 01cd 01       		.uleb128 0x1
+ 461 01ce 9C       		.byte	0x9c
+ 462 01cf F4010000 		.4byte	0x1f4
+ 463 01d3 0C       		.uleb128 0xc
+ 464 01d4 0A000000 		.4byte	.LVL4
+ 465 01d8 B8030000 		.4byte	0x3b8
+ 466 01dc EA010000 		.4byte	0x1ea
+ 467 01e0 0D       		.uleb128 0xd
+ 468 01e1 01       		.uleb128 0x1
+ 469 01e2 50       		.byte	0x50
+ 470 01e3 05       		.uleb128 0x5
+ 471 01e4 03       		.byte	0x3
+ 472 01e5 00000000 		.4byte	read_battery_Handler
+ 473 01e9 00       		.byte	0
+ 474 01ea 0E       		.uleb128 0xe
+ 475 01eb 0E000000 		.4byte	.LVL5
+ 476 01ef C9030000 		.4byte	0x3c9
+ 477 01f3 00       		.byte	0
+ 478 01f4 0B       		.uleb128 0xb
+ 479 01f5 2F010000 		.4byte	.LASF36
+ 480 01f9 01       		.byte	0x1
+ 481 01fa 38       		.byte	0x38
+ 482 01fb 00000000 		.4byte	.LFB36
+ 483 01ff 40000000 		.4byte	.LFE36-.LFB36
+ 484 0203 01       		.uleb128 0x1
+ 485 0204 9C       		.byte	0x9c
+ 486 0205 80020000 		.4byte	0x280
+ 487 0209 0E       		.uleb128 0xe
+ 488 020a 06000000 		.4byte	.LVL6
+ 489 020e D0030000 		.4byte	0x3d0
+ 490 0212 0C       		.uleb128 0xc
+ 491 0213 10000000 		.4byte	.LVL7
+ 492 0217 DB030000 		.4byte	0x3db
+ 493 021b 29020000 		.4byte	0x229
+ 494 021f 0D       		.uleb128 0xd
+ 495 0220 01       		.uleb128 0x1
+ 496 0221 50       		.byte	0x50
+ 497 0222 05       		.uleb128 0x5
+ 498 0223 03       		.byte	0x3
+ 499 0224 00000000 		.4byte	.LC1
+ 500 0228 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 12
+
+
+ 501 0229 0C       		.uleb128 0xc
+ 502 022a 16000000 		.4byte	.LVL8
+ 503 022e DB030000 		.4byte	0x3db
+ 504 0232 40020000 		.4byte	0x240
+ 505 0236 0D       		.uleb128 0xd
+ 506 0237 01       		.uleb128 0x1
+ 507 0238 50       		.byte	0x50
+ 508 0239 05       		.uleb128 0x5
+ 509 023a 03       		.byte	0x3
+ 510 023b 2C000000 		.4byte	.LC3
+ 511 023f 00       		.byte	0
+ 512 0240 0C       		.uleb128 0xc
+ 513 0241 1C000000 		.4byte	.LVL9
+ 514 0245 DB030000 		.4byte	0x3db
+ 515 0249 57020000 		.4byte	0x257
+ 516 024d 0D       		.uleb128 0xd
+ 517 024e 01       		.uleb128 0x1
+ 518 024f 50       		.byte	0x50
+ 519 0250 05       		.uleb128 0x5
+ 520 0251 03       		.byte	0x3
+ 521 0252 4C000000 		.4byte	.LC5
+ 522 0256 00       		.byte	0
+ 523 0257 0C       		.uleb128 0xc
+ 524 0258 24000000 		.4byte	.LVL10
+ 525 025c DB030000 		.4byte	0x3db
+ 526 0260 6E020000 		.4byte	0x26e
+ 527 0264 0D       		.uleb128 0xd
+ 528 0265 01       		.uleb128 0x1
+ 529 0266 50       		.byte	0x50
+ 530 0267 05       		.uleb128 0x5
+ 531 0268 03       		.byte	0x3
+ 532 0269 84000000 		.4byte	.LC7
+ 533 026d 00       		.byte	0
+ 534 026e 10       		.uleb128 0x10
+ 535 026f 2C000000 		.4byte	.LVL11
+ 536 0273 EC030000 		.4byte	0x3ec
+ 537 0277 0D       		.uleb128 0xd
+ 538 0278 01       		.uleb128 0x1
+ 539 0279 50       		.byte	0x50
+ 540 027a 03       		.uleb128 0x3
+ 541 027b 0A       		.byte	0xa
+ 542 027c D007     		.2byte	0x7d0
+ 543 027e 00       		.byte	0
+ 544 027f 00       		.byte	0
+ 545 0280 11       		.uleb128 0x11
+ 546 0281 BB000000 		.4byte	.LASF62
+ 547 0285 01       		.byte	0x1
+ 548 0286 4B       		.byte	0x4b
+ 549 0287 00000000 		.4byte	.LFB37
+ 550 028b 32000000 		.4byte	.LFE37-.LFB37
+ 551 028f 01       		.uleb128 0x1
+ 552 0290 9C       		.byte	0x9c
+ 553 0291 5B030000 		.4byte	0x35b
+ 554 0295 12       		.uleb128 0x12
+ 555 0296 736F6300 		.ascii	"soc\000"
+ 556 029a 01       		.byte	0x1
+ 557 029b 4E       		.byte	0x4e
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 13
+
+
+ 558 029c 85000000 		.4byte	0x85
+ 559 02a0 13       		.uleb128 0x13
+ 560 02a1 C6020000 		.4byte	.LASF37
+ 561 02a5 01       		.byte	0x1
+ 562 02a6 4F       		.byte	0x4f
+ 563 02a7 85000000 		.4byte	0x85
+ 564 02ab 13       		.uleb128 0x13
+ 565 02ac 8D020000 		.4byte	.LASF38
+ 566 02b0 01       		.byte	0x1
+ 567 02b1 52       		.byte	0x52
+ 568 02b2 7E000000 		.4byte	0x7e
+ 569 02b6 13       		.uleb128 0x13
+ 570 02b7 76000000 		.4byte	.LASF39
+ 571 02bb 01       		.byte	0x1
+ 572 02bc 55       		.byte	0x55
+ 573 02bd 85000000 		.4byte	0x85
+ 574 02c1 13       		.uleb128 0x13
+ 575 02c2 44020000 		.4byte	.LASF40
+ 576 02c6 01       		.byte	0x1
+ 577 02c7 58       		.byte	0x58
+ 578 02c8 85000000 		.4byte	0x85
+ 579 02cc 13       		.uleb128 0x13
+ 580 02cd 17030000 		.4byte	.LASF41
+ 581 02d1 01       		.byte	0x1
+ 582 02d2 5A       		.byte	0x5a
+ 583 02d3 7E000000 		.4byte	0x7e
+ 584 02d7 13       		.uleb128 0x13
+ 585 02d8 5A000000 		.4byte	.LASF42
+ 586 02dc 01       		.byte	0x1
+ 587 02dd 5B       		.byte	0x5b
+ 588 02de 7E000000 		.4byte	0x7e
+ 589 02e2 0E       		.uleb128 0xe
+ 590 02e3 06000000 		.4byte	.LVL12
+ 591 02e7 01040000 		.4byte	0x401
+ 592 02eb 0E       		.uleb128 0xe
+ 593 02ec 0A000000 		.4byte	.LVL13
+ 594 02f0 12040000 		.4byte	0x412
+ 595 02f4 0C       		.uleb128 0xc
+ 596 02f5 10000000 		.4byte	.LVL14
+ 597 02f9 1D040000 		.4byte	0x41d
+ 598 02fd 07030000 		.4byte	0x307
+ 599 0301 0D       		.uleb128 0xd
+ 600 0302 01       		.uleb128 0x1
+ 601 0303 50       		.byte	0x50
+ 602 0304 01       		.uleb128 0x1
+ 603 0305 30       		.byte	0x30
+ 604 0306 00       		.byte	0
+ 605 0307 0E       		.uleb128 0xe
+ 606 0308 14000000 		.4byte	.LVL15
+ 607 030c 2E040000 		.4byte	0x42e
+ 608 0310 0C       		.uleb128 0xc
+ 609 0311 1A000000 		.4byte	.LVL16
+ 610 0315 3F040000 		.4byte	0x43f
+ 611 0319 23030000 		.4byte	0x323
+ 612 031d 0D       		.uleb128 0xd
+ 613 031e 01       		.uleb128 0x1
+ 614 031f 50       		.byte	0x50
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 14
+
+
+ 615 0320 01       		.uleb128 0x1
+ 616 0321 31       		.byte	0x31
+ 617 0322 00       		.byte	0
+ 618 0323 0E       		.uleb128 0xe
+ 619 0324 1E000000 		.4byte	.LVL17
+ 620 0328 50040000 		.4byte	0x450
+ 621 032c 0C       		.uleb128 0xc
+ 622 032d 24000000 		.4byte	.LVL18
+ 623 0331 3F040000 		.4byte	0x43f
+ 624 0335 3F030000 		.4byte	0x33f
+ 625 0339 0D       		.uleb128 0xd
+ 626 033a 01       		.uleb128 0x1
+ 627 033b 50       		.byte	0x50
+ 628 033c 01       		.uleb128 0x1
+ 629 033d 30       		.byte	0x30
+ 630 033e 00       		.byte	0
+ 631 033f 0E       		.uleb128 0xe
+ 632 0340 28000000 		.4byte	.LVL19
+ 633 0344 50040000 		.4byte	0x450
+ 634 0348 0E       		.uleb128 0xe
+ 635 0349 2C000000 		.4byte	.LVL20
+ 636 034d 61040000 		.4byte	0x461
+ 637 0351 0E       		.uleb128 0xe
+ 638 0352 30000000 		.4byte	.LVL21
+ 639 0356 6C040000 		.4byte	0x46c
+ 640 035a 00       		.byte	0
+ 641 035b 14       		.uleb128 0x14
+ 642 035c CC020000 		.4byte	.LASF43
+ 643 0360 01       		.byte	0x1
+ 644 0361 1C       		.byte	0x1c
+ 645 0362 6C030000 		.4byte	0x36c
+ 646 0366 05       		.uleb128 0x5
+ 647 0367 03       		.byte	0x3
+ 648 0368 00000000 		.4byte	BATTERY_CAPACITY
+ 649 036c 15       		.uleb128 0x15
+ 650 036d 85000000 		.4byte	0x85
+ 651 0371 16       		.uleb128 0x16
+ 652 0372 6900     		.ascii	"i\000"
+ 653 0374 01       		.byte	0x1
+ 654 0375 22       		.byte	0x22
+ 655 0376 7E000000 		.4byte	0x7e
+ 656 037a 05       		.uleb128 0x5
+ 657 037b 03       		.byte	0x3
+ 658 037c 00000000 		.4byte	i
+ 659 0380 17       		.uleb128 0x17
+ 660 0381 91030000 		.4byte	.LASF44
+ 661 0385 06       		.byte	0x6
+ 662 0386 D9       		.byte	0xd9
+ 663 0387 91030000 		.4byte	0x391
+ 664 038b 18       		.uleb128 0x18
+ 665 038c B9000000 		.4byte	0xb9
+ 666 0390 00       		.byte	0
+ 667 0391 19       		.uleb128 0x19
+ 668 0392 88030000 		.4byte	.LASF46
+ 669 0396 07       		.byte	0x7
+ 670 0397 32       		.byte	0x32
+ 671 0398 AD000000 		.4byte	0xad
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 15
+
+
+ 672 039c 17       		.uleb128 0x17
+ 673 039d 6C000000 		.4byte	.LASF45
+ 674 03a1 07       		.byte	0x7
+ 675 03a2 33       		.byte	0x33
+ 676 03a3 AD030000 		.4byte	0x3ad
+ 677 03a7 18       		.uleb128 0x18
+ 678 03a8 AD000000 		.4byte	0xad
+ 679 03ac 00       		.byte	0
+ 680 03ad 19       		.uleb128 0x19
+ 681 03ae 51030000 		.4byte	.LASF47
+ 682 03b2 08       		.byte	0x8
+ 683 03b3 39       		.byte	0x39
+ 684 03b4 AD000000 		.4byte	0xad
+ 685 03b8 17       		.uleb128 0x17
+ 686 03b9 73030000 		.4byte	.LASF48
+ 687 03bd 09       		.byte	0x9
+ 688 03be 18       		.byte	0x18
+ 689 03bf C9030000 		.4byte	0x3c9
+ 690 03c3 18       		.uleb128 0x18
+ 691 03c4 DA000000 		.4byte	0xda
+ 692 03c8 00       		.byte	0
+ 693 03c9 1A       		.uleb128 0x1a
+ 694 03ca 9E000000 		.4byte	.LASF63
+ 695 03ce 0B       		.byte	0xb
+ 696 03cf 6E       		.byte	0x6e
+ 697 03d0 19       		.uleb128 0x19
+ 698 03d1 4F000000 		.4byte	.LASF49
+ 699 03d5 05       		.byte	0x5
+ 700 03d6 61       		.byte	0x61
+ 701 03d7 FA000000 		.4byte	0xfa
+ 702 03db 17       		.uleb128 0x17
+ 703 03dc CB000000 		.4byte	.LASF50
+ 704 03e0 0A       		.byte	0xa
+ 705 03e1 06       		.byte	0x6
+ 706 03e2 EC030000 		.4byte	0x3ec
+ 707 03e6 18       		.uleb128 0x18
+ 708 03e7 F4000000 		.4byte	0xf4
+ 709 03eb 00       		.byte	0
+ 710 03ec 1B       		.uleb128 0x1b
+ 711 03ed DD020000 		.4byte	.LASF64
+ 712 03f1 05       		.byte	0x5
+ 713 03f2 69       		.byte	0x69
+ 714 03f3 FA000000 		.4byte	0xfa
+ 715 03f7 01040000 		.4byte	0x401
+ 716 03fb 18       		.uleb128 0x18
+ 717 03fc A2000000 		.4byte	0xa2
+ 718 0400 00       		.byte	0
+ 719 0401 1C       		.uleb128 0x1c
+ 720 0402 04010000 		.4byte	.LASF51
+ 721 0406 05       		.byte	0x5
+ 722 0407 98       		.byte	0x98
+ 723 0408 A2000000 		.4byte	0xa2
+ 724 040c 12040000 		.4byte	0x412
+ 725 0410 1D       		.uleb128 0x1d
+ 726 0411 00       		.byte	0
+ 727 0412 19       		.uleb128 0x19
+ 728 0413 44030000 		.4byte	.LASF52
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 16
+
+
+ 729 0417 05       		.byte	0x5
+ 730 0418 73       		.byte	0x73
+ 731 0419 A2000000 		.4byte	0xa2
+ 732 041d 17       		.uleb128 0x17
+ 733 041e 57010000 		.4byte	.LASF53
+ 734 0422 05       		.byte	0x5
+ 735 0423 7C       		.byte	0x7c
+ 736 0424 2E040000 		.4byte	0x42e
+ 737 0428 18       		.uleb128 0x18
+ 738 0429 20010000 		.4byte	0x120
+ 739 042d 00       		.byte	0
+ 740 042e 1C       		.uleb128 0x1c
+ 741 042f 2B020000 		.4byte	.LASF54
+ 742 0433 05       		.byte	0x5
+ 743 0434 7D       		.byte	0x7d
+ 744 0435 97000000 		.4byte	0x97
+ 745 0439 3F040000 		.4byte	0x43f
+ 746 043d 1D       		.uleb128 0x1d
+ 747 043e 00       		.byte	0
+ 748 043f 17       		.uleb128 0x17
+ 749 0440 99030000 		.4byte	.LASF55
+ 750 0444 05       		.byte	0x5
+ 751 0445 86       		.byte	0x86
+ 752 0446 50040000 		.4byte	0x450
+ 753 044a 18       		.uleb128 0x18
+ 754 044b 6A010000 		.4byte	0x16a
+ 755 044f 00       		.byte	0
+ 756 0450 1C       		.uleb128 0x1c
+ 757 0451 7F020000 		.4byte	.LASF56
+ 758 0455 05       		.byte	0x5
+ 759 0456 87       		.byte	0x87
+ 760 0457 A2000000 		.4byte	0xa2
+ 761 045b 61040000 		.4byte	0x461
+ 762 045f 1D       		.uleb128 0x1d
+ 763 0460 00       		.byte	0
+ 764 0461 19       		.uleb128 0x19
+ 765 0462 EB000000 		.4byte	.LASF57
+ 766 0466 05       		.byte	0x5
+ 767 0467 8E       		.byte	0x8e
+ 768 0468 97000000 		.4byte	0x97
+ 769 046c 1E       		.uleb128 0x1e
+ 770 046d 0D010000 		.4byte	.LASF65
+ 771 0471 05       		.byte	0x5
+ 772 0472 A3       		.byte	0xa3
+ 773 0473 8C000000 		.4byte	0x8c
+ 774 0477 1D       		.uleb128 0x1d
+ 775 0478 00       		.byte	0
+ 776 0479 00       		.byte	0
+ 777              		.section	.debug_abbrev,"",%progbits
+ 778              	.Ldebug_abbrev0:
+ 779 0000 01       		.uleb128 0x1
+ 780 0001 11       		.uleb128 0x11
+ 781 0002 01       		.byte	0x1
+ 782 0003 25       		.uleb128 0x25
+ 783 0004 0E       		.uleb128 0xe
+ 784 0005 13       		.uleb128 0x13
+ 785 0006 0B       		.uleb128 0xb
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 17
+
+
+ 786 0007 03       		.uleb128 0x3
+ 787 0008 0E       		.uleb128 0xe
+ 788 0009 1B       		.uleb128 0x1b
+ 789 000a 0E       		.uleb128 0xe
+ 790 000b 55       		.uleb128 0x55
+ 791 000c 17       		.uleb128 0x17
+ 792 000d 11       		.uleb128 0x11
+ 793 000e 01       		.uleb128 0x1
+ 794 000f 10       		.uleb128 0x10
+ 795 0010 17       		.uleb128 0x17
+ 796 0011 00       		.byte	0
+ 797 0012 00       		.byte	0
+ 798 0013 02       		.uleb128 0x2
+ 799 0014 24       		.uleb128 0x24
+ 800 0015 00       		.byte	0
+ 801 0016 0B       		.uleb128 0xb
+ 802 0017 0B       		.uleb128 0xb
+ 803 0018 3E       		.uleb128 0x3e
+ 804 0019 0B       		.uleb128 0xb
+ 805 001a 03       		.uleb128 0x3
+ 806 001b 0E       		.uleb128 0xe
+ 807 001c 00       		.byte	0
+ 808 001d 00       		.byte	0
+ 809 001e 03       		.uleb128 0x3
+ 810 001f 16       		.uleb128 0x16
+ 811 0020 00       		.byte	0
+ 812 0021 03       		.uleb128 0x3
+ 813 0022 0E       		.uleb128 0xe
+ 814 0023 3A       		.uleb128 0x3a
+ 815 0024 0B       		.uleb128 0xb
+ 816 0025 3B       		.uleb128 0x3b
+ 817 0026 0B       		.uleb128 0xb
+ 818 0027 49       		.uleb128 0x49
+ 819 0028 13       		.uleb128 0x13
+ 820 0029 00       		.byte	0
+ 821 002a 00       		.byte	0
+ 822 002b 04       		.uleb128 0x4
+ 823 002c 24       		.uleb128 0x24
+ 824 002d 00       		.byte	0
+ 825 002e 0B       		.uleb128 0xb
+ 826 002f 0B       		.uleb128 0xb
+ 827 0030 3E       		.uleb128 0x3e
+ 828 0031 0B       		.uleb128 0xb
+ 829 0032 03       		.uleb128 0x3
+ 830 0033 08       		.uleb128 0x8
+ 831 0034 00       		.byte	0
+ 832 0035 00       		.byte	0
+ 833 0036 05       		.uleb128 0x5
+ 834 0037 16       		.uleb128 0x16
+ 835 0038 00       		.byte	0
+ 836 0039 03       		.uleb128 0x3
+ 837 003a 0E       		.uleb128 0xe
+ 838 003b 3A       		.uleb128 0x3a
+ 839 003c 0B       		.uleb128 0xb
+ 840 003d 3B       		.uleb128 0x3b
+ 841 003e 05       		.uleb128 0x5
+ 842 003f 49       		.uleb128 0x49
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 18
+
+
+ 843 0040 13       		.uleb128 0x13
+ 844 0041 00       		.byte	0
+ 845 0042 00       		.byte	0
+ 846 0043 06       		.uleb128 0x6
+ 847 0044 0F       		.uleb128 0xf
+ 848 0045 00       		.byte	0
+ 849 0046 0B       		.uleb128 0xb
+ 850 0047 0B       		.uleb128 0xb
+ 851 0048 49       		.uleb128 0x49
+ 852 0049 13       		.uleb128 0x13
+ 853 004a 00       		.byte	0
+ 854 004b 00       		.byte	0
+ 855 004c 07       		.uleb128 0x7
+ 856 004d 15       		.uleb128 0x15
+ 857 004e 00       		.byte	0
+ 858 004f 27       		.uleb128 0x27
+ 859 0050 19       		.uleb128 0x19
+ 860 0051 00       		.byte	0
+ 861 0052 00       		.byte	0
+ 862 0053 08       		.uleb128 0x8
+ 863 0054 04       		.uleb128 0x4
+ 864 0055 01       		.byte	0x1
+ 865 0056 0B       		.uleb128 0xb
+ 866 0057 0B       		.uleb128 0xb
+ 867 0058 3A       		.uleb128 0x3a
+ 868 0059 0B       		.uleb128 0xb
+ 869 005a 3B       		.uleb128 0x3b
+ 870 005b 0B       		.uleb128 0xb
+ 871 005c 01       		.uleb128 0x1
+ 872 005d 13       		.uleb128 0x13
+ 873 005e 00       		.byte	0
+ 874 005f 00       		.byte	0
+ 875 0060 09       		.uleb128 0x9
+ 876 0061 28       		.uleb128 0x28
+ 877 0062 00       		.byte	0
+ 878 0063 03       		.uleb128 0x3
+ 879 0064 08       		.uleb128 0x8
+ 880 0065 1C       		.uleb128 0x1c
+ 881 0066 0D       		.uleb128 0xd
+ 882 0067 00       		.byte	0
+ 883 0068 00       		.byte	0
+ 884 0069 0A       		.uleb128 0xa
+ 885 006a 28       		.uleb128 0x28
+ 886 006b 00       		.byte	0
+ 887 006c 03       		.uleb128 0x3
+ 888 006d 0E       		.uleb128 0xe
+ 889 006e 1C       		.uleb128 0x1c
+ 890 006f 0D       		.uleb128 0xd
+ 891 0070 00       		.byte	0
+ 892 0071 00       		.byte	0
+ 893 0072 0B       		.uleb128 0xb
+ 894 0073 2E       		.uleb128 0x2e
+ 895 0074 01       		.byte	0x1
+ 896 0075 3F       		.uleb128 0x3f
+ 897 0076 19       		.uleb128 0x19
+ 898 0077 03       		.uleb128 0x3
+ 899 0078 0E       		.uleb128 0xe
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 19
+
+
+ 900 0079 3A       		.uleb128 0x3a
+ 901 007a 0B       		.uleb128 0xb
+ 902 007b 3B       		.uleb128 0x3b
+ 903 007c 0B       		.uleb128 0xb
+ 904 007d 27       		.uleb128 0x27
+ 905 007e 19       		.uleb128 0x19
+ 906 007f 11       		.uleb128 0x11
+ 907 0080 01       		.uleb128 0x1
+ 908 0081 12       		.uleb128 0x12
+ 909 0082 06       		.uleb128 0x6
+ 910 0083 40       		.uleb128 0x40
+ 911 0084 18       		.uleb128 0x18
+ 912 0085 9742     		.uleb128 0x2117
+ 913 0087 19       		.uleb128 0x19
+ 914 0088 01       		.uleb128 0x1
+ 915 0089 13       		.uleb128 0x13
+ 916 008a 00       		.byte	0
+ 917 008b 00       		.byte	0
+ 918 008c 0C       		.uleb128 0xc
+ 919 008d 898201   		.uleb128 0x4109
+ 920 0090 01       		.byte	0x1
+ 921 0091 11       		.uleb128 0x11
+ 922 0092 01       		.uleb128 0x1
+ 923 0093 31       		.uleb128 0x31
+ 924 0094 13       		.uleb128 0x13
+ 925 0095 01       		.uleb128 0x1
+ 926 0096 13       		.uleb128 0x13
+ 927 0097 00       		.byte	0
+ 928 0098 00       		.byte	0
+ 929 0099 0D       		.uleb128 0xd
+ 930 009a 8A8201   		.uleb128 0x410a
+ 931 009d 00       		.byte	0
+ 932 009e 02       		.uleb128 0x2
+ 933 009f 18       		.uleb128 0x18
+ 934 00a0 9142     		.uleb128 0x2111
+ 935 00a2 18       		.uleb128 0x18
+ 936 00a3 00       		.byte	0
+ 937 00a4 00       		.byte	0
+ 938 00a5 0E       		.uleb128 0xe
+ 939 00a6 898201   		.uleb128 0x4109
+ 940 00a9 00       		.byte	0
+ 941 00aa 11       		.uleb128 0x11
+ 942 00ab 01       		.uleb128 0x1
+ 943 00ac 31       		.uleb128 0x31
+ 944 00ad 13       		.uleb128 0x13
+ 945 00ae 00       		.byte	0
+ 946 00af 00       		.byte	0
+ 947 00b0 0F       		.uleb128 0xf
+ 948 00b1 2E       		.uleb128 0x2e
+ 949 00b2 01       		.byte	0x1
+ 950 00b3 3F       		.uleb128 0x3f
+ 951 00b4 19       		.uleb128 0x19
+ 952 00b5 03       		.uleb128 0x3
+ 953 00b6 0E       		.uleb128 0xe
+ 954 00b7 3A       		.uleb128 0x3a
+ 955 00b8 0B       		.uleb128 0xb
+ 956 00b9 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 20
+
+
+ 957 00ba 0B       		.uleb128 0xb
+ 958 00bb 27       		.uleb128 0x27
+ 959 00bc 19       		.uleb128 0x19
+ 960 00bd 49       		.uleb128 0x49
+ 961 00be 13       		.uleb128 0x13
+ 962 00bf 11       		.uleb128 0x11
+ 963 00c0 01       		.uleb128 0x1
+ 964 00c1 12       		.uleb128 0x12
+ 965 00c2 06       		.uleb128 0x6
+ 966 00c3 40       		.uleb128 0x40
+ 967 00c4 18       		.uleb128 0x18
+ 968 00c5 9742     		.uleb128 0x2117
+ 969 00c7 19       		.uleb128 0x19
+ 970 00c8 01       		.uleb128 0x1
+ 971 00c9 13       		.uleb128 0x13
+ 972 00ca 00       		.byte	0
+ 973 00cb 00       		.byte	0
+ 974 00cc 10       		.uleb128 0x10
+ 975 00cd 898201   		.uleb128 0x4109
+ 976 00d0 01       		.byte	0x1
+ 977 00d1 11       		.uleb128 0x11
+ 978 00d2 01       		.uleb128 0x1
+ 979 00d3 31       		.uleb128 0x31
+ 980 00d4 13       		.uleb128 0x13
+ 981 00d5 00       		.byte	0
+ 982 00d6 00       		.byte	0
+ 983 00d7 11       		.uleb128 0x11
+ 984 00d8 2E       		.uleb128 0x2e
+ 985 00d9 01       		.byte	0x1
+ 986 00da 3F       		.uleb128 0x3f
+ 987 00db 19       		.uleb128 0x19
+ 988 00dc 03       		.uleb128 0x3
+ 989 00dd 0E       		.uleb128 0xe
+ 990 00de 3A       		.uleb128 0x3a
+ 991 00df 0B       		.uleb128 0xb
+ 992 00e0 3B       		.uleb128 0x3b
+ 993 00e1 0B       		.uleb128 0xb
+ 994 00e2 11       		.uleb128 0x11
+ 995 00e3 01       		.uleb128 0x1
+ 996 00e4 12       		.uleb128 0x12
+ 997 00e5 06       		.uleb128 0x6
+ 998 00e6 40       		.uleb128 0x40
+ 999 00e7 18       		.uleb128 0x18
+ 1000 00e8 9742     		.uleb128 0x2117
+ 1001 00ea 19       		.uleb128 0x19
+ 1002 00eb 01       		.uleb128 0x1
+ 1003 00ec 13       		.uleb128 0x13
+ 1004 00ed 00       		.byte	0
+ 1005 00ee 00       		.byte	0
+ 1006 00ef 12       		.uleb128 0x12
+ 1007 00f0 34       		.uleb128 0x34
+ 1008 00f1 00       		.byte	0
+ 1009 00f2 03       		.uleb128 0x3
+ 1010 00f3 08       		.uleb128 0x8
+ 1011 00f4 3A       		.uleb128 0x3a
+ 1012 00f5 0B       		.uleb128 0xb
+ 1013 00f6 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 21
+
+
+ 1014 00f7 0B       		.uleb128 0xb
+ 1015 00f8 49       		.uleb128 0x49
+ 1016 00f9 13       		.uleb128 0x13
+ 1017 00fa 00       		.byte	0
+ 1018 00fb 00       		.byte	0
+ 1019 00fc 13       		.uleb128 0x13
+ 1020 00fd 34       		.uleb128 0x34
+ 1021 00fe 00       		.byte	0
+ 1022 00ff 03       		.uleb128 0x3
+ 1023 0100 0E       		.uleb128 0xe
+ 1024 0101 3A       		.uleb128 0x3a
+ 1025 0102 0B       		.uleb128 0xb
+ 1026 0103 3B       		.uleb128 0x3b
+ 1027 0104 0B       		.uleb128 0xb
+ 1028 0105 49       		.uleb128 0x49
+ 1029 0106 13       		.uleb128 0x13
+ 1030 0107 00       		.byte	0
+ 1031 0108 00       		.byte	0
+ 1032 0109 14       		.uleb128 0x14
+ 1033 010a 34       		.uleb128 0x34
+ 1034 010b 00       		.byte	0
+ 1035 010c 03       		.uleb128 0x3
+ 1036 010d 0E       		.uleb128 0xe
+ 1037 010e 3A       		.uleb128 0x3a
+ 1038 010f 0B       		.uleb128 0xb
+ 1039 0110 3B       		.uleb128 0x3b
+ 1040 0111 0B       		.uleb128 0xb
+ 1041 0112 49       		.uleb128 0x49
+ 1042 0113 13       		.uleb128 0x13
+ 1043 0114 3F       		.uleb128 0x3f
+ 1044 0115 19       		.uleb128 0x19
+ 1045 0116 02       		.uleb128 0x2
+ 1046 0117 18       		.uleb128 0x18
+ 1047 0118 00       		.byte	0
+ 1048 0119 00       		.byte	0
+ 1049 011a 15       		.uleb128 0x15
+ 1050 011b 26       		.uleb128 0x26
+ 1051 011c 00       		.byte	0
+ 1052 011d 49       		.uleb128 0x49
+ 1053 011e 13       		.uleb128 0x13
+ 1054 011f 00       		.byte	0
+ 1055 0120 00       		.byte	0
+ 1056 0121 16       		.uleb128 0x16
+ 1057 0122 34       		.uleb128 0x34
+ 1058 0123 00       		.byte	0
+ 1059 0124 03       		.uleb128 0x3
+ 1060 0125 08       		.uleb128 0x8
+ 1061 0126 3A       		.uleb128 0x3a
+ 1062 0127 0B       		.uleb128 0xb
+ 1063 0128 3B       		.uleb128 0x3b
+ 1064 0129 0B       		.uleb128 0xb
+ 1065 012a 49       		.uleb128 0x49
+ 1066 012b 13       		.uleb128 0x13
+ 1067 012c 3F       		.uleb128 0x3f
+ 1068 012d 19       		.uleb128 0x19
+ 1069 012e 02       		.uleb128 0x2
+ 1070 012f 18       		.uleb128 0x18
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 22
+
+
+ 1071 0130 00       		.byte	0
+ 1072 0131 00       		.byte	0
+ 1073 0132 17       		.uleb128 0x17
+ 1074 0133 2E       		.uleb128 0x2e
+ 1075 0134 01       		.byte	0x1
+ 1076 0135 3F       		.uleb128 0x3f
+ 1077 0136 19       		.uleb128 0x19
+ 1078 0137 03       		.uleb128 0x3
+ 1079 0138 0E       		.uleb128 0xe
+ 1080 0139 3A       		.uleb128 0x3a
+ 1081 013a 0B       		.uleb128 0xb
+ 1082 013b 3B       		.uleb128 0x3b
+ 1083 013c 0B       		.uleb128 0xb
+ 1084 013d 27       		.uleb128 0x27
+ 1085 013e 19       		.uleb128 0x19
+ 1086 013f 3C       		.uleb128 0x3c
+ 1087 0140 19       		.uleb128 0x19
+ 1088 0141 01       		.uleb128 0x1
+ 1089 0142 13       		.uleb128 0x13
+ 1090 0143 00       		.byte	0
+ 1091 0144 00       		.byte	0
+ 1092 0145 18       		.uleb128 0x18
+ 1093 0146 05       		.uleb128 0x5
+ 1094 0147 00       		.byte	0
+ 1095 0148 49       		.uleb128 0x49
+ 1096 0149 13       		.uleb128 0x13
+ 1097 014a 00       		.byte	0
+ 1098 014b 00       		.byte	0
+ 1099 014c 19       		.uleb128 0x19
+ 1100 014d 2E       		.uleb128 0x2e
+ 1101 014e 00       		.byte	0
+ 1102 014f 3F       		.uleb128 0x3f
+ 1103 0150 19       		.uleb128 0x19
+ 1104 0151 03       		.uleb128 0x3
+ 1105 0152 0E       		.uleb128 0xe
+ 1106 0153 3A       		.uleb128 0x3a
+ 1107 0154 0B       		.uleb128 0xb
+ 1108 0155 3B       		.uleb128 0x3b
+ 1109 0156 0B       		.uleb128 0xb
+ 1110 0157 27       		.uleb128 0x27
+ 1111 0158 19       		.uleb128 0x19
+ 1112 0159 49       		.uleb128 0x49
+ 1113 015a 13       		.uleb128 0x13
+ 1114 015b 3C       		.uleb128 0x3c
+ 1115 015c 19       		.uleb128 0x19
+ 1116 015d 00       		.byte	0
+ 1117 015e 00       		.byte	0
+ 1118 015f 1A       		.uleb128 0x1a
+ 1119 0160 2E       		.uleb128 0x2e
+ 1120 0161 00       		.byte	0
+ 1121 0162 3F       		.uleb128 0x3f
+ 1122 0163 19       		.uleb128 0x19
+ 1123 0164 03       		.uleb128 0x3
+ 1124 0165 0E       		.uleb128 0xe
+ 1125 0166 3A       		.uleb128 0x3a
+ 1126 0167 0B       		.uleb128 0xb
+ 1127 0168 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 23
+
+
+ 1128 0169 0B       		.uleb128 0xb
+ 1129 016a 27       		.uleb128 0x27
+ 1130 016b 19       		.uleb128 0x19
+ 1131 016c 3C       		.uleb128 0x3c
+ 1132 016d 19       		.uleb128 0x19
+ 1133 016e 00       		.byte	0
+ 1134 016f 00       		.byte	0
+ 1135 0170 1B       		.uleb128 0x1b
+ 1136 0171 2E       		.uleb128 0x2e
+ 1137 0172 01       		.byte	0x1
+ 1138 0173 3F       		.uleb128 0x3f
+ 1139 0174 19       		.uleb128 0x19
+ 1140 0175 03       		.uleb128 0x3
+ 1141 0176 0E       		.uleb128 0xe
+ 1142 0177 3A       		.uleb128 0x3a
+ 1143 0178 0B       		.uleb128 0xb
+ 1144 0179 3B       		.uleb128 0x3b
+ 1145 017a 0B       		.uleb128 0xb
+ 1146 017b 27       		.uleb128 0x27
+ 1147 017c 19       		.uleb128 0x19
+ 1148 017d 49       		.uleb128 0x49
+ 1149 017e 13       		.uleb128 0x13
+ 1150 017f 3C       		.uleb128 0x3c
+ 1151 0180 19       		.uleb128 0x19
+ 1152 0181 01       		.uleb128 0x1
+ 1153 0182 13       		.uleb128 0x13
+ 1154 0183 00       		.byte	0
+ 1155 0184 00       		.byte	0
+ 1156 0185 1C       		.uleb128 0x1c
+ 1157 0186 2E       		.uleb128 0x2e
+ 1158 0187 01       		.byte	0x1
+ 1159 0188 3F       		.uleb128 0x3f
+ 1160 0189 19       		.uleb128 0x19
+ 1161 018a 03       		.uleb128 0x3
+ 1162 018b 0E       		.uleb128 0xe
+ 1163 018c 3A       		.uleb128 0x3a
+ 1164 018d 0B       		.uleb128 0xb
+ 1165 018e 3B       		.uleb128 0x3b
+ 1166 018f 0B       		.uleb128 0xb
+ 1167 0190 49       		.uleb128 0x49
+ 1168 0191 13       		.uleb128 0x13
+ 1169 0192 3C       		.uleb128 0x3c
+ 1170 0193 19       		.uleb128 0x19
+ 1171 0194 01       		.uleb128 0x1
+ 1172 0195 13       		.uleb128 0x13
+ 1173 0196 00       		.byte	0
+ 1174 0197 00       		.byte	0
+ 1175 0198 1D       		.uleb128 0x1d
+ 1176 0199 18       		.uleb128 0x18
+ 1177 019a 00       		.byte	0
+ 1178 019b 00       		.byte	0
+ 1179 019c 00       		.byte	0
+ 1180 019d 1E       		.uleb128 0x1e
+ 1181 019e 2E       		.uleb128 0x2e
+ 1182 019f 01       		.byte	0x1
+ 1183 01a0 3F       		.uleb128 0x3f
+ 1184 01a1 19       		.uleb128 0x19
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 24
+
+
+ 1185 01a2 03       		.uleb128 0x3
+ 1186 01a3 0E       		.uleb128 0xe
+ 1187 01a4 3A       		.uleb128 0x3a
+ 1188 01a5 0B       		.uleb128 0xb
+ 1189 01a6 3B       		.uleb128 0x3b
+ 1190 01a7 0B       		.uleb128 0xb
+ 1191 01a8 49       		.uleb128 0x49
+ 1192 01a9 13       		.uleb128 0x13
+ 1193 01aa 3C       		.uleb128 0x3c
+ 1194 01ab 19       		.uleb128 0x19
+ 1195 01ac 00       		.byte	0
+ 1196 01ad 00       		.byte	0
+ 1197 01ae 00       		.byte	0
+ 1198              		.section	.debug_aranges,"",%progbits
+ 1199 0000 34000000 		.4byte	0x34
+ 1200 0004 0200     		.2byte	0x2
+ 1201 0006 00000000 		.4byte	.Ldebug_info0
+ 1202 000a 04       		.byte	0x4
+ 1203 000b 00       		.byte	0
+ 1204 000c 0000     		.2byte	0
+ 1205 000e 0000     		.2byte	0
+ 1206 0010 00000000 		.4byte	.LFB34
+ 1207 0014 1A000000 		.4byte	.LFE34-.LFB34
+ 1208 0018 00000000 		.4byte	.LFB35
+ 1209 001c 14000000 		.4byte	.LFE35-.LFB35
+ 1210 0020 00000000 		.4byte	.LFB36
+ 1211 0024 40000000 		.4byte	.LFE36-.LFB36
+ 1212 0028 00000000 		.4byte	.LFB37
+ 1213 002c 32000000 		.4byte	.LFE37-.LFB37
+ 1214 0030 00000000 		.4byte	0
+ 1215 0034 00000000 		.4byte	0
+ 1216              		.section	.debug_ranges,"",%progbits
+ 1217              	.Ldebug_ranges0:
+ 1218 0000 00000000 		.4byte	.LFB34
+ 1219 0004 1A000000 		.4byte	.LFE34
+ 1220 0008 00000000 		.4byte	.LFB35
+ 1221 000c 14000000 		.4byte	.LFE35
+ 1222 0010 00000000 		.4byte	.LFB36
+ 1223 0014 40000000 		.4byte	.LFE36
+ 1224 0018 00000000 		.4byte	.LFB37
+ 1225 001c 32000000 		.4byte	.LFE37
+ 1226 0020 00000000 		.4byte	0
+ 1227 0024 00000000 		.4byte	0
+ 1228              		.section	.debug_line,"",%progbits
+ 1229              	.Ldebug_line0:
+ 1230 0000 31020000 		.section	.debug_str,"MS",%progbits,1
+ 1230      0200C901 
+ 1230      00000201 
+ 1230      FB0E0D00 
+ 1230      01010101 
+ 1231              	.LASF60:
+ 1232 0000 433A5C55 		.ascii	"C:\\Users\\a85495\\Desktop\\PSoC-Quadcopter\\Sensor"
+ 1232      73657273 
+ 1232      5C613835 
+ 1232      3439355C 
+ 1232      4465736B 
+ 1233 002e 735C5365 		.ascii	"s\\Sensor Test\\Base Station.cydsn\000"
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 25
+
+
+ 1233      6E736F72 
+ 1233      20546573 
+ 1233      745C4261 
+ 1233      73652053 
+ 1234              	.LASF49:
+ 1235 004f 6C69706F 		.ascii	"lipo_begin\000"
+ 1235      5F626567 
+ 1235      696E00
+ 1236              	.LASF42:
+ 1237 005a 6865616C 		.ascii	"health\000"
+ 1237      746800
+ 1238              	.LASF28:
+ 1239 0061 41564149 		.ascii	"AVAIL_FULL\000"
+ 1239      4C5F4655 
+ 1239      4C4C00
+ 1240              	.LASF45:
+ 1241 006c 4C45445F 		.ascii	"LED_Write\000"
+ 1241      57726974 
+ 1241      6500
+ 1242              	.LASF39:
+ 1243 0076 66756C6C 		.ascii	"fullCapacity\000"
+ 1243      43617061 
+ 1243      63697479 
+ 1243      00
+ 1244              	.LASF4:
+ 1245 0083 73686F72 		.ascii	"short int\000"
+ 1245      7420696E 
+ 1245      7400
+ 1246              	.LASF32:
+ 1247 008d 46554C4C 		.ascii	"FULL_UF\000"
+ 1247      5F554600 
+ 1248              	.LASF21:
+ 1249 0095 73697A65 		.ascii	"sizetype\000"
+ 1249      74797065 
+ 1249      00
+ 1250              	.LASF63:
+ 1251 009e 73657269 		.ascii	"serial_Start\000"
+ 1251      616C5F53 
+ 1251      74617274 
+ 1251      00
+ 1252              	.LASF61:
+ 1253 00ab 6D61696E 		.ascii	"main\000"
+ 1253      00
+ 1254              	.LASF5:
+ 1255 00b0 5F5F7569 		.ascii	"__uint16_t\000"
+ 1255      6E743136 
+ 1255      5F7400
+ 1256              	.LASF62:
+ 1257 00bb 67657442 		.ascii	"getBatteryStats\000"
+ 1257      61747465 
+ 1257      72795374 
+ 1257      61747300 
+ 1258              	.LASF50:
+ 1259 00cb 73657269 		.ascii	"serial_println\000"
+ 1259      616C5F70 
+ 1259      72696E74 
+ 1259      6C6E00
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 26
+
+
+ 1260              	.LASF34:
+ 1261 00da 63617061 		.ascii	"capacity_measure\000"
+ 1261      63697479 
+ 1261      5F6D6561 
+ 1261      73757265 
+ 1261      00
+ 1262              	.LASF57:
+ 1263 00eb 6C69706F 		.ascii	"lipo_power\000"
+ 1263      5F706F77 
+ 1263      657200
+ 1264              	.LASF12:
+ 1265 00f6 75696E74 		.ascii	"uint8_t\000"
+ 1265      385F7400 
+ 1266              	.LASF15:
+ 1267 00fe 75696E74 		.ascii	"uint8\000"
+ 1267      3800
+ 1268              	.LASF51:
+ 1269 0104 6C69706F 		.ascii	"lipo_soc\000"
+ 1269      5F736F63 
+ 1269      00
+ 1270              	.LASF65:
+ 1271 010d 6C69706F 		.ascii	"lipo_soh\000"
+ 1271      5F736F68 
+ 1271      00
+ 1272              	.LASF22:
+ 1273 0116 626F6F6C 		.ascii	"bool\000"
+ 1273      00
+ 1274              	.LASF17:
+ 1275 011b 666C6F61 		.ascii	"float\000"
+ 1275      7400
+ 1276              	.LASF9:
+ 1277 0121 6C6F6E67 		.ascii	"long long int\000"
+ 1277      206C6F6E 
+ 1277      6720696E 
+ 1277      7400
+ 1278              	.LASF36:
+ 1279 012f 73657475 		.ascii	"setupBQ27441\000"
+ 1279      70425132 
+ 1279      37343431 
+ 1279      00
+ 1280              	.LASF19:
+ 1281 013c 63686172 		.ascii	"char\000"
+ 1281      00
+ 1282              	.LASF7:
+ 1283 0141 6C6F6E67 		.ascii	"long int\000"
+ 1283      20696E74 
+ 1283      00
+ 1284              	.LASF33:
+ 1285 014a 44455349 		.ascii	"DESIGN\000"
+ 1285      474E00
+ 1286              	.LASF27:
+ 1287 0151 41564149 		.ascii	"AVAIL\000"
+ 1287      4C00
+ 1288              	.LASF53:
+ 1289 0157 7365745F 		.ascii	"set_lipo_current_arg\000"
+ 1289      6C69706F 
+ 1289      5F637572 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 27
+
+
+ 1289      72656E74 
+ 1289      5F617267 
+ 1290              	.LASF2:
+ 1291 016c 5F5F7569 		.ascii	"__uint8_t\000"
+ 1291      6E74385F 
+ 1291      7400
+ 1292              	.LASF23:
+ 1293 0176 53544259 		.ascii	"STBY\000"
+ 1293      00
+ 1294              	.LASF58:
+ 1295 017b 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1295      4320342E 
+ 1295      392E3320 
+ 1295      32303135 
+ 1295      30333033 
+ 1296 01ae 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 1296      20726576 
+ 1296      6973696F 
+ 1296      6E203232 
+ 1296      31323230 
+ 1297 01e1 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1297      66756E63 
+ 1297      74696F6E 
+ 1297      2D736563 
+ 1297      74696F6E 
+ 1298              	.LASF1:
+ 1299 0209 756E7369 		.ascii	"unsigned char\000"
+ 1299      676E6564 
+ 1299      20636861 
+ 1299      7200
+ 1300              	.LASF31:
+ 1301 0217 46554C4C 		.ascii	"FULL_F\000"
+ 1301      5F4600
+ 1302              	.LASF20:
+ 1303 021e 63796973 		.ascii	"cyisraddress\000"
+ 1303      72616464 
+ 1303      72657373 
+ 1303      00
+ 1304              	.LASF54:
+ 1305 022b 6C69706F 		.ascii	"lipo_current\000"
+ 1305      5F637572 
+ 1305      72656E74 
+ 1305      00
+ 1306              	.LASF0:
+ 1307 0238 7369676E 		.ascii	"signed char\000"
+ 1307      65642063 
+ 1307      68617200 
+ 1308              	.LASF40:
+ 1309 0244 63617061 		.ascii	"capacity\000"
+ 1309      63697479 
+ 1309      00
+ 1310              	.LASF10:
+ 1311 024d 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1311      206C6F6E 
+ 1311      6720756E 
+ 1311      7369676E 
+ 1311      65642069 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 28
+
+
+ 1312              	.LASF11:
+ 1313 0264 756E7369 		.ascii	"unsigned int\000"
+ 1313      676E6564 
+ 1313      20696E74 
+ 1313      00
+ 1314              	.LASF14:
+ 1315 0271 75696E74 		.ascii	"uint16_t\000"
+ 1315      31365F74 
+ 1315      00
+ 1316              	.LASF26:
+ 1317 027a 46554C4C 		.ascii	"FULL\000"
+ 1317      00
+ 1318              	.LASF56:
+ 1319 027f 6C69706F 		.ascii	"lipo_capacity\000"
+ 1319      5F636170 
+ 1319      61636974 
+ 1319      7900
+ 1320              	.LASF38:
+ 1321 028d 63757272 		.ascii	"current\000"
+ 1321      656E7400 
+ 1322              	.LASF35:
+ 1323 0295 72656164 		.ascii	"read_battery_Handler\000"
+ 1323      5F626174 
+ 1323      74657279 
+ 1323      5F48616E 
+ 1323      646C6572 
+ 1324              	.LASF29:
+ 1325 02aa 52454D41 		.ascii	"REMAIN_F\000"
+ 1325      494E5F46 
+ 1325      00
+ 1326              	.LASF6:
+ 1327 02b3 73686F72 		.ascii	"short unsigned int\000"
+ 1327      7420756E 
+ 1327      7369676E 
+ 1327      65642069 
+ 1327      6E7400
+ 1328              	.LASF37:
+ 1329 02c6 766F6C74 		.ascii	"volts\000"
+ 1329      7300
+ 1330              	.LASF43:
+ 1331 02cc 42415454 		.ascii	"BATTERY_CAPACITY\000"
+ 1331      4552595F 
+ 1331      43415041 
+ 1331      43495459 
+ 1331      00
+ 1332              	.LASF64:
+ 1333 02dd 6C69706F 		.ascii	"lipo_setCapacity\000"
+ 1333      5F736574 
+ 1333      43617061 
+ 1333      63697479 
+ 1333      00
+ 1334              	.LASF30:
+ 1335 02ee 52454D41 		.ascii	"REMAIN_UF\000"
+ 1335      494E5F55 
+ 1335      4600
+ 1336              	.LASF13:
+ 1337 02f8 696E7431 		.ascii	"int16_t\000"
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 29
+
+
+ 1337      365F7400 
+ 1338              	.LASF25:
+ 1339 0300 52454D41 		.ascii	"REMAIN\000"
+ 1339      494E00
+ 1340              	.LASF24:
+ 1341 0307 63757272 		.ascii	"current_measure\000"
+ 1341      656E745F 
+ 1341      6D656173 
+ 1341      75726500 
+ 1342              	.LASF41:
+ 1343 0317 706F7765 		.ascii	"power\000"
+ 1343      7200
+ 1344              	.LASF16:
+ 1345 031d 75696E74 		.ascii	"uint32\000"
+ 1345      333200
+ 1346              	.LASF59:
+ 1347 0324 6D61696E 		.ascii	"main.c\000"
+ 1347      2E6300
+ 1348              	.LASF8:
+ 1349 032b 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1349      20756E73 
+ 1349      69676E65 
+ 1349      6420696E 
+ 1349      7400
+ 1350              	.LASF18:
+ 1351 033d 646F7562 		.ascii	"double\000"
+ 1351      6C6500
+ 1352              	.LASF52:
+ 1353 0344 6C69706F 		.ascii	"lipo_voltage\000"
+ 1353      5F766F6C 
+ 1353      74616765 
+ 1353      00
+ 1354              	.LASF47:
+ 1355 0351 62757474 		.ascii	"butt_pin_ClearInterrupt\000"
+ 1355      5F70696E 
+ 1355      5F436C65 
+ 1355      6172496E 
+ 1355      74657272 
+ 1356              	.LASF3:
+ 1357 0369 5F5F696E 		.ascii	"__int16_t\000"
+ 1357      7431365F 
+ 1357      7400
+ 1358              	.LASF48:
+ 1359 0373 72656164 		.ascii	"read_battery_StartEx\000"
+ 1359      5F626174 
+ 1359      74657279 
+ 1359      5F537461 
+ 1359      72744578 
+ 1360              	.LASF46:
+ 1361 0388 4C45445F 		.ascii	"LED_Read\000"
+ 1361      52656164 
+ 1361      00
+ 1362              	.LASF44:
+ 1363 0391 43794465 		.ascii	"CyDelay\000"
+ 1363      6C617900 
+ 1364              	.LASF55:
+ 1365 0399 7365745F 		.ascii	"set_lipo_capacity_arg\000"
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccaMMCH7.s 			page 30
+
+
+ 1365      6C69706F 
+ 1365      5F636170 
+ 1365      61636974 
+ 1365      795F6172 
+ 1366              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

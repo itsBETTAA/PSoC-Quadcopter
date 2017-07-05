@@ -15,8 +15,8 @@
 static fxos8700AccelRange_t _range; /*will be used to save the sensitivity wanted*/
 
 /*A couple of macros are defined for simplicity in the code*/
-#define _write I2C_I2C_WRITE_XFER_MODE
-#define _read I2C_I2C_READ_XFER_MODE
+#define _write I2C_WRITE_XFER_MODE
+#define _read I2C_READ_XFER_MODE
 
 #define ACCEL_MG_LSB_2G (0.000244F)
 #define ACCEL_MG_LSB_4G (0.000488F)
