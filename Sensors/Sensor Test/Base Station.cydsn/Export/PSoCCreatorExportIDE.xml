@@ -141,18 +141,34 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_tx.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_tx_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_tx_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_rx.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_rx.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_rx_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_rx_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\butt_pin.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\butt_pin.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\butt_pin_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\butt_pin_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\read_battery.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\read_battery.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED_aliases.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED_PM.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_SCB_IRQ.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\serial_SCB_IRQ.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\RED_LED.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\RED_LED.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\RED_LED_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\RED_LED_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\YELLOW_LED.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\YELLOW_LED.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\YELLOW_LED_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\YELLOW_LED_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\GREEN_LED.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\GREEN_LED.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\GREEN_LED_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\GREEN_LED_PM.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\BOARD_LED.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\BOARD_LED.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\BOARD_LED_aliases.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\BOARD_LED_PM.c</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\Export\ARM_GCC_Generic">

@@ -89,7 +89,7 @@ CY_ISR_PROTO(StripLights_FISR);
 #define StripLights_ALL_IRQ_EN     0x18
 #define StripLights_NEXT_ROW       0x20
 
-#define StripLights_TRANSFER           0
+#define StripLights_TRANSFER           1
 #define StripLights_TRANSFER_FIRMWARE  0
 #define StripLights_TRANSFER_ISR       1
 #define StripLights_TRANSFER_DMA       2
@@ -103,9 +103,9 @@ CY_ISR_PROTO(StripLights_FISR);
 #define StripLights_MEMORY_LUT   1
 
 #if (CY_PSOC3 || CY_PSOC5LP)
-    #define  StripLights_PERIOD     ((BCLK__BUS_CLK__KHZ)/800)
+    #define  StripLights_PERIOD     ((BCLK__BUS_CLK__KHZ)/400)
 #elif (CY_PSOC4)
-    #define  StripLights_PERIOD     ((CYDEV_BCLK__HFCLK__KHZ)/800)
+    #define  StripLights_PERIOD     ((CYDEV_BCLK__HFCLK__KHZ)/400)
 #endif /* CY_PSOC5A */
         
 
@@ -121,13 +121,13 @@ CY_ISR_PROTO(StripLights_FISR);
     #define StripLights_WORD_TIME_US 60u
 #endif
 
-#define StripLights_COLUMNS     3
+#define StripLights_COLUMNS     144
 #define StripLights_ROWS        1
 #define StripLights_TOTAL_LEDS   (StripLights_COLUMNS*StripLights_ROWS)
 
-#define StripLights_ARRAY_COLS  (int32)(3)
+#define StripLights_ARRAY_COLS  (int32)(144)
 #define StripLights_ARRAY_ROWS  (int32)(1)
-#define StripLights_CHIP        (2)
+#define StripLights_CHIP        (1)
 #define StripLights_CHIP_WS2811 1
 #define StripLights_CHIP_WS2812 2
 

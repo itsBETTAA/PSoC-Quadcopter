@@ -4,6 +4,7 @@
 #include <accel_mag.h>
 #include <gyroscope.h>
 #include <barometer.h>
+#include <gps.h>
 /*==================For accelerometer and magnotometer data==============*/
 
 extern fxos8700RawData_t accel_raw; /* Raw values from last sensor read */
@@ -37,6 +38,8 @@ extern double initial_relative_altitude;
 
 extern barometricData_t baro;
     
-/*======================For IMU Measurment data==========================*/
+/*======================For GPS data==========================*/
+
+extern gpsData_t GPS; 
 
 #endif

@@ -5,8 +5,8 @@
 *   We are using the chip on a breakout board that we got from Amazon called GY-63
 */
 
-#include "Serial.h"
-#include "Serial.c"
+#include "debug_Serial.h"
+#include "debug_Serial.c"
 #include "barometer.h"
 #include "twi.h"
 #include "project.h"

@@ -9,7 +9,7 @@
 #include "SensorVal.h"
 #include "stdlib.h"
 #include <stdint.h>
-#include "Serial.h"
+#include "debug_Serial.h"
 
 static gyroRange_t _range;
 

@@ -46,10 +46,22 @@
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\butt_pin_PM.c" value="SOURCE_C;CortexM0;;;;butt_pin" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\read_battery.c" value="SOURCE_C;CortexM0;;;;read_battery" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\read_battery.h" value="HEADER;;;;;read_battery" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\LED.c" value="SOURCE_C;CortexM0;;;;LED" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\LED.h" value="HEADER;;;;;LED" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\LED_aliases.h" value="HEADER;;;;;LED" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\LED_PM.c" value="SOURCE_C;CortexM0;;;;LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\BOARD_LED.c" value="SOURCE_C;CortexM0;;;;BOARD_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\BOARD_LED.h" value="HEADER;;;;;BOARD_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\BOARD_LED_aliases.h" value="HEADER;;;;;BOARD_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\BOARD_LED_PM.c" value="SOURCE_C;CortexM0;;;;BOARD_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\RED_LED.c" value="SOURCE_C;CortexM0;;;;RED_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\RED_LED.h" value="HEADER;;;;;RED_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\RED_LED_aliases.h" value="HEADER;;;;;RED_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\RED_LED_PM.c" value="SOURCE_C;CortexM0;;;;RED_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\YELLOW_LED.c" value="SOURCE_C;CortexM0;;;;YELLOW_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\YELLOW_LED.h" value="HEADER;;;;;YELLOW_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\YELLOW_LED_aliases.h" value="HEADER;;;;;YELLOW_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\YELLOW_LED_PM.c" value="SOURCE_C;CortexM0;;;;YELLOW_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\GREEN_LED.c" value="SOURCE_C;CortexM0;;;;GREEN_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\GREEN_LED.h" value="HEADER;;;;;GREEN_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\GREEN_LED_aliases.h" value="HEADER;;;;;GREEN_LED" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\GREEN_LED_PM.c" value="SOURCE_C;CortexM0;;;;GREEN_LED" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\I2C_SCBCLK.c" value="SOURCE_C;CortexM0;;;;I2C_SCBCLK" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\I2C_SCBCLK.h" value="HEADER;;;;;I2C_SCBCLK" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\I2C_sda.c" value="SOURCE_C;CortexM0;;;;I2C_sda" />
@@ -70,6 +82,10 @@
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\serial_tx_PM.c" value="SOURCE_C;CortexM0;;;;serial_tx" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\serial_SCB_IRQ.c" value="SOURCE_C;CortexM0;;;;serial_SCB_IRQ" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\serial_SCB_IRQ.h" value="HEADER;;;;;serial_SCB_IRQ" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\serial_rx.c" value="SOURCE_C;CortexM0;;;;serial_rx" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\serial_rx.h" value="HEADER;;;;;serial_rx" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\serial_rx_aliases.h" value="HEADER;;;;;serial_rx" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\serial_rx_PM.c" value="SOURCE_C;CortexM0;;;;serial_rx" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\cm0gcc.ld" value="LINKER_SCRIPT;;;b98f980c-3bd1-4fc7-a887-c56a20a46fdd;;cy_boot" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\Cm0RealView.scat" value="LINKER_SCRIPT;;;fdb8e1ae-f83a-46cf-9446-1d703716f38a;;cy_boot" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\codegentemp\Cm0Start.c" value="SOURCE_C;CortexM0;;;;cy_boot" />

@@ -18,7 +18,10 @@ All text above must be included in any redistribution
 
 #include "project.h"
 #include "math.h"
-#include "Serial.h"
+#include "debug_Serial.h"
+#include "SensorVal.h"
+#include "SensorVal.c"
+#include <ctype.h>
 
 #ifndef true
 #define true 1
@@ -49,7 +52,6 @@ static uint8_t fixquality, satellites;
 
 static uint8_t paused;
 
-
 static uint16_t LOCUS_serial, LOCUS_records;
 static uint8_t LOCUS_type, LOCUS_mode, LOCUS_config, LOCUS_interval, LOCUS_distance, LOCUS_speed, LOCUS_status, LOCUS_percent;
 
@@ -64,9 +66,7 @@ static volatile char *lastline;
 static volatile uint8_t recvdflag; //should uint8_t remain uint8_t?
 static volatile uint8_t inStandbyMode;
 
-
 static uint8_t GPS_parseResponse(char *response);
-
 
 // CHANGE MADE HERE
 uint8_t GPS_parse(char *nmea)
@@ -338,9 +338,11 @@ char GPS_read(void)
 {
   char c = 0;
 
-  if (paused) return c;
+  if (paused)
+    return c;
 
-  if (!gpsSerial_GetRxBufferSize()){
+  if (!gpsSerial_GetRxBufferSize())
+  {
     return c;
   }
 
@@ -465,21 +467,21 @@ uint8_t GPS_LOCUS_StartLogger(void)
 {
   GPS_sendCommand(PMTK_LOCUS_STARTLOG);
   recvdflag = false;
-  return GPS_waitForSentence(PMTK_LOCUS_STARTSTOPACK);
+  return GPS_waitForSentence(PMTK_LOCUS_STARTSTOPACK, MAXWAITSENTENCE);
 }
 
 uint8_t GPS_LOCUS_StopLogger(void)
 {
   GPS_sendCommand(PMTK_LOCUS_STOPLOG);
   recvdflag = false;
-  return GPS_waitForSentence(PMTK_LOCUS_STARTSTOPACK);
+  return GPS_waitForSentence(PMTK_LOCUS_STARTSTOPACK, MAXWAITSENTENCE);
 }
 
 uint8_t GPS_LOCUS_ReadStatus(void)
 {
   GPS_sendCommand(PMTK_LOCUS_QUERY_STATUS);
 
-  if (!GPS_waitForSentence("$PMTKLOG"))
+  if (!GPS_waitForSentence("$PMTKLOG", MAXWAITSENTENCE))
     return false;
 
   char *response = GPS_lastNMEA();
@@ -548,10 +550,89 @@ uint8_t GPS_wakeup(void)
   {
     inStandbyMode = false;
     GPS_sendCommand(""); // send byte to wake it up
-    return GPS_waitForSentence(PMTK_AWAKE);
+    return GPS_waitForSentence(PMTK_AWAKE, MAXWAITSENTENCE);
   }
   else
   {
     return false; // Returns false if not in standby mode, nothing to wakeup
   }
+}
+
+uint8_t GPS_start()
+{
+  // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
+  GPS_sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  // uncomment this line to turn on only the "minimum recommended" data
+  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
+  // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
+  // the parser doesn't care about other sentences at this time
+  // Set the update rate
+  GPS_sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 1 Hz update rate
+  // For the parsing code to work nicely and have time to sort thru the data, and
+  // print it out we don't suggest using anything higher than 1 Hz
+
+  // Request updates on antenna status, comment out to keep quiet
+  GPS_sendCommand(PGCMD_ANTENNA);
+
+  CyDelay(1000);
+
+  // Ask for firmware version
+  GPSSerial_println(PMTK_Q_RELEASE);
+}
+
+uint8_t GPS_update()
+{
+  //This function will be used to update the GPS data
+  // read data from the GPS in the 'main loop'
+  char c = GPS_read();
+
+  // if you want to debug, this is a good time to do it!
+  /*
+  if (GPSECHO)
+    if (c) Serial.print(c);
+  */
+
+  // if a sentence is received, we can check the checksum, parse it...
+  if (GPS_newNMEAreceived())
+  {
+    // a tricky thing here is if we print the NMEA sentence, or data
+    // we end up not listening and catching other sentences!
+    // so be very wary if using OUTPUT_ALLDATA and trytng to print out data
+    /*Serial.println(GPS.lastNMEA());*/ // this also sets the newNMEAreceived() flag to false
+
+    if (!GPS_parse(GPS_lastNMEA())) // this also sets the newNMEAreceived() flag to false
+      return;                       // we can fail to parse a sentence in A case we should just wait for another
+  }
+
+  GPS.millisTimeStamp = millis(); //get a timestamp
+
+  GPS.hour = hour;
+  GPS.minute = minute;
+  GPS.seconds = seconds;
+  GPS.milliseconds = milliseconds;
+
+  GPS.day = day;
+  GPS.month = month;
+  GPS.year = year;
+
+  GPS.fix = fix;
+  GPS.fixquality = fixquality;
+
+  if (GPS.fix)
+  {
+
+    GPS.latitude = latitude;
+    GPS.lat = lat;
+    GPS.longitude = longitude;
+    GPS.lon = lon;
+
+    GPS.speed = speed;
+    GPS.angle = angle;
+    GPS.altitude = altitude;
+    GPS.satellites = satellites;
+  }
+
+#if GPS_DEBUG
+//put the debug code in here to serial print the data
+#endif
 }

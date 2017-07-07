@@ -2,7 +2,7 @@
 #define BAROMETER_H
 
  #include <stdint.h>
- #include "Serial.h"
+ #include "debug_Serial.h"
     
 #define BAROMETER_DEBUG 1
 #define SPECIFY_OSR_AT_RUNTIME 0

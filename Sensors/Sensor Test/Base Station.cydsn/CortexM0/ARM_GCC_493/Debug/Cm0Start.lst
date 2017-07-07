@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 1
 
 
    1              		.cpu cortex-m0
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
   30:Generated_Source\PSoC4/Cm0Start.c **** #if (CY_IP_CPUSS_CM0)
   31:Generated_Source\PSoC4/Cm0Start.c ****     /* CPUSS Configuration register */
   32:Generated_Source\PSoC4/Cm0Start.c ****     #define CY_CPUSS_CONFIG_REG         (*(reg32 *) CYREG_CPUSS_CONFIG)
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 2
 
 
   33:Generated_Source\PSoC4/Cm0Start.c ****     #define CY_CPUSS_CONFIG_PTR         ( (reg32 *) CYREG_CPUSS_CONFIG)
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
   87:Generated_Source\PSoC4/Cm0Start.c ****     *******************************************************************************/
   88:Generated_Source\PSoC4/Cm0Start.c ****     #if (__ARMCC_VERSION)
   89:Generated_Source\PSoC4/Cm0Start.c ****         __attribute__ ((section(".bootloaderruntype"), zero_init))
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 3
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 3
 
 
   90:Generated_Source\PSoC4/Cm0Start.c ****     #elif defined (__GNUC__)
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
   41              	.L2:
  129:Generated_Source\PSoC4/Cm0Start.c ****         }
  130:Generated_Source\PSoC4/Cm0Start.c ****         else
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 4
 
 
  131:Generated_Source\PSoC4/Cm0Start.c ****     #endif
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  172:Generated_Source\PSoC4/Cm0Start.c ****         * So, the stack pointer needs to be reset to be sure that
  173:Generated_Source\PSoC4/Cm0Start.c ****         * there is no garbage in the stack.
  174:Generated_Source\PSoC4/Cm0Start.c ****         */
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 5
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 5
 
 
  175:Generated_Source\PSoC4/Cm0Start.c ****         register uint32_t msp __asm("msp");
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  229:Generated_Source\PSoC4/Cm0Start.c ****     size_t zero_size;       /* Additional size to be zeroed.  */
  230:Generated_Source\PSoC4/Cm0Start.c **** };
  231:Generated_Source\PSoC4/Cm0Start.c **** 
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 6
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 6
 
 
  232:Generated_Source\PSoC4/Cm0Start.c **** extern const struct __cy_region __cy_regions[];
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
   79              	_sbrk:
   80              	.LFB2:
  262:Generated_Source\PSoC4/Cm0Start.c **** }
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 7
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 7
 
 
  263:Generated_Source\PSoC4/Cm0Start.c **** 
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  292:Generated_Source\PSoC4/Cm0Start.c ****     }
  293:Generated_Source\PSoC4/Cm0Start.c ****     else
  294:Generated_Source\PSoC4/Cm0Start.c ****     {
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 8
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 8
 
 
  295:Generated_Source\PSoC4/Cm0Start.c ****         errno = ENOMEM;
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  140              		.cfi_offset 4, -16
  141              		.cfi_offset 5, -12
  142              		.cfi_offset 6, -8
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 9
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 9
 
 
  143              		.cfi_offset 14, -4
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  329:Generated_Source\PSoC4/Cm0Start.c ****             {
  178              		.loc 1 329 0 is_stmt 0 discriminator 1
  179 0018 A242     		cmp	r2, r4
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 10
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 10
 
 
  180 001a FAD1     		bne	.L14
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  214              		.loc 1 347 0
  215 0038 FFF7FEFF 		bl	main
  216              	.LVL29:
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 11
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 11
 
 
  217              	.L18:
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  377:Generated_Source\PSoC4/Cm0Start.c **** 
  378:Generated_Source\PSoC4/Cm0Start.c ****     #if(CY_IP_SRSSLT)
  379:Generated_Source\PSoC4/Cm0Start.c ****         CySysWdtDisable();
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 12
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 12
 
 
  380:Generated_Source\PSoC4/Cm0Start.c ****     #endif  /* (CY_IP_SRSSLT) */
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  420:Generated_Source\PSoC4/Cm0Start.c **** 
  421:Generated_Source\PSoC4/Cm0Start.c ****     return 0;
  422:Generated_Source\PSoC4/Cm0Start.c **** }
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 13
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 13
 
 
  423:Generated_Source\PSoC4/Cm0Start.c **** 
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  477:Generated_Source\PSoC4/Cm0Start.c **** #if defined(__ARMCC_VERSION)
  478:Generated_Source\PSoC4/Cm0Start.c ****     #pragma diag_default 1296
  479:Generated_Source\PSoC4/Cm0Start.c **** #endif  /* defined(__ARMCC_VERSION) */
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 14
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 14
 
 
  480:Generated_Source\PSoC4/Cm0Start.c **** 
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  274 000e 5058     		ldr	r0, [r2, r1]
  275 0010 00E0     		b	.L24
  276              	.L26:
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 15
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 15
 
 
  277              		.loc 1 515 0
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  304 0034 1360     		str	r3, [r2]
  540:Generated_Source\PSoC4/Cm0Start.c **** 	#else
  541:Generated_Source\PSoC4/Cm0Start.c **** 		(*(uint32 *)CYREG_CM0P_VTOR) = CY_CPUSS_CONFIG_VECT_ADDR_IN_RAM;
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 16
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 16
 
 
  542:Generated_Source\PSoC4/Cm0Start.c ****     #endif /* (CY_IP_CPUSS_CM0) */
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  353      00000000 
  354              		.weak	__cy_region_num
  355              		.text
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 17
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 17
 
 
  356              	.Letext0:
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  410 005f 05       		.byte	0x5
  411 0060 696E7400 		.ascii	"int\000"
  412 0064 02       		.uleb128 0x2
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 18
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 18
 
 
  413 0065 04       		.byte	0x4
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  467 00d5 08       		.uleb128 0x8
  468 00d6 A9010000 		.4byte	.LASF18
  469 00da 01       		.byte	0x1
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 19
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 19
 
 
  470 00db DE       		.byte	0xde
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  524 014d 0A000000 		.4byte	.LFE1-.LFB1
  525 0151 01       		.uleb128 0x1
  526 0152 9C       		.byte	0x9c
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 20
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 20
 
 
  527 0153 78010000 		.4byte	0x178
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  581 01d0 0E       		.uleb128 0xe
  582 01d1 1C000000 		.4byte	.LVL9
  583 01d5 5E030000 		.4byte	0x35e
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 21
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 21
 
 
  584 01d9 00       		.byte	0
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  638 0267 0E       		.uleb128 0xe
  639 0268 3C000000 		.4byte	.LVL29
  640 026c 87030000 		.4byte	0x387
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 22
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 22
 
 
  641 0270 00       		.byte	0
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  695 02ef 1B       		.uleb128 0x1b
  696 02f0 E0000000 		.4byte	0xe0
  697 02f4 FA020000 		.4byte	0x2fa
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 23
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 23
 
 
  698 02f8 1C       		.uleb128 0x1c
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  752 036f 21       		.uleb128 0x21
  753 0370 0D000000 		.4byte	.LASF51
  754 0374 06       		.byte	0x6
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 24
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 24
 
 
  755 0375 E7       		.byte	0xe7
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  809 0021 0B       		.uleb128 0xb
  810 0022 0B       		.uleb128 0xb
  811 0023 3E       		.uleb128 0x3e
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 25
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 25
 
 
  812 0024 0B       		.uleb128 0xb
@@ -1498,7 +1498,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  866 005a 09       		.uleb128 0x9
  867 005b 0F       		.uleb128 0xf
  868 005c 00       		.byte	0
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 26
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 26
 
 
  869 005d 0B       		.uleb128 0xb
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  923 0093 11       		.uleb128 0x11
  924 0094 01       		.uleb128 0x1
  925 0095 12       		.uleb128 0x12
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 27
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 27
 
 
  926 0096 06       		.uleb128 0x6
@@ -1618,7 +1618,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  980 00d4 3F       		.uleb128 0x3f
  981 00d5 19       		.uleb128 0x19
  982 00d6 03       		.uleb128 0x3
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 28
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 28
 
 
  983 00d7 0E       		.uleb128 0xe
@@ -1678,7 +1678,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1037 010e 34       		.uleb128 0x34
  1038 010f 00       		.byte	0
  1039 0110 03       		.uleb128 0x3
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 29
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 29
 
 
  1040 0111 0E       		.uleb128 0xe
@@ -1738,7 +1738,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1094 0148 11       		.uleb128 0x11
  1095 0149 01       		.uleb128 0x1
  1096 014a 12       		.uleb128 0x12
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 30
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 30
 
 
  1097 014b 06       		.uleb128 0x6
@@ -1798,7 +1798,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1151 0181 3A       		.uleb128 0x3a
  1152 0182 0B       		.uleb128 0xb
  1153 0183 3B       		.uleb128 0x3b
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 31
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 31
 
 
  1154 0184 0B       		.uleb128 0xb
@@ -1858,7 +1858,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1208 01ba 21       		.uleb128 0x21
  1209 01bb 2E       		.uleb128 0x2e
  1210 01bc 01       		.byte	0x1
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 32
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 32
 
 
  1211 01bd 3F       		.uleb128 0x3f
@@ -1918,7 +1918,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1265 0018 9F       		.byte	0x9f
  1266 0019 00000000 		.4byte	0
  1267 001d 00000000 		.4byte	0
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 33
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 33
 
 
  1268              	.LLST1:
@@ -1978,7 +1978,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1322 00a9 14000000 		.4byte	.LVL19
  1323 00ad 16000000 		.4byte	.LVL20
  1324 00b1 0300     		.2byte	0x3
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 34
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 34
 
 
  1325 00b3 71       		.byte	0x71
@@ -2038,7 +2038,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1379 013c 06000000 		.4byte	.LVL32
  1380 0140 23000000 		.4byte	.LVL34-1
  1381 0144 0100     		.2byte	0x1
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 35
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 35
 
 
  1382 0146 53       		.byte	0x53
@@ -2098,7 +2098,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1430              	.LASF51:
  1431 000d 43794861 		.ascii	"CyHalt\000"
  1431      6C7400
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 36
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 36
 
 
  1432              	.LASF44:
@@ -2158,7 +2158,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1459      20636861 
  1459      7200
  1460              	.LASF27:
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 37
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 37
 
 
  1461 00a4 72657475 		.ascii	"returnValue\000"
@@ -2218,7 +2218,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1486              	.LASF10:
  1487 014a 75696E74 		.ascii	"uint32\000"
  1487      333200
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 38
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 38
 
 
  1488              	.LASF36:
@@ -2278,7 +2278,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 1
  1511      32303135 
  1511      30333033 
  1512 0209 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccxnPquy.s 			page 39
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cctrLjA6.s 			page 39
 
 
  1512      20726576 

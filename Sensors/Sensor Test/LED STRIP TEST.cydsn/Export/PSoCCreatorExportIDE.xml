@@ -25,7 +25,7 @@
       <Tool Name="postbuild" Command="" Options="" />
     </Toolchain>
   </Toolchains>
-  <Project Name="LED STRIP TEST" Path="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn" Version="5.50" Type="Bootloadable">
+  <Project Name="LED STRIP TEST" Path="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn" Version="5.50" Type="Normal">
     <CMSIS_SVD_File>LED STRIP TEST.svd</CMSIS_SVD_File>
     <Datasheet />
     <LinkerFiles>
@@ -96,14 +96,14 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Pin_1.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Pin_1_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Pin_1_PM.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cybootloader.icf</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\cybootloader.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Bootloadable.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\Bootloadable.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED.c</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED_aliases.h</File>
-          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC4\LED_PM.c</File>
+        </Files>
+      </Folder>
+      <Folder BuildType="STRICT" Path="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\StripLights_v2_2\API">
+        <Files Root="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn">
+          <File BuildType="BUILD" Toolchain="">StripLights_v2_2\API\SLights.c</File>
+          <File BuildType="BUILD" Toolchain="">StripLights_v2_2\API\SLights.h</File>
+          <File BuildType="BUILD" Toolchain="">StripLights_v2_2\API\fonts.c</File>
+          <File BuildType="BUILD" Toolchain="">StripLights_v2_2\API\fonts.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\Export\ARM_GCC_Generic">

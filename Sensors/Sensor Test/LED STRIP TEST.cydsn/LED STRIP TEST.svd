@@ -9,7 +9,7 @@
     <peripheral>
       <name>StripLights_StringSel</name>
       <description>No description available</description>
-      <baseAddress>0x400F0072</baseAddress>
+      <baseAddress>0x400F0073</baseAddress>
       <addressBlock>
         <offset>0</offset>
         <size>0x0</size>

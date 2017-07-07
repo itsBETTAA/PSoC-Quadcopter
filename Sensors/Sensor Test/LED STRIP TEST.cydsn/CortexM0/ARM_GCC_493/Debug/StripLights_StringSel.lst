@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 1
 
 
    1              		.cpu cortex-m0
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
   30:Generated_Source\PSoC4/StripLights_StringSel.c **** *
   31:Generated_Source\PSoC4/StripLights_StringSel.c **** * Return:
   32:Generated_Source\PSoC4/StripLights_StringSel.c **** *  None.
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 2
 
 
   33:Generated_Source\PSoC4/StripLights_StringSel.c **** *
@@ -79,7 +79,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
   35              	.L3:
   36 0006 C046     		.align	2
   37              	.L2:
-  38 0008 72000F40 		.word	1074724978
+  38 0008 73000F40 		.word	1074724979
   39              		.cfi_endproc
   40              	.LFE0:
   41              		.size	StripLights_StringSel_Write, .-StripLights_StringSel_Write
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
   55 0004 C0B2     		uxtb	r0, r0
   58:Generated_Source\PSoC4/StripLights_StringSel.c **** }
   56              		.loc 1 58 0
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 3
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 3
 
 
   57              		@ sp needed
@@ -126,7 +126,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
   59              	.L6:
   60              		.align	2
   61              	.L5:
-  62 0008 72000F40 		.word	1074724978
+  62 0008 73000F40 		.word	1074724979
   63              		.cfi_endproc
   64              	.LFE1:
   65              		.size	StripLights_StringSel_Read, .-StripLights_StringSel_Read
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
  111 0056 02       		.uleb128 0x2
  112 0057 08       		.byte	0x8
  113 0058 07       		.byte	0x7
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 4
 
 
  114 0059 F6000000 		.4byte	.LASF7
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
  168 00c7 6B000000 		.4byte	0x6b
  169 00cb 00000000 		.4byte	.LFB1
  170 00cf 0C000000 		.4byte	.LFE1-.LFB1
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 5
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 5
 
 
  171 00d3 01       		.uleb128 0x1
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
  225 0031 05       		.uleb128 0x5
  226 0032 49       		.uleb128 0x49
  227 0033 13       		.uleb128 0x13
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 6
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 6
 
 
  228 0034 00       		.byte	0
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
  282 006b 03       		.uleb128 0x3
  283 006c 0E       		.uleb128 0xe
  284 006d 3A       		.uleb128 0x3a
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 7
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 7
 
 
  285 006e 0B       		.uleb128 0xb
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
  330      6E736F72 
  330      20546573 
  330      745C4C45 
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 8
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 8
 
 
  330      44205354 
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 1
  354 010d 53747269 		.ascii	"StripLights_StringSel_Read\000"
  354      704C6967 
  354      6874735F 
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccQVOjfo.s 			page 9
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc4JK3PM.s 			page 9
 
 
  354      53747269 

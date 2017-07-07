@@ -20,12 +20,12 @@
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\cyfitteriar.inc" value="HEADER;;;;;" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\cyfitter.h" value="HEADER;;;;;" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\cydisabledsheets.h" value="HEADER;;;;;" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SDA_1_aliases.h" value="HEADER;;;;;SDA_1" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SDA_1.c" value="SOURCE_C;CortexM3;;;;SDA_1" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SDA_1.h" value="HEADER;;;;;SDA_1" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SCL_1_aliases.h" value="HEADER;;;;;SCL_1" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SCL_1.c" value="SOURCE_C;CortexM3;;;;SCL_1" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SCL_1.h" value="HEADER;;;;;SCL_1" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SDA_aliases.h" value="HEADER;;;;;SDA" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SDA.c" value="SOURCE_C;CortexM3;;;;SDA" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SDA.h" value="HEADER;;;;;SDA" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SCL_aliases.h" value="HEADER;;;;;SCL" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SCL.c" value="SOURCE_C;CortexM3;;;;SCL" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\SCL.h" value="HEADER;;;;;SCL" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\I2C.c" value="SOURCE_C;CortexM3;;;;I2C" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\I2C.h" value="HEADER;;;;;I2C" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\I2C_BOOT.c" value="SOURCE_C;CortexM3;;;;I2C" />
@@ -34,13 +34,38 @@
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\I2C_SLAVE.c" value="SOURCE_C;CortexM3;;;;I2C" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\I2C_MASTER.c" value="SOURCE_C;CortexM3;;;;I2C" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\I2C_PVT.h" value="HEADER;;;;;I2C" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\serial.c" value="SOURCE_C;CortexM3;;;;serial" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\serial.h" value="HEADER;;;;;serial" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\serial_PM.c" value="SOURCE_C;CortexM3;;;;serial" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\serial_INT.c" value="SOURCE_C;CortexM3;;;;serial" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\serial_BOOT.c" value="SOURCE_C;CortexM3;;;;serial" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\serial_IntClock.c" value="SOURCE_C;CortexM3;;;;serial_IntClock" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\serial_IntClock.h" value="HEADER;;;;;serial_IntClock" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\xbeeSerial.c" value="SOURCE_C;CortexM3;;;;xbeeSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\xbeeSerial.h" value="HEADER;;;;;xbeeSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\xbeeSerial_PM.c" value="SOURCE_C;CortexM3;;;;xbeeSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\xbeeSerial_INT.c" value="SOURCE_C;CortexM3;;;;xbeeSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\xbeeSerial_BOOT.c" value="SOURCE_C;CortexM3;;;;xbeeSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\right_arm_led_aliases.h" value="HEADER;;;;;right_arm_led" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\right_arm_led.c" value="SOURCE_C;CortexM3;;;;right_arm_led" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\right_arm_led.h" value="HEADER;;;;;right_arm_led" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\debugSerial.c" value="SOURCE_C;CortexM3;;;;debugSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\debugSerial.h" value="HEADER;;;;;debugSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\debugSerial_PM.c" value="SOURCE_C;CortexM3;;;;debugSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\debugSerial_INT.c" value="SOURCE_C;CortexM3;;;;debugSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\debugSerial_BOOT.c" value="SOURCE_C;CortexM3;;;;debugSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\gpsSerial.c" value="SOURCE_C;CortexM3;;;;gpsSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\gpsSerial.h" value="HEADER;;;;;gpsSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\gpsSerial_PM.c" value="SOURCE_C;CortexM3;;;;gpsSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\gpsSerial_INT.c" value="SOURCE_C;CortexM3;;;;gpsSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\gpsSerial_BOOT.c" value="SOURCE_C;CortexM3;;;;gpsSerial" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\left_arm_led_aliases.h" value="HEADER;;;;;left_arm_led" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\left_arm_led.c" value="SOURCE_C;CortexM3;;;;left_arm_led" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\left_arm_led.h" value="HEADER;;;;;left_arm_led" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\deltaTimer.c" value="SOURCE_C;CortexM3;;;;deltaTimer" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\deltaTimer.h" value="HEADER;;;;;deltaTimer" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\deltaTimer_PM.c" value="SOURCE_C;CortexM3;;;;deltaTimer" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\deltTime.c" value="SOURCE_C;CortexM3;;;;deltTime" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\deltTime.h" value="HEADER;;;;;deltTime" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\xbeeSerial_IntClock.c" value="SOURCE_C;CortexM3;;;;xbeeSerial_IntClock" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\xbeeSerial_IntClock.h" value="HEADER;;;;;xbeeSerial_IntClock" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\debugSerial_IntClock.c" value="SOURCE_C;CortexM3;;;;debugSerial_IntClock" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\debugSerial_IntClock.h" value="HEADER;;;;;debugSerial_IntClock" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\gpsSerial_IntClock.c" value="SOURCE_C;CortexM3;;;;gpsSerial_IntClock" />
+  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\gpsSerial_IntClock.h" value="HEADER;;;;;gpsSerial_IntClock" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\cm3gcc.ld" value="LINKER_SCRIPT;;;b98f980c-3bd1-4fc7-a887-c56a20a46fdd;;cy_boot" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\Cm3RealView.scat" value="LINKER_SCRIPT;;;fdb8e1ae-f83a-46cf-9446-1d703716f38a;;cy_boot" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\codegentemp\Cm3Start.c" value="SOURCE_C;CortexM3;;;;cy_boot" />

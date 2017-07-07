@@ -8,6 +8,7 @@
 #include <accel_mag.h>
 #include <gyroscope.h>
 #include <barometer.h>
+#include <gps.h>
 
 /*==================For accelerometer and magnotometer data==============*/
 
@@ -53,3 +54,37 @@ double initial_relative_altitude;
     } barometricRawData_t;
 */
 barometricData_t baro;
+
+/*===========================For GPS data==========================*/
+/*
+typedef struct
+{
+  uint8_t hour;
+  uint8_t minute;
+  uint8_t seconds;
+  uint8_t year;
+  uint8_t month;
+  uint8_t day;
+  uint16_t milliseconds;
+  float latitude;
+  float longitude;
+  int32_t latitude_fixed;
+  int32_t longitude_fixed;
+  float latitudeDegrees;
+  float longitudeDegrees;
+  float geoidheight;
+  float altitude;
+  float speed;
+  float angle;
+  float magvariation;
+  float HDOP;
+  char lat;
+  char lon;
+  char mag;
+  uint8_t fix;
+  uint8_t fixquality;
+  uint8_t satellites;
+} gpsData_t;
+*/
+
+gpsData_t GPS;

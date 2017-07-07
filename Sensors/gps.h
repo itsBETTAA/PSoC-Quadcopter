@@ -21,8 +21,7 @@ All text above must be included in any redistribution
 #ifndef GPS_H
 #define GPS_H
 
-//comment this out if you don't want to include software serial in the library
-#define USE_SW_SERIAL
+#define GPS_DEBUG
 
 // different commands to set the update rate from once a second (1 Hz) to 10 times a second (10Hz)
 // Note that these only control the rate at which the position is echoed, to actually speed up the
@@ -107,6 +106,7 @@ typedef struct
   uint8_t fix;
   uint8_t fixquality;
   uint8_t satellites;
+  uint32_t millisTimeStamp;
 } gpsData_t;
 
 void GPS_sendCommand(const char * _string);
@@ -127,9 +127,13 @@ void GPS_interruptReads(uint8_t r);
 uint8_t GPS_wakeup(void);
 uint8_t GPS_standby(void);
 
-uint8_t GPS_waitForSentence(const char *wait, uint8_t max = MAXWAITSENTENCE);
+//uint8_t GPS_waitForSentence(const char *wait, uint8_t max = MAXWAITSENTENCE); //original library defaults the max to MAXWAITSENTENCE
+uint8_t GPS_waitForSentence(const char *wait, uint8_t max);
 uint8_t GPS_LOCUS_StartLogger(void);
 uint8_t GPS_LOCUS_StopLogger(void);
 uint8_t GPS_LOCUS_ReadStatus(void);
+
+uint8_t GPS_start();
+uint8_t GPS_update();
 
 #endif

@@ -4,8 +4,6 @@
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\cyfitter_cfg.h" value="HEADER;;;;;" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\cyfitter_cfg.c" value="SOURCE_C;CortexM0;;;;" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\protect.hex" value="OTHER;;;;;" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\cybootloader.icf" value="OTHER;;;;;" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\cybootloader.c" value="SOURCE_C;CortexM0;;;;" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\cymetadata.c" value="SOURCE_C;CortexM0;;;;" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\cydevice_trm.h" value="HEADER;;;;;" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\cydevicegnu_trm.inc" value="HEADER;;;;;" />
@@ -24,12 +22,6 @@
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\Pin_1.h" value="HEADER;;;;;Pin_1" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\Pin_1_aliases.h" value="HEADER;;;;;Pin_1" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\Pin_1_PM.c" value="SOURCE_C;CortexM0;;;;Pin_1" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\Bootloadable.c" value="SOURCE_C;CortexM0;;;;Bootloadable" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\Bootloadable.h" value="HEADER;;;;;Bootloadable" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\LED.c" value="SOURCE_C;CortexM0;;;;LED" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\LED.h" value="HEADER;;;;;LED" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\LED_aliases.h" value="HEADER;;;;;LED" />
-  <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\LED_PM.c" value="SOURCE_C;CortexM0;;;;LED" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\StripLights_cisr.c" value="SOURCE_C;CortexM0;;;;StripLights_cisr" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\StripLights_cisr.h" value="HEADER;;;;;StripLights_cisr" />
   <file name="C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\codegentemp\StripLights_fisr.c" value="SOURCE_C;CortexM0;;;;StripLights_fisr" />

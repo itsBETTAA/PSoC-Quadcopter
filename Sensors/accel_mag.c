@@ -10,7 +10,7 @@
 #include "SensorVal.c"
 #include "stdlib.h"
 #include <stdint.h>
-#include "Serial.h"
+#include "debug_Serial.h"
 
 static fxos8700AccelRange_t _range; /*will be used to save the sensitivity wanted*/
 

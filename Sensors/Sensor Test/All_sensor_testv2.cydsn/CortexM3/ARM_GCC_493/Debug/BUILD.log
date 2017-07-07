@@ -1,0 +1,36 @@
+--------------- Build Started: 07/07/2017 08:41:03 Project: All_sensor_testv2, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+The code generation step is up to date.
+The compile step is up to date, no work needs to be done.
+arm-none-eabi-ar.exe -rs .\CortexM3\ARM_GCC_493\Debug\All_sensor_testv2.a .\CortexM3\ARM_GCC_493\Debug\cyfitter_cfg.o .\CortexM3\ARM_GCC_493\Debug\I2C.o .\CortexM3\ARM_GCC_493\Debug\I2C_BOOT.o .\CortexM3\ARM_GCC_493\Debug\I2C_INT.o .\CortexM3\ARM_GCC_493\Debug\I2C_PM.o .\CortexM3\ARM_GCC_493\Debug\I2C_SLAVE.o .\CortexM3\ARM_GCC_493\Debug\I2C_MASTER.o .\CortexM3\ARM_GCC_493\Debug\CyDmac.o .\CortexM3\ARM_GCC_493\Debug\CyFlash.o .\CortexM3\ARM_GCC_493\Debug\CyLib.o .\CortexM3\ARM_GCC_493\Debug\cyPm.o .\CortexM3\ARM_GCC_493\Debug\CySpc.o .\CortexM3\ARM_GCC_493\Debug\cyutils.o .\CortexM3\ARM_GCC_493\Debug\SDA.o .\CortexM3\ARM_GCC_493\Debug\SCL.o .\CortexM3\ARM_GCC_493\Debug\gpsSerial.o .\CortexM3\ARM_GCC_493\Debug\gpsSerial_PM.o .\CortexM3\ARM_GCC_493\Debug\gpsSerial_INT.o .\CortexM3\ARM_GCC_493\Debug\gpsSerial_BOOT.o .\CortexM3\ARM_GCC_493\Debug\gpsSerial_IntClock.o .\CortexM3\ARM_GCC_493\Debug\right_arm_led.o .\CortexM3\ARM_GCC_493\Debug\left_arm_led.o .\CortexM3\ARM_GCC_493\Debug\xbeeSerial.o .\CortexM3\ARM_GCC_493\Debug\xbeeSerial_PM.o .\CortexM3\ARM_GCC_493\Debug\xbeeSerial_INT.o .\CortexM3\ARM_GCC_493\Debug\xbeeSerial_BOOT.o .\CortexM3\ARM_GCC_493\Debug\debugSerial.o .\CortexM3\ARM_GCC_493\Debug\debugSerial_PM.o .\CortexM3\ARM_GCC_493\Debug\debugSerial_INT.o .\CortexM3\ARM_GCC_493\Debug\debugSerial_BOOT.o .\CortexM3\ARM_GCC_493\Debug\xbeeSerial_IntClock.o .\CortexM3\ARM_GCC_493\Debug\debugSerial_IntClock.o .\CortexM3\ARM_GCC_493\Debug\deltaTimer.o .\CortexM3\ARM_GCC_493\Debug\deltaTimer_PM.o .\CortexM3\ARM_GCC_493\Debug\deltTime.o .\CortexM3\ARM_GCC_493\Debug\CyBootAsmGnu.o
+arm-none-eabi-ar.exe: creating .\CortexM3\ARM_GCC_493\Debug\All_sensor_testv2.a
+arm-none-eabi-gcc.exe -Wl,--start-group -o .\CortexM3\ARM_GCC_493\Debug\All_sensor_testv2.elf .\CortexM3\ARM_GCC_493\Debug\main.o .\CortexM3\ARM_GCC_493\Debug\accel_mag.o .\CortexM3\ARM_GCC_493\Debug\gyroscope.o .\CortexM3\ARM_GCC_493\Debug\SensorVal.o .\CortexM3\ARM_GCC_493\Debug\twi.o .\CortexM3\ARM_GCC_493\Debug\barometer.o .\CortexM3\ARM_GCC_493\Debug\debug_Serial.o .\CortexM3\ARM_GCC_493\Debug\cymetadata.o .\CortexM3\ARM_GCC_493\Debug\Cm3Start.o .\CortexM3\ARM_GCC_493\Debug\All_sensor_testv2.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM3\ARM_GCC_493\Debug\CyComponentLibrary.a" -mcpu=cortex-m3 -mthumb -g -ffunction-sections -Og -ffat-lto-objects -l m -L Generated_Source\PSoC5 -Wl,-Map,.\CortexM3\ARM_GCC_493\Debug/All_sensor_testv2.map -T "C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\Generated_Source\PSoC5\cm3gcc.ld" -specs=nano.specs -u _printf_float -Wl,--gc-sections -Wl,--end-group
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_print':
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:13: multiple definition of `serial_begin'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:13: first defined here
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_println':
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:24: multiple definition of `serial_print'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:24: first defined here
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_printDoubleln':
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:29: multiple definition of `serial_println'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:29: first defined here
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_printDouble':
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:34: multiple definition of `serial_printDouble'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:34: first defined here
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_printDoubleln':
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:41: multiple definition of `serial_printDoubleln'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:41: first defined here
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_printFloat':
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:48: multiple definition of `serial_printFloat'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:48: first defined here
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_printFloatln':
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:55: multiple definition of `serial_printFloatln'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:55: first defined here
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_printInt':
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:62: multiple definition of `serial_printInt'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:62: first defined here
+.\CortexM3\ARM_GCC_493\Debug\debug_Serial.o: In function `serial_printIntln':
+The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:67: multiple definition of `serial_printIntln'
+.\CortexM3\ARM_GCC_493\Debug\barometer.o:C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn/..\../debug_Serial.c:67: first defined here
+collect2.exe: error: ld returned 1 exit status
+--------------- Build Failed: 07/07/2017 08:41:04 ---------------

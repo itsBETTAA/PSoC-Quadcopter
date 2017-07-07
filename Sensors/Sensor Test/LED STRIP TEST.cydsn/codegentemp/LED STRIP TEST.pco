@@ -1,5 +1,5 @@
 # LED STRIP TEST
-# 2017-07-04 17:26:49Z
+# 2017-07-05 17:46:05Z
 
 # IO_2@[IOP=(3)][IoId=(2)] is reserved: SWDDebugEnabled
 dont_use_io iocell 3 2
@@ -7,25 +7,24 @@ dont_use_io iocell 3 2
 dont_use_io iocell 3 3
 set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
 set_location "ClockBlock" m0s8clockblockcell -1 -1 0
-set_io "Pin_1(0)" iocell 3 1
-set_io "LED(0)" iocell 0 0
-set_location "Net_43" 1 0 0 0
-set_location "\StripLights:Net_159\" 1 0 1 1
-set_location "Net_39" 1 0 1 2
+set_io "Pin_1(0)" iocell 1 1
+set_location "Net_43" 0 0 0 0
+set_location "\StripLights:Net_159\" 0 0 1 1
+set_location "Net_39" 0 0 1 2
 set_location "\StripLights:cisr\" interrupt -1 -1 0
 set_location "\StripLights:fisr\" interrupt -1 -1 2
-set_location "\StripLights:StringSel:Sync:ctrl_reg\" 1 0 6
-set_location "\StripLights:B_WS2811:ctrl\" 0 0 6
-set_location "\StripLights:B_WS2811:StatusReg\" 0 0 3
-set_location "\StripLights:B_WS2811:dshifter:u0\" 0 0 2
-set_location "\StripLights:B_WS2811:pwm8:u0\" 1 0 2
-set_location "\StripLights:Net_64\" 1 0 0 1
-set_location "\StripLights:B_WS2811:status_6\" 1 0 0 3
-set_location "\StripLights:B_WS2811:bitCount_2\" 0 0 0 2
-set_location "\StripLights:B_WS2811:state_1\" 0 0 0 0
-set_location "\StripLights:B_WS2811:state_0\" 0 0 0 1
-set_location "\StripLights:B_WS2811:bitCount_1\" 0 0 1 1
-set_location "\StripLights:B_WS2811:bitCount_0\" 0 0 1 2
-set_location "\StripLights:B_WS2811:dpAddr_1\" 0 0 1 0
-set_location "\StripLights:B_WS2811:dpAddr_0\" 1 0 0 2
-set_location "\StripLights:B_WS2811:pwmCntl\" 1 0 1 0
+set_location "\StripLights:StringSel:Sync:ctrl_reg\" 0 0 6
+set_location "\StripLights:B_WS2811:ctrl\" 1 0 6
+set_location "\StripLights:B_WS2811:StatusReg\" 1 0 3
+set_location "\StripLights:B_WS2811:dshifter:u0\" 1 0 2
+set_location "\StripLights:B_WS2811:pwm8:u0\" 0 0 2
+set_location "\StripLights:Net_64\" 0 0 0 1
+set_location "\StripLights:B_WS2811:status_6\" 0 0 0 3
+set_location "\StripLights:B_WS2811:bitCount_2\" 1 0 0 2
+set_location "\StripLights:B_WS2811:state_1\" 1 0 0 0
+set_location "\StripLights:B_WS2811:state_0\" 1 0 0 1
+set_location "\StripLights:B_WS2811:bitCount_1\" 1 0 1 1
+set_location "\StripLights:B_WS2811:bitCount_0\" 1 0 1 2
+set_location "\StripLights:B_WS2811:dpAddr_1\" 1 0 1 0
+set_location "\StripLights:B_WS2811:dpAddr_0\" 0 0 0 2
+set_location "\StripLights:B_WS2811:pwmCntl\" 0 0 1 0

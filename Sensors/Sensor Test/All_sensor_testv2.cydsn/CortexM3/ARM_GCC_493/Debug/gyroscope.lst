@@ -1,0 +1,3141 @@
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"gyroscope.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.gyro_write8,"ax",%progbits
+  19              		.align	2
+  20              		.global	gyro_write8
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	gyro_write8, %function
+  24              	gyro_write8:
+  25              	.LFB63:
+  26              		.file 1 "..\\..\\gyroscope.c"
+   1:..\../gyroscope.c **** /*
+   2:..\../gyroscope.c ****  * This is going to be the remade version of the FXAS21002C library from adafruit
+   3:..\../gyroscope.c ****  * to support the PSoC Version of our project
+   4:..\../gyroscope.c **** */
+   5:..\../gyroscope.c **** 
+   6:..\../gyroscope.c **** #include "gyroscope.h"
+   7:..\../gyroscope.c **** #include "twi.h"
+   8:..\../gyroscope.c **** #include "project.h"
+   9:..\../gyroscope.c **** #include "SensorVal.h"
+  10:..\../gyroscope.c **** #include "stdlib.h"
+  11:..\../gyroscope.c **** #include <stdint.h>
+  12:..\../gyroscope.c **** #include "debug_Serial.h"
+  13:..\../gyroscope.c **** 
+  14:..\../gyroscope.c **** static gyroRange_t _range;
+  15:..\../gyroscope.c **** 
+  16:..\../gyroscope.c **** void gyro_write8(uint8_t reg, uint8_t value)
+  17:..\../gyroscope.c **** {
+  27              		.loc 1 17 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 00B5     		push	{lr}
+  33              		.cfi_def_cfa_offset 4
+  34              		.cfi_offset 14, -4
+  35 0002 83B0     		sub	sp, sp, #12
+  36              		.cfi_def_cfa_offset 16
+  18:..\../gyroscope.c **** 
+  19:..\../gyroscope.c ****     //to write, you want to write 2 values: (1) The registeraddress you want to write to
+  20:..\../gyroscope.c ****     //                                      (2) The value you wish to write to the register
+  21:..\../gyroscope.c **** 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 2
+
+
+  22:..\../gyroscope.c ****     uint8_t Write_Buf[2] = {0};  //create an array where we will store the things to be written
+  23:..\../gyroscope.c ****     Write_Buf[0] = (uint8_t)reg; //save the things to be sent in order in the array
+  37              		.loc 1 23 0
+  38 0004 8DF80400 		strb	r0, [sp, #4]
+  24:..\../gyroscope.c ****     Write_Buf[1] = (uint8_t)value;
+  39              		.loc 1 24 0
+  40 0008 8DF80510 		strb	r1, [sp, #5]
+  25:..\../gyroscope.c **** 
+  26:..\../gyroscope.c ****     //Make a complete transfer (I2C_MODE_COMPLETE_XFER) to the gyroscope
+  27:..\../gyroscope.c ****     //Before the array is sent, it first sends the address and that it's about to write to it
+  28:..\../gyroscope.c ****     //Then, it sends the first array value which is the register value it's trying to write to
+  29:..\../gyroscope.c ****     //And, finally once it receives an ACK it sends the second thing which is the value it is tryin
+  30:..\../gyroscope.c ****     I2C_MasterWriteBuf(FXAS21002C_ADDRESS, (uint8 *)Write_Buf, 2, I2C_MODE_COMPLETE_XFER);
+  41              		.loc 1 30 0
+  42 000c 2120     		movs	r0, #33
+  43              	.LVL1:
+  44 000e 01A9     		add	r1, sp, #4
+  45              	.LVL2:
+  46 0010 0222     		movs	r2, #2
+  47 0012 0023     		movs	r3, #0
+  48 0014 FFF7FEFF 		bl	I2C_MasterWriteBuf
+  49              	.LVL3:
+  50              	.L2:
+  31:..\../gyroscope.c ****     while ((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT) == 0) //Wait till the whole transfer is comple
+  51              		.loc 1 31 0 discriminator 1
+  52 0018 FFF7FEFF 		bl	I2C_MasterStatus
+  53              	.LVL4:
+  54 001c 10F0020F 		tst	r0, #2
+  55 0020 FAD0     		beq	.L2
+  32:..\../gyroscope.c ****     {
+  33:..\../gyroscope.c ****     }
+  34:..\../gyroscope.c **** 
+  35:..\../gyroscope.c ****     return; //return 1 if everything was successful
+  36:..\../gyroscope.c **** }
+  56              		.loc 1 36 0
+  57 0022 03B0     		add	sp, sp, #12
+  58              		.cfi_def_cfa_offset 4
+  59              		@ sp needed
+  60 0024 5DF804FB 		ldr	pc, [sp], #4
+  61              		.cfi_endproc
+  62              	.LFE63:
+  63              		.size	gyro_write8, .-gyro_write8
+  64              		.section	.text.gyro_read8,"ax",%progbits
+  65              		.align	2
+  66              		.global	gyro_read8
+  67              		.thumb
+  68              		.thumb_func
+  69              		.type	gyro_read8, %function
+  70              	gyro_read8:
+  71              	.LFB64:
+  37:..\../gyroscope.c **** 
+  38:..\../gyroscope.c **** uint8_t gyro_read8(uint8_t reg)
+  39:..\../gyroscope.c **** {
+  72              		.loc 1 39 0
+  73              		.cfi_startproc
+  74              		@ args = 0, pretend = 0, frame = 8
+  75              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 3
+
+
+  76              	.LVL5:
+  77 0000 00B5     		push	{lr}
+  78              		.cfi_def_cfa_offset 4
+  79              		.cfi_offset 14, -4
+  80 0002 83B0     		sub	sp, sp, #12
+  81              		.cfi_def_cfa_offset 16
+  40:..\../gyroscope.c **** 
+  41:..\../gyroscope.c ****     //to read:  (1)Write the register address you want to read from to the slave device
+  42:..\../gyroscope.c ****     //          (2)Use MasterReadBuf to store what is contained in the refister into the read buffe
+  43:..\../gyroscope.c **** 
+  44:..\../gyroscope.c ****     uint8_t Write_Buf[1];
+  45:..\../gyroscope.c ****     Write_Buf[0] = (uint8_t)reg;
+  82              		.loc 1 45 0
+  83 0004 8DF80400 		strb	r0, [sp, #4]
+  46:..\../gyroscope.c **** 
+  47:..\../gyroscope.c ****     uint8 Read_Buf[1] = {0};
+  84              		.loc 1 47 0
+  85 0008 0023     		movs	r3, #0
+  86 000a 8DF80030 		strb	r3, [sp]
+  48:..\../gyroscope.c **** 
+  49:..\../gyroscope.c ****     //Make a transfer with no stop bit (I2C_MODE_NO_STOP) to the gyroscope
+  50:..\../gyroscope.c ****     //Before the array is sent, it first sends the address and that it's about to write to it
+  51:..\../gyroscope.c ****     //Then, it sends the first array value which is the register value it's trying to point to
+  52:..\../gyroscope.c ****     //And, finally once it receives an ACK it sends the second thing which is the value it is tryin
+  53:..\../gyroscope.c ****     I2C_MasterWriteBuf(FXAS21002C_ADDRESS, (uint8 *)Write_Buf, 1, I2C_MODE_NO_STOP);
+  87              		.loc 1 53 0
+  88 000e 2120     		movs	r0, #33
+  89              	.LVL6:
+  90 0010 01A9     		add	r1, sp, #4
+  91              	.LVL7:
+  92 0012 0122     		movs	r2, #1
+  93 0014 0223     		movs	r3, #2
+  94 0016 FFF7FEFF 		bl	I2C_MasterWriteBuf
+  95              	.LVL8:
+  96              	.L5:
+  54:..\../gyroscope.c ****     while ((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT) == 0)
+  97              		.loc 1 54 0 discriminator 1
+  98 001a FFF7FEFF 		bl	I2C_MasterStatus
+  99              	.LVL9:
+ 100 001e 10F0020F 		tst	r0, #2
+ 101 0022 FAD0     		beq	.L5
+  55:..\../gyroscope.c ****     {
+  56:..\../gyroscope.c ****     } //wait till Master status indicates that write is complete
+  57:..\../gyroscope.c **** 
+  58:..\../gyroscope.c ****     //Once the first tranfer was done with a NO STOP BIT it then tells the gyroscope that it is
+  59:..\../gyroscope.c ****     //trying to read from it, after sending a repeated start. The Master will no extract as much
+  60:..\../gyroscope.c ****     //bytes as we told it to, starting from the value in the register we told it to point to
+  61:..\../gyroscope.c ****     I2C_MasterReadBuf(FXAS21002C_ADDRESS, (uint8 *)Read_Buf, 1, I2C_MODE_REPEAT_START);
+ 102              		.loc 1 61 0
+ 103 0024 2120     		movs	r0, #33
+ 104 0026 6946     		mov	r1, sp
+ 105 0028 0122     		movs	r2, #1
+ 106 002a 1346     		mov	r3, r2
+ 107 002c FFF7FEFF 		bl	I2C_MasterReadBuf
+ 108              	.LVL10:
+ 109              	.L6:
+  62:..\../gyroscope.c ****     while ((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT) == 0)
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 4
+
+
+ 110              		.loc 1 62 0 discriminator 1
+ 111 0030 FFF7FEFF 		bl	I2C_MasterStatus
+ 112              	.LVL11:
+ 113 0034 10F0010F 		tst	r0, #1
+ 114 0038 FAD0     		beq	.L6
+  63:..\../gyroscope.c ****     {
+  64:..\../gyroscope.c ****     } //wait till Master status indicates read is complete
+  65:..\../gyroscope.c **** 
+  66:..\../gyroscope.c ****     return Read_Buf[0]; //return the value we just read
+  67:..\../gyroscope.c **** }
+ 115              		.loc 1 67 0
+ 116 003a 9DF80000 		ldrb	r0, [sp]	@ zero_extendqisi2
+ 117 003e 03B0     		add	sp, sp, #12
+ 118              		.cfi_def_cfa_offset 4
+ 119              		@ sp needed
+ 120 0040 5DF804FB 		ldr	pc, [sp], #4
+ 121              		.cfi_endproc
+ 122              	.LFE64:
+ 123              		.size	gyro_read8, .-gyro_read8
+ 124              		.section	.text.gyro_begin,"ax",%progbits
+ 125              		.align	2
+ 126              		.global	gyro_begin
+ 127              		.thumb
+ 128              		.thumb_func
+ 129              		.type	gyro_begin, %function
+ 130              	gyro_begin:
+ 131              	.LFB65:
+  68:..\../gyroscope.c **** 
+  69:..\../gyroscope.c **** uint8_t gyro_begin(gyroRange_t rng)
+  70:..\../gyroscope.c **** {
+ 132              		.loc 1 70 0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 0
+ 135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 136              	.LVL12:
+ 137 0000 10B5     		push	{r4, lr}
+ 138              		.cfi_def_cfa_offset 8
+ 139              		.cfi_offset 4, -8
+ 140              		.cfi_offset 14, -4
+ 141 0002 0446     		mov	r4, r0
+  71:..\../gyroscope.c ****   /* Enable I2C */
+  72:..\../gyroscope.c ****   Wire_begin();
+ 142              		.loc 1 72 0
+ 143 0004 FFF7FEFF 		bl	Wire_begin
+ 144              	.LVL13:
+  73:..\../gyroscope.c **** 
+  74:..\../gyroscope.c ****   /* Set the range to an appropriate value */
+  75:..\../gyroscope.c ****   _range = rng;
+ 145              		.loc 1 75 0
+ 146 0008 124B     		ldr	r3, .L12
+ 147 000a 1C80     		strh	r4, [r3]	@ movhi
+  76:..\../gyroscope.c **** 
+  77:..\../gyroscope.c ****   /* Clear the raw sensor data */
+  78:..\../gyroscope.c ****   gyro_raw.x = 0;
+ 148              		.loc 1 78 0
+ 149 000c 124B     		ldr	r3, .L12+4
+ 150 000e 0022     		movs	r2, #0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 5
+
+
+ 151 0010 1A80     		strh	r2, [r3]	@ movhi
+  79:..\../gyroscope.c ****   gyro_raw.y = 0;
+ 152              		.loc 1 79 0
+ 153 0012 5A80     		strh	r2, [r3, #2]	@ movhi
+  80:..\../gyroscope.c ****   gyro_raw.z = 0;
+ 154              		.loc 1 80 0
+ 155 0014 9A80     		strh	r2, [r3, #4]	@ movhi
+  81:..\../gyroscope.c **** 
+  82:..\../gyroscope.c ****   /* Make sure we have the correct chip ID since this checks
+  83:..\../gyroscope.c ****      for correct address and that the IC is properly connected */
+  84:..\../gyroscope.c ****   uint8_t id = gyro_read8(GYRO_REGISTER_WHO_AM_I);
+ 156              		.loc 1 84 0
+ 157 0016 0C20     		movs	r0, #12
+ 158 0018 FFF7FEFF 		bl	gyro_read8
+ 159              	.LVL14:
+  85:..\../gyroscope.c ****   // Serial.print("WHO AM I? 0x"); Serial.println(id, HEX);
+  86:..\../gyroscope.c ****   if (id != FXAS21002C_ID)
+ 160              		.loc 1 86 0
+ 161 001c D728     		cmp	r0, #215
+ 162 001e 04D0     		beq	.L9
+  87:..\../gyroscope.c ****   {
+  88:..\../gyroscope.c ****     serial_println("Incorrect ID, check wiring or code");
+ 163              		.loc 1 88 0
+ 164 0020 0E48     		ldr	r0, .L12+8
+ 165              	.LVL15:
+ 166 0022 FFF7FEFF 		bl	serial_println
+ 167              	.LVL16:
+  89:..\../gyroscope.c ****     return false;
+ 168              		.loc 1 89 0
+ 169 0026 0020     		movs	r0, #0
+ 170 0028 10BD     		pop	{r4, pc}
+ 171              	.LVL17:
+ 172              	.L9:
+  90:..\../gyroscope.c ****   }
+  91:..\../gyroscope.c ****   serial_println("Correct ID");
+ 173              		.loc 1 91 0
+ 174 002a 0D48     		ldr	r0, .L12+12
+ 175              	.LVL18:
+ 176 002c FFF7FEFF 		bl	serial_println
+ 177              	.LVL19:
+  92:..\../gyroscope.c **** 
+  93:..\../gyroscope.c ****   /* Set CTRL_REG1 (0x13)
+  94:..\../gyroscope.c ****    ====================================================================
+  95:..\../gyroscope.c ****    BIT  Symbol    Description                                   Default
+  96:..\../gyroscope.c ****    ---  ------    --------------------------------------------- -------
+  97:..\../gyroscope.c ****      6  RESET     Reset device on 1                                   0
+  98:..\../gyroscope.c ****      5  ST        Self test enabled on 1                              0
+  99:..\../gyroscope.c ****    4:2  DR        Output data rate                                  000
+ 100:..\../gyroscope.c ****                   000 = 800 Hz
+ 101:..\../gyroscope.c ****                   001 = 400 Hz
+ 102:..\../gyroscope.c ****                   010 = 200 Hz
+ 103:..\../gyroscope.c ****                   011 = 100 Hz
+ 104:..\../gyroscope.c ****                   100 = 50 Hz
+ 105:..\../gyroscope.c ****                   101 = 25 Hz
+ 106:..\../gyroscope.c ****                   110 = 12.5 Hz
+ 107:..\../gyroscope.c ****                   111 = 12.5 Hz
+ 108:..\../gyroscope.c ****      1  ACTIVE    Standby(0)/Active(1)                                0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 6
+
+
+ 109:..\../gyroscope.c ****      0  READY     Standby(0)/Ready(1)                                 0*/
+ 110:..\../gyroscope.c **** 
+ 111:..\../gyroscope.c ****   /* Reset then switch to active mode with 100Hz output */
+ 112:..\../gyroscope.c ****   gyro_write8(GYRO_REGISTER_CTRL_REG1, 0x00);  //clear all bit
+ 178              		.loc 1 112 0
+ 179 0030 1320     		movs	r0, #19
+ 180 0032 0021     		movs	r1, #0
+ 181 0034 FFF7FEFF 		bl	gyro_write8
+ 182              	.LVL20:
+ 113:..\../gyroscope.c ****   gyro_write8(GYRO_REGISTER_CTRL_REG1, (1<<6));  //set the reset bit
+ 183              		.loc 1 113 0
+ 184 0038 1320     		movs	r0, #19
+ 185 003a 4021     		movs	r1, #64
+ 186 003c FFF7FEFF 		bl	gyro_write8
+ 187              	.LVL21:
+ 114:..\../gyroscope.c ****   gyro_write8(GYRO_REGISTER_CTRL_REG1, 0x0E);    //
+ 188              		.loc 1 114 0
+ 189 0040 1320     		movs	r0, #19
+ 190 0042 0E21     		movs	r1, #14
+ 191 0044 FFF7FEFF 		bl	gyro_write8
+ 192              	.LVL22:
+ 115:..\../gyroscope.c ****   CyDelay(100); // 60 ms + 1/ODR
+ 193              		.loc 1 115 0
+ 194 0048 6420     		movs	r0, #100
+ 195 004a FFF7FEFF 		bl	CyDelay
+ 196              	.LVL23:
+ 116:..\../gyroscope.c ****   /* ------------------------------------------------------------------ */
+ 117:..\../gyroscope.c **** 
+ 118:..\../gyroscope.c ****   return true;
+ 197              		.loc 1 118 0
+ 198 004e 0120     		movs	r0, #1
+ 119:..\../gyroscope.c **** }
+ 199              		.loc 1 119 0
+ 200 0050 10BD     		pop	{r4, pc}
+ 201              	.L13:
+ 202 0052 00BF     		.align	2
+ 203              	.L12:
+ 204 0054 00000000 		.word	.LANCHOR0
+ 205 0058 00000000 		.word	gyro_raw
+ 206 005c 00000000 		.word	.LC0
+ 207 0060 24000000 		.word	.LC1
+ 208              		.cfi_endproc
+ 209              	.LFE65:
+ 210              		.size	gyro_begin, .-gyro_begin
+ 211              		.global	__aeabi_i2f
+ 212              		.global	__aeabi_f2iz
+ 213              		.global	__aeabi_fmul
+ 214              		.global	__aeabi_f2d
+ 215              		.global	__aeabi_dmul
+ 216              		.global	__aeabi_d2f
+ 217              		.section	.text.gyro_update,"ax",%progbits
+ 218              		.align	2
+ 219              		.global	gyro_update
+ 220              		.thumb
+ 221              		.thumb_func
+ 222              		.type	gyro_update, %function
+ 223              	gyro_update:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 7
+
+
+ 224              	.LFB66:
+ 120:..\../gyroscope.c **** 
+ 121:..\../gyroscope.c **** uint8_t gyro_update()
+ 122:..\../gyroscope.c **** {
+ 225              		.loc 1 122 0
+ 226              		.cfi_startproc
+ 227              		@ args = 0, pretend = 0, frame = 16
+ 228              		@ frame_needed = 0, uses_anonymous_args = 0
+ 229 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 230              		.cfi_def_cfa_offset 28
+ 231              		.cfi_offset 4, -28
+ 232              		.cfi_offset 5, -24
+ 233              		.cfi_offset 6, -20
+ 234              		.cfi_offset 7, -16
+ 235              		.cfi_offset 8, -12
+ 236              		.cfi_offset 9, -8
+ 237              		.cfi_offset 14, -4
+ 238 0004 85B0     		sub	sp, sp, #20
+ 239              		.cfi_def_cfa_offset 48
+ 240              	.LVL24:
+ 123:..\../gyroscope.c ****   uint8_t readingValid = false;
+ 124:..\../gyroscope.c **** 
+ 125:..\../gyroscope.c **** 
+ 126:..\../gyroscope.c ****   /* Clear the raw data placeholder */
+ 127:..\../gyroscope.c ****   gyro_raw.x = 0;
+ 241              		.loc 1 127 0
+ 242 0006 764A     		ldr	r2, .L24+8
+ 243 0008 0023     		movs	r3, #0
+ 244 000a 1380     		strh	r3, [r2]	@ movhi
+ 128:..\../gyroscope.c ****   gyro_raw.y = 0;
+ 245              		.loc 1 128 0
+ 246 000c 5380     		strh	r3, [r2, #2]	@ movhi
+ 129:..\../gyroscope.c ****   gyro_raw.z = 0;
+ 247              		.loc 1 129 0
+ 248 000e 9380     		strh	r3, [r2, #4]	@ movhi
+ 130:..\../gyroscope.c **** 
+ 131:..\../gyroscope.c ****   /* Read 7 bytes from the sensor */
+ 132:..\../gyroscope.c ****   /*Wire.beginTransmission((byte)FXAS21002C_ADDRESS);
+ 133:..\../gyroscope.c ****   #if ARDUINO >= 100
+ 134:..\../gyroscope.c ****     Wire.write(GYRO_REGISTER_STATUS | 0x80);
+ 135:..\../gyroscope.c ****   #else
+ 136:..\../gyroscope.c ****     Wire.send(GYRO_REGISTER_STATUS | 0x80);
+ 137:..\../gyroscope.c ****   #endif
+ 138:..\../gyroscope.c ****   Wire.endTransmission();
+ 139:..\../gyroscope.c ****   Wire.requestFrom((byte)FXAS21002C_ADDRESS, (byte)7);
+ 140:..\../gyroscope.c ****   */
+ 141:..\../gyroscope.c **** 
+ 142:..\../gyroscope.c ****     uint8_t Write_Buf[1];  //create a buffer that will store the register that we want to start rea
+ 143:..\../gyroscope.c ****     Write_Buf[0] = (uint8_t)GYRO_REGISTER_STATUS;   
+ 249              		.loc 1 143 0
+ 250 0010 8DF80C30 		strb	r3, [sp, #12]
+ 144:..\../gyroscope.c ****     
+ 145:..\../gyroscope.c ****     uint8_t Read_Buf[7] = {0}; //create an array that will store the data read
+ 251              		.loc 1 145 0
+ 252 0014 0193     		str	r3, [sp, #4]
+ 253 0016 ADF80830 		strh	r3, [sp, #8]	@ movhi
+ 254 001a 8DF80A30 		strb	r3, [sp, #10]
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 8
+
+
+ 146:..\../gyroscope.c ****     
+ 147:..\../gyroscope.c ****     I2C_MasterWriteBuf(FXAS21002C_ADDRESS, (uint8 *)Write_Buf, 1, I2C_MODE_NO_STOP);
+ 255              		.loc 1 147 0
+ 256 001e 2120     		movs	r0, #33
+ 257 0020 03A9     		add	r1, sp, #12
+ 258 0022 0122     		movs	r2, #1
+ 259 0024 0223     		movs	r3, #2
+ 260 0026 FFF7FEFF 		bl	I2C_MasterWriteBuf
+ 261              	.LVL25:
+ 262              	.L15:
+ 148:..\../gyroscope.c ****     while((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT) == 0){} //wait till Master status indicates tha
+ 263              		.loc 1 148 0 discriminator 1
+ 264 002a FFF7FEFF 		bl	I2C_MasterStatus
+ 265              	.LVL26:
+ 266 002e 10F0020F 		tst	r0, #2
+ 267 0032 FAD0     		beq	.L15
+ 149:..\../gyroscope.c ****     
+ 150:..\../gyroscope.c ****     I2C_MasterReadBuf(FXAS21002C_ADDRESS, (uint8 *) Read_Buf, sizeof(Read_Buf), I2C_MODE_REPEAT_STA
+ 268              		.loc 1 150 0
+ 269 0034 2120     		movs	r0, #33
+ 270 0036 01A9     		add	r1, sp, #4
+ 271 0038 0722     		movs	r2, #7
+ 272 003a 0123     		movs	r3, #1
+ 273 003c FFF7FEFF 		bl	I2C_MasterReadBuf
+ 274              	.LVL27:
+ 275              	.L16:
+ 151:..\../gyroscope.c ****     while((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT)==0){}   //wait till Master status indicates rea
+ 276              		.loc 1 151 0 discriminator 1
+ 277 0040 FFF7FEFF 		bl	I2C_MasterStatus
+ 278              	.LVL28:
+ 279 0044 10F0010F 		tst	r0, #1
+ 280 0048 FAD0     		beq	.L16
+ 281              	.LVL29:
+ 152:..\../gyroscope.c ****     
+ 153:..\../gyroscope.c **** 
+ 154:..\../gyroscope.c ****     uint8_t status = Read_Buf[0];
+ 155:..\../gyroscope.c ****     uint8_t xhi = Read_Buf[1];
+ 282              		.loc 1 155 0
+ 283 004a 9DF80500 		ldrb	r0, [sp, #5]	@ zero_extendqisi2
+ 284              	.LVL30:
+ 156:..\../gyroscope.c ****     uint8_t xlo = Read_Buf[2];
+ 285              		.loc 1 156 0
+ 286 004e 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 287              	.LVL31:
+ 157:..\../gyroscope.c ****     uint8_t yhi = Read_Buf[3];
+ 288              		.loc 1 157 0
+ 289 0052 9DF80790 		ldrb	r9, [sp, #7]	@ zero_extendqisi2
+ 290              	.LVL32:
+ 158:..\../gyroscope.c ****     uint8_t ylo = Read_Buf[4];
+ 291              		.loc 1 158 0
+ 292 0056 9DF80860 		ldrb	r6, [sp, #8]	@ zero_extendqisi2
+ 293              	.LVL33:
+ 159:..\../gyroscope.c ****     uint8_t zhi = Read_Buf[5];
+ 294              		.loc 1 159 0
+ 295 005a 9DF80980 		ldrb	r8, [sp, #9]	@ zero_extendqisi2
+ 296              	.LVL34:
+ 160:..\../gyroscope.c ****     uint8_t zlo = Read_Buf[6];
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 9
+
+
+ 297              		.loc 1 160 0
+ 298 005e 9DF80A50 		ldrb	r5, [sp, #10]	@ zero_extendqisi2
+ 299              	.LVL35:
+ 161:..\../gyroscope.c **** 
+ 162:..\../gyroscope.c ****   /* Shift values to create properly formed integer */
+ 163:..\../gyroscope.c ****   gyro.x = (int16_t)((xhi << 8) | xlo);
+ 300              		.loc 1 163 0
+ 301 0062 43EA0020 		orr	r0, r3, r0, lsl #8
+ 302              	.LVL36:
+ 303 0066 00B2     		sxth	r0, r0
+ 304 0068 FFF7FEFF 		bl	__aeabi_i2f
+ 305              	.LVL37:
+ 306 006c 0746     		mov	r7, r0
+ 307 006e 5D4C     		ldr	r4, .L24+12
+ 308 0070 2060     		str	r0, [r4]	@ float
+ 164:..\../gyroscope.c ****   gyro.y = (int16_t)((yhi << 8) | ylo);
+ 309              		.loc 1 164 0
+ 310 0072 46EA0920 		orr	r0, r6, r9, lsl #8
+ 311 0076 00B2     		sxth	r0, r0
+ 312 0078 FFF7FEFF 		bl	__aeabi_i2f
+ 313              	.LVL38:
+ 314 007c 0646     		mov	r6, r0
+ 315              	.LVL39:
+ 316 007e 6060     		str	r0, [r4, #4]	@ float
+ 165:..\../gyroscope.c ****   gyro.z = (int16_t)((zhi << 8) | zlo);
+ 317              		.loc 1 165 0
+ 318 0080 45EA0820 		orr	r0, r5, r8, lsl #8
+ 319 0084 00B2     		sxth	r0, r0
+ 320 0086 FFF7FEFF 		bl	__aeabi_i2f
+ 321              	.LVL40:
+ 322 008a 0546     		mov	r5, r0
+ 323              	.LVL41:
+ 324 008c A060     		str	r0, [r4, #8]	@ float
+ 166:..\../gyroscope.c **** 
+ 167:..\../gyroscope.c ****   /* Assign raw values in case someone needs them */
+ 168:..\../gyroscope.c ****   gyro_raw.x = gyro.x;
+ 325              		.loc 1 168 0
+ 326 008e 544C     		ldr	r4, .L24+8
+ 327 0090 3846     		mov	r0, r7
+ 328 0092 FFF7FEFF 		bl	__aeabi_f2iz
+ 329              	.LVL42:
+ 330 0096 2080     		strh	r0, [r4]	@ movhi
+ 169:..\../gyroscope.c ****   gyro_raw.y = gyro.y;
+ 331              		.loc 1 169 0
+ 332 0098 3046     		mov	r0, r6
+ 333 009a FFF7FEFF 		bl	__aeabi_f2iz
+ 334              	.LVL43:
+ 335 009e 6080     		strh	r0, [r4, #2]	@ movhi
+ 170:..\../gyroscope.c ****   gyro_raw.z = gyro.z;
+ 336              		.loc 1 170 0
+ 337 00a0 2846     		mov	r0, r5
+ 338 00a2 FFF7FEFF 		bl	__aeabi_f2iz
+ 339              	.LVL44:
+ 340 00a6 A080     		strh	r0, [r4, #4]	@ movhi
+ 171:..\../gyroscope.c **** 
+ 172:..\../gyroscope.c ****   #if GYROSCOPE_RAW_DEBUG
+ 173:..\../gyroscope.c ****         serial_print("gyro_raw.x = ");
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 10
+
+
+ 174:..\../gyroscope.c ****         serial_printInt(gyro_raw.x);
+ 175:..\../gyroscope.c ****         serial_print(" || gyro_raw.y = ");
+ 176:..\../gyroscope.c ****         serial_printInt(gyro_raw.y);
+ 177:..\../gyroscope.c ****         serial_print("|| gyro_raw.z = ");
+ 178:..\../gyroscope.c ****         serial_printInt(gyro_raw.z);
+ 179:..\../gyroscope.c ****         serial_println(" rad/s");
+ 180:..\../gyroscope.c **** 
+ 181:..\../gyroscope.c ****   #endif
+ 182:..\../gyroscope.c **** 
+ 183:..\../gyroscope.c ****   /* Compensate values depending on the resolution */
+ 184:..\../gyroscope.c ****   switch(_range)
+ 341              		.loc 1 184 0
+ 342 00a8 4F4B     		ldr	r3, .L24+16
+ 343 00aa 1B88     		ldrh	r3, [r3]
+ 344 00ac B3F5FA7F 		cmp	r3, #500
+ 345 00b0 1ED0     		beq	.L18
+ 346 00b2 02D8     		bhi	.L19
+ 347 00b4 FA2B     		cmp	r3, #250
+ 348 00b6 07D0     		beq	.L20
+ 349 00b8 55E0     		b	.L17
+ 350              	.L19:
+ 351 00ba B3F57A7F 		cmp	r3, #1000
+ 352 00be 2BD0     		beq	.L21
+ 353 00c0 B3F5FA6F 		cmp	r3, #2000
+ 354 00c4 3CD0     		beq	.L22
+ 355 00c6 4EE0     		b	.L17
+ 356              	.L20:
+ 185:..\../gyroscope.c ****   {
+ 186:..\../gyroscope.c ****     case GYRO_RANGE_250DPS:
+ 187:..\../gyroscope.c ****       gyro.x *= GYRO_SENSITIVITY_250DPS;
+ 357              		.loc 1 187 0
+ 358 00c8 464C     		ldr	r4, .L24+12
+ 359 00ca 3846     		mov	r0, r7
+ 360 00cc 4FF07051 		mov	r1, #1006632960
+ 361 00d0 FFF7FEFF 		bl	__aeabi_fmul
+ 362              	.LVL45:
+ 363 00d4 2060     		str	r0, [r4]	@ float
+ 188:..\../gyroscope.c ****       gyro.y *= GYRO_SENSITIVITY_250DPS;
+ 364              		.loc 1 188 0
+ 365 00d6 3046     		mov	r0, r6
+ 366 00d8 4FF07051 		mov	r1, #1006632960
+ 367 00dc FFF7FEFF 		bl	__aeabi_fmul
+ 368              	.LVL46:
+ 369 00e0 6060     		str	r0, [r4, #4]	@ float
+ 189:..\../gyroscope.c ****       gyro.z *= GYRO_SENSITIVITY_250DPS;
+ 370              		.loc 1 189 0
+ 371 00e2 2846     		mov	r0, r5
+ 372 00e4 4FF07051 		mov	r1, #1006632960
+ 373 00e8 FFF7FEFF 		bl	__aeabi_fmul
+ 374              	.LVL47:
+ 375 00ec A060     		str	r0, [r4, #8]	@ float
+ 190:..\../gyroscope.c ****       break;
+ 376              		.loc 1 190 0
+ 377 00ee 3AE0     		b	.L17
+ 378              	.L18:
+ 191:..\../gyroscope.c ****     case GYRO_RANGE_500DPS:
+ 192:..\../gyroscope.c ****       gyro.x *= GYRO_SENSITIVITY_500DPS;
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 11
+
+
+ 379              		.loc 1 192 0
+ 380 00f0 3C4C     		ldr	r4, .L24+12
+ 381 00f2 3846     		mov	r0, r7
+ 382 00f4 4FF07251 		mov	r1, #1015021568
+ 383 00f8 FFF7FEFF 		bl	__aeabi_fmul
+ 384              	.LVL48:
+ 385 00fc 2060     		str	r0, [r4]	@ float
+ 193:..\../gyroscope.c ****       gyro.y *= GYRO_SENSITIVITY_500DPS;
+ 386              		.loc 1 193 0
+ 387 00fe 3046     		mov	r0, r6
+ 388 0100 4FF07251 		mov	r1, #1015021568
+ 389 0104 FFF7FEFF 		bl	__aeabi_fmul
+ 390              	.LVL49:
+ 391 0108 6060     		str	r0, [r4, #4]	@ float
+ 194:..\../gyroscope.c ****       gyro.z *= GYRO_SENSITIVITY_500DPS;
+ 392              		.loc 1 194 0
+ 393 010a 2846     		mov	r0, r5
+ 394 010c 4FF07251 		mov	r1, #1015021568
+ 395 0110 FFF7FEFF 		bl	__aeabi_fmul
+ 396              	.LVL50:
+ 397 0114 A060     		str	r0, [r4, #8]	@ float
+ 195:..\../gyroscope.c ****       break;
+ 398              		.loc 1 195 0
+ 399 0116 26E0     		b	.L17
+ 400              	.L21:
+ 196:..\../gyroscope.c ****     case GYRO_RANGE_1000DPS:
+ 197:..\../gyroscope.c ****       gyro.x *= GYRO_SENSITIVITY_1000DPS;
+ 401              		.loc 1 197 0
+ 402 0118 324C     		ldr	r4, .L24+12
+ 403 011a 3846     		mov	r0, r7
+ 404 011c 4FF07451 		mov	r1, #1023410176
+ 405 0120 FFF7FEFF 		bl	__aeabi_fmul
+ 406              	.LVL51:
+ 407 0124 2060     		str	r0, [r4]	@ float
+ 198:..\../gyroscope.c ****       gyro.y *= GYRO_SENSITIVITY_1000DPS;
+ 408              		.loc 1 198 0
+ 409 0126 3046     		mov	r0, r6
+ 410 0128 4FF07451 		mov	r1, #1023410176
+ 411 012c FFF7FEFF 		bl	__aeabi_fmul
+ 412              	.LVL52:
+ 413 0130 6060     		str	r0, [r4, #4]	@ float
+ 199:..\../gyroscope.c ****       gyro.z *= GYRO_SENSITIVITY_1000DPS;
+ 414              		.loc 1 199 0
+ 415 0132 2846     		mov	r0, r5
+ 416 0134 4FF07451 		mov	r1, #1023410176
+ 417 0138 FFF7FEFF 		bl	__aeabi_fmul
+ 418              	.LVL53:
+ 419 013c A060     		str	r0, [r4, #8]	@ float
+ 200:..\../gyroscope.c ****       break;
+ 420              		.loc 1 200 0
+ 421 013e 12E0     		b	.L17
+ 422              	.L22:
+ 201:..\../gyroscope.c ****     case GYRO_RANGE_2000DPS:
+ 202:..\../gyroscope.c ****       gyro.x *= GYRO_SENSITIVITY_2000DPS;
+ 423              		.loc 1 202 0
+ 424 0140 284C     		ldr	r4, .L24+12
+ 425 0142 3846     		mov	r0, r7
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 12
+
+
+ 426 0144 4FF07651 		mov	r1, #1031798784
+ 427 0148 FFF7FEFF 		bl	__aeabi_fmul
+ 428              	.LVL54:
+ 429 014c 2060     		str	r0, [r4]	@ float
+ 203:..\../gyroscope.c ****       gyro.y *= GYRO_SENSITIVITY_2000DPS;
+ 430              		.loc 1 203 0
+ 431 014e 3046     		mov	r0, r6
+ 432 0150 4FF07651 		mov	r1, #1031798784
+ 433 0154 FFF7FEFF 		bl	__aeabi_fmul
+ 434              	.LVL55:
+ 435 0158 6060     		str	r0, [r4, #4]	@ float
+ 204:..\../gyroscope.c ****       gyro.z *= GYRO_SENSITIVITY_2000DPS;
+ 436              		.loc 1 204 0
+ 437 015a 2846     		mov	r0, r5
+ 438 015c 4FF07651 		mov	r1, #1031798784
+ 439 0160 FFF7FEFF 		bl	__aeabi_fmul
+ 440              	.LVL56:
+ 441 0164 A060     		str	r0, [r4, #8]	@ float
+ 442              	.L17:
+ 205:..\../gyroscope.c ****       break;
+ 206:..\../gyroscope.c ****   }
+ 207:..\../gyroscope.c **** 
+ 208:..\../gyroscope.c ****   /* Convert values to rad/s */
+ 209:..\../gyroscope.c ****   gyro.x *= SENSORS_DPS_TO_RADS;
+ 443              		.loc 1 209 0
+ 444 0166 1F4C     		ldr	r4, .L24+12
+ 445 0168 2068     		ldr	r0, [r4]	@ float
+ 446 016a FFF7FEFF 		bl	__aeabi_f2d
+ 447              	.LVL57:
+ 448 016e 1AA3     		adr	r3, .L24
+ 449 0170 D3E90023 		ldrd	r2, [r3]
+ 450 0174 FFF7FEFF 		bl	__aeabi_dmul
+ 451              	.LVL58:
+ 452 0178 FFF7FEFF 		bl	__aeabi_d2f
+ 453              	.LVL59:
+ 454 017c 2060     		str	r0, [r4]	@ float
+ 210:..\../gyroscope.c ****   gyro.y *= SENSORS_DPS_TO_RADS;
+ 455              		.loc 1 210 0
+ 456 017e 6068     		ldr	r0, [r4, #4]	@ float
+ 457 0180 FFF7FEFF 		bl	__aeabi_f2d
+ 458              	.LVL60:
+ 459 0184 14A3     		adr	r3, .L24
+ 460 0186 D3E90023 		ldrd	r2, [r3]
+ 461 018a FFF7FEFF 		bl	__aeabi_dmul
+ 462              	.LVL61:
+ 463 018e FFF7FEFF 		bl	__aeabi_d2f
+ 464              	.LVL62:
+ 465 0192 6060     		str	r0, [r4, #4]	@ float
+ 211:..\../gyroscope.c ****   gyro.z *= SENSORS_DPS_TO_RADS;
+ 466              		.loc 1 211 0
+ 467 0194 A068     		ldr	r0, [r4, #8]	@ float
+ 468 0196 FFF7FEFF 		bl	__aeabi_f2d
+ 469              	.LVL63:
+ 470 019a 0FA3     		adr	r3, .L24
+ 471 019c D3E90023 		ldrd	r2, [r3]
+ 472 01a0 FFF7FEFF 		bl	__aeabi_dmul
+ 473              	.LVL64:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 13
+
+
+ 474 01a4 FFF7FEFF 		bl	__aeabi_d2f
+ 475              	.LVL65:
+ 476 01a8 A060     		str	r0, [r4, #8]	@ float
+ 212:..\../gyroscope.c **** 
+ 213:..\../gyroscope.c ****   #if GYROSCOPE_DEBUG
+ 214:..\../gyroscope.c ****         serial_print("gyro.x = ");
+ 477              		.loc 1 214 0
+ 478 01aa 1048     		ldr	r0, .L24+20
+ 479 01ac FFF7FEFF 		bl	serial_print
+ 480              	.LVL66:
+ 215:..\../gyroscope.c ****         serial_printFloat(gyro.x);
+ 481              		.loc 1 215 0
+ 482 01b0 2068     		ldr	r0, [r4]	@ float
+ 483 01b2 FFF7FEFF 		bl	serial_printFloat
+ 484              	.LVL67:
+ 216:..\../gyroscope.c ****         serial_print(" || gyro.y = ");
+ 485              		.loc 1 216 0
+ 486 01b6 0E48     		ldr	r0, .L24+24
+ 487 01b8 FFF7FEFF 		bl	serial_print
+ 488              	.LVL68:
+ 217:..\../gyroscope.c ****         serial_printFloat(gyro.y);
+ 489              		.loc 1 217 0
+ 490 01bc 6068     		ldr	r0, [r4, #4]	@ float
+ 491 01be FFF7FEFF 		bl	serial_printFloat
+ 492              	.LVL69:
+ 218:..\../gyroscope.c ****         serial_print("  || gyro.z = ");
+ 493              		.loc 1 218 0
+ 494 01c2 0C48     		ldr	r0, .L24+28
+ 495 01c4 FFF7FEFF 		bl	serial_print
+ 496              	.LVL70:
+ 219:..\../gyroscope.c ****         serial_printFloatln(gyro.z);
+ 497              		.loc 1 219 0
+ 498 01c8 A068     		ldr	r0, [r4, #8]	@ float
+ 499 01ca FFF7FEFF 		bl	serial_printFloatln
+ 500              	.LVL71:
+ 220:..\../gyroscope.c ****   #endif
+ 221:..\../gyroscope.c ****   readingValid = true;
+ 222:..\../gyroscope.c ****   return readingValid;
+ 223:..\../gyroscope.c **** }
+ 501              		.loc 1 223 0
+ 502 01ce 0120     		movs	r0, #1
+ 503 01d0 05B0     		add	sp, sp, #20
+ 504              		.cfi_def_cfa_offset 28
+ 505              		@ sp needed
+ 506 01d2 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 507              	.LVL72:
+ 508              	.L25:
+ 509 01d6 00BF     		.align	3
+ 510              	.L24:
+ 511 01d8 06ED91AA 		.word	-1433277178
+ 512 01dc 46DF913F 		.word	1066524486
+ 513 01e0 00000000 		.word	gyro_raw
+ 514 01e4 00000000 		.word	gyro
+ 515 01e8 00000000 		.word	.LANCHOR0
+ 516 01ec 30000000 		.word	.LC2
+ 517 01f0 3C000000 		.word	.LC3
+ 518 01f4 4C000000 		.word	.LC4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 14
+
+
+ 519              		.cfi_endproc
+ 520              	.LFE66:
+ 521              		.size	gyro_update, .-gyro_update
+ 522              		.section	.text.gyro_readData,"ax",%progbits
+ 523              		.align	2
+ 524              		.global	gyro_readData
+ 525              		.thumb
+ 526              		.thumb_func
+ 527              		.type	gyro_readData, %function
+ 528              	gyro_readData:
+ 529              	.LFB67:
+ 224:..\../gyroscope.c **** 
+ 225:..\../gyroscope.c **** void gyro_readData(gyroData_t *gyroscope)
+ 226:..\../gyroscope.c **** {
+ 530              		.loc 1 226 0
+ 531              		.cfi_startproc
+ 532              		@ args = 0, pretend = 0, frame = 0
+ 533              		@ frame_needed = 0, uses_anonymous_args = 0
+ 534              	.LVL73:
+ 535 0000 10B5     		push	{r4, lr}
+ 536              		.cfi_def_cfa_offset 8
+ 537              		.cfi_offset 4, -8
+ 538              		.cfi_offset 14, -4
+ 539 0002 0446     		mov	r4, r0
+ 227:..\../gyroscope.c ****     //gets the gyroscope data
+ 228:..\../gyroscope.c ****     gyro_update();
+ 540              		.loc 1 228 0
+ 541 0004 FFF7FEFF 		bl	gyro_update
+ 542              	.LVL74:
+ 229:..\../gyroscope.c ****     gyroscope->x = gyro.x;
+ 543              		.loc 1 229 0
+ 544 0008 034B     		ldr	r3, .L28
+ 545 000a 1A68     		ldr	r2, [r3]	@ float
+ 546 000c 2260     		str	r2, [r4]	@ float
+ 230:..\../gyroscope.c ****     gyroscope->y = gyro.y;
+ 547              		.loc 1 230 0
+ 548 000e 5A68     		ldr	r2, [r3, #4]	@ float
+ 549 0010 6260     		str	r2, [r4, #4]	@ float
+ 231:..\../gyroscope.c ****     gyroscope->z = gyro.z;
+ 550              		.loc 1 231 0
+ 551 0012 9B68     		ldr	r3, [r3, #8]	@ float
+ 552 0014 A360     		str	r3, [r4, #8]	@ float
+ 553 0016 10BD     		pop	{r4, pc}
+ 554              	.LVL75:
+ 555              	.L29:
+ 556              		.align	2
+ 557              	.L28:
+ 558 0018 00000000 		.word	gyro
+ 559              		.cfi_endproc
+ 560              	.LFE67:
+ 561              		.size	gyro_readData, .-gyro_readData
+ 562              		.section	.text.gyro_initialize,"ax",%progbits
+ 563              		.align	2
+ 564              		.global	gyro_initialize
+ 565              		.thumb
+ 566              		.thumb_func
+ 567              		.type	gyro_initialize, %function
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 15
+
+
+ 568              	gyro_initialize:
+ 569              	.LFB68:
+ 232:..\../gyroscope.c **** 
+ 233:..\../gyroscope.c **** }
+ 234:..\../gyroscope.c **** 
+ 235:..\../gyroscope.c **** uint8_t gyro_initialize(gyroRange_t rng){
+ 570              		.loc 1 235 0
+ 571              		.cfi_startproc
+ 572              		@ args = 0, pretend = 0, frame = 0
+ 573              		@ frame_needed = 0, uses_anonymous_args = 0
+ 574              	.LVL76:
+ 575 0000 08B5     		push	{r3, lr}
+ 576              		.cfi_def_cfa_offset 8
+ 577              		.cfi_offset 3, -8
+ 578              		.cfi_offset 14, -4
+ 579              	.LVL77:
+ 236:..\../gyroscope.c ****     uint8_t ret = 1;
+ 237:..\../gyroscope.c ****     ret = gyro_begin(rng);
+ 580              		.loc 1 237 0
+ 581 0002 FFF7FEFF 		bl	gyro_begin
+ 582              	.LVL78:
+ 238:..\../gyroscope.c ****     return ret;
+ 239:..\../gyroscope.c **** }
+ 583              		.loc 1 239 0
+ 584 0006 08BD     		pop	{r3, pc}
+ 585              		.cfi_endproc
+ 586              	.LFE68:
+ 587              		.size	gyro_initialize, .-gyro_initialize
+ 588              		.section	.text.gyro_getX,"ax",%progbits
+ 589              		.align	2
+ 590              		.global	gyro_getX
+ 591              		.thumb
+ 592              		.thumb_func
+ 593              		.type	gyro_getX, %function
+ 594              	gyro_getX:
+ 595              	.LFB69:
+ 240:..\../gyroscope.c **** 
+ 241:..\../gyroscope.c **** /*  These functions are provided to allow the user to extract
+ 242:..\../gyroscope.c ****  *  single pieces of data from the sensor readings safely
+ 243:..\../gyroscope.c ****  *  instead of just calling the sensor variables directly
+ 244:..\../gyroscope.c **** */
+ 245:..\../gyroscope.c **** float gyro_getX(void){
+ 596              		.loc 1 245 0
+ 597              		.cfi_startproc
+ 598              		@ args = 0, pretend = 0, frame = 0
+ 599              		@ frame_needed = 0, uses_anonymous_args = 0
+ 600              		@ link register save eliminated.
+ 246:..\../gyroscope.c ****   return (gyro.x);
+ 247:..\../gyroscope.c **** }
+ 601              		.loc 1 247 0
+ 602 0000 014B     		ldr	r3, .L33
+ 603 0002 1868     		ldr	r0, [r3]	@ float
+ 604 0004 7047     		bx	lr
+ 605              	.L34:
+ 606 0006 00BF     		.align	2
+ 607              	.L33:
+ 608 0008 00000000 		.word	gyro
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 16
+
+
+ 609              		.cfi_endproc
+ 610              	.LFE69:
+ 611              		.size	gyro_getX, .-gyro_getX
+ 612              		.section	.text.gyro_getY,"ax",%progbits
+ 613              		.align	2
+ 614              		.global	gyro_getY
+ 615              		.thumb
+ 616              		.thumb_func
+ 617              		.type	gyro_getY, %function
+ 618              	gyro_getY:
+ 619              	.LFB70:
+ 248:..\../gyroscope.c **** 
+ 249:..\../gyroscope.c **** float gyro_getY(void){
+ 620              		.loc 1 249 0
+ 621              		.cfi_startproc
+ 622              		@ args = 0, pretend = 0, frame = 0
+ 623              		@ frame_needed = 0, uses_anonymous_args = 0
+ 624              		@ link register save eliminated.
+ 250:..\../gyroscope.c ****   return (gyro.y);
+ 251:..\../gyroscope.c **** }
+ 625              		.loc 1 251 0
+ 626 0000 014B     		ldr	r3, .L36
+ 627 0002 5868     		ldr	r0, [r3, #4]	@ float
+ 628 0004 7047     		bx	lr
+ 629              	.L37:
+ 630 0006 00BF     		.align	2
+ 631              	.L36:
+ 632 0008 00000000 		.word	gyro
+ 633              		.cfi_endproc
+ 634              	.LFE70:
+ 635              		.size	gyro_getY, .-gyro_getY
+ 636              		.section	.text.gyro_getZ,"ax",%progbits
+ 637              		.align	2
+ 638              		.global	gyro_getZ
+ 639              		.thumb
+ 640              		.thumb_func
+ 641              		.type	gyro_getZ, %function
+ 642              	gyro_getZ:
+ 643              	.LFB71:
+ 252:..\../gyroscope.c **** 
+ 253:..\../gyroscope.c **** float gyro_getZ(void){
+ 644              		.loc 1 253 0
+ 645              		.cfi_startproc
+ 646              		@ args = 0, pretend = 0, frame = 0
+ 647              		@ frame_needed = 0, uses_anonymous_args = 0
+ 648              		@ link register save eliminated.
+ 254:..\../gyroscope.c ****   return (gyro.z);
+ 255:..\../gyroscope.c **** }...
+ 649              		.loc 1 255 0
+ 650 0000 014B     		ldr	r3, .L39
+ 651 0002 9868     		ldr	r0, [r3, #8]	@ float
+ 652 0004 7047     		bx	lr
+ 653              	.L40:
+ 654 0006 00BF     		.align	2
+ 655              	.L39:
+ 656 0008 00000000 		.word	gyro
+ 657              		.cfi_endproc
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 17
+
+
+ 658              	.LFE71:
+ 659              		.size	gyro_getZ, .-gyro_getZ
+ 660              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 661              		.align	2
+ 662              	.LC0:
+ 663 0000 496E636F 		.ascii	"Incorrect ID, check wiring or code\000"
+ 663      72726563 
+ 663      74204944 
+ 663      2C206368 
+ 663      65636B20 
+ 664 0023 00       		.space	1
+ 665              	.LC1:
+ 666 0024 436F7272 		.ascii	"Correct ID\000"
+ 666      65637420 
+ 666      494400
+ 667 002f 00       		.space	1
+ 668              	.LC2:
+ 669 0030 6779726F 		.ascii	"gyro.x = \000"
+ 669      2E78203D 
+ 669      2000
+ 670 003a 0000     		.space	2
+ 671              	.LC3:
+ 672 003c 207C7C20 		.ascii	" || gyro.y = \000"
+ 672      6779726F 
+ 672      2E79203D 
+ 672      2000
+ 673 004a 0000     		.space	2
+ 674              	.LC4:
+ 675 004c 20207C7C 		.ascii	"  || gyro.z = \000"
+ 675      20677972 
+ 675      6F2E7A20 
+ 675      3D2000
+ 676 005b 00       		.bss
+ 677              		.align	1
+ 678              		.set	.LANCHOR0,. + 0
+ 679              		.type	_range, %object
+ 680              		.size	_range, 2
+ 681              	_range:
+ 682 0000 0000     		.space	2
+ 683              		.text
+ 684              	.Letext0:
+ 685              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 686              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 687              		.file 4 "..\\..\\gyroscope.h"
+ 688              		.file 5 "Generated_Source\\PSoC5/cytypes.h"
+ 689              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 690              		.file 7 "..\\..\\SensorVal.h"
+ 691              		.file 8 "Generated_Source\\PSoC5/I2C.h"
+ 692              		.file 9 "..\\../debug_Serial.h"
+ 693              		.file 10 "Generated_Source\\PSoC5/CyLib.h"
+ 694              		.file 11 "..\\..\\twi.h"
+ 695              		.section	.debug_info,"",%progbits
+ 696              	.Ldebug_info0:
+ 697 0000 FE060000 		.4byte	0x6fe
+ 698 0004 0400     		.2byte	0x4
+ 699 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 700 000a 04       		.byte	0x4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 18
+
+
+ 701 000b 01       		.uleb128 0x1
+ 702 000c B1020000 		.4byte	.LASF68
+ 703 0010 01       		.byte	0x1
+ 704 0011 B9010000 		.4byte	.LASF69
+ 705 0015 13020000 		.4byte	.LASF70
+ 706 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 707 001d 00000000 		.4byte	0
+ 708 0021 00000000 		.4byte	.Ldebug_line0
+ 709 0025 02       		.uleb128 0x2
+ 710 0026 01       		.byte	0x1
+ 711 0027 06       		.byte	0x6
+ 712 0028 17000000 		.4byte	.LASF0
+ 713 002c 03       		.uleb128 0x3
+ 714 002d 4F010000 		.4byte	.LASF2
+ 715 0031 02       		.byte	0x2
+ 716 0032 1D       		.byte	0x1d
+ 717 0033 37000000 		.4byte	0x37
+ 718 0037 02       		.uleb128 0x2
+ 719 0038 01       		.byte	0x1
+ 720 0039 08       		.byte	0x8
+ 721 003a 83010000 		.4byte	.LASF1
+ 722 003e 03       		.uleb128 0x3
+ 723 003f DC030000 		.4byte	.LASF3
+ 724 0043 02       		.byte	0x2
+ 725 0044 29       		.byte	0x29
+ 726 0045 49000000 		.4byte	0x49
+ 727 0049 02       		.uleb128 0x2
+ 728 004a 02       		.byte	0x2
+ 729 004b 05       		.byte	0x5
+ 730 004c 2E000000 		.4byte	.LASF4
+ 731 0050 02       		.uleb128 0x2
+ 732 0051 02       		.byte	0x2
+ 733 0052 07       		.byte	0x7
+ 734 0053 99020000 		.4byte	.LASF5
+ 735 0057 03       		.uleb128 0x3
+ 736 0058 BA030000 		.4byte	.LASF6
+ 737 005c 02       		.byte	0x2
+ 738 005d 3F       		.byte	0x3f
+ 739 005e 62000000 		.4byte	0x62
+ 740 0062 02       		.uleb128 0x2
+ 741 0063 04       		.byte	0x4
+ 742 0064 05       		.byte	0x5
+ 743 0065 46010000 		.4byte	.LASF7
+ 744 0069 02       		.uleb128 0x2
+ 745 006a 04       		.byte	0x4
+ 746 006b 07       		.byte	0x7
+ 747 006c 89030000 		.4byte	.LASF8
+ 748 0070 02       		.uleb128 0x2
+ 749 0071 08       		.byte	0x8
+ 750 0072 05       		.byte	0x5
+ 751 0073 16010000 		.4byte	.LASF9
+ 752 0077 02       		.uleb128 0x2
+ 753 0078 08       		.byte	0x8
+ 754 0079 07       		.byte	0x7
+ 755 007a 24010000 		.4byte	.LASF10
+ 756 007e 04       		.uleb128 0x4
+ 757 007f 04       		.byte	0x4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 19
+
+
+ 758 0080 05       		.byte	0x5
+ 759 0081 696E7400 		.ascii	"int\000"
+ 760 0085 02       		.uleb128 0x2
+ 761 0086 04       		.byte	0x4
+ 762 0087 07       		.byte	0x7
+ 763 0088 E9010000 		.4byte	.LASF11
+ 764 008c 03       		.uleb128 0x3
+ 765 008d AF000000 		.4byte	.LASF12
+ 766 0091 03       		.byte	0x3
+ 767 0092 15       		.byte	0x15
+ 768 0093 2C000000 		.4byte	0x2c
+ 769 0097 03       		.uleb128 0x3
+ 770 0098 57030000 		.4byte	.LASF13
+ 771 009c 03       		.byte	0x3
+ 772 009d 20       		.byte	0x20
+ 773 009e 3E000000 		.4byte	0x3e
+ 774 00a2 03       		.uleb128 0x3
+ 775 00a3 4F030000 		.4byte	.LASF14
+ 776 00a7 03       		.byte	0x3
+ 777 00a8 2C       		.byte	0x2c
+ 778 00a9 57000000 		.4byte	0x57
+ 779 00ad 05       		.uleb128 0x5
+ 780 00ae 01       		.byte	0x1
+ 781 00af 04       		.byte	0x4
+ 782 00b0 26       		.byte	0x26
+ 783 00b1 F8000000 		.4byte	0xf8
+ 784 00b5 06       		.uleb128 0x6
+ 785 00b6 A4010000 		.4byte	.LASF15
+ 786 00ba 00       		.sleb128 0
+ 787 00bb 06       		.uleb128 0x6
+ 788 00bc 6B010000 		.4byte	.LASF16
+ 789 00c0 01       		.sleb128 1
+ 790 00c1 06       		.uleb128 0x6
+ 791 00c2 7A020000 		.4byte	.LASF17
+ 792 00c6 02       		.sleb128 2
+ 793 00c7 06       		.uleb128 0x6
+ 794 00c8 C4030000 		.4byte	.LASF18
+ 795 00cc 03       		.sleb128 3
+ 796 00cd 06       		.uleb128 0x6
+ 797 00ce 33040000 		.4byte	.LASF19
+ 798 00d2 04       		.sleb128 4
+ 799 00d3 06       		.uleb128 0x6
+ 800 00d4 76000000 		.4byte	.LASF20
+ 801 00d8 05       		.sleb128 5
+ 802 00d9 06       		.uleb128 0x6
+ 803 00da F8000000 		.4byte	.LASF21
+ 804 00de 06       		.sleb128 6
+ 805 00df 06       		.uleb128 0x6
+ 806 00e0 00000000 		.4byte	.LASF22
+ 807 00e4 0C       		.sleb128 12
+ 808 00e5 06       		.uleb128 0x6
+ 809 00e6 68040000 		.4byte	.LASF23
+ 810 00ea 0D       		.sleb128 13
+ 811 00eb 06       		.uleb128 0x6
+ 812 00ec 80040000 		.4byte	.LASF24
+ 813 00f0 13       		.sleb128 19
+ 814 00f1 06       		.uleb128 0x6
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 20
+
+
+ 815 00f2 98040000 		.4byte	.LASF25
+ 816 00f6 14       		.sleb128 20
+ 817 00f7 00       		.byte	0
+ 818 00f8 05       		.uleb128 0x5
+ 819 00f9 02       		.byte	0x2
+ 820 00fa 04       		.byte	0x4
+ 821 00fb 39       		.byte	0x39
+ 822 00fc 1D010000 		.4byte	0x11d
+ 823 0100 06       		.uleb128 0x6
+ 824 0101 5F030000 		.4byte	.LASF26
+ 825 0105 FA01     		.sleb128 250
+ 826 0107 06       		.uleb128 0x6
+ 827 0108 02040000 		.4byte	.LASF27
+ 828 010c F403     		.sleb128 500
+ 829 010e 06       		.uleb128 0x6
+ 830 010f 67020000 		.4byte	.LASF28
+ 831 0113 E807     		.sleb128 1000
+ 832 0115 06       		.uleb128 0x6
+ 833 0116 91010000 		.4byte	.LASF29
+ 834 011a D00F     		.sleb128 2000
+ 835 011c 00       		.byte	0
+ 836 011d 03       		.uleb128 0x3
+ 837 011e D1000000 		.4byte	.LASF30
+ 838 0122 04       		.byte	0x4
+ 839 0123 3E       		.byte	0x3e
+ 840 0124 F8000000 		.4byte	0xf8
+ 841 0128 07       		.uleb128 0x7
+ 842 0129 E6030000 		.4byte	.LASF32
+ 843 012d 06       		.byte	0x6
+ 844 012e 04       		.byte	0x4
+ 845 012f 44       		.byte	0x44
+ 846 0130 53010000 		.4byte	0x153
+ 847 0134 08       		.uleb128 0x8
+ 848 0135 7800     		.ascii	"x\000"
+ 849 0137 04       		.byte	0x4
+ 850 0138 46       		.byte	0x46
+ 851 0139 97000000 		.4byte	0x97
+ 852 013d 00       		.byte	0
+ 853 013e 08       		.uleb128 0x8
+ 854 013f 7900     		.ascii	"y\000"
+ 855 0141 04       		.byte	0x4
+ 856 0142 47       		.byte	0x47
+ 857 0143 97000000 		.4byte	0x97
+ 858 0147 02       		.byte	0x2
+ 859 0148 08       		.uleb128 0x8
+ 860 0149 7A00     		.ascii	"z\000"
+ 861 014b 04       		.byte	0x4
+ 862 014c 48       		.byte	0x48
+ 863 014d 97000000 		.4byte	0x97
+ 864 0151 04       		.byte	0x4
+ 865 0152 00       		.byte	0
+ 866 0153 03       		.uleb128 0x3
+ 867 0154 F4030000 		.4byte	.LASF31
+ 868 0158 04       		.byte	0x4
+ 869 0159 49       		.byte	0x49
+ 870 015a 28010000 		.4byte	0x128
+ 871 015e 07       		.uleb128 0x7
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 21
+
+
+ 872 015f 23000000 		.4byte	.LASF33
+ 873 0163 0C       		.byte	0xc
+ 874 0164 04       		.byte	0x4
+ 875 0165 4B       		.byte	0x4b
+ 876 0166 89010000 		.4byte	0x189
+ 877 016a 08       		.uleb128 0x8
+ 878 016b 7800     		.ascii	"x\000"
+ 879 016d 04       		.byte	0x4
+ 880 016e 4D       		.byte	0x4d
+ 881 016f 89010000 		.4byte	0x189
+ 882 0173 00       		.byte	0
+ 883 0174 08       		.uleb128 0x8
+ 884 0175 7900     		.ascii	"y\000"
+ 885 0177 04       		.byte	0x4
+ 886 0178 4E       		.byte	0x4e
+ 887 0179 89010000 		.4byte	0x189
+ 888 017d 04       		.byte	0x4
+ 889 017e 08       		.uleb128 0x8
+ 890 017f 7A00     		.ascii	"z\000"
+ 891 0181 04       		.byte	0x4
+ 892 0182 4F       		.byte	0x4f
+ 893 0183 89010000 		.4byte	0x189
+ 894 0187 08       		.byte	0x8
+ 895 0188 00       		.byte	0
+ 896 0189 02       		.uleb128 0x2
+ 897 018a 04       		.byte	0x4
+ 898 018b 04       		.byte	0x4
+ 899 018c 10010000 		.4byte	.LASF34
+ 900 0190 03       		.uleb128 0x3
+ 901 0191 F6010000 		.4byte	.LASF35
+ 902 0195 04       		.byte	0x4
+ 903 0196 50       		.byte	0x50
+ 904 0197 5E010000 		.4byte	0x15e
+ 905 019b 09       		.uleb128 0x9
+ 906 019c CB000000 		.4byte	.LASF36
+ 907 01a0 05       		.byte	0x5
+ 908 01a1 9201     		.2byte	0x192
+ 909 01a3 37000000 		.4byte	0x37
+ 910 01a7 09       		.uleb128 0x9
+ 911 01a8 82030000 		.4byte	.LASF37
+ 912 01ac 05       		.byte	0x5
+ 913 01ad 9401     		.2byte	0x194
+ 914 01af 69000000 		.4byte	0x69
+ 915 01b3 02       		.uleb128 0x2
+ 916 01b4 08       		.byte	0x8
+ 917 01b5 04       		.byte	0x4
+ 918 01b6 9B030000 		.4byte	.LASF38
+ 919 01ba 02       		.uleb128 0x2
+ 920 01bb 01       		.byte	0x1
+ 921 01bc 08       		.byte	0x8
+ 922 01bd AC020000 		.4byte	.LASF39
+ 923 01c1 02       		.uleb128 0x2
+ 924 01c2 04       		.byte	0x4
+ 925 01c3 07       		.byte	0x7
+ 926 01c4 38000000 		.4byte	.LASF40
+ 927 01c8 0A       		.uleb128 0xa
+ 928 01c9 04       		.byte	0x4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 22
+
+
+ 929 01ca BA010000 		.4byte	0x1ba
+ 930 01ce 0B       		.uleb128 0xb
+ 931 01cf A3000000 		.4byte	.LASF46
+ 932 01d3 01       		.byte	0x1
+ 933 01d4 10       		.byte	0x10
+ 934 01d5 00000000 		.4byte	.LFB63
+ 935 01d9 28000000 		.4byte	.LFE63-.LFB63
+ 936 01dd 01       		.uleb128 0x1
+ 937 01de 9C       		.byte	0x9c
+ 938 01df 3D020000 		.4byte	0x23d
+ 939 01e3 0C       		.uleb128 0xc
+ 940 01e4 72656700 		.ascii	"reg\000"
+ 941 01e8 01       		.byte	0x1
+ 942 01e9 10       		.byte	0x10
+ 943 01ea 8C000000 		.4byte	0x8c
+ 944 01ee 00000000 		.4byte	.LLST0
+ 945 01f2 0D       		.uleb128 0xd
+ 946 01f3 9D000000 		.4byte	.LASF41
+ 947 01f7 01       		.byte	0x1
+ 948 01f8 10       		.byte	0x10
+ 949 01f9 8C000000 		.4byte	0x8c
+ 950 01fd 39000000 		.4byte	.LLST1
+ 951 0201 0E       		.uleb128 0xe
+ 952 0202 5E040000 		.4byte	.LASF42
+ 953 0206 01       		.byte	0x1
+ 954 0207 16       		.byte	0x16
+ 955 0208 3D020000 		.4byte	0x23d
+ 956 020c 02       		.uleb128 0x2
+ 957 020d 91       		.byte	0x91
+ 958 020e 74       		.sleb128 -12
+ 959 020f 0F       		.uleb128 0xf
+ 960 0210 18000000 		.4byte	.LVL3
+ 961 0214 4A060000 		.4byte	0x64a
+ 962 0218 33020000 		.4byte	0x233
+ 963 021c 10       		.uleb128 0x10
+ 964 021d 01       		.uleb128 0x1
+ 965 021e 53       		.byte	0x53
+ 966 021f 01       		.uleb128 0x1
+ 967 0220 30       		.byte	0x30
+ 968 0221 10       		.uleb128 0x10
+ 969 0222 01       		.uleb128 0x1
+ 970 0223 52       		.byte	0x52
+ 971 0224 01       		.uleb128 0x1
+ 972 0225 32       		.byte	0x32
+ 973 0226 10       		.uleb128 0x10
+ 974 0227 01       		.uleb128 0x1
+ 975 0228 51       		.byte	0x51
+ 976 0229 02       		.uleb128 0x2
+ 977 022a 91       		.byte	0x91
+ 978 022b 74       		.sleb128 -12
+ 979 022c 10       		.uleb128 0x10
+ 980 022d 01       		.uleb128 0x1
+ 981 022e 50       		.byte	0x50
+ 982 022f 02       		.uleb128 0x2
+ 983 0230 08       		.byte	0x8
+ 984 0231 21       		.byte	0x21
+ 985 0232 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 23
+
+
+ 986 0233 11       		.uleb128 0x11
+ 987 0234 1C000000 		.4byte	.LVL4
+ 988 0238 74060000 		.4byte	0x674
+ 989 023c 00       		.byte	0
+ 990 023d 12       		.uleb128 0x12
+ 991 023e 8C000000 		.4byte	0x8c
+ 992 0242 4D020000 		.4byte	0x24d
+ 993 0246 13       		.uleb128 0x13
+ 994 0247 C1010000 		.4byte	0x1c1
+ 995 024b 01       		.byte	0x1
+ 996 024c 00       		.byte	0
+ 997 024d 14       		.uleb128 0x14
+ 998 024e DE010000 		.4byte	.LASF44
+ 999 0252 01       		.byte	0x1
+ 1000 0253 26       		.byte	0x26
+ 1001 0254 8C000000 		.4byte	0x8c
+ 1002 0258 00000000 		.4byte	.LFB64
+ 1003 025c 44000000 		.4byte	.LFE64-.LFB64
+ 1004 0260 01       		.uleb128 0x1
+ 1005 0261 9C       		.byte	0x9c
+ 1006 0262 EC020000 		.4byte	0x2ec
+ 1007 0266 0C       		.uleb128 0xc
+ 1008 0267 72656700 		.ascii	"reg\000"
+ 1009 026b 01       		.byte	0x1
+ 1010 026c 26       		.byte	0x26
+ 1011 026d 8C000000 		.4byte	0x8c
+ 1012 0271 66000000 		.4byte	.LLST2
+ 1013 0275 0E       		.uleb128 0xe
+ 1014 0276 5E040000 		.4byte	.LASF42
+ 1015 027a 01       		.byte	0x1
+ 1016 027b 2C       		.byte	0x2c
+ 1017 027c EC020000 		.4byte	0x2ec
+ 1018 0280 02       		.uleb128 0x2
+ 1019 0281 91       		.byte	0x91
+ 1020 0282 74       		.sleb128 -12
+ 1021 0283 0E       		.uleb128 0xe
+ 1022 0284 6D000000 		.4byte	.LASF43
+ 1023 0288 01       		.byte	0x1
+ 1024 0289 2F       		.byte	0x2f
+ 1025 028a FC020000 		.4byte	0x2fc
+ 1026 028e 02       		.uleb128 0x2
+ 1027 028f 91       		.byte	0x91
+ 1028 0290 70       		.sleb128 -16
+ 1029 0291 0F       		.uleb128 0xf
+ 1030 0292 1A000000 		.4byte	.LVL8
+ 1031 0296 4A060000 		.4byte	0x64a
+ 1032 029a B5020000 		.4byte	0x2b5
+ 1033 029e 10       		.uleb128 0x10
+ 1034 029f 01       		.uleb128 0x1
+ 1035 02a0 53       		.byte	0x53
+ 1036 02a1 01       		.uleb128 0x1
+ 1037 02a2 32       		.byte	0x32
+ 1038 02a3 10       		.uleb128 0x10
+ 1039 02a4 01       		.uleb128 0x1
+ 1040 02a5 52       		.byte	0x52
+ 1041 02a6 01       		.uleb128 0x1
+ 1042 02a7 31       		.byte	0x31
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 24
+
+
+ 1043 02a8 10       		.uleb128 0x10
+ 1044 02a9 01       		.uleb128 0x1
+ 1045 02aa 51       		.byte	0x51
+ 1046 02ab 02       		.uleb128 0x2
+ 1047 02ac 91       		.byte	0x91
+ 1048 02ad 74       		.sleb128 -12
+ 1049 02ae 10       		.uleb128 0x10
+ 1050 02af 01       		.uleb128 0x1
+ 1051 02b0 50       		.byte	0x50
+ 1052 02b1 02       		.uleb128 0x2
+ 1053 02b2 08       		.byte	0x8
+ 1054 02b3 21       		.byte	0x21
+ 1055 02b4 00       		.byte	0
+ 1056 02b5 11       		.uleb128 0x11
+ 1057 02b6 1E000000 		.4byte	.LVL9
+ 1058 02ba 74060000 		.4byte	0x674
+ 1059 02be 0F       		.uleb128 0xf
+ 1060 02bf 30000000 		.4byte	.LVL10
+ 1061 02c3 7F060000 		.4byte	0x67f
+ 1062 02c7 E2020000 		.4byte	0x2e2
+ 1063 02cb 10       		.uleb128 0x10
+ 1064 02cc 01       		.uleb128 0x1
+ 1065 02cd 53       		.byte	0x53
+ 1066 02ce 01       		.uleb128 0x1
+ 1067 02cf 31       		.byte	0x31
+ 1068 02d0 10       		.uleb128 0x10
+ 1069 02d1 01       		.uleb128 0x1
+ 1070 02d2 52       		.byte	0x52
+ 1071 02d3 01       		.uleb128 0x1
+ 1072 02d4 31       		.byte	0x31
+ 1073 02d5 10       		.uleb128 0x10
+ 1074 02d6 01       		.uleb128 0x1
+ 1075 02d7 51       		.byte	0x51
+ 1076 02d8 02       		.uleb128 0x2
+ 1077 02d9 7D       		.byte	0x7d
+ 1078 02da 00       		.sleb128 0
+ 1079 02db 10       		.uleb128 0x10
+ 1080 02dc 01       		.uleb128 0x1
+ 1081 02dd 50       		.byte	0x50
+ 1082 02de 02       		.uleb128 0x2
+ 1083 02df 08       		.byte	0x8
+ 1084 02e0 21       		.byte	0x21
+ 1085 02e1 00       		.byte	0
+ 1086 02e2 11       		.uleb128 0x11
+ 1087 02e3 34000000 		.4byte	.LVL11
+ 1088 02e7 74060000 		.4byte	0x674
+ 1089 02eb 00       		.byte	0
+ 1090 02ec 12       		.uleb128 0x12
+ 1091 02ed 8C000000 		.4byte	0x8c
+ 1092 02f1 FC020000 		.4byte	0x2fc
+ 1093 02f5 13       		.uleb128 0x13
+ 1094 02f6 C1010000 		.4byte	0x1c1
+ 1095 02fa 00       		.byte	0
+ 1096 02fb 00       		.byte	0
+ 1097 02fc 12       		.uleb128 0x12
+ 1098 02fd 9B010000 		.4byte	0x19b
+ 1099 0301 0C030000 		.4byte	0x30c
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 25
+
+
+ 1100 0305 13       		.uleb128 0x13
+ 1101 0306 C1010000 		.4byte	0x1c1
+ 1102 030a 00       		.byte	0
+ 1103 030b 00       		.byte	0
+ 1104 030c 14       		.uleb128 0x14
+ 1105 030d AF030000 		.4byte	.LASF45
+ 1106 0311 01       		.byte	0x1
+ 1107 0312 45       		.byte	0x45
+ 1108 0313 8C000000 		.4byte	0x8c
+ 1109 0317 00000000 		.4byte	.LFB65
+ 1110 031b 64000000 		.4byte	.LFE65-.LFB65
+ 1111 031f 01       		.uleb128 0x1
+ 1112 0320 9C       		.byte	0x9c
+ 1113 0321 E6030000 		.4byte	0x3e6
+ 1114 0325 0C       		.uleb128 0xc
+ 1115 0326 726E6700 		.ascii	"rng\000"
+ 1116 032a 01       		.byte	0x1
+ 1117 032b 45       		.byte	0x45
+ 1118 032c 1D010000 		.4byte	0x11d
+ 1119 0330 9F000000 		.4byte	.LLST3
+ 1120 0334 15       		.uleb128 0x15
+ 1121 0335 696400   		.ascii	"id\000"
+ 1122 0338 01       		.byte	0x1
+ 1123 0339 54       		.byte	0x54
+ 1124 033a 8C000000 		.4byte	0x8c
+ 1125 033e C0000000 		.4byte	.LLST4
+ 1126 0342 11       		.uleb128 0x11
+ 1127 0343 08000000 		.4byte	.LVL13
+ 1128 0347 A3060000 		.4byte	0x6a3
+ 1129 034b 0F       		.uleb128 0xf
+ 1130 034c 1C000000 		.4byte	.LVL14
+ 1131 0350 4D020000 		.4byte	0x24d
+ 1132 0354 5E030000 		.4byte	0x35e
+ 1133 0358 10       		.uleb128 0x10
+ 1134 0359 01       		.uleb128 0x1
+ 1135 035a 50       		.byte	0x50
+ 1136 035b 01       		.uleb128 0x1
+ 1137 035c 3C       		.byte	0x3c
+ 1138 035d 00       		.byte	0
+ 1139 035e 0F       		.uleb128 0xf
+ 1140 035f 26000000 		.4byte	.LVL16
+ 1141 0363 B0060000 		.4byte	0x6b0
+ 1142 0367 75030000 		.4byte	0x375
+ 1143 036b 10       		.uleb128 0x10
+ 1144 036c 01       		.uleb128 0x1
+ 1145 036d 50       		.byte	0x50
+ 1146 036e 05       		.uleb128 0x5
+ 1147 036f 03       		.byte	0x3
+ 1148 0370 00000000 		.4byte	.LC0
+ 1149 0374 00       		.byte	0
+ 1150 0375 0F       		.uleb128 0xf
+ 1151 0376 30000000 		.4byte	.LVL19
+ 1152 037a B0060000 		.4byte	0x6b0
+ 1153 037e 8C030000 		.4byte	0x38c
+ 1154 0382 10       		.uleb128 0x10
+ 1155 0383 01       		.uleb128 0x1
+ 1156 0384 50       		.byte	0x50
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 26
+
+
+ 1157 0385 05       		.uleb128 0x5
+ 1158 0386 03       		.byte	0x3
+ 1159 0387 24000000 		.4byte	.LC1
+ 1160 038b 00       		.byte	0
+ 1161 038c 0F       		.uleb128 0xf
+ 1162 038d 38000000 		.4byte	.LVL20
+ 1163 0391 CE010000 		.4byte	0x1ce
+ 1164 0395 A4030000 		.4byte	0x3a4
+ 1165 0399 10       		.uleb128 0x10
+ 1166 039a 01       		.uleb128 0x1
+ 1167 039b 51       		.byte	0x51
+ 1168 039c 01       		.uleb128 0x1
+ 1169 039d 30       		.byte	0x30
+ 1170 039e 10       		.uleb128 0x10
+ 1171 039f 01       		.uleb128 0x1
+ 1172 03a0 50       		.byte	0x50
+ 1173 03a1 01       		.uleb128 0x1
+ 1174 03a2 43       		.byte	0x43
+ 1175 03a3 00       		.byte	0
+ 1176 03a4 0F       		.uleb128 0xf
+ 1177 03a5 40000000 		.4byte	.LVL21
+ 1178 03a9 CE010000 		.4byte	0x1ce
+ 1179 03ad BD030000 		.4byte	0x3bd
+ 1180 03b1 10       		.uleb128 0x10
+ 1181 03b2 01       		.uleb128 0x1
+ 1182 03b3 51       		.byte	0x51
+ 1183 03b4 02       		.uleb128 0x2
+ 1184 03b5 08       		.byte	0x8
+ 1185 03b6 40       		.byte	0x40
+ 1186 03b7 10       		.uleb128 0x10
+ 1187 03b8 01       		.uleb128 0x1
+ 1188 03b9 50       		.byte	0x50
+ 1189 03ba 01       		.uleb128 0x1
+ 1190 03bb 43       		.byte	0x43
+ 1191 03bc 00       		.byte	0
+ 1192 03bd 0F       		.uleb128 0xf
+ 1193 03be 48000000 		.4byte	.LVL22
+ 1194 03c2 CE010000 		.4byte	0x1ce
+ 1195 03c6 D5030000 		.4byte	0x3d5
+ 1196 03ca 10       		.uleb128 0x10
+ 1197 03cb 01       		.uleb128 0x1
+ 1198 03cc 51       		.byte	0x51
+ 1199 03cd 01       		.uleb128 0x1
+ 1200 03ce 3E       		.byte	0x3e
+ 1201 03cf 10       		.uleb128 0x10
+ 1202 03d0 01       		.uleb128 0x1
+ 1203 03d1 50       		.byte	0x50
+ 1204 03d2 01       		.uleb128 0x1
+ 1205 03d3 43       		.byte	0x43
+ 1206 03d4 00       		.byte	0
+ 1207 03d5 16       		.uleb128 0x16
+ 1208 03d6 4E000000 		.4byte	.LVL23
+ 1209 03da C1060000 		.4byte	0x6c1
+ 1210 03de 10       		.uleb128 0x10
+ 1211 03df 01       		.uleb128 0x1
+ 1212 03e0 50       		.byte	0x50
+ 1213 03e1 02       		.uleb128 0x2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 27
+
+
+ 1214 03e2 08       		.byte	0x8
+ 1215 03e3 64       		.byte	0x64
+ 1216 03e4 00       		.byte	0
+ 1217 03e5 00       		.byte	0
+ 1218 03e6 17       		.uleb128 0x17
+ 1219 03e7 4B040000 		.4byte	.LASF47
+ 1220 03eb 01       		.byte	0x1
+ 1221 03ec 79       		.byte	0x79
+ 1222 03ed 8C000000 		.4byte	0x8c
+ 1223 03f1 00000000 		.4byte	.LFB66
+ 1224 03f5 F8010000 		.4byte	.LFE66-.LFB66
+ 1225 03f9 01       		.uleb128 0x1
+ 1226 03fa 9C       		.byte	0x9c
+ 1227 03fb 4E050000 		.4byte	0x54e
+ 1228 03ff 18       		.uleb128 0x18
+ 1229 0400 EB000000 		.4byte	.LASF48
+ 1230 0404 01       		.byte	0x1
+ 1231 0405 7B       		.byte	0x7b
+ 1232 0406 8C000000 		.4byte	0x8c
+ 1233 040a DE000000 		.4byte	.LLST5
+ 1234 040e 0E       		.uleb128 0xe
+ 1235 040f 5E040000 		.4byte	.LASF42
+ 1236 0413 01       		.byte	0x1
+ 1237 0414 8E       		.byte	0x8e
+ 1238 0415 EC020000 		.4byte	0x2ec
+ 1239 0419 02       		.uleb128 0x2
+ 1240 041a 91       		.byte	0x91
+ 1241 041b 5C       		.sleb128 -36
+ 1242 041c 0E       		.uleb128 0xe
+ 1243 041d 6D000000 		.4byte	.LASF43
+ 1244 0421 01       		.byte	0x1
+ 1245 0422 91       		.byte	0x91
+ 1246 0423 4E050000 		.4byte	0x54e
+ 1247 0427 02       		.uleb128 0x2
+ 1248 0428 91       		.byte	0x91
+ 1249 0429 54       		.sleb128 -44
+ 1250 042a 18       		.uleb128 0x18
+ 1251 042b 92020000 		.4byte	.LASF49
+ 1252 042f 01       		.byte	0x1
+ 1253 0430 9A       		.byte	0x9a
+ 1254 0431 8C000000 		.4byte	0x8c
+ 1255 0435 FE000000 		.4byte	.LLST6
+ 1256 0439 15       		.uleb128 0x15
+ 1257 043a 78686900 		.ascii	"xhi\000"
+ 1258 043e 01       		.byte	0x1
+ 1259 043f 9B       		.byte	0x9b
+ 1260 0440 8C000000 		.4byte	0x8c
+ 1261 0444 12010000 		.4byte	.LLST7
+ 1262 0448 15       		.uleb128 0x15
+ 1263 0449 786C6F00 		.ascii	"xlo\000"
+ 1264 044d 01       		.byte	0x1
+ 1265 044e 9C       		.byte	0x9c
+ 1266 044f 8C000000 		.4byte	0x8c
+ 1267 0453 31010000 		.4byte	.LLST8
+ 1268 0457 15       		.uleb128 0x15
+ 1269 0458 79686900 		.ascii	"yhi\000"
+ 1270 045c 01       		.byte	0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 28
+
+
+ 1271 045d 9D       		.byte	0x9d
+ 1272 045e 8C000000 		.4byte	0x8c
+ 1273 0462 44010000 		.4byte	.LLST9
+ 1274 0466 15       		.uleb128 0x15
+ 1275 0467 796C6F00 		.ascii	"ylo\000"
+ 1276 046b 01       		.byte	0x1
+ 1277 046c 9E       		.byte	0x9e
+ 1278 046d 8C000000 		.4byte	0x8c
+ 1279 0471 57010000 		.4byte	.LLST10
+ 1280 0475 15       		.uleb128 0x15
+ 1281 0476 7A686900 		.ascii	"zhi\000"
+ 1282 047a 01       		.byte	0x1
+ 1283 047b 9F       		.byte	0x9f
+ 1284 047c 8C000000 		.4byte	0x8c
+ 1285 0480 6A010000 		.4byte	.LLST11
+ 1286 0484 15       		.uleb128 0x15
+ 1287 0485 7A6C6F00 		.ascii	"zlo\000"
+ 1288 0489 01       		.byte	0x1
+ 1289 048a A0       		.byte	0xa0
+ 1290 048b 8C000000 		.4byte	0x8c
+ 1291 048f 7D010000 		.4byte	.LLST12
+ 1292 0493 0F       		.uleb128 0xf
+ 1293 0494 2A000000 		.4byte	.LVL25
+ 1294 0498 4A060000 		.4byte	0x64a
+ 1295 049c B7040000 		.4byte	0x4b7
+ 1296 04a0 10       		.uleb128 0x10
+ 1297 04a1 01       		.uleb128 0x1
+ 1298 04a2 53       		.byte	0x53
+ 1299 04a3 01       		.uleb128 0x1
+ 1300 04a4 32       		.byte	0x32
+ 1301 04a5 10       		.uleb128 0x10
+ 1302 04a6 01       		.uleb128 0x1
+ 1303 04a7 52       		.byte	0x52
+ 1304 04a8 01       		.uleb128 0x1
+ 1305 04a9 31       		.byte	0x31
+ 1306 04aa 10       		.uleb128 0x10
+ 1307 04ab 01       		.uleb128 0x1
+ 1308 04ac 51       		.byte	0x51
+ 1309 04ad 02       		.uleb128 0x2
+ 1310 04ae 91       		.byte	0x91
+ 1311 04af 5C       		.sleb128 -36
+ 1312 04b0 10       		.uleb128 0x10
+ 1313 04b1 01       		.uleb128 0x1
+ 1314 04b2 50       		.byte	0x50
+ 1315 04b3 02       		.uleb128 0x2
+ 1316 04b4 08       		.byte	0x8
+ 1317 04b5 21       		.byte	0x21
+ 1318 04b6 00       		.byte	0
+ 1319 04b7 11       		.uleb128 0x11
+ 1320 04b8 2E000000 		.4byte	.LVL26
+ 1321 04bc 74060000 		.4byte	0x674
+ 1322 04c0 0F       		.uleb128 0xf
+ 1323 04c1 40000000 		.4byte	.LVL27
+ 1324 04c5 7F060000 		.4byte	0x67f
+ 1325 04c9 E4040000 		.4byte	0x4e4
+ 1326 04cd 10       		.uleb128 0x10
+ 1327 04ce 01       		.uleb128 0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 29
+
+
+ 1328 04cf 53       		.byte	0x53
+ 1329 04d0 01       		.uleb128 0x1
+ 1330 04d1 31       		.byte	0x31
+ 1331 04d2 10       		.uleb128 0x10
+ 1332 04d3 01       		.uleb128 0x1
+ 1333 04d4 52       		.byte	0x52
+ 1334 04d5 01       		.uleb128 0x1
+ 1335 04d6 37       		.byte	0x37
+ 1336 04d7 10       		.uleb128 0x10
+ 1337 04d8 01       		.uleb128 0x1
+ 1338 04d9 51       		.byte	0x51
+ 1339 04da 02       		.uleb128 0x2
+ 1340 04db 91       		.byte	0x91
+ 1341 04dc 54       		.sleb128 -44
+ 1342 04dd 10       		.uleb128 0x10
+ 1343 04de 01       		.uleb128 0x1
+ 1344 04df 50       		.byte	0x50
+ 1345 04e0 02       		.uleb128 0x2
+ 1346 04e1 08       		.byte	0x8
+ 1347 04e2 21       		.byte	0x21
+ 1348 04e3 00       		.byte	0
+ 1349 04e4 11       		.uleb128 0x11
+ 1350 04e5 44000000 		.4byte	.LVL28
+ 1351 04e9 74060000 		.4byte	0x674
+ 1352 04ed 0F       		.uleb128 0xf
+ 1353 04ee B0010000 		.4byte	.LVL66
+ 1354 04f2 D2060000 		.4byte	0x6d2
+ 1355 04f6 04050000 		.4byte	0x504
+ 1356 04fa 10       		.uleb128 0x10
+ 1357 04fb 01       		.uleb128 0x1
+ 1358 04fc 50       		.byte	0x50
+ 1359 04fd 05       		.uleb128 0x5
+ 1360 04fe 03       		.byte	0x3
+ 1361 04ff 30000000 		.4byte	.LC2
+ 1362 0503 00       		.byte	0
+ 1363 0504 11       		.uleb128 0x11
+ 1364 0505 B6010000 		.4byte	.LVL67
+ 1365 0509 E3060000 		.4byte	0x6e3
+ 1366 050d 0F       		.uleb128 0xf
+ 1367 050e BC010000 		.4byte	.LVL68
+ 1368 0512 D2060000 		.4byte	0x6d2
+ 1369 0516 24050000 		.4byte	0x524
+ 1370 051a 10       		.uleb128 0x10
+ 1371 051b 01       		.uleb128 0x1
+ 1372 051c 50       		.byte	0x50
+ 1373 051d 05       		.uleb128 0x5
+ 1374 051e 03       		.byte	0x3
+ 1375 051f 3C000000 		.4byte	.LC3
+ 1376 0523 00       		.byte	0
+ 1377 0524 11       		.uleb128 0x11
+ 1378 0525 C2010000 		.4byte	.LVL69
+ 1379 0529 E3060000 		.4byte	0x6e3
+ 1380 052d 0F       		.uleb128 0xf
+ 1381 052e C8010000 		.4byte	.LVL70
+ 1382 0532 D2060000 		.4byte	0x6d2
+ 1383 0536 44050000 		.4byte	0x544
+ 1384 053a 10       		.uleb128 0x10
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 30
+
+
+ 1385 053b 01       		.uleb128 0x1
+ 1386 053c 50       		.byte	0x50
+ 1387 053d 05       		.uleb128 0x5
+ 1388 053e 03       		.byte	0x3
+ 1389 053f 4C000000 		.4byte	.LC4
+ 1390 0543 00       		.byte	0
+ 1391 0544 11       		.uleb128 0x11
+ 1392 0545 CE010000 		.4byte	.LVL71
+ 1393 0549 F4060000 		.4byte	0x6f4
+ 1394 054d 00       		.byte	0
+ 1395 054e 12       		.uleb128 0x12
+ 1396 054f 8C000000 		.4byte	0x8c
+ 1397 0553 5E050000 		.4byte	0x55e
+ 1398 0557 13       		.uleb128 0x13
+ 1399 0558 C1010000 		.4byte	0x1c1
+ 1400 055c 06       		.byte	0x6
+ 1401 055d 00       		.byte	0
+ 1402 055e 0B       		.uleb128 0xb
+ 1403 055f DD000000 		.4byte	.LASF50
+ 1404 0563 01       		.byte	0x1
+ 1405 0564 E1       		.byte	0xe1
+ 1406 0565 00000000 		.4byte	.LFB67
+ 1407 0569 1C000000 		.4byte	.LFE67-.LFB67
+ 1408 056d 01       		.uleb128 0x1
+ 1409 056e 9C       		.byte	0x9c
+ 1410 056f 8C050000 		.4byte	0x58c
+ 1411 0573 0D       		.uleb128 0xd
+ 1412 0574 21040000 		.4byte	.LASF51
+ 1413 0578 01       		.byte	0x1
+ 1414 0579 E1       		.byte	0xe1
+ 1415 057a 8C050000 		.4byte	0x58c
+ 1416 057e 90010000 		.4byte	.LLST13
+ 1417 0582 11       		.uleb128 0x11
+ 1418 0583 08000000 		.4byte	.LVL74
+ 1419 0587 E6030000 		.4byte	0x3e6
+ 1420 058b 00       		.byte	0
+ 1421 058c 0A       		.uleb128 0xa
+ 1422 058d 04       		.byte	0x4
+ 1423 058e 90010000 		.4byte	0x190
+ 1424 0592 14       		.uleb128 0x14
+ 1425 0593 3F030000 		.4byte	.LASF52
+ 1426 0597 01       		.byte	0x1
+ 1427 0598 EB       		.byte	0xeb
+ 1428 0599 8C000000 		.4byte	0x8c
+ 1429 059d 00000000 		.4byte	.LFB68
+ 1430 05a1 08000000 		.4byte	.LFE68-.LFB68
+ 1431 05a5 01       		.uleb128 0x1
+ 1432 05a6 9C       		.byte	0x9c
+ 1433 05a7 D3050000 		.4byte	0x5d3
+ 1434 05ab 0C       		.uleb128 0xc
+ 1435 05ac 726E6700 		.ascii	"rng\000"
+ 1436 05b0 01       		.byte	0x1
+ 1437 05b1 EB       		.byte	0xeb
+ 1438 05b2 1D010000 		.4byte	0x11d
+ 1439 05b6 BC010000 		.4byte	.LLST14
+ 1440 05ba 15       		.uleb128 0x15
+ 1441 05bb 72657400 		.ascii	"ret\000"
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 31
+
+
+ 1442 05bf 01       		.byte	0x1
+ 1443 05c0 EC       		.byte	0xec
+ 1444 05c1 8C000000 		.4byte	0x8c
+ 1445 05c5 DD010000 		.4byte	.LLST15
+ 1446 05c9 11       		.uleb128 0x11
+ 1447 05ca 06000000 		.4byte	.LVL78
+ 1448 05ce 0C030000 		.4byte	0x30c
+ 1449 05d2 00       		.byte	0
+ 1450 05d3 19       		.uleb128 0x19
+ 1451 05d4 46000000 		.4byte	.LASF53
+ 1452 05d8 01       		.byte	0x1
+ 1453 05d9 F5       		.byte	0xf5
+ 1454 05da 89010000 		.4byte	0x189
+ 1455 05de 00000000 		.4byte	.LFB69
+ 1456 05e2 0C000000 		.4byte	.LFE69-.LFB69
+ 1457 05e6 01       		.uleb128 0x1
+ 1458 05e7 9C       		.byte	0x9c
+ 1459 05e8 19       		.uleb128 0x19
+ 1460 05e9 50000000 		.4byte	.LASF54
+ 1461 05ed 01       		.byte	0x1
+ 1462 05ee F9       		.byte	0xf9
+ 1463 05ef 89010000 		.4byte	0x189
+ 1464 05f3 00000000 		.4byte	.LFB70
+ 1465 05f7 0C000000 		.4byte	.LFE70-.LFB70
+ 1466 05fb 01       		.uleb128 0x1
+ 1467 05fc 9C       		.byte	0x9c
+ 1468 05fd 19       		.uleb128 0x19
+ 1469 05fe 5A000000 		.4byte	.LASF55
+ 1470 0602 01       		.byte	0x1
+ 1471 0603 FD       		.byte	0xfd
+ 1472 0604 89010000 		.4byte	0x189
+ 1473 0608 00000000 		.4byte	.LFB71
+ 1474 060c 0C000000 		.4byte	.LFE71-.LFB71
+ 1475 0610 01       		.uleb128 0x1
+ 1476 0611 9C       		.byte	0x9c
+ 1477 0612 0E       		.uleb128 0xe
+ 1478 0613 57040000 		.4byte	.LASF56
+ 1479 0617 01       		.byte	0x1
+ 1480 0618 0E       		.byte	0xe
+ 1481 0619 1D010000 		.4byte	0x11d
+ 1482 061d 05       		.uleb128 0x5
+ 1483 061e 03       		.byte	0x3
+ 1484 061f 00000000 		.4byte	_range
+ 1485 0623 1A       		.uleb128 0x1a
+ 1486 0624 14040000 		.4byte	.LASF57
+ 1487 0628 06       		.byte	0x6
+ 1488 0629 9606     		.2byte	0x696
+ 1489 062b 2F060000 		.4byte	0x62f
+ 1490 062f 1B       		.uleb128 0x1b
+ 1491 0630 A2000000 		.4byte	0xa2
+ 1492 0634 1C       		.uleb128 0x1c
+ 1493 0635 64000000 		.4byte	.LASF58
+ 1494 0639 07       		.byte	0x7
+ 1495 063a 12       		.byte	0x12
+ 1496 063b 53010000 		.4byte	0x153
+ 1497 063f 1C       		.uleb128 0x1c
+ 1498 0640 41000000 		.4byte	.LASF59
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 32
+
+
+ 1499 0644 07       		.byte	0x7
+ 1500 0645 13       		.byte	0x13
+ 1501 0646 90010000 		.4byte	0x190
+ 1502 064a 1D       		.uleb128 0x1d
+ 1503 064b CB010000 		.4byte	.LASF60
+ 1504 064f 08       		.byte	0x8
+ 1505 0650 A7       		.byte	0xa7
+ 1506 0651 9B010000 		.4byte	0x19b
+ 1507 0655 6E060000 		.4byte	0x66e
+ 1508 0659 1E       		.uleb128 0x1e
+ 1509 065a 9B010000 		.4byte	0x19b
+ 1510 065e 1E       		.uleb128 0x1e
+ 1511 065f 6E060000 		.4byte	0x66e
+ 1512 0663 1E       		.uleb128 0x1e
+ 1513 0664 9B010000 		.4byte	0x19b
+ 1514 0668 1E       		.uleb128 0x1e
+ 1515 0669 9B010000 		.4byte	0x19b
+ 1516 066d 00       		.byte	0
+ 1517 066e 0A       		.uleb128 0xa
+ 1518 066f 04       		.byte	0x4
+ 1519 0670 9B010000 		.4byte	0x19b
+ 1520 0674 1F       		.uleb128 0x1f
+ 1521 0675 71030000 		.4byte	.LASF71
+ 1522 0679 08       		.byte	0x8
+ 1523 067a A3       		.byte	0xa3
+ 1524 067b 9B010000 		.4byte	0x19b
+ 1525 067f 1D       		.uleb128 0x1d
+ 1526 0680 59010000 		.4byte	.LASF61
+ 1527 0684 08       		.byte	0x8
+ 1528 0685 A9       		.byte	0xa9
+ 1529 0686 9B010000 		.4byte	0x19b
+ 1530 068a A3060000 		.4byte	0x6a3
+ 1531 068e 1E       		.uleb128 0x1e
+ 1532 068f 9B010000 		.4byte	0x19b
+ 1533 0693 1E       		.uleb128 0x1e
+ 1534 0694 6E060000 		.4byte	0x66e
+ 1535 0698 1E       		.uleb128 0x1e
+ 1536 0699 9B010000 		.4byte	0x19b
+ 1537 069d 1E       		.uleb128 0x1e
+ 1538 069e 9B010000 		.4byte	0x19b
+ 1539 06a2 00       		.byte	0
+ 1540 06a3 20       		.uleb128 0x20
+ 1541 06a4 3B010000 		.4byte	.LASF66
+ 1542 06a8 0B       		.byte	0xb
+ 1543 06a9 0A       		.byte	0xa
+ 1544 06aa B0060000 		.4byte	0x6b0
+ 1545 06ae 21       		.uleb128 0x21
+ 1546 06af 00       		.byte	0
+ 1547 06b0 22       		.uleb128 0x22
+ 1548 06b1 8E000000 		.4byte	.LASF62
+ 1549 06b5 09       		.byte	0x9
+ 1550 06b6 06       		.byte	0x6
+ 1551 06b7 C1060000 		.4byte	0x6c1
+ 1552 06bb 1E       		.uleb128 0x1e
+ 1553 06bc C8010000 		.4byte	0x1c8
+ 1554 06c0 00       		.byte	0
+ 1555 06c1 22       		.uleb128 0x22
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 33
+
+
+ 1556 06c2 2B040000 		.4byte	.LASF63
+ 1557 06c6 0A       		.byte	0xa
+ 1558 06c7 76       		.byte	0x76
+ 1559 06c8 D2060000 		.4byte	0x6d2
+ 1560 06cc 1E       		.uleb128 0x1e
+ 1561 06cd A7010000 		.4byte	0x1a7
+ 1562 06d1 00       		.byte	0
+ 1563 06d2 22       		.uleb128 0x22
+ 1564 06d3 A2030000 		.4byte	.LASF64
+ 1565 06d7 09       		.byte	0x9
+ 1566 06d8 05       		.byte	0x5
+ 1567 06d9 E3060000 		.4byte	0x6e3
+ 1568 06dd 1E       		.uleb128 0x1e
+ 1569 06de C8010000 		.4byte	0x1c8
+ 1570 06e2 00       		.byte	0
+ 1571 06e3 22       		.uleb128 0x22
+ 1572 06e4 01020000 		.4byte	.LASF65
+ 1573 06e8 09       		.byte	0x9
+ 1574 06e9 09       		.byte	0x9
+ 1575 06ea F4060000 		.4byte	0x6f4
+ 1576 06ee 1E       		.uleb128 0x1e
+ 1577 06ef 89010000 		.4byte	0x189
+ 1578 06f3 00       		.byte	0
+ 1579 06f4 23       		.uleb128 0x23
+ 1580 06f5 B7000000 		.4byte	.LASF67
+ 1581 06f9 09       		.byte	0x9
+ 1582 06fa 0A       		.byte	0xa
+ 1583 06fb 1E       		.uleb128 0x1e
+ 1584 06fc 89010000 		.4byte	0x189
+ 1585 0700 00       		.byte	0
+ 1586 0701 00       		.byte	0
+ 1587              		.section	.debug_abbrev,"",%progbits
+ 1588              	.Ldebug_abbrev0:
+ 1589 0000 01       		.uleb128 0x1
+ 1590 0001 11       		.uleb128 0x11
+ 1591 0002 01       		.byte	0x1
+ 1592 0003 25       		.uleb128 0x25
+ 1593 0004 0E       		.uleb128 0xe
+ 1594 0005 13       		.uleb128 0x13
+ 1595 0006 0B       		.uleb128 0xb
+ 1596 0007 03       		.uleb128 0x3
+ 1597 0008 0E       		.uleb128 0xe
+ 1598 0009 1B       		.uleb128 0x1b
+ 1599 000a 0E       		.uleb128 0xe
+ 1600 000b 55       		.uleb128 0x55
+ 1601 000c 17       		.uleb128 0x17
+ 1602 000d 11       		.uleb128 0x11
+ 1603 000e 01       		.uleb128 0x1
+ 1604 000f 10       		.uleb128 0x10
+ 1605 0010 17       		.uleb128 0x17
+ 1606 0011 00       		.byte	0
+ 1607 0012 00       		.byte	0
+ 1608 0013 02       		.uleb128 0x2
+ 1609 0014 24       		.uleb128 0x24
+ 1610 0015 00       		.byte	0
+ 1611 0016 0B       		.uleb128 0xb
+ 1612 0017 0B       		.uleb128 0xb
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 34
+
+
+ 1613 0018 3E       		.uleb128 0x3e
+ 1614 0019 0B       		.uleb128 0xb
+ 1615 001a 03       		.uleb128 0x3
+ 1616 001b 0E       		.uleb128 0xe
+ 1617 001c 00       		.byte	0
+ 1618 001d 00       		.byte	0
+ 1619 001e 03       		.uleb128 0x3
+ 1620 001f 16       		.uleb128 0x16
+ 1621 0020 00       		.byte	0
+ 1622 0021 03       		.uleb128 0x3
+ 1623 0022 0E       		.uleb128 0xe
+ 1624 0023 3A       		.uleb128 0x3a
+ 1625 0024 0B       		.uleb128 0xb
+ 1626 0025 3B       		.uleb128 0x3b
+ 1627 0026 0B       		.uleb128 0xb
+ 1628 0027 49       		.uleb128 0x49
+ 1629 0028 13       		.uleb128 0x13
+ 1630 0029 00       		.byte	0
+ 1631 002a 00       		.byte	0
+ 1632 002b 04       		.uleb128 0x4
+ 1633 002c 24       		.uleb128 0x24
+ 1634 002d 00       		.byte	0
+ 1635 002e 0B       		.uleb128 0xb
+ 1636 002f 0B       		.uleb128 0xb
+ 1637 0030 3E       		.uleb128 0x3e
+ 1638 0031 0B       		.uleb128 0xb
+ 1639 0032 03       		.uleb128 0x3
+ 1640 0033 08       		.uleb128 0x8
+ 1641 0034 00       		.byte	0
+ 1642 0035 00       		.byte	0
+ 1643 0036 05       		.uleb128 0x5
+ 1644 0037 04       		.uleb128 0x4
+ 1645 0038 01       		.byte	0x1
+ 1646 0039 0B       		.uleb128 0xb
+ 1647 003a 0B       		.uleb128 0xb
+ 1648 003b 3A       		.uleb128 0x3a
+ 1649 003c 0B       		.uleb128 0xb
+ 1650 003d 3B       		.uleb128 0x3b
+ 1651 003e 0B       		.uleb128 0xb
+ 1652 003f 01       		.uleb128 0x1
+ 1653 0040 13       		.uleb128 0x13
+ 1654 0041 00       		.byte	0
+ 1655 0042 00       		.byte	0
+ 1656 0043 06       		.uleb128 0x6
+ 1657 0044 28       		.uleb128 0x28
+ 1658 0045 00       		.byte	0
+ 1659 0046 03       		.uleb128 0x3
+ 1660 0047 0E       		.uleb128 0xe
+ 1661 0048 1C       		.uleb128 0x1c
+ 1662 0049 0D       		.uleb128 0xd
+ 1663 004a 00       		.byte	0
+ 1664 004b 00       		.byte	0
+ 1665 004c 07       		.uleb128 0x7
+ 1666 004d 13       		.uleb128 0x13
+ 1667 004e 01       		.byte	0x1
+ 1668 004f 03       		.uleb128 0x3
+ 1669 0050 0E       		.uleb128 0xe
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 35
+
+
+ 1670 0051 0B       		.uleb128 0xb
+ 1671 0052 0B       		.uleb128 0xb
+ 1672 0053 3A       		.uleb128 0x3a
+ 1673 0054 0B       		.uleb128 0xb
+ 1674 0055 3B       		.uleb128 0x3b
+ 1675 0056 0B       		.uleb128 0xb
+ 1676 0057 01       		.uleb128 0x1
+ 1677 0058 13       		.uleb128 0x13
+ 1678 0059 00       		.byte	0
+ 1679 005a 00       		.byte	0
+ 1680 005b 08       		.uleb128 0x8
+ 1681 005c 0D       		.uleb128 0xd
+ 1682 005d 00       		.byte	0
+ 1683 005e 03       		.uleb128 0x3
+ 1684 005f 08       		.uleb128 0x8
+ 1685 0060 3A       		.uleb128 0x3a
+ 1686 0061 0B       		.uleb128 0xb
+ 1687 0062 3B       		.uleb128 0x3b
+ 1688 0063 0B       		.uleb128 0xb
+ 1689 0064 49       		.uleb128 0x49
+ 1690 0065 13       		.uleb128 0x13
+ 1691 0066 38       		.uleb128 0x38
+ 1692 0067 0B       		.uleb128 0xb
+ 1693 0068 00       		.byte	0
+ 1694 0069 00       		.byte	0
+ 1695 006a 09       		.uleb128 0x9
+ 1696 006b 16       		.uleb128 0x16
+ 1697 006c 00       		.byte	0
+ 1698 006d 03       		.uleb128 0x3
+ 1699 006e 0E       		.uleb128 0xe
+ 1700 006f 3A       		.uleb128 0x3a
+ 1701 0070 0B       		.uleb128 0xb
+ 1702 0071 3B       		.uleb128 0x3b
+ 1703 0072 05       		.uleb128 0x5
+ 1704 0073 49       		.uleb128 0x49
+ 1705 0074 13       		.uleb128 0x13
+ 1706 0075 00       		.byte	0
+ 1707 0076 00       		.byte	0
+ 1708 0077 0A       		.uleb128 0xa
+ 1709 0078 0F       		.uleb128 0xf
+ 1710 0079 00       		.byte	0
+ 1711 007a 0B       		.uleb128 0xb
+ 1712 007b 0B       		.uleb128 0xb
+ 1713 007c 49       		.uleb128 0x49
+ 1714 007d 13       		.uleb128 0x13
+ 1715 007e 00       		.byte	0
+ 1716 007f 00       		.byte	0
+ 1717 0080 0B       		.uleb128 0xb
+ 1718 0081 2E       		.uleb128 0x2e
+ 1719 0082 01       		.byte	0x1
+ 1720 0083 3F       		.uleb128 0x3f
+ 1721 0084 19       		.uleb128 0x19
+ 1722 0085 03       		.uleb128 0x3
+ 1723 0086 0E       		.uleb128 0xe
+ 1724 0087 3A       		.uleb128 0x3a
+ 1725 0088 0B       		.uleb128 0xb
+ 1726 0089 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 36
+
+
+ 1727 008a 0B       		.uleb128 0xb
+ 1728 008b 27       		.uleb128 0x27
+ 1729 008c 19       		.uleb128 0x19
+ 1730 008d 11       		.uleb128 0x11
+ 1731 008e 01       		.uleb128 0x1
+ 1732 008f 12       		.uleb128 0x12
+ 1733 0090 06       		.uleb128 0x6
+ 1734 0091 40       		.uleb128 0x40
+ 1735 0092 18       		.uleb128 0x18
+ 1736 0093 9742     		.uleb128 0x2117
+ 1737 0095 19       		.uleb128 0x19
+ 1738 0096 01       		.uleb128 0x1
+ 1739 0097 13       		.uleb128 0x13
+ 1740 0098 00       		.byte	0
+ 1741 0099 00       		.byte	0
+ 1742 009a 0C       		.uleb128 0xc
+ 1743 009b 05       		.uleb128 0x5
+ 1744 009c 00       		.byte	0
+ 1745 009d 03       		.uleb128 0x3
+ 1746 009e 08       		.uleb128 0x8
+ 1747 009f 3A       		.uleb128 0x3a
+ 1748 00a0 0B       		.uleb128 0xb
+ 1749 00a1 3B       		.uleb128 0x3b
+ 1750 00a2 0B       		.uleb128 0xb
+ 1751 00a3 49       		.uleb128 0x49
+ 1752 00a4 13       		.uleb128 0x13
+ 1753 00a5 02       		.uleb128 0x2
+ 1754 00a6 17       		.uleb128 0x17
+ 1755 00a7 00       		.byte	0
+ 1756 00a8 00       		.byte	0
+ 1757 00a9 0D       		.uleb128 0xd
+ 1758 00aa 05       		.uleb128 0x5
+ 1759 00ab 00       		.byte	0
+ 1760 00ac 03       		.uleb128 0x3
+ 1761 00ad 0E       		.uleb128 0xe
+ 1762 00ae 3A       		.uleb128 0x3a
+ 1763 00af 0B       		.uleb128 0xb
+ 1764 00b0 3B       		.uleb128 0x3b
+ 1765 00b1 0B       		.uleb128 0xb
+ 1766 00b2 49       		.uleb128 0x49
+ 1767 00b3 13       		.uleb128 0x13
+ 1768 00b4 02       		.uleb128 0x2
+ 1769 00b5 17       		.uleb128 0x17
+ 1770 00b6 00       		.byte	0
+ 1771 00b7 00       		.byte	0
+ 1772 00b8 0E       		.uleb128 0xe
+ 1773 00b9 34       		.uleb128 0x34
+ 1774 00ba 00       		.byte	0
+ 1775 00bb 03       		.uleb128 0x3
+ 1776 00bc 0E       		.uleb128 0xe
+ 1777 00bd 3A       		.uleb128 0x3a
+ 1778 00be 0B       		.uleb128 0xb
+ 1779 00bf 3B       		.uleb128 0x3b
+ 1780 00c0 0B       		.uleb128 0xb
+ 1781 00c1 49       		.uleb128 0x49
+ 1782 00c2 13       		.uleb128 0x13
+ 1783 00c3 02       		.uleb128 0x2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 37
+
+
+ 1784 00c4 18       		.uleb128 0x18
+ 1785 00c5 00       		.byte	0
+ 1786 00c6 00       		.byte	0
+ 1787 00c7 0F       		.uleb128 0xf
+ 1788 00c8 898201   		.uleb128 0x4109
+ 1789 00cb 01       		.byte	0x1
+ 1790 00cc 11       		.uleb128 0x11
+ 1791 00cd 01       		.uleb128 0x1
+ 1792 00ce 31       		.uleb128 0x31
+ 1793 00cf 13       		.uleb128 0x13
+ 1794 00d0 01       		.uleb128 0x1
+ 1795 00d1 13       		.uleb128 0x13
+ 1796 00d2 00       		.byte	0
+ 1797 00d3 00       		.byte	0
+ 1798 00d4 10       		.uleb128 0x10
+ 1799 00d5 8A8201   		.uleb128 0x410a
+ 1800 00d8 00       		.byte	0
+ 1801 00d9 02       		.uleb128 0x2
+ 1802 00da 18       		.uleb128 0x18
+ 1803 00db 9142     		.uleb128 0x2111
+ 1804 00dd 18       		.uleb128 0x18
+ 1805 00de 00       		.byte	0
+ 1806 00df 00       		.byte	0
+ 1807 00e0 11       		.uleb128 0x11
+ 1808 00e1 898201   		.uleb128 0x4109
+ 1809 00e4 00       		.byte	0
+ 1810 00e5 11       		.uleb128 0x11
+ 1811 00e6 01       		.uleb128 0x1
+ 1812 00e7 31       		.uleb128 0x31
+ 1813 00e8 13       		.uleb128 0x13
+ 1814 00e9 00       		.byte	0
+ 1815 00ea 00       		.byte	0
+ 1816 00eb 12       		.uleb128 0x12
+ 1817 00ec 01       		.uleb128 0x1
+ 1818 00ed 01       		.byte	0x1
+ 1819 00ee 49       		.uleb128 0x49
+ 1820 00ef 13       		.uleb128 0x13
+ 1821 00f0 01       		.uleb128 0x1
+ 1822 00f1 13       		.uleb128 0x13
+ 1823 00f2 00       		.byte	0
+ 1824 00f3 00       		.byte	0
+ 1825 00f4 13       		.uleb128 0x13
+ 1826 00f5 21       		.uleb128 0x21
+ 1827 00f6 00       		.byte	0
+ 1828 00f7 49       		.uleb128 0x49
+ 1829 00f8 13       		.uleb128 0x13
+ 1830 00f9 2F       		.uleb128 0x2f
+ 1831 00fa 0B       		.uleb128 0xb
+ 1832 00fb 00       		.byte	0
+ 1833 00fc 00       		.byte	0
+ 1834 00fd 14       		.uleb128 0x14
+ 1835 00fe 2E       		.uleb128 0x2e
+ 1836 00ff 01       		.byte	0x1
+ 1837 0100 3F       		.uleb128 0x3f
+ 1838 0101 19       		.uleb128 0x19
+ 1839 0102 03       		.uleb128 0x3
+ 1840 0103 0E       		.uleb128 0xe
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 38
+
+
+ 1841 0104 3A       		.uleb128 0x3a
+ 1842 0105 0B       		.uleb128 0xb
+ 1843 0106 3B       		.uleb128 0x3b
+ 1844 0107 0B       		.uleb128 0xb
+ 1845 0108 27       		.uleb128 0x27
+ 1846 0109 19       		.uleb128 0x19
+ 1847 010a 49       		.uleb128 0x49
+ 1848 010b 13       		.uleb128 0x13
+ 1849 010c 11       		.uleb128 0x11
+ 1850 010d 01       		.uleb128 0x1
+ 1851 010e 12       		.uleb128 0x12
+ 1852 010f 06       		.uleb128 0x6
+ 1853 0110 40       		.uleb128 0x40
+ 1854 0111 18       		.uleb128 0x18
+ 1855 0112 9742     		.uleb128 0x2117
+ 1856 0114 19       		.uleb128 0x19
+ 1857 0115 01       		.uleb128 0x1
+ 1858 0116 13       		.uleb128 0x13
+ 1859 0117 00       		.byte	0
+ 1860 0118 00       		.byte	0
+ 1861 0119 15       		.uleb128 0x15
+ 1862 011a 34       		.uleb128 0x34
+ 1863 011b 00       		.byte	0
+ 1864 011c 03       		.uleb128 0x3
+ 1865 011d 08       		.uleb128 0x8
+ 1866 011e 3A       		.uleb128 0x3a
+ 1867 011f 0B       		.uleb128 0xb
+ 1868 0120 3B       		.uleb128 0x3b
+ 1869 0121 0B       		.uleb128 0xb
+ 1870 0122 49       		.uleb128 0x49
+ 1871 0123 13       		.uleb128 0x13
+ 1872 0124 02       		.uleb128 0x2
+ 1873 0125 17       		.uleb128 0x17
+ 1874 0126 00       		.byte	0
+ 1875 0127 00       		.byte	0
+ 1876 0128 16       		.uleb128 0x16
+ 1877 0129 898201   		.uleb128 0x4109
+ 1878 012c 01       		.byte	0x1
+ 1879 012d 11       		.uleb128 0x11
+ 1880 012e 01       		.uleb128 0x1
+ 1881 012f 31       		.uleb128 0x31
+ 1882 0130 13       		.uleb128 0x13
+ 1883 0131 00       		.byte	0
+ 1884 0132 00       		.byte	0
+ 1885 0133 17       		.uleb128 0x17
+ 1886 0134 2E       		.uleb128 0x2e
+ 1887 0135 01       		.byte	0x1
+ 1888 0136 3F       		.uleb128 0x3f
+ 1889 0137 19       		.uleb128 0x19
+ 1890 0138 03       		.uleb128 0x3
+ 1891 0139 0E       		.uleb128 0xe
+ 1892 013a 3A       		.uleb128 0x3a
+ 1893 013b 0B       		.uleb128 0xb
+ 1894 013c 3B       		.uleb128 0x3b
+ 1895 013d 0B       		.uleb128 0xb
+ 1896 013e 49       		.uleb128 0x49
+ 1897 013f 13       		.uleb128 0x13
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 39
+
+
+ 1898 0140 11       		.uleb128 0x11
+ 1899 0141 01       		.uleb128 0x1
+ 1900 0142 12       		.uleb128 0x12
+ 1901 0143 06       		.uleb128 0x6
+ 1902 0144 40       		.uleb128 0x40
+ 1903 0145 18       		.uleb128 0x18
+ 1904 0146 9642     		.uleb128 0x2116
+ 1905 0148 19       		.uleb128 0x19
+ 1906 0149 01       		.uleb128 0x1
+ 1907 014a 13       		.uleb128 0x13
+ 1908 014b 00       		.byte	0
+ 1909 014c 00       		.byte	0
+ 1910 014d 18       		.uleb128 0x18
+ 1911 014e 34       		.uleb128 0x34
+ 1912 014f 00       		.byte	0
+ 1913 0150 03       		.uleb128 0x3
+ 1914 0151 0E       		.uleb128 0xe
+ 1915 0152 3A       		.uleb128 0x3a
+ 1916 0153 0B       		.uleb128 0xb
+ 1917 0154 3B       		.uleb128 0x3b
+ 1918 0155 0B       		.uleb128 0xb
+ 1919 0156 49       		.uleb128 0x49
+ 1920 0157 13       		.uleb128 0x13
+ 1921 0158 02       		.uleb128 0x2
+ 1922 0159 17       		.uleb128 0x17
+ 1923 015a 00       		.byte	0
+ 1924 015b 00       		.byte	0
+ 1925 015c 19       		.uleb128 0x19
+ 1926 015d 2E       		.uleb128 0x2e
+ 1927 015e 00       		.byte	0
+ 1928 015f 3F       		.uleb128 0x3f
+ 1929 0160 19       		.uleb128 0x19
+ 1930 0161 03       		.uleb128 0x3
+ 1931 0162 0E       		.uleb128 0xe
+ 1932 0163 3A       		.uleb128 0x3a
+ 1933 0164 0B       		.uleb128 0xb
+ 1934 0165 3B       		.uleb128 0x3b
+ 1935 0166 0B       		.uleb128 0xb
+ 1936 0167 27       		.uleb128 0x27
+ 1937 0168 19       		.uleb128 0x19
+ 1938 0169 49       		.uleb128 0x49
+ 1939 016a 13       		.uleb128 0x13
+ 1940 016b 11       		.uleb128 0x11
+ 1941 016c 01       		.uleb128 0x1
+ 1942 016d 12       		.uleb128 0x12
+ 1943 016e 06       		.uleb128 0x6
+ 1944 016f 40       		.uleb128 0x40
+ 1945 0170 18       		.uleb128 0x18
+ 1946 0171 9742     		.uleb128 0x2117
+ 1947 0173 19       		.uleb128 0x19
+ 1948 0174 00       		.byte	0
+ 1949 0175 00       		.byte	0
+ 1950 0176 1A       		.uleb128 0x1a
+ 1951 0177 34       		.uleb128 0x34
+ 1952 0178 00       		.byte	0
+ 1953 0179 03       		.uleb128 0x3
+ 1954 017a 0E       		.uleb128 0xe
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 40
+
+
+ 1955 017b 3A       		.uleb128 0x3a
+ 1956 017c 0B       		.uleb128 0xb
+ 1957 017d 3B       		.uleb128 0x3b
+ 1958 017e 05       		.uleb128 0x5
+ 1959 017f 49       		.uleb128 0x49
+ 1960 0180 13       		.uleb128 0x13
+ 1961 0181 3F       		.uleb128 0x3f
+ 1962 0182 19       		.uleb128 0x19
+ 1963 0183 3C       		.uleb128 0x3c
+ 1964 0184 19       		.uleb128 0x19
+ 1965 0185 00       		.byte	0
+ 1966 0186 00       		.byte	0
+ 1967 0187 1B       		.uleb128 0x1b
+ 1968 0188 35       		.uleb128 0x35
+ 1969 0189 00       		.byte	0
+ 1970 018a 49       		.uleb128 0x49
+ 1971 018b 13       		.uleb128 0x13
+ 1972 018c 00       		.byte	0
+ 1973 018d 00       		.byte	0
+ 1974 018e 1C       		.uleb128 0x1c
+ 1975 018f 34       		.uleb128 0x34
+ 1976 0190 00       		.byte	0
+ 1977 0191 03       		.uleb128 0x3
+ 1978 0192 0E       		.uleb128 0xe
+ 1979 0193 3A       		.uleb128 0x3a
+ 1980 0194 0B       		.uleb128 0xb
+ 1981 0195 3B       		.uleb128 0x3b
+ 1982 0196 0B       		.uleb128 0xb
+ 1983 0197 49       		.uleb128 0x49
+ 1984 0198 13       		.uleb128 0x13
+ 1985 0199 3F       		.uleb128 0x3f
+ 1986 019a 19       		.uleb128 0x19
+ 1987 019b 3C       		.uleb128 0x3c
+ 1988 019c 19       		.uleb128 0x19
+ 1989 019d 00       		.byte	0
+ 1990 019e 00       		.byte	0
+ 1991 019f 1D       		.uleb128 0x1d
+ 1992 01a0 2E       		.uleb128 0x2e
+ 1993 01a1 01       		.byte	0x1
+ 1994 01a2 3F       		.uleb128 0x3f
+ 1995 01a3 19       		.uleb128 0x19
+ 1996 01a4 03       		.uleb128 0x3
+ 1997 01a5 0E       		.uleb128 0xe
+ 1998 01a6 3A       		.uleb128 0x3a
+ 1999 01a7 0B       		.uleb128 0xb
+ 2000 01a8 3B       		.uleb128 0x3b
+ 2001 01a9 0B       		.uleb128 0xb
+ 2002 01aa 27       		.uleb128 0x27
+ 2003 01ab 19       		.uleb128 0x19
+ 2004 01ac 49       		.uleb128 0x49
+ 2005 01ad 13       		.uleb128 0x13
+ 2006 01ae 3C       		.uleb128 0x3c
+ 2007 01af 19       		.uleb128 0x19
+ 2008 01b0 01       		.uleb128 0x1
+ 2009 01b1 13       		.uleb128 0x13
+ 2010 01b2 00       		.byte	0
+ 2011 01b3 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 41
+
+
+ 2012 01b4 1E       		.uleb128 0x1e
+ 2013 01b5 05       		.uleb128 0x5
+ 2014 01b6 00       		.byte	0
+ 2015 01b7 49       		.uleb128 0x49
+ 2016 01b8 13       		.uleb128 0x13
+ 2017 01b9 00       		.byte	0
+ 2018 01ba 00       		.byte	0
+ 2019 01bb 1F       		.uleb128 0x1f
+ 2020 01bc 2E       		.uleb128 0x2e
+ 2021 01bd 00       		.byte	0
+ 2022 01be 3F       		.uleb128 0x3f
+ 2023 01bf 19       		.uleb128 0x19
+ 2024 01c0 03       		.uleb128 0x3
+ 2025 01c1 0E       		.uleb128 0xe
+ 2026 01c2 3A       		.uleb128 0x3a
+ 2027 01c3 0B       		.uleb128 0xb
+ 2028 01c4 3B       		.uleb128 0x3b
+ 2029 01c5 0B       		.uleb128 0xb
+ 2030 01c6 27       		.uleb128 0x27
+ 2031 01c7 19       		.uleb128 0x19
+ 2032 01c8 49       		.uleb128 0x49
+ 2033 01c9 13       		.uleb128 0x13
+ 2034 01ca 3C       		.uleb128 0x3c
+ 2035 01cb 19       		.uleb128 0x19
+ 2036 01cc 00       		.byte	0
+ 2037 01cd 00       		.byte	0
+ 2038 01ce 20       		.uleb128 0x20
+ 2039 01cf 2E       		.uleb128 0x2e
+ 2040 01d0 01       		.byte	0x1
+ 2041 01d1 3F       		.uleb128 0x3f
+ 2042 01d2 19       		.uleb128 0x19
+ 2043 01d3 03       		.uleb128 0x3
+ 2044 01d4 0E       		.uleb128 0xe
+ 2045 01d5 3A       		.uleb128 0x3a
+ 2046 01d6 0B       		.uleb128 0xb
+ 2047 01d7 3B       		.uleb128 0x3b
+ 2048 01d8 0B       		.uleb128 0xb
+ 2049 01d9 3C       		.uleb128 0x3c
+ 2050 01da 19       		.uleb128 0x19
+ 2051 01db 01       		.uleb128 0x1
+ 2052 01dc 13       		.uleb128 0x13
+ 2053 01dd 00       		.byte	0
+ 2054 01de 00       		.byte	0
+ 2055 01df 21       		.uleb128 0x21
+ 2056 01e0 18       		.uleb128 0x18
+ 2057 01e1 00       		.byte	0
+ 2058 01e2 00       		.byte	0
+ 2059 01e3 00       		.byte	0
+ 2060 01e4 22       		.uleb128 0x22
+ 2061 01e5 2E       		.uleb128 0x2e
+ 2062 01e6 01       		.byte	0x1
+ 2063 01e7 3F       		.uleb128 0x3f
+ 2064 01e8 19       		.uleb128 0x19
+ 2065 01e9 03       		.uleb128 0x3
+ 2066 01ea 0E       		.uleb128 0xe
+ 2067 01eb 3A       		.uleb128 0x3a
+ 2068 01ec 0B       		.uleb128 0xb
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 42
+
+
+ 2069 01ed 3B       		.uleb128 0x3b
+ 2070 01ee 0B       		.uleb128 0xb
+ 2071 01ef 27       		.uleb128 0x27
+ 2072 01f0 19       		.uleb128 0x19
+ 2073 01f1 3C       		.uleb128 0x3c
+ 2074 01f2 19       		.uleb128 0x19
+ 2075 01f3 01       		.uleb128 0x1
+ 2076 01f4 13       		.uleb128 0x13
+ 2077 01f5 00       		.byte	0
+ 2078 01f6 00       		.byte	0
+ 2079 01f7 23       		.uleb128 0x23
+ 2080 01f8 2E       		.uleb128 0x2e
+ 2081 01f9 01       		.byte	0x1
+ 2082 01fa 3F       		.uleb128 0x3f
+ 2083 01fb 19       		.uleb128 0x19
+ 2084 01fc 03       		.uleb128 0x3
+ 2085 01fd 0E       		.uleb128 0xe
+ 2086 01fe 3A       		.uleb128 0x3a
+ 2087 01ff 0B       		.uleb128 0xb
+ 2088 0200 3B       		.uleb128 0x3b
+ 2089 0201 0B       		.uleb128 0xb
+ 2090 0202 27       		.uleb128 0x27
+ 2091 0203 19       		.uleb128 0x19
+ 2092 0204 3C       		.uleb128 0x3c
+ 2093 0205 19       		.uleb128 0x19
+ 2094 0206 00       		.byte	0
+ 2095 0207 00       		.byte	0
+ 2096 0208 00       		.byte	0
+ 2097              		.section	.debug_loc,"",%progbits
+ 2098              	.Ldebug_loc0:
+ 2099              	.LLST0:
+ 2100 0000 00000000 		.4byte	.LVL0
+ 2101 0004 0E000000 		.4byte	.LVL1
+ 2102 0008 0100     		.2byte	0x1
+ 2103 000a 50       		.byte	0x50
+ 2104 000b 0E000000 		.4byte	.LVL1
+ 2105 000f 10000000 		.4byte	.LVL2
+ 2106 0013 0200     		.2byte	0x2
+ 2107 0015 91       		.byte	0x91
+ 2108 0016 74       		.sleb128 -12
+ 2109 0017 10000000 		.4byte	.LVL2
+ 2110 001b 17000000 		.4byte	.LVL3-1
+ 2111 001f 0200     		.2byte	0x2
+ 2112 0021 71       		.byte	0x71
+ 2113 0022 00       		.sleb128 0
+ 2114 0023 17000000 		.4byte	.LVL3-1
+ 2115 0027 28000000 		.4byte	.LFE63
+ 2116 002b 0400     		.2byte	0x4
+ 2117 002d F3       		.byte	0xf3
+ 2118 002e 01       		.uleb128 0x1
+ 2119 002f 50       		.byte	0x50
+ 2120 0030 9F       		.byte	0x9f
+ 2121 0031 00000000 		.4byte	0
+ 2122 0035 00000000 		.4byte	0
+ 2123              	.LLST1:
+ 2124 0039 00000000 		.4byte	.LVL0
+ 2125 003d 10000000 		.4byte	.LVL2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 43
+
+
+ 2126 0041 0100     		.2byte	0x1
+ 2127 0043 51       		.byte	0x51
+ 2128 0044 10000000 		.4byte	.LVL2
+ 2129 0048 17000000 		.4byte	.LVL3-1
+ 2130 004c 0200     		.2byte	0x2
+ 2131 004e 91       		.byte	0x91
+ 2132 004f 75       		.sleb128 -11
+ 2133 0050 17000000 		.4byte	.LVL3-1
+ 2134 0054 28000000 		.4byte	.LFE63
+ 2135 0058 0400     		.2byte	0x4
+ 2136 005a F3       		.byte	0xf3
+ 2137 005b 01       		.uleb128 0x1
+ 2138 005c 51       		.byte	0x51
+ 2139 005d 9F       		.byte	0x9f
+ 2140 005e 00000000 		.4byte	0
+ 2141 0062 00000000 		.4byte	0
+ 2142              	.LLST2:
+ 2143 0066 00000000 		.4byte	.LVL5
+ 2144 006a 10000000 		.4byte	.LVL6
+ 2145 006e 0100     		.2byte	0x1
+ 2146 0070 50       		.byte	0x50
+ 2147 0071 10000000 		.4byte	.LVL6
+ 2148 0075 12000000 		.4byte	.LVL7
+ 2149 0079 0200     		.2byte	0x2
+ 2150 007b 91       		.byte	0x91
+ 2151 007c 74       		.sleb128 -12
+ 2152 007d 12000000 		.4byte	.LVL7
+ 2153 0081 19000000 		.4byte	.LVL8-1
+ 2154 0085 0200     		.2byte	0x2
+ 2155 0087 71       		.byte	0x71
+ 2156 0088 00       		.sleb128 0
+ 2157 0089 19000000 		.4byte	.LVL8-1
+ 2158 008d 44000000 		.4byte	.LFE64
+ 2159 0091 0400     		.2byte	0x4
+ 2160 0093 F3       		.byte	0xf3
+ 2161 0094 01       		.uleb128 0x1
+ 2162 0095 50       		.byte	0x50
+ 2163 0096 9F       		.byte	0x9f
+ 2164 0097 00000000 		.4byte	0
+ 2165 009b 00000000 		.4byte	0
+ 2166              	.LLST3:
+ 2167 009f 00000000 		.4byte	.LVL12
+ 2168 00a3 07000000 		.4byte	.LVL13-1
+ 2169 00a7 0100     		.2byte	0x1
+ 2170 00a9 50       		.byte	0x50
+ 2171 00aa 07000000 		.4byte	.LVL13-1
+ 2172 00ae 64000000 		.4byte	.LFE65
+ 2173 00b2 0400     		.2byte	0x4
+ 2174 00b4 F3       		.byte	0xf3
+ 2175 00b5 01       		.uleb128 0x1
+ 2176 00b6 50       		.byte	0x50
+ 2177 00b7 9F       		.byte	0x9f
+ 2178 00b8 00000000 		.4byte	0
+ 2179 00bc 00000000 		.4byte	0
+ 2180              	.LLST4:
+ 2181 00c0 1C000000 		.4byte	.LVL14
+ 2182 00c4 22000000 		.4byte	.LVL15
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 44
+
+
+ 2183 00c8 0100     		.2byte	0x1
+ 2184 00ca 50       		.byte	0x50
+ 2185 00cb 2A000000 		.4byte	.LVL17
+ 2186 00cf 2C000000 		.4byte	.LVL18
+ 2187 00d3 0100     		.2byte	0x1
+ 2188 00d5 50       		.byte	0x50
+ 2189 00d6 00000000 		.4byte	0
+ 2190 00da 00000000 		.4byte	0
+ 2191              	.LLST5:
+ 2192 00de 06000000 		.4byte	.LVL24
+ 2193 00e2 CE010000 		.4byte	.LVL71
+ 2194 00e6 0200     		.2byte	0x2
+ 2195 00e8 30       		.byte	0x30
+ 2196 00e9 9F       		.byte	0x9f
+ 2197 00ea CE010000 		.4byte	.LVL71
+ 2198 00ee F8010000 		.4byte	.LFE66
+ 2199 00f2 0200     		.2byte	0x2
+ 2200 00f4 31       		.byte	0x31
+ 2201 00f5 9F       		.byte	0x9f
+ 2202 00f6 00000000 		.4byte	0
+ 2203 00fa 00000000 		.4byte	0
+ 2204              	.LLST6:
+ 2205 00fe 4A000000 		.4byte	.LVL29
+ 2206 0102 6B000000 		.4byte	.LVL37-1
+ 2207 0106 0200     		.2byte	0x2
+ 2208 0108 91       		.byte	0x91
+ 2209 0109 54       		.sleb128 -44
+ 2210 010a 00000000 		.4byte	0
+ 2211 010e 00000000 		.4byte	0
+ 2212              	.LLST7:
+ 2213 0112 4E000000 		.4byte	.LVL30
+ 2214 0116 66000000 		.4byte	.LVL36
+ 2215 011a 0100     		.2byte	0x1
+ 2216 011c 50       		.byte	0x50
+ 2217 011d 66000000 		.4byte	.LVL36
+ 2218 0121 6B000000 		.4byte	.LVL37-1
+ 2219 0125 0200     		.2byte	0x2
+ 2220 0127 91       		.byte	0x91
+ 2221 0128 55       		.sleb128 -43
+ 2222 0129 00000000 		.4byte	0
+ 2223 012d 00000000 		.4byte	0
+ 2224              	.LLST8:
+ 2225 0131 52000000 		.4byte	.LVL31
+ 2226 0135 6B000000 		.4byte	.LVL37-1
+ 2227 0139 0100     		.2byte	0x1
+ 2228 013b 53       		.byte	0x53
+ 2229 013c 00000000 		.4byte	0
+ 2230 0140 00000000 		.4byte	0
+ 2231              	.LLST9:
+ 2232 0144 56000000 		.4byte	.LVL32
+ 2233 0148 D6010000 		.4byte	.LVL72
+ 2234 014c 0100     		.2byte	0x1
+ 2235 014e 59       		.byte	0x59
+ 2236 014f 00000000 		.4byte	0
+ 2237 0153 00000000 		.4byte	0
+ 2238              	.LLST10:
+ 2239 0157 5A000000 		.4byte	.LVL33
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 45
+
+
+ 2240 015b 7E000000 		.4byte	.LVL39
+ 2241 015f 0100     		.2byte	0x1
+ 2242 0161 56       		.byte	0x56
+ 2243 0162 00000000 		.4byte	0
+ 2244 0166 00000000 		.4byte	0
+ 2245              	.LLST11:
+ 2246 016a 5E000000 		.4byte	.LVL34
+ 2247 016e D6010000 		.4byte	.LVL72
+ 2248 0172 0100     		.2byte	0x1
+ 2249 0174 58       		.byte	0x58
+ 2250 0175 00000000 		.4byte	0
+ 2251 0179 00000000 		.4byte	0
+ 2252              	.LLST12:
+ 2253 017d 62000000 		.4byte	.LVL35
+ 2254 0181 8C000000 		.4byte	.LVL41
+ 2255 0185 0100     		.2byte	0x1
+ 2256 0187 55       		.byte	0x55
+ 2257 0188 00000000 		.4byte	0
+ 2258 018c 00000000 		.4byte	0
+ 2259              	.LLST13:
+ 2260 0190 00000000 		.4byte	.LVL73
+ 2261 0194 07000000 		.4byte	.LVL74-1
+ 2262 0198 0100     		.2byte	0x1
+ 2263 019a 50       		.byte	0x50
+ 2264 019b 07000000 		.4byte	.LVL74-1
+ 2265 019f 18000000 		.4byte	.LVL75
+ 2266 01a3 0100     		.2byte	0x1
+ 2267 01a5 54       		.byte	0x54
+ 2268 01a6 18000000 		.4byte	.LVL75
+ 2269 01aa 1C000000 		.4byte	.LFE67
+ 2270 01ae 0400     		.2byte	0x4
+ 2271 01b0 F3       		.byte	0xf3
+ 2272 01b1 01       		.uleb128 0x1
+ 2273 01b2 50       		.byte	0x50
+ 2274 01b3 9F       		.byte	0x9f
+ 2275 01b4 00000000 		.4byte	0
+ 2276 01b8 00000000 		.4byte	0
+ 2277              	.LLST14:
+ 2278 01bc 00000000 		.4byte	.LVL76
+ 2279 01c0 05000000 		.4byte	.LVL78-1
+ 2280 01c4 0100     		.2byte	0x1
+ 2281 01c6 50       		.byte	0x50
+ 2282 01c7 05000000 		.4byte	.LVL78-1
+ 2283 01cb 08000000 		.4byte	.LFE68
+ 2284 01cf 0400     		.2byte	0x4
+ 2285 01d1 F3       		.byte	0xf3
+ 2286 01d2 01       		.uleb128 0x1
+ 2287 01d3 50       		.byte	0x50
+ 2288 01d4 9F       		.byte	0x9f
+ 2289 01d5 00000000 		.4byte	0
+ 2290 01d9 00000000 		.4byte	0
+ 2291              	.LLST15:
+ 2292 01dd 02000000 		.4byte	.LVL77
+ 2293 01e1 06000000 		.4byte	.LVL78
+ 2294 01e5 0200     		.2byte	0x2
+ 2295 01e7 31       		.byte	0x31
+ 2296 01e8 9F       		.byte	0x9f
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 46
+
+
+ 2297 01e9 06000000 		.4byte	.LVL78
+ 2298 01ed 08000000 		.4byte	.LFE68
+ 2299 01f1 0100     		.2byte	0x1
+ 2300 01f3 50       		.byte	0x50
+ 2301 01f4 00000000 		.4byte	0
+ 2302 01f8 00000000 		.4byte	0
+ 2303              		.section	.debug_aranges,"",%progbits
+ 2304 0000 5C000000 		.4byte	0x5c
+ 2305 0004 0200     		.2byte	0x2
+ 2306 0006 00000000 		.4byte	.Ldebug_info0
+ 2307 000a 04       		.byte	0x4
+ 2308 000b 00       		.byte	0
+ 2309 000c 0000     		.2byte	0
+ 2310 000e 0000     		.2byte	0
+ 2311 0010 00000000 		.4byte	.LFB63
+ 2312 0014 28000000 		.4byte	.LFE63-.LFB63
+ 2313 0018 00000000 		.4byte	.LFB64
+ 2314 001c 44000000 		.4byte	.LFE64-.LFB64
+ 2315 0020 00000000 		.4byte	.LFB65
+ 2316 0024 64000000 		.4byte	.LFE65-.LFB65
+ 2317 0028 00000000 		.4byte	.LFB66
+ 2318 002c F8010000 		.4byte	.LFE66-.LFB66
+ 2319 0030 00000000 		.4byte	.LFB67
+ 2320 0034 1C000000 		.4byte	.LFE67-.LFB67
+ 2321 0038 00000000 		.4byte	.LFB68
+ 2322 003c 08000000 		.4byte	.LFE68-.LFB68
+ 2323 0040 00000000 		.4byte	.LFB69
+ 2324 0044 0C000000 		.4byte	.LFE69-.LFB69
+ 2325 0048 00000000 		.4byte	.LFB70
+ 2326 004c 0C000000 		.4byte	.LFE70-.LFB70
+ 2327 0050 00000000 		.4byte	.LFB71
+ 2328 0054 0C000000 		.4byte	.LFE71-.LFB71
+ 2329 0058 00000000 		.4byte	0
+ 2330 005c 00000000 		.4byte	0
+ 2331              		.section	.debug_ranges,"",%progbits
+ 2332              	.Ldebug_ranges0:
+ 2333 0000 00000000 		.4byte	.LFB63
+ 2334 0004 28000000 		.4byte	.LFE63
+ 2335 0008 00000000 		.4byte	.LFB64
+ 2336 000c 44000000 		.4byte	.LFE64
+ 2337 0010 00000000 		.4byte	.LFB65
+ 2338 0014 64000000 		.4byte	.LFE65
+ 2339 0018 00000000 		.4byte	.LFB66
+ 2340 001c F8010000 		.4byte	.LFE66
+ 2341 0020 00000000 		.4byte	.LFB67
+ 2342 0024 1C000000 		.4byte	.LFE67
+ 2343 0028 00000000 		.4byte	.LFB68
+ 2344 002c 08000000 		.4byte	.LFE68
+ 2345 0030 00000000 		.4byte	.LFB69
+ 2346 0034 0C000000 		.4byte	.LFE69
+ 2347 0038 00000000 		.4byte	.LFB70
+ 2348 003c 0C000000 		.4byte	.LFE70
+ 2349 0040 00000000 		.4byte	.LFB71
+ 2350 0044 0C000000 		.4byte	.LFE71
+ 2351 0048 00000000 		.4byte	0
+ 2352 004c 00000000 		.4byte	0
+ 2353              		.section	.debug_line,"",%progbits
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 47
+
+
+ 2354              	.Ldebug_line0:
+ 2355 0000 A1020000 		.section	.debug_str,"MS",%progbits,1
+ 2355      02009F01 
+ 2355      00000201 
+ 2355      FB0E0D00 
+ 2355      01010101 
+ 2356              	.LASF22:
+ 2357 0000 4759524F 		.ascii	"GYRO_REGISTER_WHO_AM_I\000"
+ 2357      5F524547 
+ 2357      49535445 
+ 2357      525F5748 
+ 2357      4F5F414D 
+ 2358              	.LASF0:
+ 2359 0017 7369676E 		.ascii	"signed char\000"
+ 2359      65642063 
+ 2359      68617200 
+ 2360              	.LASF33:
+ 2361 0023 6779726F 		.ascii	"gyroData_s\000"
+ 2361      44617461 
+ 2361      5F7300
+ 2362              	.LASF4:
+ 2363 002e 73686F72 		.ascii	"short int\000"
+ 2363      7420696E 
+ 2363      7400
+ 2364              	.LASF40:
+ 2365 0038 73697A65 		.ascii	"sizetype\000"
+ 2365      74797065 
+ 2365      00
+ 2366              	.LASF59:
+ 2367 0041 6779726F 		.ascii	"gyro\000"
+ 2367      00
+ 2368              	.LASF53:
+ 2369 0046 6779726F 		.ascii	"gyro_getX\000"
+ 2369      5F676574 
+ 2369      5800
+ 2370              	.LASF54:
+ 2371 0050 6779726F 		.ascii	"gyro_getY\000"
+ 2371      5F676574 
+ 2371      5900
+ 2372              	.LASF55:
+ 2373 005a 6779726F 		.ascii	"gyro_getZ\000"
+ 2373      5F676574 
+ 2373      5A00
+ 2374              	.LASF58:
+ 2375 0064 6779726F 		.ascii	"gyro_raw\000"
+ 2375      5F726177 
+ 2375      00
+ 2376              	.LASF43:
+ 2377 006d 52656164 		.ascii	"Read_Buf\000"
+ 2377      5F427566 
+ 2377      00
+ 2378              	.LASF20:
+ 2379 0076 4759524F 		.ascii	"GYRO_REGISTER_OUT_Z_MSB\000"
+ 2379      5F524547 
+ 2379      49535445 
+ 2379      525F4F55 
+ 2379      545F5A5F 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 48
+
+
+ 2380              	.LASF62:
+ 2381 008e 73657269 		.ascii	"serial_println\000"
+ 2381      616C5F70 
+ 2381      72696E74 
+ 2381      6C6E00
+ 2382              	.LASF41:
+ 2383 009d 76616C75 		.ascii	"value\000"
+ 2383      6500
+ 2384              	.LASF46:
+ 2385 00a3 6779726F 		.ascii	"gyro_write8\000"
+ 2385      5F777269 
+ 2385      74653800 
+ 2386              	.LASF12:
+ 2387 00af 75696E74 		.ascii	"uint8_t\000"
+ 2387      385F7400 
+ 2388              	.LASF67:
+ 2389 00b7 73657269 		.ascii	"serial_printFloatln\000"
+ 2389      616C5F70 
+ 2389      72696E74 
+ 2389      466C6F61 
+ 2389      746C6E00 
+ 2390              	.LASF36:
+ 2391 00cb 75696E74 		.ascii	"uint8\000"
+ 2391      3800
+ 2392              	.LASF30:
+ 2393 00d1 6779726F 		.ascii	"gyroRange_t\000"
+ 2393      52616E67 
+ 2393      655F7400 
+ 2394              	.LASF50:
+ 2395 00dd 6779726F 		.ascii	"gyro_readData\000"
+ 2395      5F726561 
+ 2395      64446174 
+ 2395      6100
+ 2396              	.LASF48:
+ 2397 00eb 72656164 		.ascii	"readingValid\000"
+ 2397      696E6756 
+ 2397      616C6964 
+ 2397      00
+ 2398              	.LASF21:
+ 2399 00f8 4759524F 		.ascii	"GYRO_REGISTER_OUT_Z_LSB\000"
+ 2399      5F524547 
+ 2399      49535445 
+ 2399      525F4F55 
+ 2399      545F5A5F 
+ 2400              	.LASF34:
+ 2401 0110 666C6F61 		.ascii	"float\000"
+ 2401      7400
+ 2402              	.LASF9:
+ 2403 0116 6C6F6E67 		.ascii	"long long int\000"
+ 2403      206C6F6E 
+ 2403      6720696E 
+ 2403      7400
+ 2404              	.LASF10:
+ 2405 0124 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2405      206C6F6E 
+ 2405      6720756E 
+ 2405      7369676E 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 49
+
+
+ 2405      65642069 
+ 2406              	.LASF66:
+ 2407 013b 57697265 		.ascii	"Wire_begin\000"
+ 2407      5F626567 
+ 2407      696E00
+ 2408              	.LASF7:
+ 2409 0146 6C6F6E67 		.ascii	"long int\000"
+ 2409      20696E74 
+ 2409      00
+ 2410              	.LASF2:
+ 2411 014f 5F5F7569 		.ascii	"__uint8_t\000"
+ 2411      6E74385F 
+ 2411      7400
+ 2412              	.LASF61:
+ 2413 0159 4932435F 		.ascii	"I2C_MasterReadBuf\000"
+ 2413      4D617374 
+ 2413      65725265 
+ 2413      61644275 
+ 2413      6600
+ 2414              	.LASF16:
+ 2415 016b 4759524F 		.ascii	"GYRO_REGISTER_OUT_X_MSB\000"
+ 2415      5F524547 
+ 2415      49535445 
+ 2415      525F4F55 
+ 2415      545F585F 
+ 2416              	.LASF1:
+ 2417 0183 756E7369 		.ascii	"unsigned char\000"
+ 2417      676E6564 
+ 2417      20636861 
+ 2417      7200
+ 2418              	.LASF29:
+ 2419 0191 4759524F 		.ascii	"GYRO_RANGE_2000DPS\000"
+ 2419      5F52414E 
+ 2419      47455F32 
+ 2419      30303044 
+ 2419      505300
+ 2420              	.LASF15:
+ 2421 01a4 4759524F 		.ascii	"GYRO_REGISTER_STATUS\000"
+ 2421      5F524547 
+ 2421      49535445 
+ 2421      525F5354 
+ 2421      41545553 
+ 2422              	.LASF69:
+ 2423 01b9 2E2E5C2E 		.ascii	"..\\..\\gyroscope.c\000"
+ 2423      2E5C6779 
+ 2423      726F7363 
+ 2423      6F70652E 
+ 2423      6300
+ 2424              	.LASF60:
+ 2425 01cb 4932435F 		.ascii	"I2C_MasterWriteBuf\000"
+ 2425      4D617374 
+ 2425      65725772 
+ 2425      69746542 
+ 2425      756600
+ 2426              	.LASF44:
+ 2427 01de 6779726F 		.ascii	"gyro_read8\000"
+ 2427      5F726561 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 50
+
+
+ 2427      643800
+ 2428              	.LASF11:
+ 2429 01e9 756E7369 		.ascii	"unsigned int\000"
+ 2429      676E6564 
+ 2429      20696E74 
+ 2429      00
+ 2430              	.LASF35:
+ 2431 01f6 6779726F 		.ascii	"gyroData_t\000"
+ 2431      44617461 
+ 2431      5F7400
+ 2432              	.LASF65:
+ 2433 0201 73657269 		.ascii	"serial_printFloat\000"
+ 2433      616C5F70 
+ 2433      72696E74 
+ 2433      466C6F61 
+ 2433      7400
+ 2434              	.LASF70:
+ 2435 0213 433A5C55 		.ascii	"C:\\Users\\a85495\\Desktop\\PSoC-Quadcopter\\Sensor"
+ 2435      73657273 
+ 2435      5C613835 
+ 2435      3439355C 
+ 2435      4465736B 
+ 2436 0241 735C5365 		.ascii	"s\\Sensor Test\\All_sensor_testv2.cydsn\000"
+ 2436      6E736F72 
+ 2436      20546573 
+ 2436      745C416C 
+ 2436      6C5F7365 
+ 2437              	.LASF28:
+ 2438 0267 4759524F 		.ascii	"GYRO_RANGE_1000DPS\000"
+ 2438      5F52414E 
+ 2438      47455F31 
+ 2438      30303044 
+ 2438      505300
+ 2439              	.LASF17:
+ 2440 027a 4759524F 		.ascii	"GYRO_REGISTER_OUT_X_LSB\000"
+ 2440      5F524547 
+ 2440      49535445 
+ 2440      525F4F55 
+ 2440      545F585F 
+ 2441              	.LASF49:
+ 2442 0292 73746174 		.ascii	"status\000"
+ 2442      757300
+ 2443              	.LASF5:
+ 2444 0299 73686F72 		.ascii	"short unsigned int\000"
+ 2444      7420756E 
+ 2444      7369676E 
+ 2444      65642069 
+ 2444      6E7400
+ 2445              	.LASF39:
+ 2446 02ac 63686172 		.ascii	"char\000"
+ 2446      00
+ 2447              	.LASF68:
+ 2448 02b1 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2448      4320342E 
+ 2448      392E3320 
+ 2448      32303135 
+ 2448      30333033 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 51
+
+
+ 2449 02e4 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 2449      20726576 
+ 2449      6973696F 
+ 2449      6E203232 
+ 2449      31323230 
+ 2450 0317 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2450      66756E63 
+ 2450      74696F6E 
+ 2450      2D736563 
+ 2450      74696F6E 
+ 2451              	.LASF52:
+ 2452 033f 6779726F 		.ascii	"gyro_initialize\000"
+ 2452      5F696E69 
+ 2452      7469616C 
+ 2452      697A6500 
+ 2453              	.LASF14:
+ 2454 034f 696E7433 		.ascii	"int32_t\000"
+ 2454      325F7400 
+ 2455              	.LASF13:
+ 2456 0357 696E7431 		.ascii	"int16_t\000"
+ 2456      365F7400 
+ 2457              	.LASF26:
+ 2458 035f 4759524F 		.ascii	"GYRO_RANGE_250DPS\000"
+ 2458      5F52414E 
+ 2458      47455F32 
+ 2458      35304450 
+ 2458      5300
+ 2459              	.LASF71:
+ 2460 0371 4932435F 		.ascii	"I2C_MasterStatus\000"
+ 2460      4D617374 
+ 2460      65725374 
+ 2460      61747573 
+ 2460      00
+ 2461              	.LASF37:
+ 2462 0382 75696E74 		.ascii	"uint32\000"
+ 2462      333200
+ 2463              	.LASF8:
+ 2464 0389 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2464      20756E73 
+ 2464      69676E65 
+ 2464      6420696E 
+ 2464      7400
+ 2465              	.LASF38:
+ 2466 039b 646F7562 		.ascii	"double\000"
+ 2466      6C6500
+ 2467              	.LASF64:
+ 2468 03a2 73657269 		.ascii	"serial_print\000"
+ 2468      616C5F70 
+ 2468      72696E74 
+ 2468      00
+ 2469              	.LASF45:
+ 2470 03af 6779726F 		.ascii	"gyro_begin\000"
+ 2470      5F626567 
+ 2470      696E00
+ 2471              	.LASF6:
+ 2472 03ba 5F5F696E 		.ascii	"__int32_t\000"
+ 2472      7433325F 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 52
+
+
+ 2472      7400
+ 2473              	.LASF18:
+ 2474 03c4 4759524F 		.ascii	"GYRO_REGISTER_OUT_Y_MSB\000"
+ 2474      5F524547 
+ 2474      49535445 
+ 2474      525F4F55 
+ 2474      545F595F 
+ 2475              	.LASF3:
+ 2476 03dc 5F5F696E 		.ascii	"__int16_t\000"
+ 2476      7431365F 
+ 2476      7400
+ 2477              	.LASF32:
+ 2478 03e6 6779726F 		.ascii	"gyroRawData_s\000"
+ 2478      52617744 
+ 2478      6174615F 
+ 2478      7300
+ 2479              	.LASF31:
+ 2480 03f4 6779726F 		.ascii	"gyroRawData_t\000"
+ 2480      52617744 
+ 2480      6174615F 
+ 2480      7400
+ 2481              	.LASF27:
+ 2482 0402 4759524F 		.ascii	"GYRO_RANGE_500DPS\000"
+ 2482      5F52414E 
+ 2482      47455F35 
+ 2482      30304450 
+ 2482      5300
+ 2483              	.LASF57:
+ 2484 0414 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 2484      52784275 
+ 2484      66666572 
+ 2484      00
+ 2485              	.LASF51:
+ 2486 0421 6779726F 		.ascii	"gyroscope\000"
+ 2486      73636F70 
+ 2486      6500
+ 2487              	.LASF63:
+ 2488 042b 43794465 		.ascii	"CyDelay\000"
+ 2488      6C617900 
+ 2489              	.LASF19:
+ 2490 0433 4759524F 		.ascii	"GYRO_REGISTER_OUT_Y_LSB\000"
+ 2490      5F524547 
+ 2490      49535445 
+ 2490      525F4F55 
+ 2490      545F595F 
+ 2491              	.LASF47:
+ 2492 044b 6779726F 		.ascii	"gyro_update\000"
+ 2492      5F757064 
+ 2492      61746500 
+ 2493              	.LASF56:
+ 2494 0457 5F72616E 		.ascii	"_range\000"
+ 2494      676500
+ 2495              	.LASF42:
+ 2496 045e 57726974 		.ascii	"Write_Buf\000"
+ 2496      655F4275 
+ 2496      6600
+ 2497              	.LASF23:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\cchTlgfM.s 			page 53
+
+
+ 2498 0468 4759524F 		.ascii	"GYRO_REGISTER_CTRL_REG0\000"
+ 2498      5F524547 
+ 2498      49535445 
+ 2498      525F4354 
+ 2498      524C5F52 
+ 2499              	.LASF24:
+ 2500 0480 4759524F 		.ascii	"GYRO_REGISTER_CTRL_REG1\000"
+ 2500      5F524547 
+ 2500      49535445 
+ 2500      525F4354 
+ 2500      524C5F52 
+ 2501              	.LASF25:
+ 2502 0498 4759524F 		.ascii	"GYRO_REGISTER_CTRL_REG2\000"
+ 2502      5F524547 
+ 2502      49535445 
+ 2502      525F4354 
+ 2502      524C5F52 
+ 2503              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
