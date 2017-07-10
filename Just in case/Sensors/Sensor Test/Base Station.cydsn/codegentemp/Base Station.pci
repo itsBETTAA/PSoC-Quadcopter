@@ -1,0 +1,14 @@
+# Base Station
+# 2017-07-06 01:19:08Z
+
+# IO_2@[IOP=(3)][IoId=(2)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 2
+# IO_3@[IOP=(3)][IoId=(3)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 3
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
+set_io "\I2C:sda(0)\" iocell 4 1
+set_io "\I2C:scl(0)\" iocell 4 0
+set_io "\serial:tx(0)\" iocell 0 5
+set_io "\serial:rx(0)\" iocell 0 4
+set_io "butt_pin(0)" iocell 2 2
+set_io "BOARD_LED(0)" iocell 1 6

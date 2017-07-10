@@ -1,0 +1,6 @@
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\AccelerometerTest\AccelerometerTest.cydsn\AccelerometerTest.cyprj|1a98f426-36d6-4191-a948-195be54e2b35
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|89922751-f280-4999-b539-dc966a0cdfb3
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|dc232ed1-8bfb-4e85-b9e1-87a24f77b870
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|0cc53764-1a4f-4e48-a8ef-d61a2347ca14
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|4b3c3f4d-4aba-4877-8e72-0176e3b97b3a
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\GyroscopeTest.cydsn\GyroscopeTest.cyprj|cfa81061-a4bc-4886-80b2-a28a06c988b0

@@ -34,6 +34,8 @@
 #include "left_arm_led.h"
 #include "deltaTimer.h"
 #include "deltTime.h"
+#include "accel_mag_rst_aliases.h"
+#include "accel_mag_rst.h"
 #include "xbeeSerial_IntClock.h"
 #include "debugSerial_IntClock.h"
 #include "gpsSerial_IntClock.h"

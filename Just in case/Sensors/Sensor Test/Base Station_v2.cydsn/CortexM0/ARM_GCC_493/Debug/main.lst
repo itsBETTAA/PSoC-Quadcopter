@@ -1,0 +1,3664 @@
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.read_battery_Handler,"ax",%progbits
+  18              		.align	2
+  19              		.global	read_battery_Handler
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	read_battery_Handler, %function
+  23              	read_battery_Handler:
+  24              	.LFB34:
+  25              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright ARROW ELECTRONICS, 2017
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:main.c        ****  * WHICH IS THE PROPERTY OF your company.
+   9:main.c        ****  *
+  10:main.c        ****  * ========================================
+  11:main.c        **** */
+  12:main.c        **** 
+  13:main.c        **** /* ========================================
+  14:main.c        ****  *
+  15:main.c        ****  * This code will read the neccessary information from Battery Babysitter
+  16:main.c        ****  * And display the necessary information on a 3 LEDs: Green, Yellow, Red
+  17:main.c        ****  *
+  18:main.c        ****  * ========================================
+  19:main.c        **** */
+  20:main.c        **** #include "project.h"
+  21:main.c        **** #include <batteryMonitor.h>
+  22:main.c        **** #include <sev_seg.h>
+  23:main.c        **** #include <mySerial.h>
+  24:main.c        **** 
+  25:main.c        **** //if in debug mode,
+  26:main.c        **** //we will never enter hibernate mode
+  27:main.c        **** //all that we will be doing is outputing the battery monitor
+  28:main.c        **** //values through the UART line
+  29:main.c        **** #define _DEBUG 0
+  30:main.c        **** 
+  31:main.c        **** //if in setup_GPOUT mode,
+  32:main.c        **** //the battery monitor will be configured to output
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 2
+
+
+  33:main.c        **** //an active low or active high signal when the
+  34:main.c        **** //battery monitor detects that the battery level are low or dangerously low
+  35:main.c        **** #define setup_GPOUT 1
+  36:main.c        **** 
+  37:main.c        **** // Set BATTERY_CAPACITY to the design capacity of your battery.
+  38:main.c        **** const unsigned int BATTERY_CAPACITY = 2000; // e.g. 2000mAh battery
+  39:main.c        **** const uint8_t SOCI_SET = 15; // Interrupt set threshold at 20%
+  40:main.c        **** const uint8_t SOCI_CLR = 20; // Interrupt clear threshold at 25%
+  41:main.c        **** const uint8_t SOCF_SET = 5;  // Final threshold set at 5%
+  42:main.c        **** const uint8_t SOCF_CLR = 10; // Final threshold clear at 10%
+  43:main.c        **** 
+  44:main.c        **** #if _DEBUG
+  45:main.c        **** void getBatteryStats();
+  46:main.c        **** #endif
+  47:main.c        **** 
+  48:main.c        **** //=============================================================//
+  49:main.c        **** //=============Interrupt handler Prototype=====================//
+  50:main.c        **** //=============================================================//
+  51:main.c        **** 
+  52:main.c        **** CY_ISR(read_battery_Handler);
+  53:main.c        **** CY_ISR(battery_critical_low_Handler);
+  54:main.c        **** 
+  55:main.c        **** //=============================================================//
+  56:main.c        **** //========Battery Monitor Setup Function Prototype=============//
+  57:main.c        **** //=============================================================//
+  58:main.c        **** 
+  59:main.c        **** void setupBQ27441(void);
+  60:main.c        **** 
+  61:main.c        **** //=============================================================//
+  62:main.c        **** //============LED Toggler Functions Prototype==================//
+  63:main.c        **** //=============================================================//
+  64:main.c        **** 
+  65:main.c        **** void toggleBoardLED   (int numberOfTimes, int delayBetweenBlinks);
+  66:main.c        **** void toggleRedLED     (int numberOfTimes, int delayBetweenBlinks);
+  67:main.c        **** void toggleYellowLED  (int numberOfTimes, int delayBetweenBlinks);
+  68:main.c        **** void toggleGreenLED   (int numberOfTimes, int delayBetweenBlinks);
+  69:main.c        **** void toggleSequenceLED(int numberOfTimes, int delayBetweenSequenceToggle);
+  70:main.c        **** 
+  71:main.c        **** //=============================================================//
+  72:main.c        **** //==============Interrupt Handler function=====================//
+  73:main.c        **** //=============================================================//
+  74:main.c        **** 
+  75:main.c        **** CY_ISR(read_battery_Handler){
+  26              		.loc 1 75 0
+  27              		.cfi_startproc
+  28 0000 08B5     		push	{r3, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 3, -8
+  31              		.cfi_offset 14, -4
+  76:main.c        ****     
+  77:main.c        ****     BOARD_LED_Write(~BOARD_LED_Read());    //TOGGLE THE BOARD LED TO SHOW that we are in an interru
+  32              		.loc 1 77 0
+  33 0002 FFF7FEFF 		bl	BOARD_LED_Read
+  34              	.LVL0:
+  35 0006 C043     		mvn	r0, r0
+  36 0008 C0B2     		uxtb	r0, r0
+  37 000a FFF7FEFF 		bl	BOARD_LED_Write
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 3
+
+
+  38              	.LVL1:
+  78:main.c        ****     unsigned int percentage = lipo_soc();  // Read state-of-charge (%)
+  39              		.loc 1 78 0
+  40 000e FFF7FEFF 		bl	lipo_soc
+  41              	.LVL2:
+  79:main.c        ****    
+  80:main.c        ****     if(percentage >= 25){  //if the state of charge of the battery is greater than 40 percent
+  42              		.loc 1 80 0
+  43 0012 1828     		cmp	r0, #24
+  44 0014 09D9     		bls	.L2
+  81:main.c        ****         RED_LED_Write(0);  //Keep the green lights on
+  45              		.loc 1 81 0
+  46 0016 0020     		mov	r0, #0
+  47              	.LVL3:
+  48 0018 FFF7FEFF 		bl	RED_LED_Write
+  49              	.LVL4:
+  82:main.c        ****         YELLOW_LED_Write(0); 
+  50              		.loc 1 82 0
+  51 001c 0020     		mov	r0, #0
+  52 001e FFF7FEFF 		bl	YELLOW_LED_Write
+  53              	.LVL5:
+  83:main.c        ****         GREEN_LED_Write(1);
+  54              		.loc 1 83 0
+  55 0022 0120     		mov	r0, #1
+  56 0024 FFF7FEFF 		bl	GREEN_LED_Write
+  57              	.LVL6:
+  58 0028 14E0     		b	.L3
+  59              	.LVL7:
+  60              	.L2:
+  84:main.c        ****     }
+  85:main.c        ****     else if(percentage >= 15){ //else if the state of charge of the battery is greater than 15 perc
+  61              		.loc 1 85 0
+  62 002a 0E28     		cmp	r0, #14
+  63 002c 09D9     		bls	.L4
+  86:main.c        ****         RED_LED_Write(0);      //Keep the Yellow light on
+  64              		.loc 1 86 0
+  65 002e 0020     		mov	r0, #0
+  66              	.LVL8:
+  67 0030 FFF7FEFF 		bl	RED_LED_Write
+  68              	.LVL9:
+  87:main.c        ****         YELLOW_LED_Write(1);
+  69              		.loc 1 87 0
+  70 0034 0120     		mov	r0, #1
+  71 0036 FFF7FEFF 		bl	YELLOW_LED_Write
+  72              	.LVL10:
+  88:main.c        ****         GREEN_LED_Write(0);
+  73              		.loc 1 88 0
+  74 003a 0020     		mov	r0, #0
+  75 003c FFF7FEFF 		bl	GREEN_LED_Write
+  76              	.LVL11:
+  77 0040 08E0     		b	.L3
+  78              	.LVL12:
+  79              	.L4:
+  89:main.c        ****     }
+  90:main.c        ****     else{
+  91:main.c        ****         RED_LED_Write(1);    //else, which means that State of Charge is less than 15 percent
+  80              		.loc 1 91 0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 4
+
+
+  81 0042 0120     		mov	r0, #1
+  82              	.LVL13:
+  83 0044 FFF7FEFF 		bl	RED_LED_Write
+  84              	.LVL14:
+  92:main.c        ****         YELLOW_LED_Write(0); //Keep the red light on to notify the user to charge the base station 
+  85              		.loc 1 92 0
+  86 0048 0020     		mov	r0, #0
+  87 004a FFF7FEFF 		bl	YELLOW_LED_Write
+  88              	.LVL15:
+  93:main.c        ****         GREEN_LED_Write(0);
+  89              		.loc 1 93 0
+  90 004e 0020     		mov	r0, #0
+  91 0050 FFF7FEFF 		bl	GREEN_LED_Write
+  92              	.LVL16:
+  93              	.L3:
+  94:main.c        ****     }
+  95:main.c        ****     CyDelay(10000);
+  94              		.loc 1 95 0
+  95 0054 0748     		ldr	r0, .L5
+  96 0056 FFF7FEFF 		bl	CyDelay
+  97              	.LVL17:
+  96:main.c        ****     
+  97:main.c        ****     RED_LED_Write(0);   //inialize all of the LEDs turned off
+  98              		.loc 1 97 0
+  99 005a 0020     		mov	r0, #0
+ 100 005c FFF7FEFF 		bl	RED_LED_Write
+ 101              	.LVL18:
+  98:main.c        ****     YELLOW_LED_Write(0); 
+ 102              		.loc 1 98 0
+ 103 0060 0020     		mov	r0, #0
+ 104 0062 FFF7FEFF 		bl	YELLOW_LED_Write
+ 105              	.LVL19:
+  99:main.c        ****     GREEN_LED_Write(0);
+ 106              		.loc 1 99 0
+ 107 0066 0020     		mov	r0, #0
+ 108 0068 FFF7FEFF 		bl	GREEN_LED_Write
+ 109              	.LVL20:
+ 100:main.c        ****     
+ 101:main.c        ****     butt_pin_ClearInterrupt(); //Clear the interrupt so that we are not going to be stuck in the in
+ 110              		.loc 1 101 0
+ 111 006c FFF7FEFF 		bl	butt_pin_ClearInterrupt
+ 112              	.LVL21:
+ 102:main.c        **** } 
+ 113              		.loc 1 102 0
+ 114              		@ sp needed
+ 115 0070 08BD     		pop	{r3, pc}
+ 116              	.L6:
+ 117 0072 C046     		.align	2
+ 118              	.L5:
+ 119 0074 10270000 		.word	10000
+ 120              		.cfi_endproc
+ 121              	.LFE34:
+ 122              		.size	read_battery_Handler, .-read_battery_Handler
+ 123              		.section	.text.battery_critical_low_Handler,"ax",%progbits
+ 124              		.align	2
+ 125              		.global	battery_critical_low_Handler
+ 126              		.code	16
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 5
+
+
+ 127              		.thumb_func
+ 128              		.type	battery_critical_low_Handler, %function
+ 129              	battery_critical_low_Handler:
+ 130              	.LFB35:
+ 103:main.c        **** 
+ 104:main.c        **** CY_ISR(battery_critical_low_Handler){
+ 131              		.loc 1 104 0
+ 132              		.cfi_startproc
+ 133 0000 08B5     		push	{r3, lr}
+ 134              		.cfi_def_cfa_offset 8
+ 135              		.cfi_offset 3, -8
+ 136              		.cfi_offset 14, -4
+ 105:main.c        ****     // Check which of the flags triggered the interrupt
+ 106:main.c        ****     if (lipo_socfFlag()) {
+ 137              		.loc 1 106 0
+ 138 0002 FFF7FEFF 		bl	lipo_socfFlag
+ 139              	.LVL22:
+ 140 0006 0028     		cmp	r0, #0
+ 141 0008 0BD0     		beq	.L8
+ 107:main.c        ****         #if _DEBUG
+ 108:main.c        ****             serial_println("<!-- WARNING: Battery Dangerously low -->");
+ 109:main.c        ****         #else
+ 110:main.c        ****             RED_LED_Write(1);    
+ 142              		.loc 1 110 0
+ 143 000a 0120     		mov	r0, #1
+ 144 000c FFF7FEFF 		bl	RED_LED_Write
+ 145              	.LVL23:
+ 111:main.c        ****             YELLOW_LED_Write(0); 
+ 146              		.loc 1 111 0
+ 147 0010 0020     		mov	r0, #0
+ 148 0012 FFF7FEFF 		bl	YELLOW_LED_Write
+ 149              	.LVL24:
+ 112:main.c        ****             GREEN_LED_Write(0);
+ 150              		.loc 1 112 0
+ 151 0016 0020     		mov	r0, #0
+ 152 0018 FFF7FEFF 		bl	GREEN_LED_Write
+ 153              	.LVL25:
+ 113:main.c        ****             read_battery_Disable();
+ 154              		.loc 1 113 0
+ 155 001c FFF7FEFF 		bl	read_battery_Disable
+ 156              	.LVL26:
+ 157 0020 0CE0     		b	.L9
+ 158              	.L8:
+ 114:main.c        ****         #endif
+ 115:main.c        ****     }
+ 116:main.c        ****     else if (lipo_socFlag()){
+ 159              		.loc 1 116 0
+ 160 0022 FFF7FEFF 		bl	lipo_socFlag
+ 161              	.LVL27:
+ 162 0026 0028     		cmp	r0, #0
+ 163 0028 08D0     		beq	.L9
+ 117:main.c        ****         #if _DEBUG
+ 118:main.c        ****             serial_println("<!-- WARNING: Battery Low -->");
+ 119:main.c        ****         #else
+ 120:main.c        ****             RED_LED_Write(0);    
+ 164              		.loc 1 120 0
+ 165 002a 0020     		mov	r0, #0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 6
+
+
+ 166 002c FFF7FEFF 		bl	RED_LED_Write
+ 167              	.LVL28:
+ 121:main.c        ****             YELLOW_LED_Write(1); 
+ 168              		.loc 1 121 0
+ 169 0030 0120     		mov	r0, #1
+ 170 0032 FFF7FEFF 		bl	YELLOW_LED_Write
+ 171              	.LVL29:
+ 122:main.c        ****             GREEN_LED_Write(0);
+ 172              		.loc 1 122 0
+ 173 0036 0020     		mov	r0, #0
+ 174 0038 FFF7FEFF 		bl	GREEN_LED_Write
+ 175              	.LVL30:
+ 176              	.L9:
+ 123:main.c        ****         #endif
+ 124:main.c        ****     }
+ 125:main.c        ****     
+ 126:main.c        ****     
+ 127:main.c        ****     GPOUT_ClearInterrupt();
+ 177              		.loc 1 127 0
+ 178 003c FFF7FEFF 		bl	GPOUT_ClearInterrupt
+ 179              	.LVL31:
+ 128:main.c        **** }
+ 180              		.loc 1 128 0
+ 181              		@ sp needed
+ 182 0040 08BD     		pop	{r3, pc}
+ 183              		.cfi_endproc
+ 184              	.LFE35:
+ 185              		.size	battery_critical_low_Handler, .-battery_critical_low_Handler
+ 186 0042 C046     		.section	.text.toggleBoardLED,"ax",%progbits
+ 187              		.align	2
+ 188              		.global	toggleBoardLED
+ 189              		.code	16
+ 190              		.thumb_func
+ 191              		.type	toggleBoardLED, %function
+ 192              	toggleBoardLED:
+ 193              	.LFB38:
+ 129:main.c        **** 
+ 130:main.c        **** //=============================================================//
+ 131:main.c        **** //=======================Main Function=========================//
+ 132:main.c        **** //=============================================================//
+ 133:main.c        **** 
+ 134:main.c        **** int main(void)
+ 135:main.c        **** {
+ 136:main.c        ****     CyGlobalIntEnable;                          /* Enable global interrupts. */    
+ 137:main.c        ****     setupBQ27441();                             //Initializes battery monitor
+ 138:main.c        ****     read_battery_StartEx(read_battery_Handler); //Sets up the interrupt Handler
+ 139:main.c        ****     lipo_gpout_StartEx(battery_critical_low_Handler);
+ 140:main.c        ****     
+ 141:main.c        ****     RED_LED_Write(0);   //inialize all of the LEDs turned off
+ 142:main.c        ****     YELLOW_LED_Write(0); 
+ 143:main.c        ****     GREEN_LED_Write(0);
+ 144:main.c        ****     
+ 145:main.c        ****     #if _DEBUG         
+ 146:main.c        ****         serial_Start(); //If the user wishes to debug, then initialize serial communication
+ 147:main.c        ****     #else
+ 148:main.c        ****         //if there was a reset, check if it was caused by a hibernate wakeup
+ 149:main.c        ****         if(CySysPmGetResetReason() == CY_PM_RESET_REASON_WAKEUP_HIB){
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 7
+
+
+ 150:main.c        ****             CySysPmUnfreezeIo(); //if so, unfreeze the GPIO PINS
+ 151:main.c        ****         }
+ 152:main.c        ****     #endif
+ 153:main.c        ****     
+ 154:main.c        ****     for(;;)
+ 155:main.c        ****     {
+ 156:main.c        ****         #if _DEBUG  //if the _DEBUG MACRO value is 1
+ 157:main.c        ****             getBatteryStats(); //then the user is debuging so allow data to be sent through the UAR
+ 158:main.c        ****         #else
+ 159:main.c        ****             //if debug is off then allow for hibernate sleep to occur
+ 160:main.c        ****             CySysPmFreezeIo(); //allows us to retain their state upon wake up
+ 161:main.c        ****             //Pulls 150 nA
+ 162:main.c        ****             CySysPmHibernate(); //Puts the device in Hibernate state
+ 163:main.c        ****                                 //This turns off all of the clocks but retains logical state
+ 164:main.c        ****                                 //used for long period of inactivity 
+ 165:main.c        ****                                 //where the device is not needed for for critical tasks and periodi
+ 166:main.c        ****                                 //wake ups are not required
+ 167:main.c        ****                                 //Any exist resets the microcontroller
+ 168:main.c        ****         #endif
+ 169:main.c        ****     }
+ 170:main.c        **** }
+ 171:main.c        **** 
+ 172:main.c        **** //=============================================================//
+ 173:main.c        **** //========Battery Monitor Initialization Function==============//
+ 174:main.c        **** //=============================================================//
+ 175:main.c        **** 
+ 176:main.c        **** void setupBQ27441(void)
+ 177:main.c        **** {
+ 178:main.c        ****     #if _DEBUG  
+ 179:main.c        ****         // Use lipo.begin() to initialize the BQ27441-G1A and confirm that it's
+ 180:main.c        ****         // connected and communicating.
+ 181:main.c        ****         serial_println(" Lipo monitor communication being initialized.");
+ 182:main.c        ****         if (!lipo_begin()) // begin() will return true if communication is successful
+ 183:main.c        ****         {
+ 184:main.c        **** 	        // If communication fails, print an error message and loop forever.
+ 185:main.c        ****             serial_println(" Error: Unable to communicate with BQ27441.");
+ 186:main.c        ****             serial_println("  Check wiring and try again.");
+ 187:main.c        ****             serial_println("  (Battery must be plugged into Battery Babysitter!)");
+ 188:main.c        ****             while (1) ;
+ 189:main.c        ****         }
+ 190:main.c        ****         serial_println(" Connected to BQ27441!");
+ 191:main.c        ****   
+ 192:main.c        ****         // Uset lipo.setCapacity(BATTERY_CAPACITY) to set the design capacity
+ 193:main.c        ****         // of your battery.
+ 194:main.c        ****         serial_println(" Setting Lipo monitor capacity.");
+ 195:main.c        ****         lipo_setCapacity(BATTERY_CAPACITY);
+ 196:main.c        ****         serial_println(" Lipo monitor capacity set.");
+ 197:main.c        ****     #else
+ 198:main.c        ****         if(!lipo_begin()){  //if the battery monitor does not properly initialize
+ 199:main.c        ****            while(1){        //Toggle the RED led on indefinetly
+ 200:main.c        ****                 toggleRedLED(3, 500);
+ 201:main.c        ****                 CyDelay(2000);
+ 202:main.c        ****             }
+ 203:main.c        ****         }
+ 204:main.c        ****         toggleYellowLED(3, 1000); //else if all connections goes well, toggle the yellow LED 3 time
+ 205:main.c        ****         CyDelay(1000);            //wait for about 2 seconds to settle down the user after the Yell
+ 206:main.c        ****         
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 8
+
+
+ 207:main.c        ****         lipo_setCapacity(BATTERY_CAPACITY); //set the capacity of the Lipo battery to the specified
+ 208:main.c        ****         toggleGreenLED(3,1000);             //if the lipo capacity was set correctly and didn't get
+ 209:main.c        ****                                             //toggle the green LED 3 times with a seond interval to
+ 210:main.c        ****                                             //Battery Monitor is responsive and fully setup
+ 211:main.c        ****     #endif
+ 212:main.c        ****     
+ 213:main.c        ****     #ifdef setup_GPOUT
+ 214:main.c        ****         // In this example, we'll manually enter and exit config mode. By controlling
+ 215:main.c        ****         // config mode manually, you can set the chip up faster -- completing all of
+ 216:main.c        ****         // the set up in a single config mode sweep.
+ 217:main.c        ****         lipo_enterConfig(); // To configure the values below, you must be in config mode
+ 218:main.c        ****         lipo_setCapacity(BATTERY_CAPACITY); // Set the battery capacity
+ 219:main.c        ****         lipo_setGPOUTPolarity(0); // Set GPOUT to active-high
+ 220:main.c        ****         lipo_setGPOUTFunction(BAT_LOW); // Set GPOUT to BAT_LOW mode
+ 221:main.c        ****         lipo_setSOC1Thresholds(SOCI_SET, SOCI_CLR); // Set SOCI set and clear thresholds
+ 222:main.c        ****         lipo_setSOCFThresholds(SOCF_SET, SOCF_CLR); // Set SOCF set and clear thresholds
+ 223:main.c        ****         lipo_exitConfig();
+ 224:main.c        ****     #endif
+ 225:main.c        **** }
+ 226:main.c        **** 
+ 227:main.c        **** //=============================================================//
+ 228:main.c        **** //==============Battery Monitor Debug Function=================//
+ 229:main.c        **** //=============================================================//
+ 230:main.c        **** //=============Only ran if _DEBUG MACRO is a 1=================//
+ 231:main.c        **** 
+ 232:main.c        **** #if _DEBUG  //if debug is true then define the function if not it would not compile
+ 233:main.c        ****     void getBatteryStats()
+ 234:main.c        ****     {
+ 235:main.c        **** 
+ 236:main.c        ****         // Read battery stats from the BQ27441-G1A
+ 237:main.c        ****         unsigned int soc = lipo_soc();  // Read state-of-charge (%)
+ 238:main.c        ****         unsigned int volts = lipo_voltage(); // Read battery voltage (mV)
+ 239:main.c        **** 
+ 240:main.c        ****         set_lipo_current_arg(AVG);
+ 241:main.c        ****         int current = lipo_current(/*AVG*/); // Read average current (mA)
+ 242:main.c        **** 
+ 243:main.c        ****         set_lipo_capacity_arg(FULL_F);
+ 244:main.c        ****         unsigned int fullCapacity = lipo_capacity(/*FULL*/); // Read full capacity (mAh)
+ 245:main.c        **** 
+ 246:main.c        ****         set_lipo_capacity_arg(REMAIN);
+ 247:main.c        ****         unsigned int capacity = lipo_capacity(/*REMAIN*/); // Read remaining capacity (mAh)
+ 248:main.c        **** 
+ 249:main.c        ****         int power = lipo_power(); // Read average power draw (mW)
+ 250:main.c        ****         int health = lipo_soh(); // Read state-of-health (%)
+ 251:main.c        **** 
+ 252:main.c        **** 
+ 253:main.c        ****         serial_print("SOC(%) = "); 
+ 254:main.c        ****         serial_printInt(soc);
+ 255:main.c        ****         serial_print(" | Volt(mV) = "); 
+ 256:main.c        ****         serial_printInt(volts);
+ 257:main.c        ****         serial_print(" | Current(mA) = "); 
+ 258:main.c        ****         serial_printInt(current);
+ 259:main.c        **** 
+ 260:main.c        ****         serial_print(" | Remaining(mAh) = "); 
+ 261:main.c        ****         serial_printInt(capacity);
+ 262:main.c        ****         serial_print(" / full(mAh) = "); 
+ 263:main.c        ****         serial_printInt(fullCapacity);
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 9
+
+
+ 264:main.c        ****   
+ 265:main.c        ****         serial_print(" | Power(mW) = "); 
+ 266:main.c        ****         serial_printInt(power);
+ 267:main.c        ****         serial_print(" | Health = "); 
+ 268:main.c        ****         serial_printIntln(health);
+ 269:main.c        ****     }
+ 270:main.c        **** #endif
+ 271:main.c        **** 
+ 272:main.c        **** //=============================================================//
+ 273:main.c        **** //=======Function to help with board signallings===============//
+ 274:main.c        **** //=============================================================//
+ 275:main.c        **** 
+ 276:main.c        **** void toggleBoardLED(int numberOfTimes, int delayBetweenBlinks){
+ 194              		.loc 1 276 0
+ 195              		.cfi_startproc
+ 196              	.LVL32:
+ 197 0000 70B5     		push	{r4, r5, r6, lr}
+ 198              		.cfi_def_cfa_offset 16
+ 199              		.cfi_offset 4, -16
+ 200              		.cfi_offset 5, -12
+ 201              		.cfi_offset 6, -8
+ 202              		.cfi_offset 14, -4
+ 203 0002 061C     		mov	r6, r0
+ 204 0004 0C1C     		mov	r4, r1
+ 205              	.LVL33:
+ 277:main.c        ****     int i = 0;
+ 278:main.c        ****     for(i = 0; i<= numberOfTimes; i++){
+ 206              		.loc 1 278 0
+ 207 0006 0025     		mov	r5, #0
+ 208 0008 13E0     		b	.L11
+ 209              	.LVL34:
+ 210              	.L12:
+ 279:main.c        ****         BOARD_LED_Write(~BOARD_LED_Read());
+ 211              		.loc 1 279 0 discriminator 3
+ 212 000a FFF7FEFF 		bl	BOARD_LED_Read
+ 213              	.LVL35:
+ 214 000e C043     		mvn	r0, r0
+ 215 0010 C0B2     		uxtb	r0, r0
+ 216 0012 FFF7FEFF 		bl	BOARD_LED_Write
+ 217              	.LVL36:
+ 280:main.c        ****         CyDelay(500);
+ 218              		.loc 1 280 0 discriminator 3
+ 219 0016 FA20     		mov	r0, #250
+ 220 0018 4000     		lsl	r0, r0, #1
+ 221 001a FFF7FEFF 		bl	CyDelay
+ 222              	.LVL37:
+ 281:main.c        ****         BOARD_LED_Write(~BOARD_LED_Read());
+ 223              		.loc 1 281 0 discriminator 3
+ 224 001e FFF7FEFF 		bl	BOARD_LED_Read
+ 225              	.LVL38:
+ 226 0022 C043     		mvn	r0, r0
+ 227 0024 C0B2     		uxtb	r0, r0
+ 228 0026 FFF7FEFF 		bl	BOARD_LED_Write
+ 229              	.LVL39:
+ 282:main.c        ****         CyDelay(delayBetweenBlinks);
+ 230              		.loc 1 282 0 discriminator 3
+ 231 002a 201C     		mov	r0, r4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 10
+
+
+ 232 002c FFF7FEFF 		bl	CyDelay
+ 233              	.LVL40:
+ 278:main.c        ****         BOARD_LED_Write(~BOARD_LED_Read());
+ 234              		.loc 1 278 0 discriminator 3
+ 235 0030 0135     		add	r5, r5, #1
+ 236              	.LVL41:
+ 237              	.L11:
+ 278:main.c        ****         BOARD_LED_Write(~BOARD_LED_Read());
+ 238              		.loc 1 278 0 is_stmt 0 discriminator 1
+ 239 0032 B542     		cmp	r5, r6
+ 240 0034 E9DD     		ble	.L12
+ 283:main.c        ****     }
+ 284:main.c        **** }
+ 241              		.loc 1 284 0 is_stmt 1
+ 242              		@ sp needed
+ 243              	.LVL42:
+ 244              	.LVL43:
+ 245              	.LVL44:
+ 246 0036 70BD     		pop	{r4, r5, r6, pc}
+ 247              		.cfi_endproc
+ 248              	.LFE38:
+ 249              		.size	toggleBoardLED, .-toggleBoardLED
+ 250              		.section	.text.toggleRedLED,"ax",%progbits
+ 251              		.align	2
+ 252              		.global	toggleRedLED
+ 253              		.code	16
+ 254              		.thumb_func
+ 255              		.type	toggleRedLED, %function
+ 256              	toggleRedLED:
+ 257              	.LFB39:
+ 285:main.c        **** 
+ 286:main.c        **** void toggleRedLED(int numberOfTimes, int delayBetweenBlinks){
+ 258              		.loc 1 286 0
+ 259              		.cfi_startproc
+ 260              	.LVL45:
+ 261 0000 70B5     		push	{r4, r5, r6, lr}
+ 262              		.cfi_def_cfa_offset 16
+ 263              		.cfi_offset 4, -16
+ 264              		.cfi_offset 5, -12
+ 265              		.cfi_offset 6, -8
+ 266              		.cfi_offset 14, -4
+ 267 0002 061C     		mov	r6, r0
+ 268 0004 0C1C     		mov	r4, r1
+ 269              	.LVL46:
+ 287:main.c        ****     int i = 0;
+ 288:main.c        ****     RED_LED_Write(0);
+ 270              		.loc 1 288 0
+ 271 0006 0020     		mov	r0, #0
+ 272              	.LVL47:
+ 273 0008 FFF7FEFF 		bl	RED_LED_Write
+ 274              	.LVL48:
+ 289:main.c        ****     
+ 290:main.c        ****     for(i = 0; i<= numberOfTimes; i++){
+ 275              		.loc 1 290 0
+ 276 000c 0025     		mov	r5, #0
+ 277 000e 13E0     		b	.L14
+ 278              	.LVL49:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 11
+
+
+ 279              	.L15:
+ 291:main.c        ****         RED_LED_Write(~RED_LED_Read());
+ 280              		.loc 1 291 0 discriminator 3
+ 281 0010 FFF7FEFF 		bl	RED_LED_Read
+ 282              	.LVL50:
+ 283 0014 C043     		mvn	r0, r0
+ 284 0016 C0B2     		uxtb	r0, r0
+ 285 0018 FFF7FEFF 		bl	RED_LED_Write
+ 286              	.LVL51:
+ 292:main.c        ****         CyDelay(500);
+ 287              		.loc 1 292 0 discriminator 3
+ 288 001c FA20     		mov	r0, #250
+ 289 001e 4000     		lsl	r0, r0, #1
+ 290 0020 FFF7FEFF 		bl	CyDelay
+ 291              	.LVL52:
+ 293:main.c        ****         RED_LED_Write(~RED_LED_Read());
+ 292              		.loc 1 293 0 discriminator 3
+ 293 0024 FFF7FEFF 		bl	RED_LED_Read
+ 294              	.LVL53:
+ 295 0028 C043     		mvn	r0, r0
+ 296 002a C0B2     		uxtb	r0, r0
+ 297 002c FFF7FEFF 		bl	RED_LED_Write
+ 298              	.LVL54:
+ 294:main.c        ****         CyDelay(delayBetweenBlinks);
+ 299              		.loc 1 294 0 discriminator 3
+ 300 0030 201C     		mov	r0, r4
+ 301 0032 FFF7FEFF 		bl	CyDelay
+ 302              	.LVL55:
+ 290:main.c        ****         RED_LED_Write(~RED_LED_Read());
+ 303              		.loc 1 290 0 discriminator 3
+ 304 0036 0135     		add	r5, r5, #1
+ 305              	.LVL56:
+ 306              	.L14:
+ 290:main.c        ****         RED_LED_Write(~RED_LED_Read());
+ 307              		.loc 1 290 0 is_stmt 0 discriminator 1
+ 308 0038 B542     		cmp	r5, r6
+ 309 003a E9DD     		ble	.L15
+ 295:main.c        ****     }
+ 296:main.c        **** }
+ 310              		.loc 1 296 0 is_stmt 1
+ 311              		@ sp needed
+ 312              	.LVL57:
+ 313              	.LVL58:
+ 314              	.LVL59:
+ 315 003c 70BD     		pop	{r4, r5, r6, pc}
+ 316              		.cfi_endproc
+ 317              	.LFE39:
+ 318              		.size	toggleRedLED, .-toggleRedLED
+ 319 003e C046     		.section	.text.toggleYellowLED,"ax",%progbits
+ 320              		.align	2
+ 321              		.global	toggleYellowLED
+ 322              		.code	16
+ 323              		.thumb_func
+ 324              		.type	toggleYellowLED, %function
+ 325              	toggleYellowLED:
+ 326              	.LFB40:
+ 297:main.c        **** void toggleYellowLED(int numberOfTimes, int delayBetweenBlinks){
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 12
+
+
+ 327              		.loc 1 297 0
+ 328              		.cfi_startproc
+ 329              	.LVL60:
+ 330 0000 70B5     		push	{r4, r5, r6, lr}
+ 331              		.cfi_def_cfa_offset 16
+ 332              		.cfi_offset 4, -16
+ 333              		.cfi_offset 5, -12
+ 334              		.cfi_offset 6, -8
+ 335              		.cfi_offset 14, -4
+ 336 0002 061C     		mov	r6, r0
+ 337 0004 0C1C     		mov	r4, r1
+ 338              	.LVL61:
+ 298:main.c        ****     int i = 0;
+ 299:main.c        ****     YELLOW_LED_Write(0);
+ 339              		.loc 1 299 0
+ 340 0006 0020     		mov	r0, #0
+ 341              	.LVL62:
+ 342 0008 FFF7FEFF 		bl	YELLOW_LED_Write
+ 343              	.LVL63:
+ 300:main.c        ****     
+ 301:main.c        ****     for(i = 0; i<= numberOfTimes; i++){
+ 344              		.loc 1 301 0
+ 345 000c 0025     		mov	r5, #0
+ 346 000e 13E0     		b	.L17
+ 347              	.LVL64:
+ 348              	.L18:
+ 302:main.c        ****         YELLOW_LED_Write(~YELLOW_LED_Read());
+ 349              		.loc 1 302 0 discriminator 3
+ 350 0010 FFF7FEFF 		bl	YELLOW_LED_Read
+ 351              	.LVL65:
+ 352 0014 C043     		mvn	r0, r0
+ 353 0016 C0B2     		uxtb	r0, r0
+ 354 0018 FFF7FEFF 		bl	YELLOW_LED_Write
+ 355              	.LVL66:
+ 303:main.c        ****         CyDelay(500);
+ 356              		.loc 1 303 0 discriminator 3
+ 357 001c FA20     		mov	r0, #250
+ 358 001e 4000     		lsl	r0, r0, #1
+ 359 0020 FFF7FEFF 		bl	CyDelay
+ 360              	.LVL67:
+ 304:main.c        ****         YELLOW_LED_Write(~YELLOW_LED_Read());
+ 361              		.loc 1 304 0 discriminator 3
+ 362 0024 FFF7FEFF 		bl	YELLOW_LED_Read
+ 363              	.LVL68:
+ 364 0028 C043     		mvn	r0, r0
+ 365 002a C0B2     		uxtb	r0, r0
+ 366 002c FFF7FEFF 		bl	YELLOW_LED_Write
+ 367              	.LVL69:
+ 305:main.c        ****         CyDelay(delayBetweenBlinks);
+ 368              		.loc 1 305 0 discriminator 3
+ 369 0030 201C     		mov	r0, r4
+ 370 0032 FFF7FEFF 		bl	CyDelay
+ 371              	.LVL70:
+ 301:main.c        ****         YELLOW_LED_Write(~YELLOW_LED_Read());
+ 372              		.loc 1 301 0 discriminator 3
+ 373 0036 0135     		add	r5, r5, #1
+ 374              	.LVL71:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 13
+
+
+ 375              	.L17:
+ 301:main.c        ****         YELLOW_LED_Write(~YELLOW_LED_Read());
+ 376              		.loc 1 301 0 is_stmt 0 discriminator 1
+ 377 0038 B542     		cmp	r5, r6
+ 378 003a E9DD     		ble	.L18
+ 306:main.c        ****     }
+ 307:main.c        **** }
+ 379              		.loc 1 307 0 is_stmt 1
+ 380              		@ sp needed
+ 381              	.LVL72:
+ 382              	.LVL73:
+ 383              	.LVL74:
+ 384 003c 70BD     		pop	{r4, r5, r6, pc}
+ 385              		.cfi_endproc
+ 386              	.LFE40:
+ 387              		.size	toggleYellowLED, .-toggleYellowLED
+ 388 003e C046     		.section	.text.toggleGreenLED,"ax",%progbits
+ 389              		.align	2
+ 390              		.global	toggleGreenLED
+ 391              		.code	16
+ 392              		.thumb_func
+ 393              		.type	toggleGreenLED, %function
+ 394              	toggleGreenLED:
+ 395              	.LFB41:
+ 308:main.c        **** void toggleGreenLED(int numberOfTimes, int delayBetweenBlinks){
+ 396              		.loc 1 308 0
+ 397              		.cfi_startproc
+ 398              	.LVL75:
+ 399 0000 70B5     		push	{r4, r5, r6, lr}
+ 400              		.cfi_def_cfa_offset 16
+ 401              		.cfi_offset 4, -16
+ 402              		.cfi_offset 5, -12
+ 403              		.cfi_offset 6, -8
+ 404              		.cfi_offset 14, -4
+ 405 0002 061C     		mov	r6, r0
+ 406 0004 0C1C     		mov	r4, r1
+ 407              	.LVL76:
+ 309:main.c        ****     int i = 0;
+ 310:main.c        ****     GREEN_LED_Write(0);
+ 408              		.loc 1 310 0
+ 409 0006 0020     		mov	r0, #0
+ 410              	.LVL77:
+ 411 0008 FFF7FEFF 		bl	GREEN_LED_Write
+ 412              	.LVL78:
+ 311:main.c        ****     
+ 312:main.c        ****     for(i = 0; i<= numberOfTimes; i++){
+ 413              		.loc 1 312 0
+ 414 000c 0025     		mov	r5, #0
+ 415 000e 13E0     		b	.L20
+ 416              	.LVL79:
+ 417              	.L21:
+ 313:main.c        ****         GREEN_LED_Write(~GREEN_LED_Read());
+ 418              		.loc 1 313 0 discriminator 3
+ 419 0010 FFF7FEFF 		bl	GREEN_LED_Read
+ 420              	.LVL80:
+ 421 0014 C043     		mvn	r0, r0
+ 422 0016 C0B2     		uxtb	r0, r0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 14
+
+
+ 423 0018 FFF7FEFF 		bl	GREEN_LED_Write
+ 424              	.LVL81:
+ 314:main.c        ****         CyDelay(500);
+ 425              		.loc 1 314 0 discriminator 3
+ 426 001c FA20     		mov	r0, #250
+ 427 001e 4000     		lsl	r0, r0, #1
+ 428 0020 FFF7FEFF 		bl	CyDelay
+ 429              	.LVL82:
+ 315:main.c        ****         GREEN_LED_Write(~GREEN_LED_Read());
+ 430              		.loc 1 315 0 discriminator 3
+ 431 0024 FFF7FEFF 		bl	GREEN_LED_Read
+ 432              	.LVL83:
+ 433 0028 C043     		mvn	r0, r0
+ 434 002a C0B2     		uxtb	r0, r0
+ 435 002c FFF7FEFF 		bl	GREEN_LED_Write
+ 436              	.LVL84:
+ 316:main.c        ****         CyDelay(delayBetweenBlinks);
+ 437              		.loc 1 316 0 discriminator 3
+ 438 0030 201C     		mov	r0, r4
+ 439 0032 FFF7FEFF 		bl	CyDelay
+ 440              	.LVL85:
+ 312:main.c        ****         GREEN_LED_Write(~GREEN_LED_Read());
+ 441              		.loc 1 312 0 discriminator 3
+ 442 0036 0135     		add	r5, r5, #1
+ 443              	.LVL86:
+ 444              	.L20:
+ 312:main.c        ****         GREEN_LED_Write(~GREEN_LED_Read());
+ 445              		.loc 1 312 0 is_stmt 0 discriminator 1
+ 446 0038 B542     		cmp	r5, r6
+ 447 003a E9DD     		ble	.L21
+ 317:main.c        ****     }
+ 318:main.c        **** }
+ 448              		.loc 1 318 0 is_stmt 1
+ 449              		@ sp needed
+ 450              	.LVL87:
+ 451              	.LVL88:
+ 452              	.LVL89:
+ 453 003c 70BD     		pop	{r4, r5, r6, pc}
+ 454              		.cfi_endproc
+ 455              	.LFE41:
+ 456              		.size	toggleGreenLED, .-toggleGreenLED
+ 457 003e C046     		.section	.text.setupBQ27441,"ax",%progbits
+ 458              		.align	2
+ 459              		.global	setupBQ27441
+ 460              		.code	16
+ 461              		.thumb_func
+ 462              		.type	setupBQ27441, %function
+ 463              	setupBQ27441:
+ 464              	.LFB37:
+ 177:main.c        ****     #if _DEBUG  
+ 465              		.loc 1 177 0
+ 466              		.cfi_startproc
+ 467 0000 38B5     		push	{r3, r4, r5, lr}
+ 468              		.cfi_def_cfa_offset 16
+ 469              		.cfi_offset 3, -16
+ 470              		.cfi_offset 4, -12
+ 471              		.cfi_offset 5, -8
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 15
+
+
+ 472              		.cfi_offset 14, -4
+ 198:main.c        ****            while(1){        //Toggle the RED led on indefinetly
+ 473              		.loc 1 198 0
+ 474 0002 FFF7FEFF 		bl	lipo_begin
+ 475              	.LVL90:
+ 476 0006 0028     		cmp	r0, #0
+ 477 0008 09D1     		bne	.L23
+ 478              	.L24:
+ 200:main.c        ****                 CyDelay(2000);
+ 479              		.loc 1 200 0 discriminator 1
+ 480 000a 0320     		mov	r0, #3
+ 481 000c FA21     		mov	r1, #250
+ 482 000e 4900     		lsl	r1, r1, #1
+ 483 0010 FFF7FEFF 		bl	toggleRedLED
+ 484              	.LVL91:
+ 201:main.c        ****             }
+ 485              		.loc 1 201 0 discriminator 1
+ 486 0014 FA20     		mov	r0, #250
+ 487 0016 C000     		lsl	r0, r0, #3
+ 488 0018 FFF7FEFF 		bl	CyDelay
+ 489              	.LVL92:
+ 202:main.c        ****         }
+ 490              		.loc 1 202 0 discriminator 1
+ 491 001c F5E7     		b	.L24
+ 492              	.L23:
+ 204:main.c        ****         CyDelay(1000);            //wait for about 2 seconds to settle down the user after the Yell
+ 493              		.loc 1 204 0
+ 494 001e FA24     		mov	r4, #250
+ 495 0020 A400     		lsl	r4, r4, #2
+ 496 0022 0320     		mov	r0, #3
+ 497 0024 211C     		mov	r1, r4
+ 498 0026 FFF7FEFF 		bl	toggleYellowLED
+ 499              	.LVL93:
+ 205:main.c        ****         
+ 500              		.loc 1 205 0
+ 501 002a 201C     		mov	r0, r4
+ 502 002c FFF7FEFF 		bl	CyDelay
+ 503              	.LVL94:
+ 207:main.c        ****         toggleGreenLED(3,1000);             //if the lipo capacity was set correctly and didn't get
+ 504              		.loc 1 207 0
+ 505 0030 FA25     		mov	r5, #250
+ 506 0032 ED00     		lsl	r5, r5, #3
+ 507 0034 281C     		mov	r0, r5
+ 508 0036 FFF7FEFF 		bl	lipo_setCapacity
+ 509              	.LVL95:
+ 208:main.c        ****                                             //toggle the green LED 3 times with a seond interval to
+ 510              		.loc 1 208 0
+ 511 003a 0320     		mov	r0, #3
+ 512 003c 211C     		mov	r1, r4
+ 513 003e FFF7FEFF 		bl	toggleGreenLED
+ 514              	.LVL96:
+ 217:main.c        ****         lipo_setCapacity(BATTERY_CAPACITY); // Set the battery capacity
+ 515              		.loc 1 217 0
+ 516 0042 FFF7FEFF 		bl	lipo_enterConfig
+ 517              	.LVL97:
+ 218:main.c        ****         lipo_setGPOUTPolarity(0); // Set GPOUT to active-high
+ 518              		.loc 1 218 0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 16
+
+
+ 519 0046 281C     		mov	r0, r5
+ 520 0048 FFF7FEFF 		bl	lipo_setCapacity
+ 521              	.LVL98:
+ 219:main.c        ****         lipo_setGPOUTFunction(BAT_LOW); // Set GPOUT to BAT_LOW mode
+ 522              		.loc 1 219 0
+ 523 004c 0020     		mov	r0, #0
+ 524 004e FFF7FEFF 		bl	lipo_setGPOUTPolarity
+ 525              	.LVL99:
+ 220:main.c        ****         lipo_setSOC1Thresholds(SOCI_SET, SOCI_CLR); // Set SOCI set and clear thresholds
+ 526              		.loc 1 220 0
+ 527 0052 0120     		mov	r0, #1
+ 528 0054 FFF7FEFF 		bl	lipo_setGPOUTFunction
+ 529              	.LVL100:
+ 221:main.c        ****         lipo_setSOCFThresholds(SOCF_SET, SOCF_CLR); // Set SOCF set and clear thresholds
+ 530              		.loc 1 221 0
+ 531 0058 0F20     		mov	r0, #15
+ 532 005a 1421     		mov	r1, #20
+ 533 005c FFF7FEFF 		bl	lipo_setSOC1Thresholds
+ 534              	.LVL101:
+ 222:main.c        ****         lipo_exitConfig();
+ 535              		.loc 1 222 0
+ 536 0060 0520     		mov	r0, #5
+ 537 0062 0A21     		mov	r1, #10
+ 538 0064 FFF7FEFF 		bl	lipo_setSOCFThresholds
+ 539              	.LVL102:
+ 223:main.c        ****     #endif
+ 540              		.loc 1 223 0
+ 541 0068 FFF7FEFF 		bl	lipo_exitConfig
+ 542              	.LVL103:
+ 225:main.c        **** 
+ 543              		.loc 1 225 0
+ 544              		@ sp needed
+ 545 006c 38BD     		pop	{r3, r4, r5, pc}
+ 546              		.cfi_endproc
+ 547              	.LFE37:
+ 548              		.size	setupBQ27441, .-setupBQ27441
+ 549 006e C046     		.section	.text.main,"ax",%progbits
+ 550              		.align	2
+ 551              		.global	main
+ 552              		.code	16
+ 553              		.thumb_func
+ 554              		.type	main, %function
+ 555              	main:
+ 556              	.LFB36:
+ 135:main.c        ****     CyGlobalIntEnable;                          /* Enable global interrupts. */    
+ 557              		.loc 1 135 0
+ 558              		.cfi_startproc
+ 559 0000 08B5     		push	{r3, lr}
+ 560              		.cfi_def_cfa_offset 8
+ 561              		.cfi_offset 3, -8
+ 562              		.cfi_offset 14, -4
+ 136:main.c        ****     setupBQ27441();                             //Initializes battery monitor
+ 563              		.loc 1 136 0
+ 564              	@ 136 "main.c" 1
+ 565 0002 62B6     		CPSIE   i
+ 566              	@ 0 "" 2
+ 137:main.c        ****     read_battery_StartEx(read_battery_Handler); //Sets up the interrupt Handler
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 17
+
+
+ 567              		.loc 1 137 0
+ 568              		.code	16
+ 569 0004 FFF7FEFF 		bl	setupBQ27441
+ 570              	.LVL104:
+ 138:main.c        ****     lipo_gpout_StartEx(battery_critical_low_Handler);
+ 571              		.loc 1 138 0
+ 572 0008 0C48     		ldr	r0, .L28
+ 573 000a FFF7FEFF 		bl	read_battery_StartEx
+ 574              	.LVL105:
+ 139:main.c        ****     
+ 575              		.loc 1 139 0
+ 576 000e 0C48     		ldr	r0, .L28+4
+ 577 0010 FFF7FEFF 		bl	lipo_gpout_StartEx
+ 578              	.LVL106:
+ 141:main.c        ****     YELLOW_LED_Write(0); 
+ 579              		.loc 1 141 0
+ 580 0014 0020     		mov	r0, #0
+ 581 0016 FFF7FEFF 		bl	RED_LED_Write
+ 582              	.LVL107:
+ 142:main.c        ****     GREEN_LED_Write(0);
+ 583              		.loc 1 142 0
+ 584 001a 0020     		mov	r0, #0
+ 585 001c FFF7FEFF 		bl	YELLOW_LED_Write
+ 586              	.LVL108:
+ 143:main.c        ****     
+ 587              		.loc 1 143 0
+ 588 0020 0020     		mov	r0, #0
+ 589 0022 FFF7FEFF 		bl	GREEN_LED_Write
+ 590              	.LVL109:
+ 149:main.c        ****             CySysPmUnfreezeIo(); //if so, unfreeze the GPIO PINS
+ 591              		.loc 1 149 0
+ 592 0026 FFF7FEFF 		bl	CySysPmGetResetReason
+ 593              	.LVL110:
+ 594 002a 0228     		cmp	r0, #2
+ 595 002c 01D1     		bne	.L27
+ 150:main.c        ****         }
+ 596              		.loc 1 150 0
+ 597 002e FFF7FEFF 		bl	CySysPmUnfreezeIo
+ 598              	.LVL111:
+ 599              	.L27:
+ 160:main.c        ****             //Pulls 150 nA
+ 600              		.loc 1 160 0 discriminator 1
+ 601 0032 FFF7FEFF 		bl	CySysPmFreezeIo
+ 602              	.LVL112:
+ 162:main.c        ****                                 //This turns off all of the clocks but retains logical state
+ 603              		.loc 1 162 0 discriminator 1
+ 604 0036 FFF7FEFF 		bl	CySysPmHibernate
+ 605              	.LVL113:
+ 169:main.c        **** }
+ 606              		.loc 1 169 0 discriminator 1
+ 607 003a FAE7     		b	.L27
+ 608              	.L29:
+ 609              		.align	2
+ 610              	.L28:
+ 611 003c 00000000 		.word	read_battery_Handler
+ 612 0040 00000000 		.word	battery_critical_low_Handler
+ 613              		.cfi_endproc
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 18
+
+
+ 614              	.LFE36:
+ 615              		.size	main, .-main
+ 616              		.section	.text.toggleSequenceLED,"ax",%progbits
+ 617              		.align	2
+ 618              		.global	toggleSequenceLED
+ 619              		.code	16
+ 620              		.thumb_func
+ 621              		.type	toggleSequenceLED, %function
+ 622              	toggleSequenceLED:
+ 623              	.LFB42:
+ 319:main.c        **** 
+ 320:main.c        **** void toggleSequenceLED(int numberOfTimes, int delayBetweenSequenceToggle){
+ 624              		.loc 1 320 0
+ 625              		.cfi_startproc
+ 626              	.LVL114:
+ 627 0000 70B5     		push	{r4, r5, r6, lr}
+ 628              		.cfi_def_cfa_offset 16
+ 629              		.cfi_offset 4, -16
+ 630              		.cfi_offset 5, -12
+ 631              		.cfi_offset 6, -8
+ 632              		.cfi_offset 14, -4
+ 633 0002 061C     		mov	r6, r0
+ 634 0004 0C1C     		mov	r4, r1
+ 635              	.LVL115:
+ 321:main.c        ****     int i = 0;
+ 322:main.c        ****     RED_LED_Write(0);   //turn all of the LEDS off at first
+ 636              		.loc 1 322 0
+ 637 0006 0020     		mov	r0, #0
+ 638              	.LVL116:
+ 639 0008 FFF7FEFF 		bl	RED_LED_Write
+ 640              	.LVL117:
+ 323:main.c        ****     YELLOW_LED_Write(0);
+ 641              		.loc 1 323 0
+ 642 000c 0020     		mov	r0, #0
+ 643 000e FFF7FEFF 		bl	YELLOW_LED_Write
+ 644              	.LVL118:
+ 324:main.c        ****     GREEN_LED_Write(0);
+ 645              		.loc 1 324 0
+ 646 0012 0020     		mov	r0, #0
+ 647 0014 FFF7FEFF 		bl	GREEN_LED_Write
+ 648              	.LVL119:
+ 325:main.c        ****     
+ 326:main.c        ****     for(i = 0; i < (numberOfTimes*2); i++){      //Then, for the number of specified times
+ 649              		.loc 1 326 0
+ 650 0018 0025     		mov	r5, #0
+ 651 001a 1BE0     		b	.L31
+ 652              	.LVL120:
+ 653              	.L32:
+ 327:main.c        ****         RED_LED_Write(~RED_LED_Read());      //toggle each LEDS in a sequence 
+ 654              		.loc 1 327 0 discriminator 3
+ 655 001c FFF7FEFF 		bl	RED_LED_Read
+ 656              	.LVL121:
+ 657 0020 C043     		mvn	r0, r0
+ 658 0022 C0B2     		uxtb	r0, r0
+ 659 0024 FFF7FEFF 		bl	RED_LED_Write
+ 660              	.LVL122:
+ 328:main.c        ****         CyDelay(delayBetweenSequenceToggle); //with the given intervals
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 19
+
+
+ 661              		.loc 1 328 0 discriminator 3
+ 662 0028 201C     		mov	r0, r4
+ 663 002a FFF7FEFF 		bl	CyDelay
+ 664              	.LVL123:
+ 329:main.c        ****         YELLOW_LED_Write(~YELLOW_LED_Read());
+ 665              		.loc 1 329 0 discriminator 3
+ 666 002e FFF7FEFF 		bl	YELLOW_LED_Read
+ 667              	.LVL124:
+ 668 0032 C043     		mvn	r0, r0
+ 669 0034 C0B2     		uxtb	r0, r0
+ 670 0036 FFF7FEFF 		bl	YELLOW_LED_Write
+ 671              	.LVL125:
+ 330:main.c        ****         CyDelay(delayBetweenSequenceToggle);
+ 672              		.loc 1 330 0 discriminator 3
+ 673 003a 201C     		mov	r0, r4
+ 674 003c FFF7FEFF 		bl	CyDelay
+ 675              	.LVL126:
+ 331:main.c        ****         GREEN_LED_Write(~GREEN_LED_Read());
+ 676              		.loc 1 331 0 discriminator 3
+ 677 0040 FFF7FEFF 		bl	GREEN_LED_Read
+ 678              	.LVL127:
+ 679 0044 C043     		mvn	r0, r0
+ 680 0046 C0B2     		uxtb	r0, r0
+ 681 0048 FFF7FEFF 		bl	GREEN_LED_Write
+ 682              	.LVL128:
+ 332:main.c        ****         CyDelay(delayBetweenSequenceToggle);
+ 683              		.loc 1 332 0 discriminator 3
+ 684 004c 201C     		mov	r0, r4
+ 685 004e FFF7FEFF 		bl	CyDelay
+ 686              	.LVL129:
+ 326:main.c        ****         RED_LED_Write(~RED_LED_Read());      //toggle each LEDS in a sequence 
+ 687              		.loc 1 326 0 discriminator 3
+ 688 0052 0135     		add	r5, r5, #1
+ 689              	.LVL130:
+ 690              	.L31:
+ 326:main.c        ****         RED_LED_Write(~RED_LED_Read());      //toggle each LEDS in a sequence 
+ 691              		.loc 1 326 0 is_stmt 0 discriminator 1
+ 692 0054 7300     		lsl	r3, r6, #1
+ 693 0056 AB42     		cmp	r3, r5
+ 694 0058 E0DC     		bgt	.L32
+ 333:main.c        ****     }
+ 334:main.c        **** }
+ 695              		.loc 1 334 0 is_stmt 1
+ 696              		@ sp needed
+ 697              	.LVL131:
+ 698              	.LVL132:
+ 699              	.LVL133:
+ 700 005a 70BD     		pop	{r4, r5, r6, pc}
+ 701              		.cfi_endproc
+ 702              	.LFE42:
+ 703              		.size	toggleSequenceLED, .-toggleSequenceLED
+ 704              		.global	SOCF_CLR
+ 705              		.global	SOCF_SET
+ 706              		.global	SOCI_CLR
+ 707              		.global	SOCI_SET
+ 708              		.global	BATTERY_CAPACITY
+ 709              		.section	.rodata
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 20
+
+
+ 710              		.align	2
+ 711              		.type	SOCF_CLR, %object
+ 712              		.size	SOCF_CLR, 1
+ 713              	SOCF_CLR:
+ 714 0000 0A       		.byte	10
+ 715              		.type	SOCF_SET, %object
+ 716              		.size	SOCF_SET, 1
+ 717              	SOCF_SET:
+ 718 0001 05       		.byte	5
+ 719              		.type	SOCI_CLR, %object
+ 720              		.size	SOCI_CLR, 1
+ 721              	SOCI_CLR:
+ 722 0002 14       		.byte	20
+ 723              		.type	SOCI_SET, %object
+ 724              		.size	SOCI_SET, 1
+ 725              	SOCI_SET:
+ 726 0003 0F       		.byte	15
+ 727              		.type	BATTERY_CAPACITY, %object
+ 728              		.size	BATTERY_CAPACITY, 4
+ 729              	BATTERY_CAPACITY:
+ 730 0004 D0070000 		.word	2000
+ 731              		.text
+ 732              	.Letext0:
+ 733              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 734              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 735              		.file 4 "Generated_Source\\PSoC4/cytypes.h"
+ 736              		.file 5 "..\\..\\..\\..\\PSoC Basestation\\Base_station_src/batteryMonitor.h"
+ 737              		.file 6 "Generated_Source\\PSoC4/BOARD_LED.h"
+ 738              		.file 7 "Generated_Source\\PSoC4/RED_LED.h"
+ 739              		.file 8 "Generated_Source\\PSoC4/YELLOW_LED.h"
+ 740              		.file 9 "Generated_Source\\PSoC4/GREEN_LED.h"
+ 741              		.file 10 "Generated_Source\\PSoC4/CyLib.h"
+ 742              		.file 11 "Generated_Source\\PSoC4/butt_pin.h"
+ 743              		.file 12 "Generated_Source\\PSoC4/GPOUT.h"
+ 744              		.file 13 "Generated_Source\\PSoC4/read_battery.h"
+ 745              		.file 14 "Generated_Source\\PSoC4/lipo_gpout.h"
+ 746              		.file 15 "Generated_Source\\PSoC4/cyPm.h"
+ 747              		.section	.debug_info,"",%progbits
+ 748              	.Ldebug_info0:
+ 749 0000 2D0A0000 		.4byte	0xa2d
+ 750 0004 0400     		.2byte	0x4
+ 751 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 752 000a 04       		.byte	0x4
+ 753 000b 01       		.uleb128 0x1
+ 754 000c E3010000 		.4byte	.LASF70
+ 755 0010 01       		.byte	0x1
+ 756 0011 CF030000 		.4byte	.LASF71
+ 757 0015 4F000000 		.4byte	.LASF72
+ 758 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 759 001d 00000000 		.4byte	0
+ 760 0021 00000000 		.4byte	.Ldebug_line0
+ 761 0025 02       		.uleb128 0x2
+ 762 0026 01       		.byte	0x1
+ 763 0027 06       		.byte	0x6
+ 764 0028 A8020000 		.4byte	.LASF0
+ 765 002c 03       		.uleb128 0x3
+ 766 002d B7010000 		.4byte	.LASF3
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 21
+
+
+ 767 0031 02       		.byte	0x2
+ 768 0032 1D       		.byte	0x1d
+ 769 0033 37000000 		.4byte	0x37
+ 770 0037 02       		.uleb128 0x2
+ 771 0038 01       		.byte	0x1
+ 772 0039 08       		.byte	0x8
+ 773 003a 71020000 		.4byte	.LASF1
+ 774 003e 02       		.uleb128 0x2
+ 775 003f 02       		.byte	0x2
+ 776 0040 05       		.byte	0x5
+ 777 0041 A1000000 		.4byte	.LASF2
+ 778 0045 03       		.uleb128 0x3
+ 779 0046 DE000000 		.4byte	.LASF4
+ 780 004a 02       		.byte	0x2
+ 781 004b 2B       		.byte	0x2b
+ 782 004c 50000000 		.4byte	0x50
+ 783 0050 02       		.uleb128 0x2
+ 784 0051 02       		.byte	0x2
+ 785 0052 07       		.byte	0x7
+ 786 0053 52030000 		.4byte	.LASF5
+ 787 0057 02       		.uleb128 0x2
+ 788 0058 04       		.byte	0x4
+ 789 0059 05       		.byte	0x5
+ 790 005a 9F010000 		.4byte	.LASF6
+ 791 005e 02       		.uleb128 0x2
+ 792 005f 04       		.byte	0x4
+ 793 0060 07       		.byte	0x7
+ 794 0061 0E030000 		.4byte	.LASF7
+ 795 0065 02       		.uleb128 0x2
+ 796 0066 08       		.byte	0x8
+ 797 0067 05       		.byte	0x5
+ 798 0068 72010000 		.4byte	.LASF8
+ 799 006c 02       		.uleb128 0x2
+ 800 006d 08       		.byte	0x8
+ 801 006e 07       		.byte	0x7
+ 802 006f B4020000 		.4byte	.LASF9
+ 803 0073 04       		.uleb128 0x4
+ 804 0074 04       		.byte	0x4
+ 805 0075 05       		.byte	0x5
+ 806 0076 696E7400 		.ascii	"int\000"
+ 807 007a 02       		.uleb128 0x2
+ 808 007b 04       		.byte	0x4
+ 809 007c 07       		.byte	0x7
+ 810 007d F8020000 		.4byte	.LASF10
+ 811 0081 03       		.uleb128 0x3
+ 812 0082 FC000000 		.4byte	.LASF11
+ 813 0086 03       		.byte	0x3
+ 814 0087 15       		.byte	0x15
+ 815 0088 2C000000 		.4byte	0x2c
+ 816 008c 03       		.uleb128 0x3
+ 817 008d 05030000 		.4byte	.LASF12
+ 818 0091 03       		.byte	0x3
+ 819 0092 21       		.byte	0x21
+ 820 0093 45000000 		.4byte	0x45
+ 821 0097 05       		.uleb128 0x5
+ 822 0098 04010000 		.4byte	.LASF13
+ 823 009c 04       		.byte	0x4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 22
+
+
+ 824 009d B901     		.2byte	0x1b9
+ 825 009f 37000000 		.4byte	0x37
+ 826 00a3 05       		.uleb128 0x5
+ 827 00a4 C8030000 		.4byte	.LASF14
+ 828 00a8 04       		.byte	0x4
+ 829 00a9 BB01     		.2byte	0x1bb
+ 830 00ab 5E000000 		.4byte	0x5e
+ 831 00af 02       		.uleb128 0x2
+ 832 00b0 04       		.byte	0x4
+ 833 00b1 04       		.byte	0x4
+ 834 00b2 57010000 		.4byte	.LASF15
+ 835 00b6 02       		.uleb128 0x2
+ 836 00b7 08       		.byte	0x8
+ 837 00b8 04       		.byte	0x4
+ 838 00b9 1B000000 		.4byte	.LASF16
+ 839 00bd 02       		.uleb128 0x2
+ 840 00be 01       		.byte	0x1
+ 841 00bf 08       		.byte	0x8
+ 842 00c0 9A010000 		.4byte	.LASF17
+ 843 00c4 05       		.uleb128 0x5
+ 844 00c5 80010000 		.4byte	.LASF18
+ 845 00c9 04       		.byte	0x4
+ 846 00ca 7502     		.2byte	0x275
+ 847 00cc D0000000 		.4byte	0xd0
+ 848 00d0 06       		.uleb128 0x6
+ 849 00d1 04       		.byte	0x4
+ 850 00d2 D6000000 		.4byte	0xd6
+ 851 00d6 07       		.uleb128 0x7
+ 852 00d7 02       		.uleb128 0x2
+ 853 00d8 04       		.byte	0x4
+ 854 00d9 07       		.byte	0x7
+ 855 00da AB000000 		.4byte	.LASF19
+ 856 00de 03       		.uleb128 0x3
+ 857 00df 22010000 		.4byte	.LASF20
+ 858 00e3 05       		.byte	0x5
+ 859 00e4 28       		.byte	0x28
+ 860 00e5 8C000000 		.4byte	0x8c
+ 861 00e9 08       		.uleb128 0x8
+ 862 00ea 01       		.byte	0x1
+ 863 00eb 05       		.byte	0x5
+ 864 00ec 51       		.byte	0x51
+ 865 00ed FE000000 		.4byte	0xfe
+ 866 00f1 09       		.uleb128 0x9
+ 867 00f2 41040000 		.4byte	.LASF21
+ 868 00f6 00       		.sleb128 0
+ 869 00f7 09       		.uleb128 0x9
+ 870 00f8 35030000 		.4byte	.LASF22
+ 871 00fc 01       		.sleb128 1
+ 872 00fd 00       		.byte	0
+ 873 00fe 03       		.uleb128 0x3
+ 874 00ff BD040000 		.4byte	.LASF23
+ 875 0103 05       		.byte	0x5
+ 876 0104 54       		.byte	0x54
+ 877 0105 E9000000 		.4byte	0xe9
+ 878 0109 0A       		.uleb128 0xa
+ 879 010a 3D030000 		.4byte	.LASF24
+ 880 010e 01       		.byte	0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 23
+
+
+ 881 010f 4B       		.byte	0x4b
+ 882 0110 00000000 		.4byte	.LFB34
+ 883 0114 78000000 		.4byte	.LFE34-.LFB34
+ 884 0118 01       		.uleb128 0x1
+ 885 0119 9C       		.byte	0x9c
+ 886 011a 4B020000 		.4byte	0x24b
+ 887 011e 0B       		.uleb128 0xb
+ 888 011f 7F020000 		.4byte	.LASF29
+ 889 0123 01       		.byte	0x1
+ 890 0124 4E       		.byte	0x4e
+ 891 0125 7A000000 		.4byte	0x7a
+ 892 0129 00000000 		.4byte	.LLST0
+ 893 012d 0C       		.uleb128 0xc
+ 894 012e 06000000 		.4byte	.LVL0
+ 895 0132 85080000 		.4byte	0x885
+ 896 0136 0C       		.uleb128 0xc
+ 897 0137 0E000000 		.4byte	.LVL1
+ 898 013b 90080000 		.4byte	0x890
+ 899 013f 0C       		.uleb128 0xc
+ 900 0140 12000000 		.4byte	.LVL2
+ 901 0144 A1080000 		.4byte	0x8a1
+ 902 0148 0D       		.uleb128 0xd
+ 903 0149 1C000000 		.4byte	.LVL4
+ 904 014d B2080000 		.4byte	0x8b2
+ 905 0151 5B010000 		.4byte	0x15b
+ 906 0155 0E       		.uleb128 0xe
+ 907 0156 01       		.uleb128 0x1
+ 908 0157 50       		.byte	0x50
+ 909 0158 01       		.uleb128 0x1
+ 910 0159 30       		.byte	0x30
+ 911 015a 00       		.byte	0
+ 912 015b 0D       		.uleb128 0xd
+ 913 015c 22000000 		.4byte	.LVL5
+ 914 0160 C3080000 		.4byte	0x8c3
+ 915 0164 6E010000 		.4byte	0x16e
+ 916 0168 0E       		.uleb128 0xe
+ 917 0169 01       		.uleb128 0x1
+ 918 016a 50       		.byte	0x50
+ 919 016b 01       		.uleb128 0x1
+ 920 016c 30       		.byte	0x30
+ 921 016d 00       		.byte	0
+ 922 016e 0D       		.uleb128 0xd
+ 923 016f 28000000 		.4byte	.LVL6
+ 924 0173 D4080000 		.4byte	0x8d4
+ 925 0177 81010000 		.4byte	0x181
+ 926 017b 0E       		.uleb128 0xe
+ 927 017c 01       		.uleb128 0x1
+ 928 017d 50       		.byte	0x50
+ 929 017e 01       		.uleb128 0x1
+ 930 017f 31       		.byte	0x31
+ 931 0180 00       		.byte	0
+ 932 0181 0D       		.uleb128 0xd
+ 933 0182 34000000 		.4byte	.LVL9
+ 934 0186 B2080000 		.4byte	0x8b2
+ 935 018a 94010000 		.4byte	0x194
+ 936 018e 0E       		.uleb128 0xe
+ 937 018f 01       		.uleb128 0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 24
+
+
+ 938 0190 50       		.byte	0x50
+ 939 0191 01       		.uleb128 0x1
+ 940 0192 30       		.byte	0x30
+ 941 0193 00       		.byte	0
+ 942 0194 0D       		.uleb128 0xd
+ 943 0195 3A000000 		.4byte	.LVL10
+ 944 0199 C3080000 		.4byte	0x8c3
+ 945 019d A7010000 		.4byte	0x1a7
+ 946 01a1 0E       		.uleb128 0xe
+ 947 01a2 01       		.uleb128 0x1
+ 948 01a3 50       		.byte	0x50
+ 949 01a4 01       		.uleb128 0x1
+ 950 01a5 31       		.byte	0x31
+ 951 01a6 00       		.byte	0
+ 952 01a7 0D       		.uleb128 0xd
+ 953 01a8 40000000 		.4byte	.LVL11
+ 954 01ac D4080000 		.4byte	0x8d4
+ 955 01b0 BA010000 		.4byte	0x1ba
+ 956 01b4 0E       		.uleb128 0xe
+ 957 01b5 01       		.uleb128 0x1
+ 958 01b6 50       		.byte	0x50
+ 959 01b7 01       		.uleb128 0x1
+ 960 01b8 30       		.byte	0x30
+ 961 01b9 00       		.byte	0
+ 962 01ba 0D       		.uleb128 0xd
+ 963 01bb 48000000 		.4byte	.LVL14
+ 964 01bf B2080000 		.4byte	0x8b2
+ 965 01c3 CD010000 		.4byte	0x1cd
+ 966 01c7 0E       		.uleb128 0xe
+ 967 01c8 01       		.uleb128 0x1
+ 968 01c9 50       		.byte	0x50
+ 969 01ca 01       		.uleb128 0x1
+ 970 01cb 31       		.byte	0x31
+ 971 01cc 00       		.byte	0
+ 972 01cd 0D       		.uleb128 0xd
+ 973 01ce 4E000000 		.4byte	.LVL15
+ 974 01d2 C3080000 		.4byte	0x8c3
+ 975 01d6 E0010000 		.4byte	0x1e0
+ 976 01da 0E       		.uleb128 0xe
+ 977 01db 01       		.uleb128 0x1
+ 978 01dc 50       		.byte	0x50
+ 979 01dd 01       		.uleb128 0x1
+ 980 01de 30       		.byte	0x30
+ 981 01df 00       		.byte	0
+ 982 01e0 0D       		.uleb128 0xd
+ 983 01e1 54000000 		.4byte	.LVL16
+ 984 01e5 D4080000 		.4byte	0x8d4
+ 985 01e9 F3010000 		.4byte	0x1f3
+ 986 01ed 0E       		.uleb128 0xe
+ 987 01ee 01       		.uleb128 0x1
+ 988 01ef 50       		.byte	0x50
+ 989 01f0 01       		.uleb128 0x1
+ 990 01f1 30       		.byte	0x30
+ 991 01f2 00       		.byte	0
+ 992 01f3 0D       		.uleb128 0xd
+ 993 01f4 5A000000 		.4byte	.LVL17
+ 994 01f8 E5080000 		.4byte	0x8e5
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 25
+
+
+ 995 01fc 08020000 		.4byte	0x208
+ 996 0200 0E       		.uleb128 0xe
+ 997 0201 01       		.uleb128 0x1
+ 998 0202 50       		.byte	0x50
+ 999 0203 03       		.uleb128 0x3
+ 1000 0204 0A       		.byte	0xa
+ 1001 0205 1027     		.2byte	0x2710
+ 1002 0207 00       		.byte	0
+ 1003 0208 0D       		.uleb128 0xd
+ 1004 0209 60000000 		.4byte	.LVL18
+ 1005 020d B2080000 		.4byte	0x8b2
+ 1006 0211 1B020000 		.4byte	0x21b
+ 1007 0215 0E       		.uleb128 0xe
+ 1008 0216 01       		.uleb128 0x1
+ 1009 0217 50       		.byte	0x50
+ 1010 0218 01       		.uleb128 0x1
+ 1011 0219 30       		.byte	0x30
+ 1012 021a 00       		.byte	0
+ 1013 021b 0D       		.uleb128 0xd
+ 1014 021c 66000000 		.4byte	.LVL19
+ 1015 0220 C3080000 		.4byte	0x8c3
+ 1016 0224 2E020000 		.4byte	0x22e
+ 1017 0228 0E       		.uleb128 0xe
+ 1018 0229 01       		.uleb128 0x1
+ 1019 022a 50       		.byte	0x50
+ 1020 022b 01       		.uleb128 0x1
+ 1021 022c 30       		.byte	0x30
+ 1022 022d 00       		.byte	0
+ 1023 022e 0D       		.uleb128 0xd
+ 1024 022f 6C000000 		.4byte	.LVL20
+ 1025 0233 D4080000 		.4byte	0x8d4
+ 1026 0237 41020000 		.4byte	0x241
+ 1027 023b 0E       		.uleb128 0xe
+ 1028 023c 01       		.uleb128 0x1
+ 1029 023d 50       		.byte	0x50
+ 1030 023e 01       		.uleb128 0x1
+ 1031 023f 30       		.byte	0x30
+ 1032 0240 00       		.byte	0
+ 1033 0241 0C       		.uleb128 0xc
+ 1034 0242 70000000 		.4byte	.LVL21
+ 1035 0246 F6080000 		.4byte	0x8f6
+ 1036 024a 00       		.byte	0
+ 1037 024b 0A       		.uleb128 0xa
+ 1038 024c D6030000 		.4byte	.LASF25
+ 1039 0250 01       		.byte	0x1
+ 1040 0251 68       		.byte	0x68
+ 1041 0252 00000000 		.4byte	.LFB35
+ 1042 0256 42000000 		.4byte	.LFE35-.LFB35
+ 1043 025a 01       		.uleb128 0x1
+ 1044 025b 9C       		.byte	0x9c
+ 1045 025c F7020000 		.4byte	0x2f7
+ 1046 0260 0C       		.uleb128 0xc
+ 1047 0261 06000000 		.4byte	.LVL22
+ 1048 0265 01090000 		.4byte	0x901
+ 1049 0269 0D       		.uleb128 0xd
+ 1050 026a 10000000 		.4byte	.LVL23
+ 1051 026e B2080000 		.4byte	0x8b2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 26
+
+
+ 1052 0272 7C020000 		.4byte	0x27c
+ 1053 0276 0E       		.uleb128 0xe
+ 1054 0277 01       		.uleb128 0x1
+ 1055 0278 50       		.byte	0x50
+ 1056 0279 01       		.uleb128 0x1
+ 1057 027a 31       		.byte	0x31
+ 1058 027b 00       		.byte	0
+ 1059 027c 0D       		.uleb128 0xd
+ 1060 027d 16000000 		.4byte	.LVL24
+ 1061 0281 C3080000 		.4byte	0x8c3
+ 1062 0285 8F020000 		.4byte	0x28f
+ 1063 0289 0E       		.uleb128 0xe
+ 1064 028a 01       		.uleb128 0x1
+ 1065 028b 50       		.byte	0x50
+ 1066 028c 01       		.uleb128 0x1
+ 1067 028d 30       		.byte	0x30
+ 1068 028e 00       		.byte	0
+ 1069 028f 0D       		.uleb128 0xd
+ 1070 0290 1C000000 		.4byte	.LVL25
+ 1071 0294 D4080000 		.4byte	0x8d4
+ 1072 0298 A2020000 		.4byte	0x2a2
+ 1073 029c 0E       		.uleb128 0xe
+ 1074 029d 01       		.uleb128 0x1
+ 1075 029e 50       		.byte	0x50
+ 1076 029f 01       		.uleb128 0x1
+ 1077 02a0 30       		.byte	0x30
+ 1078 02a1 00       		.byte	0
+ 1079 02a2 0C       		.uleb128 0xc
+ 1080 02a3 20000000 		.4byte	.LVL26
+ 1081 02a7 0D090000 		.4byte	0x90d
+ 1082 02ab 0C       		.uleb128 0xc
+ 1083 02ac 26000000 		.4byte	.LVL27
+ 1084 02b0 14090000 		.4byte	0x914
+ 1085 02b4 0D       		.uleb128 0xd
+ 1086 02b5 30000000 		.4byte	.LVL28
+ 1087 02b9 B2080000 		.4byte	0x8b2
+ 1088 02bd C7020000 		.4byte	0x2c7
+ 1089 02c1 0E       		.uleb128 0xe
+ 1090 02c2 01       		.uleb128 0x1
+ 1091 02c3 50       		.byte	0x50
+ 1092 02c4 01       		.uleb128 0x1
+ 1093 02c5 30       		.byte	0x30
+ 1094 02c6 00       		.byte	0
+ 1095 02c7 0D       		.uleb128 0xd
+ 1096 02c8 36000000 		.4byte	.LVL29
+ 1097 02cc C3080000 		.4byte	0x8c3
+ 1098 02d0 DA020000 		.4byte	0x2da
+ 1099 02d4 0E       		.uleb128 0xe
+ 1100 02d5 01       		.uleb128 0x1
+ 1101 02d6 50       		.byte	0x50
+ 1102 02d7 01       		.uleb128 0x1
+ 1103 02d8 31       		.byte	0x31
+ 1104 02d9 00       		.byte	0
+ 1105 02da 0D       		.uleb128 0xd
+ 1106 02db 3C000000 		.4byte	.LVL30
+ 1107 02df D4080000 		.4byte	0x8d4
+ 1108 02e3 ED020000 		.4byte	0x2ed
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 27
+
+
+ 1109 02e7 0E       		.uleb128 0xe
+ 1110 02e8 01       		.uleb128 0x1
+ 1111 02e9 50       		.byte	0x50
+ 1112 02ea 01       		.uleb128 0x1
+ 1113 02eb 30       		.byte	0x30
+ 1114 02ec 00       		.byte	0
+ 1115 02ed 0C       		.uleb128 0xc
+ 1116 02ee 40000000 		.4byte	.LVL31
+ 1117 02f2 20090000 		.4byte	0x920
+ 1118 02f6 00       		.byte	0
+ 1119 02f7 0F       		.uleb128 0xf
+ 1120 02f8 A6030000 		.4byte	.LASF26
+ 1121 02fc 01       		.byte	0x1
+ 1122 02fd 1401     		.2byte	0x114
+ 1123 02ff 00000000 		.4byte	.LFB38
+ 1124 0303 38000000 		.4byte	.LFE38-.LFB38
+ 1125 0307 01       		.uleb128 0x1
+ 1126 0308 9C       		.byte	0x9c
+ 1127 0309 85030000 		.4byte	0x385
+ 1128 030d 10       		.uleb128 0x10
+ 1129 030e 0E040000 		.4byte	.LASF27
+ 1130 0312 01       		.byte	0x1
+ 1131 0313 1401     		.2byte	0x114
+ 1132 0315 73000000 		.4byte	0x73
+ 1133 0319 29000000 		.4byte	.LLST1
+ 1134 031d 10       		.uleb128 0x10
+ 1135 031e E9000000 		.4byte	.LASF28
+ 1136 0322 01       		.byte	0x1
+ 1137 0323 1401     		.2byte	0x114
+ 1138 0325 73000000 		.4byte	0x73
+ 1139 0329 55000000 		.4byte	.LLST2
+ 1140 032d 11       		.uleb128 0x11
+ 1141 032e 6900     		.ascii	"i\000"
+ 1142 0330 01       		.byte	0x1
+ 1143 0331 1501     		.2byte	0x115
+ 1144 0333 73000000 		.4byte	0x73
+ 1145 0337 81000000 		.4byte	.LLST3
+ 1146 033b 0C       		.uleb128 0xc
+ 1147 033c 0E000000 		.4byte	.LVL35
+ 1148 0340 85080000 		.4byte	0x885
+ 1149 0344 0C       		.uleb128 0xc
+ 1150 0345 16000000 		.4byte	.LVL36
+ 1151 0349 90080000 		.4byte	0x890
+ 1152 034d 0D       		.uleb128 0xd
+ 1153 034e 1E000000 		.4byte	.LVL37
+ 1154 0352 E5080000 		.4byte	0x8e5
+ 1155 0356 62030000 		.4byte	0x362
+ 1156 035a 0E       		.uleb128 0xe
+ 1157 035b 01       		.uleb128 0x1
+ 1158 035c 50       		.byte	0x50
+ 1159 035d 03       		.uleb128 0x3
+ 1160 035e 0A       		.byte	0xa
+ 1161 035f F401     		.2byte	0x1f4
+ 1162 0361 00       		.byte	0
+ 1163 0362 0C       		.uleb128 0xc
+ 1164 0363 22000000 		.4byte	.LVL38
+ 1165 0367 85080000 		.4byte	0x885
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 28
+
+
+ 1166 036b 0C       		.uleb128 0xc
+ 1167 036c 2A000000 		.4byte	.LVL39
+ 1168 0370 90080000 		.4byte	0x890
+ 1169 0374 12       		.uleb128 0x12
+ 1170 0375 30000000 		.4byte	.LVL40
+ 1171 0379 E5080000 		.4byte	0x8e5
+ 1172 037d 0E       		.uleb128 0xe
+ 1173 037e 01       		.uleb128 0x1
+ 1174 037f 50       		.byte	0x50
+ 1175 0380 02       		.uleb128 0x2
+ 1176 0381 74       		.byte	0x74
+ 1177 0382 00       		.sleb128 0
+ 1178 0383 00       		.byte	0
+ 1179 0384 00       		.byte	0
+ 1180 0385 0F       		.uleb128 0xf
+ 1181 0386 D1000000 		.4byte	.LASF30
+ 1182 038a 01       		.byte	0x1
+ 1183 038b 1E01     		.2byte	0x11e
+ 1184 038d 00000000 		.4byte	.LFB39
+ 1185 0391 3E000000 		.4byte	.LFE39-.LFB39
+ 1186 0395 01       		.uleb128 0x1
+ 1187 0396 9C       		.byte	0x9c
+ 1188 0397 26040000 		.4byte	0x426
+ 1189 039b 10       		.uleb128 0x10
+ 1190 039c 0E040000 		.4byte	.LASF27
+ 1191 03a0 01       		.byte	0x1
+ 1192 03a1 1E01     		.2byte	0x11e
+ 1193 03a3 73000000 		.4byte	0x73
+ 1194 03a7 A0000000 		.4byte	.LLST4
+ 1195 03ab 10       		.uleb128 0x10
+ 1196 03ac E9000000 		.4byte	.LASF28
+ 1197 03b0 01       		.byte	0x1
+ 1198 03b1 1E01     		.2byte	0x11e
+ 1199 03b3 73000000 		.4byte	0x73
+ 1200 03b7 CC000000 		.4byte	.LLST5
+ 1201 03bb 11       		.uleb128 0x11
+ 1202 03bc 6900     		.ascii	"i\000"
+ 1203 03be 01       		.byte	0x1
+ 1204 03bf 1F01     		.2byte	0x11f
+ 1205 03c1 73000000 		.4byte	0x73
+ 1206 03c5 F8000000 		.4byte	.LLST6
+ 1207 03c9 0D       		.uleb128 0xd
+ 1208 03ca 0C000000 		.4byte	.LVL48
+ 1209 03ce B2080000 		.4byte	0x8b2
+ 1210 03d2 DC030000 		.4byte	0x3dc
+ 1211 03d6 0E       		.uleb128 0xe
+ 1212 03d7 01       		.uleb128 0x1
+ 1213 03d8 50       		.byte	0x50
+ 1214 03d9 01       		.uleb128 0x1
+ 1215 03da 30       		.byte	0x30
+ 1216 03db 00       		.byte	0
+ 1217 03dc 0C       		.uleb128 0xc
+ 1218 03dd 14000000 		.4byte	.LVL50
+ 1219 03e1 2B090000 		.4byte	0x92b
+ 1220 03e5 0C       		.uleb128 0xc
+ 1221 03e6 1C000000 		.4byte	.LVL51
+ 1222 03ea B2080000 		.4byte	0x8b2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 29
+
+
+ 1223 03ee 0D       		.uleb128 0xd
+ 1224 03ef 24000000 		.4byte	.LVL52
+ 1225 03f3 E5080000 		.4byte	0x8e5
+ 1226 03f7 03040000 		.4byte	0x403
+ 1227 03fb 0E       		.uleb128 0xe
+ 1228 03fc 01       		.uleb128 0x1
+ 1229 03fd 50       		.byte	0x50
+ 1230 03fe 03       		.uleb128 0x3
+ 1231 03ff 0A       		.byte	0xa
+ 1232 0400 F401     		.2byte	0x1f4
+ 1233 0402 00       		.byte	0
+ 1234 0403 0C       		.uleb128 0xc
+ 1235 0404 28000000 		.4byte	.LVL53
+ 1236 0408 2B090000 		.4byte	0x92b
+ 1237 040c 0C       		.uleb128 0xc
+ 1238 040d 30000000 		.4byte	.LVL54
+ 1239 0411 B2080000 		.4byte	0x8b2
+ 1240 0415 12       		.uleb128 0x12
+ 1241 0416 36000000 		.4byte	.LVL55
+ 1242 041a E5080000 		.4byte	0x8e5
+ 1243 041e 0E       		.uleb128 0xe
+ 1244 041f 01       		.uleb128 0x1
+ 1245 0420 50       		.byte	0x50
+ 1246 0421 02       		.uleb128 0x2
+ 1247 0422 74       		.byte	0x74
+ 1248 0423 00       		.sleb128 0
+ 1249 0424 00       		.byte	0
+ 1250 0425 00       		.byte	0
+ 1251 0426 0F       		.uleb128 0xf
+ 1252 0427 8A020000 		.4byte	.LASF31
+ 1253 042b 01       		.byte	0x1
+ 1254 042c 2901     		.2byte	0x129
+ 1255 042e 00000000 		.4byte	.LFB40
+ 1256 0432 3E000000 		.4byte	.LFE40-.LFB40
+ 1257 0436 01       		.uleb128 0x1
+ 1258 0437 9C       		.byte	0x9c
+ 1259 0438 C7040000 		.4byte	0x4c7
+ 1260 043c 10       		.uleb128 0x10
+ 1261 043d 0E040000 		.4byte	.LASF27
+ 1262 0441 01       		.byte	0x1
+ 1263 0442 2901     		.2byte	0x129
+ 1264 0444 73000000 		.4byte	0x73
+ 1265 0448 17010000 		.4byte	.LLST7
+ 1266 044c 10       		.uleb128 0x10
+ 1267 044d E9000000 		.4byte	.LASF28
+ 1268 0451 01       		.byte	0x1
+ 1269 0452 2901     		.2byte	0x129
+ 1270 0454 73000000 		.4byte	0x73
+ 1271 0458 43010000 		.4byte	.LLST8
+ 1272 045c 11       		.uleb128 0x11
+ 1273 045d 6900     		.ascii	"i\000"
+ 1274 045f 01       		.byte	0x1
+ 1275 0460 2A01     		.2byte	0x12a
+ 1276 0462 73000000 		.4byte	0x73
+ 1277 0466 6F010000 		.4byte	.LLST9
+ 1278 046a 0D       		.uleb128 0xd
+ 1279 046b 0C000000 		.4byte	.LVL63
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 30
+
+
+ 1280 046f C3080000 		.4byte	0x8c3
+ 1281 0473 7D040000 		.4byte	0x47d
+ 1282 0477 0E       		.uleb128 0xe
+ 1283 0478 01       		.uleb128 0x1
+ 1284 0479 50       		.byte	0x50
+ 1285 047a 01       		.uleb128 0x1
+ 1286 047b 30       		.byte	0x30
+ 1287 047c 00       		.byte	0
+ 1288 047d 0C       		.uleb128 0xc
+ 1289 047e 14000000 		.4byte	.LVL65
+ 1290 0482 36090000 		.4byte	0x936
+ 1291 0486 0C       		.uleb128 0xc
+ 1292 0487 1C000000 		.4byte	.LVL66
+ 1293 048b C3080000 		.4byte	0x8c3
+ 1294 048f 0D       		.uleb128 0xd
+ 1295 0490 24000000 		.4byte	.LVL67
+ 1296 0494 E5080000 		.4byte	0x8e5
+ 1297 0498 A4040000 		.4byte	0x4a4
+ 1298 049c 0E       		.uleb128 0xe
+ 1299 049d 01       		.uleb128 0x1
+ 1300 049e 50       		.byte	0x50
+ 1301 049f 03       		.uleb128 0x3
+ 1302 04a0 0A       		.byte	0xa
+ 1303 04a1 F401     		.2byte	0x1f4
+ 1304 04a3 00       		.byte	0
+ 1305 04a4 0C       		.uleb128 0xc
+ 1306 04a5 28000000 		.4byte	.LVL68
+ 1307 04a9 36090000 		.4byte	0x936
+ 1308 04ad 0C       		.uleb128 0xc
+ 1309 04ae 30000000 		.4byte	.LVL69
+ 1310 04b2 C3080000 		.4byte	0x8c3
+ 1311 04b6 12       		.uleb128 0x12
+ 1312 04b7 36000000 		.4byte	.LVL70
+ 1313 04bb E5080000 		.4byte	0x8e5
+ 1314 04bf 0E       		.uleb128 0xe
+ 1315 04c0 01       		.uleb128 0x1
+ 1316 04c1 50       		.byte	0x50
+ 1317 04c2 02       		.uleb128 0x2
+ 1318 04c3 74       		.byte	0x74
+ 1319 04c4 00       		.sleb128 0
+ 1320 04c5 00       		.byte	0
+ 1321 04c6 00       		.byte	0
+ 1322 04c7 0F       		.uleb128 0xf
+ 1323 04c8 13010000 		.4byte	.LASF32
+ 1324 04cc 01       		.byte	0x1
+ 1325 04cd 3401     		.2byte	0x134
+ 1326 04cf 00000000 		.4byte	.LFB41
+ 1327 04d3 3E000000 		.4byte	.LFE41-.LFB41
+ 1328 04d7 01       		.uleb128 0x1
+ 1329 04d8 9C       		.byte	0x9c
+ 1330 04d9 68050000 		.4byte	0x568
+ 1331 04dd 10       		.uleb128 0x10
+ 1332 04de 0E040000 		.4byte	.LASF27
+ 1333 04e2 01       		.byte	0x1
+ 1334 04e3 3401     		.2byte	0x134
+ 1335 04e5 73000000 		.4byte	0x73
+ 1336 04e9 8E010000 		.4byte	.LLST10
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 31
+
+
+ 1337 04ed 10       		.uleb128 0x10
+ 1338 04ee E9000000 		.4byte	.LASF28
+ 1339 04f2 01       		.byte	0x1
+ 1340 04f3 3401     		.2byte	0x134
+ 1341 04f5 73000000 		.4byte	0x73
+ 1342 04f9 BA010000 		.4byte	.LLST11
+ 1343 04fd 11       		.uleb128 0x11
+ 1344 04fe 6900     		.ascii	"i\000"
+ 1345 0500 01       		.byte	0x1
+ 1346 0501 3501     		.2byte	0x135
+ 1347 0503 73000000 		.4byte	0x73
+ 1348 0507 E6010000 		.4byte	.LLST12
+ 1349 050b 0D       		.uleb128 0xd
+ 1350 050c 0C000000 		.4byte	.LVL78
+ 1351 0510 D4080000 		.4byte	0x8d4
+ 1352 0514 1E050000 		.4byte	0x51e
+ 1353 0518 0E       		.uleb128 0xe
+ 1354 0519 01       		.uleb128 0x1
+ 1355 051a 50       		.byte	0x50
+ 1356 051b 01       		.uleb128 0x1
+ 1357 051c 30       		.byte	0x30
+ 1358 051d 00       		.byte	0
+ 1359 051e 0C       		.uleb128 0xc
+ 1360 051f 14000000 		.4byte	.LVL80
+ 1361 0523 41090000 		.4byte	0x941
+ 1362 0527 0C       		.uleb128 0xc
+ 1363 0528 1C000000 		.4byte	.LVL81
+ 1364 052c D4080000 		.4byte	0x8d4
+ 1365 0530 0D       		.uleb128 0xd
+ 1366 0531 24000000 		.4byte	.LVL82
+ 1367 0535 E5080000 		.4byte	0x8e5
+ 1368 0539 45050000 		.4byte	0x545
+ 1369 053d 0E       		.uleb128 0xe
+ 1370 053e 01       		.uleb128 0x1
+ 1371 053f 50       		.byte	0x50
+ 1372 0540 03       		.uleb128 0x3
+ 1373 0541 0A       		.byte	0xa
+ 1374 0542 F401     		.2byte	0x1f4
+ 1375 0544 00       		.byte	0
+ 1376 0545 0C       		.uleb128 0xc
+ 1377 0546 28000000 		.4byte	.LVL83
+ 1378 054a 41090000 		.4byte	0x941
+ 1379 054e 0C       		.uleb128 0xc
+ 1380 054f 30000000 		.4byte	.LVL84
+ 1381 0553 D4080000 		.4byte	0x8d4
+ 1382 0557 12       		.uleb128 0x12
+ 1383 0558 36000000 		.4byte	.LVL85
+ 1384 055c E5080000 		.4byte	0x8e5
+ 1385 0560 0E       		.uleb128 0xe
+ 1386 0561 01       		.uleb128 0x1
+ 1387 0562 50       		.byte	0x50
+ 1388 0563 02       		.uleb128 0x2
+ 1389 0564 74       		.byte	0x74
+ 1390 0565 00       		.sleb128 0
+ 1391 0566 00       		.byte	0
+ 1392 0567 00       		.byte	0
+ 1393 0568 0A       		.uleb128 0xa
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 32
+
+
+ 1394 0569 8D010000 		.4byte	.LASF33
+ 1395 056d 01       		.byte	0x1
+ 1396 056e B0       		.byte	0xb0
+ 1397 056f 00000000 		.4byte	.LFB37
+ 1398 0573 6E000000 		.4byte	.LFE37-.LFB37
+ 1399 0577 01       		.uleb128 0x1
+ 1400 0578 9C       		.byte	0x9c
+ 1401 0579 8C060000 		.4byte	0x68c
+ 1402 057d 0C       		.uleb128 0xc
+ 1403 057e 06000000 		.4byte	.LVL90
+ 1404 0582 4C090000 		.4byte	0x94c
+ 1405 0586 0D       		.uleb128 0xd
+ 1406 0587 14000000 		.4byte	.LVL91
+ 1407 058b 85030000 		.4byte	0x385
+ 1408 058f A0050000 		.4byte	0x5a0
+ 1409 0593 0E       		.uleb128 0xe
+ 1410 0594 01       		.uleb128 0x1
+ 1411 0595 51       		.byte	0x51
+ 1412 0596 03       		.uleb128 0x3
+ 1413 0597 0A       		.byte	0xa
+ 1414 0598 F401     		.2byte	0x1f4
+ 1415 059a 0E       		.uleb128 0xe
+ 1416 059b 01       		.uleb128 0x1
+ 1417 059c 50       		.byte	0x50
+ 1418 059d 01       		.uleb128 0x1
+ 1419 059e 33       		.byte	0x33
+ 1420 059f 00       		.byte	0
+ 1421 05a0 0D       		.uleb128 0xd
+ 1422 05a1 1C000000 		.4byte	.LVL92
+ 1423 05a5 E5080000 		.4byte	0x8e5
+ 1424 05a9 B5050000 		.4byte	0x5b5
+ 1425 05ad 0E       		.uleb128 0xe
+ 1426 05ae 01       		.uleb128 0x1
+ 1427 05af 50       		.byte	0x50
+ 1428 05b0 03       		.uleb128 0x3
+ 1429 05b1 0A       		.byte	0xa
+ 1430 05b2 D007     		.2byte	0x7d0
+ 1431 05b4 00       		.byte	0
+ 1432 05b5 0D       		.uleb128 0xd
+ 1433 05b6 2A000000 		.4byte	.LVL93
+ 1434 05ba 26040000 		.4byte	0x426
+ 1435 05be CE050000 		.4byte	0x5ce
+ 1436 05c2 0E       		.uleb128 0xe
+ 1437 05c3 01       		.uleb128 0x1
+ 1438 05c4 51       		.byte	0x51
+ 1439 05c5 02       		.uleb128 0x2
+ 1440 05c6 74       		.byte	0x74
+ 1441 05c7 00       		.sleb128 0
+ 1442 05c8 0E       		.uleb128 0xe
+ 1443 05c9 01       		.uleb128 0x1
+ 1444 05ca 50       		.byte	0x50
+ 1445 05cb 01       		.uleb128 0x1
+ 1446 05cc 33       		.byte	0x33
+ 1447 05cd 00       		.byte	0
+ 1448 05ce 0D       		.uleb128 0xd
+ 1449 05cf 30000000 		.4byte	.LVL94
+ 1450 05d3 E5080000 		.4byte	0x8e5
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 33
+
+
+ 1451 05d7 E2050000 		.4byte	0x5e2
+ 1452 05db 0E       		.uleb128 0xe
+ 1453 05dc 01       		.uleb128 0x1
+ 1454 05dd 50       		.byte	0x50
+ 1455 05de 02       		.uleb128 0x2
+ 1456 05df 74       		.byte	0x74
+ 1457 05e0 00       		.sleb128 0
+ 1458 05e1 00       		.byte	0
+ 1459 05e2 0D       		.uleb128 0xd
+ 1460 05e3 3A000000 		.4byte	.LVL95
+ 1461 05e7 57090000 		.4byte	0x957
+ 1462 05eb F6050000 		.4byte	0x5f6
+ 1463 05ef 0E       		.uleb128 0xe
+ 1464 05f0 01       		.uleb128 0x1
+ 1465 05f1 50       		.byte	0x50
+ 1466 05f2 02       		.uleb128 0x2
+ 1467 05f3 75       		.byte	0x75
+ 1468 05f4 00       		.sleb128 0
+ 1469 05f5 00       		.byte	0
+ 1470 05f6 0D       		.uleb128 0xd
+ 1471 05f7 42000000 		.4byte	.LVL96
+ 1472 05fb C7040000 		.4byte	0x4c7
+ 1473 05ff 0F060000 		.4byte	0x60f
+ 1474 0603 0E       		.uleb128 0xe
+ 1475 0604 01       		.uleb128 0x1
+ 1476 0605 51       		.byte	0x51
+ 1477 0606 02       		.uleb128 0x2
+ 1478 0607 74       		.byte	0x74
+ 1479 0608 00       		.sleb128 0
+ 1480 0609 0E       		.uleb128 0xe
+ 1481 060a 01       		.uleb128 0x1
+ 1482 060b 50       		.byte	0x50
+ 1483 060c 01       		.uleb128 0x1
+ 1484 060d 33       		.byte	0x33
+ 1485 060e 00       		.byte	0
+ 1486 060f 0C       		.uleb128 0xc
+ 1487 0610 46000000 		.4byte	.LVL97
+ 1488 0614 6C090000 		.4byte	0x96c
+ 1489 0618 0D       		.uleb128 0xd
+ 1490 0619 4C000000 		.4byte	.LVL98
+ 1491 061d 57090000 		.4byte	0x957
+ 1492 0621 2C060000 		.4byte	0x62c
+ 1493 0625 0E       		.uleb128 0xe
+ 1494 0626 01       		.uleb128 0x1
+ 1495 0627 50       		.byte	0x50
+ 1496 0628 02       		.uleb128 0x2
+ 1497 0629 75       		.byte	0x75
+ 1498 062a 00       		.sleb128 0
+ 1499 062b 00       		.byte	0
+ 1500 062c 0D       		.uleb128 0xd
+ 1501 062d 52000000 		.4byte	.LVL99
+ 1502 0631 7E090000 		.4byte	0x97e
+ 1503 0635 3F060000 		.4byte	0x63f
+ 1504 0639 0E       		.uleb128 0xe
+ 1505 063a 01       		.uleb128 0x1
+ 1506 063b 50       		.byte	0x50
+ 1507 063c 01       		.uleb128 0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 34
+
+
+ 1508 063d 30       		.byte	0x30
+ 1509 063e 00       		.byte	0
+ 1510 063f 0D       		.uleb128 0xd
+ 1511 0640 58000000 		.4byte	.LVL100
+ 1512 0644 93090000 		.4byte	0x993
+ 1513 0648 52060000 		.4byte	0x652
+ 1514 064c 0E       		.uleb128 0xe
+ 1515 064d 01       		.uleb128 0x1
+ 1516 064e 50       		.byte	0x50
+ 1517 064f 01       		.uleb128 0x1
+ 1518 0650 31       		.byte	0x31
+ 1519 0651 00       		.byte	0
+ 1520 0652 0D       		.uleb128 0xd
+ 1521 0653 60000000 		.4byte	.LVL101
+ 1522 0657 A8090000 		.4byte	0x9a8
+ 1523 065b 6A060000 		.4byte	0x66a
+ 1524 065f 0E       		.uleb128 0xe
+ 1525 0660 01       		.uleb128 0x1
+ 1526 0661 51       		.byte	0x51
+ 1527 0662 01       		.uleb128 0x1
+ 1528 0663 44       		.byte	0x44
+ 1529 0664 0E       		.uleb128 0xe
+ 1530 0665 01       		.uleb128 0x1
+ 1531 0666 50       		.byte	0x50
+ 1532 0667 01       		.uleb128 0x1
+ 1533 0668 3F       		.byte	0x3f
+ 1534 0669 00       		.byte	0
+ 1535 066a 0D       		.uleb128 0xd
+ 1536 066b 68000000 		.4byte	.LVL102
+ 1537 066f C2090000 		.4byte	0x9c2
+ 1538 0673 82060000 		.4byte	0x682
+ 1539 0677 0E       		.uleb128 0xe
+ 1540 0678 01       		.uleb128 0x1
+ 1541 0679 51       		.byte	0x51
+ 1542 067a 01       		.uleb128 0x1
+ 1543 067b 3A       		.byte	0x3a
+ 1544 067c 0E       		.uleb128 0xe
+ 1545 067d 01       		.uleb128 0x1
+ 1546 067e 50       		.byte	0x50
+ 1547 067f 01       		.uleb128 0x1
+ 1548 0680 35       		.byte	0x35
+ 1549 0681 00       		.byte	0
+ 1550 0682 0C       		.uleb128 0xc
+ 1551 0683 6C000000 		.4byte	.LVL103
+ 1552 0687 DC090000 		.4byte	0x9dc
+ 1553 068b 00       		.byte	0
+ 1554 068c 13       		.uleb128 0x13
+ 1555 068d CC000000 		.4byte	.LASF73
+ 1556 0691 01       		.byte	0x1
+ 1557 0692 86       		.byte	0x86
+ 1558 0693 73000000 		.4byte	0x73
+ 1559 0697 00000000 		.4byte	.LFB36
+ 1560 069b 44000000 		.4byte	.LFE36-.LFB36
+ 1561 069f 01       		.uleb128 0x1
+ 1562 06a0 9C       		.byte	0x9c
+ 1563 06a1 3A070000 		.4byte	0x73a
+ 1564 06a5 0C       		.uleb128 0xc
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 35
+
+
+ 1565 06a6 08000000 		.4byte	.LVL104
+ 1566 06aa 68050000 		.4byte	0x568
+ 1567 06ae 0D       		.uleb128 0xd
+ 1568 06af 0E000000 		.4byte	.LVL105
+ 1569 06b3 EE090000 		.4byte	0x9ee
+ 1570 06b7 C5060000 		.4byte	0x6c5
+ 1571 06bb 0E       		.uleb128 0xe
+ 1572 06bc 01       		.uleb128 0x1
+ 1573 06bd 50       		.byte	0x50
+ 1574 06be 05       		.uleb128 0x5
+ 1575 06bf 03       		.byte	0x3
+ 1576 06c0 00000000 		.4byte	read_battery_Handler
+ 1577 06c4 00       		.byte	0
+ 1578 06c5 0D       		.uleb128 0xd
+ 1579 06c6 14000000 		.4byte	.LVL106
+ 1580 06ca FF090000 		.4byte	0x9ff
+ 1581 06ce DC060000 		.4byte	0x6dc
+ 1582 06d2 0E       		.uleb128 0xe
+ 1583 06d3 01       		.uleb128 0x1
+ 1584 06d4 50       		.byte	0x50
+ 1585 06d5 05       		.uleb128 0x5
+ 1586 06d6 03       		.byte	0x3
+ 1587 06d7 00000000 		.4byte	battery_critical_low_Handler
+ 1588 06db 00       		.byte	0
+ 1589 06dc 0D       		.uleb128 0xd
+ 1590 06dd 1A000000 		.4byte	.LVL107
+ 1591 06e1 B2080000 		.4byte	0x8b2
+ 1592 06e5 EF060000 		.4byte	0x6ef
+ 1593 06e9 0E       		.uleb128 0xe
+ 1594 06ea 01       		.uleb128 0x1
+ 1595 06eb 50       		.byte	0x50
+ 1596 06ec 01       		.uleb128 0x1
+ 1597 06ed 30       		.byte	0x30
+ 1598 06ee 00       		.byte	0
+ 1599 06ef 0D       		.uleb128 0xd
+ 1600 06f0 20000000 		.4byte	.LVL108
+ 1601 06f4 C3080000 		.4byte	0x8c3
+ 1602 06f8 02070000 		.4byte	0x702
+ 1603 06fc 0E       		.uleb128 0xe
+ 1604 06fd 01       		.uleb128 0x1
+ 1605 06fe 50       		.byte	0x50
+ 1606 06ff 01       		.uleb128 0x1
+ 1607 0700 30       		.byte	0x30
+ 1608 0701 00       		.byte	0
+ 1609 0702 0D       		.uleb128 0xd
+ 1610 0703 26000000 		.4byte	.LVL109
+ 1611 0707 D4080000 		.4byte	0x8d4
+ 1612 070b 15070000 		.4byte	0x715
+ 1613 070f 0E       		.uleb128 0xe
+ 1614 0710 01       		.uleb128 0x1
+ 1615 0711 50       		.byte	0x50
+ 1616 0712 01       		.uleb128 0x1
+ 1617 0713 30       		.byte	0x30
+ 1618 0714 00       		.byte	0
+ 1619 0715 0C       		.uleb128 0xc
+ 1620 0716 2A000000 		.4byte	.LVL110
+ 1621 071a 100A0000 		.4byte	0xa10
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 36
+
+
+ 1622 071e 0C       		.uleb128 0xc
+ 1623 071f 32000000 		.4byte	.LVL111
+ 1624 0723 1B0A0000 		.4byte	0xa1b
+ 1625 0727 0C       		.uleb128 0xc
+ 1626 0728 36000000 		.4byte	.LVL112
+ 1627 072c 220A0000 		.4byte	0xa22
+ 1628 0730 0C       		.uleb128 0xc
+ 1629 0731 3A000000 		.4byte	.LVL113
+ 1630 0735 290A0000 		.4byte	0xa29
+ 1631 0739 00       		.byte	0
+ 1632 073a 0F       		.uleb128 0xf
+ 1633 073b 7F040000 		.4byte	.LASF34
+ 1634 073f 01       		.byte	0x1
+ 1635 0740 4001     		.2byte	0x140
+ 1636 0742 00000000 		.4byte	.LFB42
+ 1637 0746 5C000000 		.4byte	.LFE42-.LFB42
+ 1638 074a 01       		.uleb128 0x1
+ 1639 074b 9C       		.byte	0x9c
+ 1640 074c 26080000 		.4byte	0x826
+ 1641 0750 10       		.uleb128 0x10
+ 1642 0751 0E040000 		.4byte	.LASF27
+ 1643 0755 01       		.byte	0x1
+ 1644 0756 4001     		.2byte	0x140
+ 1645 0758 73000000 		.4byte	0x73
+ 1646 075c 05020000 		.4byte	.LLST13
+ 1647 0760 10       		.uleb128 0x10
+ 1648 0761 F3030000 		.4byte	.LASF35
+ 1649 0765 01       		.byte	0x1
+ 1650 0766 4001     		.2byte	0x140
+ 1651 0768 73000000 		.4byte	0x73
+ 1652 076c 31020000 		.4byte	.LLST14
+ 1653 0770 11       		.uleb128 0x11
+ 1654 0771 6900     		.ascii	"i\000"
+ 1655 0773 01       		.byte	0x1
+ 1656 0774 4101     		.2byte	0x141
+ 1657 0776 73000000 		.4byte	0x73
+ 1658 077a 5D020000 		.4byte	.LLST15
+ 1659 077e 0D       		.uleb128 0xd
+ 1660 077f 0C000000 		.4byte	.LVL117
+ 1661 0783 B2080000 		.4byte	0x8b2
+ 1662 0787 91070000 		.4byte	0x791
+ 1663 078b 0E       		.uleb128 0xe
+ 1664 078c 01       		.uleb128 0x1
+ 1665 078d 50       		.byte	0x50
+ 1666 078e 01       		.uleb128 0x1
+ 1667 078f 30       		.byte	0x30
+ 1668 0790 00       		.byte	0
+ 1669 0791 0D       		.uleb128 0xd
+ 1670 0792 12000000 		.4byte	.LVL118
+ 1671 0796 C3080000 		.4byte	0x8c3
+ 1672 079a A4070000 		.4byte	0x7a4
+ 1673 079e 0E       		.uleb128 0xe
+ 1674 079f 01       		.uleb128 0x1
+ 1675 07a0 50       		.byte	0x50
+ 1676 07a1 01       		.uleb128 0x1
+ 1677 07a2 30       		.byte	0x30
+ 1678 07a3 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 37
+
+
+ 1679 07a4 0D       		.uleb128 0xd
+ 1680 07a5 18000000 		.4byte	.LVL119
+ 1681 07a9 D4080000 		.4byte	0x8d4
+ 1682 07ad B7070000 		.4byte	0x7b7
+ 1683 07b1 0E       		.uleb128 0xe
+ 1684 07b2 01       		.uleb128 0x1
+ 1685 07b3 50       		.byte	0x50
+ 1686 07b4 01       		.uleb128 0x1
+ 1687 07b5 30       		.byte	0x30
+ 1688 07b6 00       		.byte	0
+ 1689 07b7 0C       		.uleb128 0xc
+ 1690 07b8 20000000 		.4byte	.LVL121
+ 1691 07bc 2B090000 		.4byte	0x92b
+ 1692 07c0 0C       		.uleb128 0xc
+ 1693 07c1 28000000 		.4byte	.LVL122
+ 1694 07c5 B2080000 		.4byte	0x8b2
+ 1695 07c9 0D       		.uleb128 0xd
+ 1696 07ca 2E000000 		.4byte	.LVL123
+ 1697 07ce E5080000 		.4byte	0x8e5
+ 1698 07d2 DD070000 		.4byte	0x7dd
+ 1699 07d6 0E       		.uleb128 0xe
+ 1700 07d7 01       		.uleb128 0x1
+ 1701 07d8 50       		.byte	0x50
+ 1702 07d9 02       		.uleb128 0x2
+ 1703 07da 74       		.byte	0x74
+ 1704 07db 00       		.sleb128 0
+ 1705 07dc 00       		.byte	0
+ 1706 07dd 0C       		.uleb128 0xc
+ 1707 07de 32000000 		.4byte	.LVL124
+ 1708 07e2 36090000 		.4byte	0x936
+ 1709 07e6 0C       		.uleb128 0xc
+ 1710 07e7 3A000000 		.4byte	.LVL125
+ 1711 07eb C3080000 		.4byte	0x8c3
+ 1712 07ef 0D       		.uleb128 0xd
+ 1713 07f0 40000000 		.4byte	.LVL126
+ 1714 07f4 E5080000 		.4byte	0x8e5
+ 1715 07f8 03080000 		.4byte	0x803
+ 1716 07fc 0E       		.uleb128 0xe
+ 1717 07fd 01       		.uleb128 0x1
+ 1718 07fe 50       		.byte	0x50
+ 1719 07ff 02       		.uleb128 0x2
+ 1720 0800 74       		.byte	0x74
+ 1721 0801 00       		.sleb128 0
+ 1722 0802 00       		.byte	0
+ 1723 0803 0C       		.uleb128 0xc
+ 1724 0804 44000000 		.4byte	.LVL127
+ 1725 0808 41090000 		.4byte	0x941
+ 1726 080c 0C       		.uleb128 0xc
+ 1727 080d 4C000000 		.4byte	.LVL128
+ 1728 0811 D4080000 		.4byte	0x8d4
+ 1729 0815 12       		.uleb128 0x12
+ 1730 0816 52000000 		.4byte	.LVL129
+ 1731 081a E5080000 		.4byte	0x8e5
+ 1732 081e 0E       		.uleb128 0xe
+ 1733 081f 01       		.uleb128 0x1
+ 1734 0820 50       		.byte	0x50
+ 1735 0821 02       		.uleb128 0x2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 38
+
+
+ 1736 0822 74       		.byte	0x74
+ 1737 0823 00       		.sleb128 0
+ 1738 0824 00       		.byte	0
+ 1739 0825 00       		.byte	0
+ 1740 0826 14       		.uleb128 0x14
+ 1741 0827 7B030000 		.4byte	.LASF36
+ 1742 082b 01       		.byte	0x1
+ 1743 082c 26       		.byte	0x26
+ 1744 082d 37080000 		.4byte	0x837
+ 1745 0831 05       		.uleb128 0x5
+ 1746 0832 03       		.byte	0x3
+ 1747 0833 00000000 		.4byte	BATTERY_CAPACITY
+ 1748 0837 15       		.uleb128 0x15
+ 1749 0838 7A000000 		.4byte	0x7a
+ 1750 083c 14       		.uleb128 0x14
+ 1751 083d CC040000 		.4byte	.LASF37
+ 1752 0841 01       		.byte	0x1
+ 1753 0842 27       		.byte	0x27
+ 1754 0843 4D080000 		.4byte	0x84d
+ 1755 0847 05       		.uleb128 0x5
+ 1756 0848 03       		.byte	0x3
+ 1757 0849 00000000 		.4byte	SOCI_SET
+ 1758 084d 15       		.uleb128 0x15
+ 1759 084e 81000000 		.4byte	0x81
+ 1760 0852 14       		.uleb128 0x14
+ 1761 0853 9D030000 		.4byte	.LASF38
+ 1762 0857 01       		.byte	0x1
+ 1763 0858 28       		.byte	0x28
+ 1764 0859 4D080000 		.4byte	0x84d
+ 1765 085d 05       		.uleb128 0x5
+ 1766 085e 03       		.byte	0x3
+ 1767 085f 00000000 		.4byte	SOCI_CLR
+ 1768 0863 14       		.uleb128 0x14
+ 1769 0864 91040000 		.4byte	.LASF39
+ 1770 0868 01       		.byte	0x1
+ 1771 0869 29       		.byte	0x29
+ 1772 086a 4D080000 		.4byte	0x84d
+ 1773 086e 05       		.uleb128 0x5
+ 1774 086f 03       		.byte	0x3
+ 1775 0870 00000000 		.4byte	SOCF_SET
+ 1776 0874 14       		.uleb128 0x14
+ 1777 0875 72030000 		.4byte	.LASF40
+ 1778 0879 01       		.byte	0x1
+ 1779 087a 2A       		.byte	0x2a
+ 1780 087b 4D080000 		.4byte	0x84d
+ 1781 087f 05       		.uleb128 0x5
+ 1782 0880 03       		.byte	0x3
+ 1783 0881 00000000 		.4byte	SOCF_CLR
+ 1784 0885 16       		.uleb128 0x16
+ 1785 0886 A8010000 		.4byte	.LASF47
+ 1786 088a 06       		.byte	0x6
+ 1787 088b 32       		.byte	0x32
+ 1788 088c 97000000 		.4byte	0x97
+ 1789 0890 17       		.uleb128 0x17
+ 1790 0891 37010000 		.4byte	.LASF41
+ 1791 0895 06       		.byte	0x6
+ 1792 0896 33       		.byte	0x33
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 39
+
+
+ 1793 0897 A1080000 		.4byte	0x8a1
+ 1794 089b 18       		.uleb128 0x18
+ 1795 089c 97000000 		.4byte	0x97
+ 1796 08a0 00       		.byte	0
+ 1797 08a1 19       		.uleb128 0x19
+ 1798 08a2 0A010000 		.4byte	.LASF42
+ 1799 08a6 05       		.byte	0x5
+ 1800 08a7 98       		.byte	0x98
+ 1801 08a8 8C000000 		.4byte	0x8c
+ 1802 08ac B2080000 		.4byte	0x8b2
+ 1803 08b0 1A       		.uleb128 0x1a
+ 1804 08b1 00       		.byte	0
+ 1805 08b2 17       		.uleb128 0x17
+ 1806 08b3 A7040000 		.4byte	.LASF43
+ 1807 08b7 07       		.byte	0x7
+ 1808 08b8 33       		.byte	0x33
+ 1809 08b9 C3080000 		.4byte	0x8c3
+ 1810 08bd 18       		.uleb128 0x18
+ 1811 08be 97000000 		.4byte	0x97
+ 1812 08c2 00       		.byte	0
+ 1813 08c3 17       		.uleb128 0x17
+ 1814 08c4 49040000 		.4byte	.LASF44
+ 1815 08c8 08       		.byte	0x8
+ 1816 08c9 33       		.byte	0x33
+ 1817 08ca D4080000 		.4byte	0x8d4
+ 1818 08ce 18       		.uleb128 0x18
+ 1819 08cf 97000000 		.4byte	0x97
+ 1820 08d3 00       		.byte	0
+ 1821 08d4 17       		.uleb128 0x17
+ 1822 08d5 47010000 		.4byte	.LASF45
+ 1823 08d9 09       		.byte	0x9
+ 1824 08da 33       		.byte	0x33
+ 1825 08db E5080000 		.4byte	0x8e5
+ 1826 08df 18       		.uleb128 0x18
+ 1827 08e0 97000000 		.4byte	0x97
+ 1828 08e4 00       		.byte	0
+ 1829 08e5 17       		.uleb128 0x17
+ 1830 08e6 B5040000 		.4byte	.LASF46
+ 1831 08ea 0A       		.byte	0xa
+ 1832 08eb D9       		.byte	0xd9
+ 1833 08ec F6080000 		.4byte	0x8f6
+ 1834 08f0 18       		.uleb128 0x18
+ 1835 08f1 A3000000 		.4byte	0xa3
+ 1836 08f5 00       		.byte	0
+ 1837 08f6 16       		.uleb128 0x16
+ 1838 08f7 B4000000 		.4byte	.LASF48
+ 1839 08fb 0B       		.byte	0xb
+ 1840 08fc 39       		.byte	0x39
+ 1841 08fd 97000000 		.4byte	0x97
+ 1842 0901 1B       		.uleb128 0x1b
+ 1843 0902 9A020000 		.4byte	.LASF49
+ 1844 0906 05       		.byte	0x5
+ 1845 0907 0801     		.2byte	0x108
+ 1846 0909 DE000000 		.4byte	0xde
+ 1847 090d 1C       		.uleb128 0x1c
+ 1848 090e 5D010000 		.4byte	.LASF66
+ 1849 0912 0D       		.byte	0xd
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 40
+
+
+ 1850 0913 25       		.byte	0x25
+ 1851 0914 1B       		.uleb128 0x1b
+ 1852 0915 65030000 		.4byte	.LASF50
+ 1853 0919 05       		.byte	0x5
+ 1854 091a 0101     		.2byte	0x101
+ 1855 091c DE000000 		.4byte	0xde
+ 1856 0920 16       		.uleb128 0x16
+ 1857 0921 2C040000 		.4byte	.LASF51
+ 1858 0925 0C       		.byte	0xc
+ 1859 0926 39       		.byte	0x39
+ 1860 0927 97000000 		.4byte	0x97
+ 1861 092b 16       		.uleb128 0x16
+ 1862 092c 9A040000 		.4byte	.LASF52
+ 1863 0930 07       		.byte	0x7
+ 1864 0931 32       		.byte	0x32
+ 1865 0932 97000000 		.4byte	0x97
+ 1866 0936 16       		.uleb128 0x16
+ 1867 0937 1C040000 		.4byte	.LASF53
+ 1868 093b 08       		.byte	0x8
+ 1869 093c 32       		.byte	0x32
+ 1870 093d 97000000 		.4byte	0x97
+ 1871 0941 16       		.uleb128 0x16
+ 1872 0942 5A040000 		.4byte	.LASF54
+ 1873 0946 09       		.byte	0x9
+ 1874 0947 32       		.byte	0x32
+ 1875 0948 97000000 		.4byte	0x97
+ 1876 094c 16       		.uleb128 0x16
+ 1877 094d 10000000 		.4byte	.LASF55
+ 1878 0951 05       		.byte	0x5
+ 1879 0952 61       		.byte	0x61
+ 1880 0953 DE000000 		.4byte	0xde
+ 1881 0957 1D       		.uleb128 0x1d
+ 1882 0958 8C030000 		.4byte	.LASF57
+ 1883 095c 05       		.byte	0x5
+ 1884 095d 69       		.byte	0x69
+ 1885 095e DE000000 		.4byte	0xde
+ 1886 0962 6C090000 		.4byte	0x96c
+ 1887 0966 18       		.uleb128 0x18
+ 1888 0967 8C000000 		.4byte	0x8c
+ 1889 096b 00       		.byte	0
+ 1890 096c 1E       		.uleb128 0x1e
+ 1891 096d C1010000 		.4byte	.LASF56
+ 1892 0971 05       		.byte	0x5
+ 1893 0972 3501     		.2byte	0x135
+ 1894 0974 DE000000 		.4byte	0xde
+ 1895 0978 7E090000 		.4byte	0x97e
+ 1896 097c 1A       		.uleb128 0x1a
+ 1897 097d 00       		.byte	0
+ 1898 097e 1D       		.uleb128 0x1d
+ 1899 097f 69040000 		.4byte	.LASF58
+ 1900 0983 05       		.byte	0x5
+ 1901 0984 BF       		.byte	0xbf
+ 1902 0985 DE000000 		.4byte	0xde
+ 1903 0989 93090000 		.4byte	0x993
+ 1904 098d 18       		.uleb128 0x18
+ 1905 098e DE000000 		.4byte	0xde
+ 1906 0992 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 41
+
+
+ 1907 0993 1D       		.uleb128 0x1d
+ 1908 0994 CB020000 		.4byte	.LASF59
+ 1909 0998 05       		.byte	0x5
+ 1910 0999 CE       		.byte	0xce
+ 1911 099a DE000000 		.4byte	0xde
+ 1912 099e A8090000 		.4byte	0x9a8
+ 1913 09a2 18       		.uleb128 0x18
+ 1914 09a3 FE000000 		.4byte	0xfe
+ 1915 09a7 00       		.byte	0
+ 1916 09a8 1D       		.uleb128 0x1d
+ 1917 09a9 22000000 		.4byte	.LASF60
+ 1918 09ad 05       		.byte	0x5
+ 1919 09ae E4       		.byte	0xe4
+ 1920 09af DE000000 		.4byte	0xde
+ 1921 09b3 C2090000 		.4byte	0x9c2
+ 1922 09b7 18       		.uleb128 0x18
+ 1923 09b8 81000000 		.4byte	0x81
+ 1924 09bc 18       		.uleb128 0x18
+ 1925 09bd 81000000 		.4byte	0x81
+ 1926 09c1 00       		.byte	0
+ 1927 09c2 1D       		.uleb128 0x1d
+ 1928 09c3 E1020000 		.4byte	.LASF61
+ 1929 09c7 05       		.byte	0x5
+ 1930 09c8 FA       		.byte	0xfa
+ 1931 09c9 DE000000 		.4byte	0xde
+ 1932 09cd DC090000 		.4byte	0x9dc
+ 1933 09d1 18       		.uleb128 0x18
+ 1934 09d2 81000000 		.4byte	0x81
+ 1935 09d6 18       		.uleb128 0x18
+ 1936 09d7 81000000 		.4byte	0x81
+ 1937 09db 00       		.byte	0
+ 1938 09dc 1E       		.uleb128 0x1e
+ 1939 09dd 00000000 		.4byte	.LASF62
+ 1940 09e1 05       		.byte	0x5
+ 1941 09e2 3F01     		.2byte	0x13f
+ 1942 09e4 DE000000 		.4byte	0xde
+ 1943 09e8 EE090000 		.4byte	0x9ee
+ 1944 09ec 1A       		.uleb128 0x1a
+ 1945 09ed 00       		.byte	0
+ 1946 09ee 17       		.uleb128 0x17
+ 1947 09ef 20030000 		.4byte	.LASF63
+ 1948 09f3 0D       		.byte	0xd
+ 1949 09f4 18       		.byte	0x18
+ 1950 09f5 FF090000 		.4byte	0x9ff
+ 1951 09f9 18       		.uleb128 0x18
+ 1952 09fa C4000000 		.4byte	0xc4
+ 1953 09fe 00       		.byte	0
+ 1954 09ff 17       		.uleb128 0x17
+ 1955 0a00 B5030000 		.4byte	.LASF64
+ 1956 0a04 0E       		.byte	0xe
+ 1957 0a05 18       		.byte	0x18
+ 1958 0a06 100A0000 		.4byte	0xa10
+ 1959 0a0a 18       		.uleb128 0x18
+ 1960 0a0b C4000000 		.4byte	0xc4
+ 1961 0a0f 00       		.byte	0
+ 1962 0a10 16       		.uleb128 0x16
+ 1963 0a11 39000000 		.4byte	.LASF65
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 42
+
+
+ 1964 0a15 0F       		.byte	0xf
+ 1965 0a16 5D       		.byte	0x5d
+ 1966 0a17 A3000000 		.4byte	0xa3
+ 1967 0a1b 1C       		.uleb128 0x1c
+ 1968 0a1c D5040000 		.4byte	.LASF67
+ 1969 0a20 0F       		.byte	0xf
+ 1970 0a21 5C       		.byte	0x5c
+ 1971 0a22 1C       		.uleb128 0x1c
+ 1972 0a23 27010000 		.4byte	.LASF68
+ 1973 0a27 0F       		.byte	0xf
+ 1974 0a28 5B       		.byte	0x5b
+ 1975 0a29 1C       		.uleb128 0x1c
+ 1976 0a2a D2010000 		.4byte	.LASF69
+ 1977 0a2e 0F       		.byte	0xf
+ 1978 0a2f 5A       		.byte	0x5a
+ 1979 0a30 00       		.byte	0
+ 1980              		.section	.debug_abbrev,"",%progbits
+ 1981              	.Ldebug_abbrev0:
+ 1982 0000 01       		.uleb128 0x1
+ 1983 0001 11       		.uleb128 0x11
+ 1984 0002 01       		.byte	0x1
+ 1985 0003 25       		.uleb128 0x25
+ 1986 0004 0E       		.uleb128 0xe
+ 1987 0005 13       		.uleb128 0x13
+ 1988 0006 0B       		.uleb128 0xb
+ 1989 0007 03       		.uleb128 0x3
+ 1990 0008 0E       		.uleb128 0xe
+ 1991 0009 1B       		.uleb128 0x1b
+ 1992 000a 0E       		.uleb128 0xe
+ 1993 000b 55       		.uleb128 0x55
+ 1994 000c 17       		.uleb128 0x17
+ 1995 000d 11       		.uleb128 0x11
+ 1996 000e 01       		.uleb128 0x1
+ 1997 000f 10       		.uleb128 0x10
+ 1998 0010 17       		.uleb128 0x17
+ 1999 0011 00       		.byte	0
+ 2000 0012 00       		.byte	0
+ 2001 0013 02       		.uleb128 0x2
+ 2002 0014 24       		.uleb128 0x24
+ 2003 0015 00       		.byte	0
+ 2004 0016 0B       		.uleb128 0xb
+ 2005 0017 0B       		.uleb128 0xb
+ 2006 0018 3E       		.uleb128 0x3e
+ 2007 0019 0B       		.uleb128 0xb
+ 2008 001a 03       		.uleb128 0x3
+ 2009 001b 0E       		.uleb128 0xe
+ 2010 001c 00       		.byte	0
+ 2011 001d 00       		.byte	0
+ 2012 001e 03       		.uleb128 0x3
+ 2013 001f 16       		.uleb128 0x16
+ 2014 0020 00       		.byte	0
+ 2015 0021 03       		.uleb128 0x3
+ 2016 0022 0E       		.uleb128 0xe
+ 2017 0023 3A       		.uleb128 0x3a
+ 2018 0024 0B       		.uleb128 0xb
+ 2019 0025 3B       		.uleb128 0x3b
+ 2020 0026 0B       		.uleb128 0xb
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 43
+
+
+ 2021 0027 49       		.uleb128 0x49
+ 2022 0028 13       		.uleb128 0x13
+ 2023 0029 00       		.byte	0
+ 2024 002a 00       		.byte	0
+ 2025 002b 04       		.uleb128 0x4
+ 2026 002c 24       		.uleb128 0x24
+ 2027 002d 00       		.byte	0
+ 2028 002e 0B       		.uleb128 0xb
+ 2029 002f 0B       		.uleb128 0xb
+ 2030 0030 3E       		.uleb128 0x3e
+ 2031 0031 0B       		.uleb128 0xb
+ 2032 0032 03       		.uleb128 0x3
+ 2033 0033 08       		.uleb128 0x8
+ 2034 0034 00       		.byte	0
+ 2035 0035 00       		.byte	0
+ 2036 0036 05       		.uleb128 0x5
+ 2037 0037 16       		.uleb128 0x16
+ 2038 0038 00       		.byte	0
+ 2039 0039 03       		.uleb128 0x3
+ 2040 003a 0E       		.uleb128 0xe
+ 2041 003b 3A       		.uleb128 0x3a
+ 2042 003c 0B       		.uleb128 0xb
+ 2043 003d 3B       		.uleb128 0x3b
+ 2044 003e 05       		.uleb128 0x5
+ 2045 003f 49       		.uleb128 0x49
+ 2046 0040 13       		.uleb128 0x13
+ 2047 0041 00       		.byte	0
+ 2048 0042 00       		.byte	0
+ 2049 0043 06       		.uleb128 0x6
+ 2050 0044 0F       		.uleb128 0xf
+ 2051 0045 00       		.byte	0
+ 2052 0046 0B       		.uleb128 0xb
+ 2053 0047 0B       		.uleb128 0xb
+ 2054 0048 49       		.uleb128 0x49
+ 2055 0049 13       		.uleb128 0x13
+ 2056 004a 00       		.byte	0
+ 2057 004b 00       		.byte	0
+ 2058 004c 07       		.uleb128 0x7
+ 2059 004d 15       		.uleb128 0x15
+ 2060 004e 00       		.byte	0
+ 2061 004f 27       		.uleb128 0x27
+ 2062 0050 19       		.uleb128 0x19
+ 2063 0051 00       		.byte	0
+ 2064 0052 00       		.byte	0
+ 2065 0053 08       		.uleb128 0x8
+ 2066 0054 04       		.uleb128 0x4
+ 2067 0055 01       		.byte	0x1
+ 2068 0056 0B       		.uleb128 0xb
+ 2069 0057 0B       		.uleb128 0xb
+ 2070 0058 3A       		.uleb128 0x3a
+ 2071 0059 0B       		.uleb128 0xb
+ 2072 005a 3B       		.uleb128 0x3b
+ 2073 005b 0B       		.uleb128 0xb
+ 2074 005c 01       		.uleb128 0x1
+ 2075 005d 13       		.uleb128 0x13
+ 2076 005e 00       		.byte	0
+ 2077 005f 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 44
+
+
+ 2078 0060 09       		.uleb128 0x9
+ 2079 0061 28       		.uleb128 0x28
+ 2080 0062 00       		.byte	0
+ 2081 0063 03       		.uleb128 0x3
+ 2082 0064 0E       		.uleb128 0xe
+ 2083 0065 1C       		.uleb128 0x1c
+ 2084 0066 0D       		.uleb128 0xd
+ 2085 0067 00       		.byte	0
+ 2086 0068 00       		.byte	0
+ 2087 0069 0A       		.uleb128 0xa
+ 2088 006a 2E       		.uleb128 0x2e
+ 2089 006b 01       		.byte	0x1
+ 2090 006c 3F       		.uleb128 0x3f
+ 2091 006d 19       		.uleb128 0x19
+ 2092 006e 03       		.uleb128 0x3
+ 2093 006f 0E       		.uleb128 0xe
+ 2094 0070 3A       		.uleb128 0x3a
+ 2095 0071 0B       		.uleb128 0xb
+ 2096 0072 3B       		.uleb128 0x3b
+ 2097 0073 0B       		.uleb128 0xb
+ 2098 0074 27       		.uleb128 0x27
+ 2099 0075 19       		.uleb128 0x19
+ 2100 0076 11       		.uleb128 0x11
+ 2101 0077 01       		.uleb128 0x1
+ 2102 0078 12       		.uleb128 0x12
+ 2103 0079 06       		.uleb128 0x6
+ 2104 007a 40       		.uleb128 0x40
+ 2105 007b 18       		.uleb128 0x18
+ 2106 007c 9742     		.uleb128 0x2117
+ 2107 007e 19       		.uleb128 0x19
+ 2108 007f 01       		.uleb128 0x1
+ 2109 0080 13       		.uleb128 0x13
+ 2110 0081 00       		.byte	0
+ 2111 0082 00       		.byte	0
+ 2112 0083 0B       		.uleb128 0xb
+ 2113 0084 34       		.uleb128 0x34
+ 2114 0085 00       		.byte	0
+ 2115 0086 03       		.uleb128 0x3
+ 2116 0087 0E       		.uleb128 0xe
+ 2117 0088 3A       		.uleb128 0x3a
+ 2118 0089 0B       		.uleb128 0xb
+ 2119 008a 3B       		.uleb128 0x3b
+ 2120 008b 0B       		.uleb128 0xb
+ 2121 008c 49       		.uleb128 0x49
+ 2122 008d 13       		.uleb128 0x13
+ 2123 008e 02       		.uleb128 0x2
+ 2124 008f 17       		.uleb128 0x17
+ 2125 0090 00       		.byte	0
+ 2126 0091 00       		.byte	0
+ 2127 0092 0C       		.uleb128 0xc
+ 2128 0093 898201   		.uleb128 0x4109
+ 2129 0096 00       		.byte	0
+ 2130 0097 11       		.uleb128 0x11
+ 2131 0098 01       		.uleb128 0x1
+ 2132 0099 31       		.uleb128 0x31
+ 2133 009a 13       		.uleb128 0x13
+ 2134 009b 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 45
+
+
+ 2135 009c 00       		.byte	0
+ 2136 009d 0D       		.uleb128 0xd
+ 2137 009e 898201   		.uleb128 0x4109
+ 2138 00a1 01       		.byte	0x1
+ 2139 00a2 11       		.uleb128 0x11
+ 2140 00a3 01       		.uleb128 0x1
+ 2141 00a4 31       		.uleb128 0x31
+ 2142 00a5 13       		.uleb128 0x13
+ 2143 00a6 01       		.uleb128 0x1
+ 2144 00a7 13       		.uleb128 0x13
+ 2145 00a8 00       		.byte	0
+ 2146 00a9 00       		.byte	0
+ 2147 00aa 0E       		.uleb128 0xe
+ 2148 00ab 8A8201   		.uleb128 0x410a
+ 2149 00ae 00       		.byte	0
+ 2150 00af 02       		.uleb128 0x2
+ 2151 00b0 18       		.uleb128 0x18
+ 2152 00b1 9142     		.uleb128 0x2111
+ 2153 00b3 18       		.uleb128 0x18
+ 2154 00b4 00       		.byte	0
+ 2155 00b5 00       		.byte	0
+ 2156 00b6 0F       		.uleb128 0xf
+ 2157 00b7 2E       		.uleb128 0x2e
+ 2158 00b8 01       		.byte	0x1
+ 2159 00b9 3F       		.uleb128 0x3f
+ 2160 00ba 19       		.uleb128 0x19
+ 2161 00bb 03       		.uleb128 0x3
+ 2162 00bc 0E       		.uleb128 0xe
+ 2163 00bd 3A       		.uleb128 0x3a
+ 2164 00be 0B       		.uleb128 0xb
+ 2165 00bf 3B       		.uleb128 0x3b
+ 2166 00c0 05       		.uleb128 0x5
+ 2167 00c1 27       		.uleb128 0x27
+ 2168 00c2 19       		.uleb128 0x19
+ 2169 00c3 11       		.uleb128 0x11
+ 2170 00c4 01       		.uleb128 0x1
+ 2171 00c5 12       		.uleb128 0x12
+ 2172 00c6 06       		.uleb128 0x6
+ 2173 00c7 40       		.uleb128 0x40
+ 2174 00c8 18       		.uleb128 0x18
+ 2175 00c9 9742     		.uleb128 0x2117
+ 2176 00cb 19       		.uleb128 0x19
+ 2177 00cc 01       		.uleb128 0x1
+ 2178 00cd 13       		.uleb128 0x13
+ 2179 00ce 00       		.byte	0
+ 2180 00cf 00       		.byte	0
+ 2181 00d0 10       		.uleb128 0x10
+ 2182 00d1 05       		.uleb128 0x5
+ 2183 00d2 00       		.byte	0
+ 2184 00d3 03       		.uleb128 0x3
+ 2185 00d4 0E       		.uleb128 0xe
+ 2186 00d5 3A       		.uleb128 0x3a
+ 2187 00d6 0B       		.uleb128 0xb
+ 2188 00d7 3B       		.uleb128 0x3b
+ 2189 00d8 05       		.uleb128 0x5
+ 2190 00d9 49       		.uleb128 0x49
+ 2191 00da 13       		.uleb128 0x13
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 46
+
+
+ 2192 00db 02       		.uleb128 0x2
+ 2193 00dc 17       		.uleb128 0x17
+ 2194 00dd 00       		.byte	0
+ 2195 00de 00       		.byte	0
+ 2196 00df 11       		.uleb128 0x11
+ 2197 00e0 34       		.uleb128 0x34
+ 2198 00e1 00       		.byte	0
+ 2199 00e2 03       		.uleb128 0x3
+ 2200 00e3 08       		.uleb128 0x8
+ 2201 00e4 3A       		.uleb128 0x3a
+ 2202 00e5 0B       		.uleb128 0xb
+ 2203 00e6 3B       		.uleb128 0x3b
+ 2204 00e7 05       		.uleb128 0x5
+ 2205 00e8 49       		.uleb128 0x49
+ 2206 00e9 13       		.uleb128 0x13
+ 2207 00ea 02       		.uleb128 0x2
+ 2208 00eb 17       		.uleb128 0x17
+ 2209 00ec 00       		.byte	0
+ 2210 00ed 00       		.byte	0
+ 2211 00ee 12       		.uleb128 0x12
+ 2212 00ef 898201   		.uleb128 0x4109
+ 2213 00f2 01       		.byte	0x1
+ 2214 00f3 11       		.uleb128 0x11
+ 2215 00f4 01       		.uleb128 0x1
+ 2216 00f5 31       		.uleb128 0x31
+ 2217 00f6 13       		.uleb128 0x13
+ 2218 00f7 00       		.byte	0
+ 2219 00f8 00       		.byte	0
+ 2220 00f9 13       		.uleb128 0x13
+ 2221 00fa 2E       		.uleb128 0x2e
+ 2222 00fb 01       		.byte	0x1
+ 2223 00fc 3F       		.uleb128 0x3f
+ 2224 00fd 19       		.uleb128 0x19
+ 2225 00fe 03       		.uleb128 0x3
+ 2226 00ff 0E       		.uleb128 0xe
+ 2227 0100 3A       		.uleb128 0x3a
+ 2228 0101 0B       		.uleb128 0xb
+ 2229 0102 3B       		.uleb128 0x3b
+ 2230 0103 0B       		.uleb128 0xb
+ 2231 0104 27       		.uleb128 0x27
+ 2232 0105 19       		.uleb128 0x19
+ 2233 0106 49       		.uleb128 0x49
+ 2234 0107 13       		.uleb128 0x13
+ 2235 0108 11       		.uleb128 0x11
+ 2236 0109 01       		.uleb128 0x1
+ 2237 010a 12       		.uleb128 0x12
+ 2238 010b 06       		.uleb128 0x6
+ 2239 010c 40       		.uleb128 0x40
+ 2240 010d 18       		.uleb128 0x18
+ 2241 010e 9742     		.uleb128 0x2117
+ 2242 0110 19       		.uleb128 0x19
+ 2243 0111 01       		.uleb128 0x1
+ 2244 0112 13       		.uleb128 0x13
+ 2245 0113 00       		.byte	0
+ 2246 0114 00       		.byte	0
+ 2247 0115 14       		.uleb128 0x14
+ 2248 0116 34       		.uleb128 0x34
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 47
+
+
+ 2249 0117 00       		.byte	0
+ 2250 0118 03       		.uleb128 0x3
+ 2251 0119 0E       		.uleb128 0xe
+ 2252 011a 3A       		.uleb128 0x3a
+ 2253 011b 0B       		.uleb128 0xb
+ 2254 011c 3B       		.uleb128 0x3b
+ 2255 011d 0B       		.uleb128 0xb
+ 2256 011e 49       		.uleb128 0x49
+ 2257 011f 13       		.uleb128 0x13
+ 2258 0120 3F       		.uleb128 0x3f
+ 2259 0121 19       		.uleb128 0x19
+ 2260 0122 02       		.uleb128 0x2
+ 2261 0123 18       		.uleb128 0x18
+ 2262 0124 00       		.byte	0
+ 2263 0125 00       		.byte	0
+ 2264 0126 15       		.uleb128 0x15
+ 2265 0127 26       		.uleb128 0x26
+ 2266 0128 00       		.byte	0
+ 2267 0129 49       		.uleb128 0x49
+ 2268 012a 13       		.uleb128 0x13
+ 2269 012b 00       		.byte	0
+ 2270 012c 00       		.byte	0
+ 2271 012d 16       		.uleb128 0x16
+ 2272 012e 2E       		.uleb128 0x2e
+ 2273 012f 00       		.byte	0
+ 2274 0130 3F       		.uleb128 0x3f
+ 2275 0131 19       		.uleb128 0x19
+ 2276 0132 03       		.uleb128 0x3
+ 2277 0133 0E       		.uleb128 0xe
+ 2278 0134 3A       		.uleb128 0x3a
+ 2279 0135 0B       		.uleb128 0xb
+ 2280 0136 3B       		.uleb128 0x3b
+ 2281 0137 0B       		.uleb128 0xb
+ 2282 0138 27       		.uleb128 0x27
+ 2283 0139 19       		.uleb128 0x19
+ 2284 013a 49       		.uleb128 0x49
+ 2285 013b 13       		.uleb128 0x13
+ 2286 013c 3C       		.uleb128 0x3c
+ 2287 013d 19       		.uleb128 0x19
+ 2288 013e 00       		.byte	0
+ 2289 013f 00       		.byte	0
+ 2290 0140 17       		.uleb128 0x17
+ 2291 0141 2E       		.uleb128 0x2e
+ 2292 0142 01       		.byte	0x1
+ 2293 0143 3F       		.uleb128 0x3f
+ 2294 0144 19       		.uleb128 0x19
+ 2295 0145 03       		.uleb128 0x3
+ 2296 0146 0E       		.uleb128 0xe
+ 2297 0147 3A       		.uleb128 0x3a
+ 2298 0148 0B       		.uleb128 0xb
+ 2299 0149 3B       		.uleb128 0x3b
+ 2300 014a 0B       		.uleb128 0xb
+ 2301 014b 27       		.uleb128 0x27
+ 2302 014c 19       		.uleb128 0x19
+ 2303 014d 3C       		.uleb128 0x3c
+ 2304 014e 19       		.uleb128 0x19
+ 2305 014f 01       		.uleb128 0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 48
+
+
+ 2306 0150 13       		.uleb128 0x13
+ 2307 0151 00       		.byte	0
+ 2308 0152 00       		.byte	0
+ 2309 0153 18       		.uleb128 0x18
+ 2310 0154 05       		.uleb128 0x5
+ 2311 0155 00       		.byte	0
+ 2312 0156 49       		.uleb128 0x49
+ 2313 0157 13       		.uleb128 0x13
+ 2314 0158 00       		.byte	0
+ 2315 0159 00       		.byte	0
+ 2316 015a 19       		.uleb128 0x19
+ 2317 015b 2E       		.uleb128 0x2e
+ 2318 015c 01       		.byte	0x1
+ 2319 015d 3F       		.uleb128 0x3f
+ 2320 015e 19       		.uleb128 0x19
+ 2321 015f 03       		.uleb128 0x3
+ 2322 0160 0E       		.uleb128 0xe
+ 2323 0161 3A       		.uleb128 0x3a
+ 2324 0162 0B       		.uleb128 0xb
+ 2325 0163 3B       		.uleb128 0x3b
+ 2326 0164 0B       		.uleb128 0xb
+ 2327 0165 49       		.uleb128 0x49
+ 2328 0166 13       		.uleb128 0x13
+ 2329 0167 3C       		.uleb128 0x3c
+ 2330 0168 19       		.uleb128 0x19
+ 2331 0169 01       		.uleb128 0x1
+ 2332 016a 13       		.uleb128 0x13
+ 2333 016b 00       		.byte	0
+ 2334 016c 00       		.byte	0
+ 2335 016d 1A       		.uleb128 0x1a
+ 2336 016e 18       		.uleb128 0x18
+ 2337 016f 00       		.byte	0
+ 2338 0170 00       		.byte	0
+ 2339 0171 00       		.byte	0
+ 2340 0172 1B       		.uleb128 0x1b
+ 2341 0173 2E       		.uleb128 0x2e
+ 2342 0174 00       		.byte	0
+ 2343 0175 3F       		.uleb128 0x3f
+ 2344 0176 19       		.uleb128 0x19
+ 2345 0177 03       		.uleb128 0x3
+ 2346 0178 0E       		.uleb128 0xe
+ 2347 0179 3A       		.uleb128 0x3a
+ 2348 017a 0B       		.uleb128 0xb
+ 2349 017b 3B       		.uleb128 0x3b
+ 2350 017c 05       		.uleb128 0x5
+ 2351 017d 27       		.uleb128 0x27
+ 2352 017e 19       		.uleb128 0x19
+ 2353 017f 49       		.uleb128 0x49
+ 2354 0180 13       		.uleb128 0x13
+ 2355 0181 3C       		.uleb128 0x3c
+ 2356 0182 19       		.uleb128 0x19
+ 2357 0183 00       		.byte	0
+ 2358 0184 00       		.byte	0
+ 2359 0185 1C       		.uleb128 0x1c
+ 2360 0186 2E       		.uleb128 0x2e
+ 2361 0187 00       		.byte	0
+ 2362 0188 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 49
+
+
+ 2363 0189 19       		.uleb128 0x19
+ 2364 018a 03       		.uleb128 0x3
+ 2365 018b 0E       		.uleb128 0xe
+ 2366 018c 3A       		.uleb128 0x3a
+ 2367 018d 0B       		.uleb128 0xb
+ 2368 018e 3B       		.uleb128 0x3b
+ 2369 018f 0B       		.uleb128 0xb
+ 2370 0190 27       		.uleb128 0x27
+ 2371 0191 19       		.uleb128 0x19
+ 2372 0192 3C       		.uleb128 0x3c
+ 2373 0193 19       		.uleb128 0x19
+ 2374 0194 00       		.byte	0
+ 2375 0195 00       		.byte	0
+ 2376 0196 1D       		.uleb128 0x1d
+ 2377 0197 2E       		.uleb128 0x2e
+ 2378 0198 01       		.byte	0x1
+ 2379 0199 3F       		.uleb128 0x3f
+ 2380 019a 19       		.uleb128 0x19
+ 2381 019b 03       		.uleb128 0x3
+ 2382 019c 0E       		.uleb128 0xe
+ 2383 019d 3A       		.uleb128 0x3a
+ 2384 019e 0B       		.uleb128 0xb
+ 2385 019f 3B       		.uleb128 0x3b
+ 2386 01a0 0B       		.uleb128 0xb
+ 2387 01a1 27       		.uleb128 0x27
+ 2388 01a2 19       		.uleb128 0x19
+ 2389 01a3 49       		.uleb128 0x49
+ 2390 01a4 13       		.uleb128 0x13
+ 2391 01a5 3C       		.uleb128 0x3c
+ 2392 01a6 19       		.uleb128 0x19
+ 2393 01a7 01       		.uleb128 0x1
+ 2394 01a8 13       		.uleb128 0x13
+ 2395 01a9 00       		.byte	0
+ 2396 01aa 00       		.byte	0
+ 2397 01ab 1E       		.uleb128 0x1e
+ 2398 01ac 2E       		.uleb128 0x2e
+ 2399 01ad 01       		.byte	0x1
+ 2400 01ae 3F       		.uleb128 0x3f
+ 2401 01af 19       		.uleb128 0x19
+ 2402 01b0 03       		.uleb128 0x3
+ 2403 01b1 0E       		.uleb128 0xe
+ 2404 01b2 3A       		.uleb128 0x3a
+ 2405 01b3 0B       		.uleb128 0xb
+ 2406 01b4 3B       		.uleb128 0x3b
+ 2407 01b5 05       		.uleb128 0x5
+ 2408 01b6 49       		.uleb128 0x49
+ 2409 01b7 13       		.uleb128 0x13
+ 2410 01b8 3C       		.uleb128 0x3c
+ 2411 01b9 19       		.uleb128 0x19
+ 2412 01ba 01       		.uleb128 0x1
+ 2413 01bb 13       		.uleb128 0x13
+ 2414 01bc 00       		.byte	0
+ 2415 01bd 00       		.byte	0
+ 2416 01be 00       		.byte	0
+ 2417              		.section	.debug_loc,"",%progbits
+ 2418              	.Ldebug_loc0:
+ 2419              	.LLST0:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 50
+
+
+ 2420 0000 12000000 		.4byte	.LVL2
+ 2421 0004 18000000 		.4byte	.LVL3
+ 2422 0008 0100     		.2byte	0x1
+ 2423 000a 50       		.byte	0x50
+ 2424 000b 2A000000 		.4byte	.LVL7
+ 2425 000f 30000000 		.4byte	.LVL8
+ 2426 0013 0100     		.2byte	0x1
+ 2427 0015 50       		.byte	0x50
+ 2428 0016 42000000 		.4byte	.LVL12
+ 2429 001a 44000000 		.4byte	.LVL13
+ 2430 001e 0100     		.2byte	0x1
+ 2431 0020 50       		.byte	0x50
+ 2432 0021 00000000 		.4byte	0
+ 2433 0025 00000000 		.4byte	0
+ 2434              	.LLST1:
+ 2435 0029 00000000 		.4byte	.LVL32
+ 2436 002d 0A000000 		.4byte	.LVL34
+ 2437 0031 0100     		.2byte	0x1
+ 2438 0033 50       		.byte	0x50
+ 2439 0034 0A000000 		.4byte	.LVL34
+ 2440 0038 36000000 		.4byte	.LVL44
+ 2441 003c 0100     		.2byte	0x1
+ 2442 003e 56       		.byte	0x56
+ 2443 003f 36000000 		.4byte	.LVL44
+ 2444 0043 38000000 		.4byte	.LFE38
+ 2445 0047 0400     		.2byte	0x4
+ 2446 0049 F3       		.byte	0xf3
+ 2447 004a 01       		.uleb128 0x1
+ 2448 004b 50       		.byte	0x50
+ 2449 004c 9F       		.byte	0x9f
+ 2450 004d 00000000 		.4byte	0
+ 2451 0051 00000000 		.4byte	0
+ 2452              	.LLST2:
+ 2453 0055 00000000 		.4byte	.LVL32
+ 2454 0059 0A000000 		.4byte	.LVL34
+ 2455 005d 0100     		.2byte	0x1
+ 2456 005f 51       		.byte	0x51
+ 2457 0060 0A000000 		.4byte	.LVL34
+ 2458 0064 36000000 		.4byte	.LVL42
+ 2459 0068 0100     		.2byte	0x1
+ 2460 006a 54       		.byte	0x54
+ 2461 006b 36000000 		.4byte	.LVL42
+ 2462 006f 38000000 		.4byte	.LFE38
+ 2463 0073 0400     		.2byte	0x4
+ 2464 0075 F3       		.byte	0xf3
+ 2465 0076 01       		.uleb128 0x1
+ 2466 0077 51       		.byte	0x51
+ 2467 0078 9F       		.byte	0x9f
+ 2468 0079 00000000 		.4byte	0
+ 2469 007d 00000000 		.4byte	0
+ 2470              	.LLST3:
+ 2471 0081 06000000 		.4byte	.LVL33
+ 2472 0085 0A000000 		.4byte	.LVL34
+ 2473 0089 0200     		.2byte	0x2
+ 2474 008b 30       		.byte	0x30
+ 2475 008c 9F       		.byte	0x9f
+ 2476 008d 0A000000 		.4byte	.LVL34
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 51
+
+
+ 2477 0091 36000000 		.4byte	.LVL43
+ 2478 0095 0100     		.2byte	0x1
+ 2479 0097 55       		.byte	0x55
+ 2480 0098 00000000 		.4byte	0
+ 2481 009c 00000000 		.4byte	0
+ 2482              	.LLST4:
+ 2483 00a0 00000000 		.4byte	.LVL45
+ 2484 00a4 08000000 		.4byte	.LVL47
+ 2485 00a8 0100     		.2byte	0x1
+ 2486 00aa 50       		.byte	0x50
+ 2487 00ab 08000000 		.4byte	.LVL47
+ 2488 00af 3C000000 		.4byte	.LVL59
+ 2489 00b3 0100     		.2byte	0x1
+ 2490 00b5 56       		.byte	0x56
+ 2491 00b6 3C000000 		.4byte	.LVL59
+ 2492 00ba 3E000000 		.4byte	.LFE39
+ 2493 00be 0400     		.2byte	0x4
+ 2494 00c0 F3       		.byte	0xf3
+ 2495 00c1 01       		.uleb128 0x1
+ 2496 00c2 50       		.byte	0x50
+ 2497 00c3 9F       		.byte	0x9f
+ 2498 00c4 00000000 		.4byte	0
+ 2499 00c8 00000000 		.4byte	0
+ 2500              	.LLST5:
+ 2501 00cc 00000000 		.4byte	.LVL45
+ 2502 00d0 0B000000 		.4byte	.LVL48-1
+ 2503 00d4 0100     		.2byte	0x1
+ 2504 00d6 51       		.byte	0x51
+ 2505 00d7 0B000000 		.4byte	.LVL48-1
+ 2506 00db 3C000000 		.4byte	.LVL57
+ 2507 00df 0100     		.2byte	0x1
+ 2508 00e1 54       		.byte	0x54
+ 2509 00e2 3C000000 		.4byte	.LVL57
+ 2510 00e6 3E000000 		.4byte	.LFE39
+ 2511 00ea 0400     		.2byte	0x4
+ 2512 00ec F3       		.byte	0xf3
+ 2513 00ed 01       		.uleb128 0x1
+ 2514 00ee 51       		.byte	0x51
+ 2515 00ef 9F       		.byte	0x9f
+ 2516 00f0 00000000 		.4byte	0
+ 2517 00f4 00000000 		.4byte	0
+ 2518              	.LLST6:
+ 2519 00f8 06000000 		.4byte	.LVL46
+ 2520 00fc 10000000 		.4byte	.LVL49
+ 2521 0100 0200     		.2byte	0x2
+ 2522 0102 30       		.byte	0x30
+ 2523 0103 9F       		.byte	0x9f
+ 2524 0104 10000000 		.4byte	.LVL49
+ 2525 0108 3C000000 		.4byte	.LVL58
+ 2526 010c 0100     		.2byte	0x1
+ 2527 010e 55       		.byte	0x55
+ 2528 010f 00000000 		.4byte	0
+ 2529 0113 00000000 		.4byte	0
+ 2530              	.LLST7:
+ 2531 0117 00000000 		.4byte	.LVL60
+ 2532 011b 08000000 		.4byte	.LVL62
+ 2533 011f 0100     		.2byte	0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 52
+
+
+ 2534 0121 50       		.byte	0x50
+ 2535 0122 08000000 		.4byte	.LVL62
+ 2536 0126 3C000000 		.4byte	.LVL74
+ 2537 012a 0100     		.2byte	0x1
+ 2538 012c 56       		.byte	0x56
+ 2539 012d 3C000000 		.4byte	.LVL74
+ 2540 0131 3E000000 		.4byte	.LFE40
+ 2541 0135 0400     		.2byte	0x4
+ 2542 0137 F3       		.byte	0xf3
+ 2543 0138 01       		.uleb128 0x1
+ 2544 0139 50       		.byte	0x50
+ 2545 013a 9F       		.byte	0x9f
+ 2546 013b 00000000 		.4byte	0
+ 2547 013f 00000000 		.4byte	0
+ 2548              	.LLST8:
+ 2549 0143 00000000 		.4byte	.LVL60
+ 2550 0147 0B000000 		.4byte	.LVL63-1
+ 2551 014b 0100     		.2byte	0x1
+ 2552 014d 51       		.byte	0x51
+ 2553 014e 0B000000 		.4byte	.LVL63-1
+ 2554 0152 3C000000 		.4byte	.LVL72
+ 2555 0156 0100     		.2byte	0x1
+ 2556 0158 54       		.byte	0x54
+ 2557 0159 3C000000 		.4byte	.LVL72
+ 2558 015d 3E000000 		.4byte	.LFE40
+ 2559 0161 0400     		.2byte	0x4
+ 2560 0163 F3       		.byte	0xf3
+ 2561 0164 01       		.uleb128 0x1
+ 2562 0165 51       		.byte	0x51
+ 2563 0166 9F       		.byte	0x9f
+ 2564 0167 00000000 		.4byte	0
+ 2565 016b 00000000 		.4byte	0
+ 2566              	.LLST9:
+ 2567 016f 06000000 		.4byte	.LVL61
+ 2568 0173 10000000 		.4byte	.LVL64
+ 2569 0177 0200     		.2byte	0x2
+ 2570 0179 30       		.byte	0x30
+ 2571 017a 9F       		.byte	0x9f
+ 2572 017b 10000000 		.4byte	.LVL64
+ 2573 017f 3C000000 		.4byte	.LVL73
+ 2574 0183 0100     		.2byte	0x1
+ 2575 0185 55       		.byte	0x55
+ 2576 0186 00000000 		.4byte	0
+ 2577 018a 00000000 		.4byte	0
+ 2578              	.LLST10:
+ 2579 018e 00000000 		.4byte	.LVL75
+ 2580 0192 08000000 		.4byte	.LVL77
+ 2581 0196 0100     		.2byte	0x1
+ 2582 0198 50       		.byte	0x50
+ 2583 0199 08000000 		.4byte	.LVL77
+ 2584 019d 3C000000 		.4byte	.LVL89
+ 2585 01a1 0100     		.2byte	0x1
+ 2586 01a3 56       		.byte	0x56
+ 2587 01a4 3C000000 		.4byte	.LVL89
+ 2588 01a8 3E000000 		.4byte	.LFE41
+ 2589 01ac 0400     		.2byte	0x4
+ 2590 01ae F3       		.byte	0xf3
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 53
+
+
+ 2591 01af 01       		.uleb128 0x1
+ 2592 01b0 50       		.byte	0x50
+ 2593 01b1 9F       		.byte	0x9f
+ 2594 01b2 00000000 		.4byte	0
+ 2595 01b6 00000000 		.4byte	0
+ 2596              	.LLST11:
+ 2597 01ba 00000000 		.4byte	.LVL75
+ 2598 01be 0B000000 		.4byte	.LVL78-1
+ 2599 01c2 0100     		.2byte	0x1
+ 2600 01c4 51       		.byte	0x51
+ 2601 01c5 0B000000 		.4byte	.LVL78-1
+ 2602 01c9 3C000000 		.4byte	.LVL87
+ 2603 01cd 0100     		.2byte	0x1
+ 2604 01cf 54       		.byte	0x54
+ 2605 01d0 3C000000 		.4byte	.LVL87
+ 2606 01d4 3E000000 		.4byte	.LFE41
+ 2607 01d8 0400     		.2byte	0x4
+ 2608 01da F3       		.byte	0xf3
+ 2609 01db 01       		.uleb128 0x1
+ 2610 01dc 51       		.byte	0x51
+ 2611 01dd 9F       		.byte	0x9f
+ 2612 01de 00000000 		.4byte	0
+ 2613 01e2 00000000 		.4byte	0
+ 2614              	.LLST12:
+ 2615 01e6 06000000 		.4byte	.LVL76
+ 2616 01ea 10000000 		.4byte	.LVL79
+ 2617 01ee 0200     		.2byte	0x2
+ 2618 01f0 30       		.byte	0x30
+ 2619 01f1 9F       		.byte	0x9f
+ 2620 01f2 10000000 		.4byte	.LVL79
+ 2621 01f6 3C000000 		.4byte	.LVL88
+ 2622 01fa 0100     		.2byte	0x1
+ 2623 01fc 55       		.byte	0x55
+ 2624 01fd 00000000 		.4byte	0
+ 2625 0201 00000000 		.4byte	0
+ 2626              	.LLST13:
+ 2627 0205 00000000 		.4byte	.LVL114
+ 2628 0209 08000000 		.4byte	.LVL116
+ 2629 020d 0100     		.2byte	0x1
+ 2630 020f 50       		.byte	0x50
+ 2631 0210 08000000 		.4byte	.LVL116
+ 2632 0214 5A000000 		.4byte	.LVL133
+ 2633 0218 0100     		.2byte	0x1
+ 2634 021a 56       		.byte	0x56
+ 2635 021b 5A000000 		.4byte	.LVL133
+ 2636 021f 5C000000 		.4byte	.LFE42
+ 2637 0223 0400     		.2byte	0x4
+ 2638 0225 F3       		.byte	0xf3
+ 2639 0226 01       		.uleb128 0x1
+ 2640 0227 50       		.byte	0x50
+ 2641 0228 9F       		.byte	0x9f
+ 2642 0229 00000000 		.4byte	0
+ 2643 022d 00000000 		.4byte	0
+ 2644              	.LLST14:
+ 2645 0231 00000000 		.4byte	.LVL114
+ 2646 0235 0B000000 		.4byte	.LVL117-1
+ 2647 0239 0100     		.2byte	0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 54
+
+
+ 2648 023b 51       		.byte	0x51
+ 2649 023c 0B000000 		.4byte	.LVL117-1
+ 2650 0240 5A000000 		.4byte	.LVL131
+ 2651 0244 0100     		.2byte	0x1
+ 2652 0246 54       		.byte	0x54
+ 2653 0247 5A000000 		.4byte	.LVL131
+ 2654 024b 5C000000 		.4byte	.LFE42
+ 2655 024f 0400     		.2byte	0x4
+ 2656 0251 F3       		.byte	0xf3
+ 2657 0252 01       		.uleb128 0x1
+ 2658 0253 51       		.byte	0x51
+ 2659 0254 9F       		.byte	0x9f
+ 2660 0255 00000000 		.4byte	0
+ 2661 0259 00000000 		.4byte	0
+ 2662              	.LLST15:
+ 2663 025d 06000000 		.4byte	.LVL115
+ 2664 0261 1C000000 		.4byte	.LVL120
+ 2665 0265 0200     		.2byte	0x2
+ 2666 0267 30       		.byte	0x30
+ 2667 0268 9F       		.byte	0x9f
+ 2668 0269 1C000000 		.4byte	.LVL120
+ 2669 026d 5A000000 		.4byte	.LVL132
+ 2670 0271 0100     		.2byte	0x1
+ 2671 0273 55       		.byte	0x55
+ 2672 0274 00000000 		.4byte	0
+ 2673 0278 00000000 		.4byte	0
+ 2674              		.section	.debug_aranges,"",%progbits
+ 2675 0000 5C000000 		.4byte	0x5c
+ 2676 0004 0200     		.2byte	0x2
+ 2677 0006 00000000 		.4byte	.Ldebug_info0
+ 2678 000a 04       		.byte	0x4
+ 2679 000b 00       		.byte	0
+ 2680 000c 0000     		.2byte	0
+ 2681 000e 0000     		.2byte	0
+ 2682 0010 00000000 		.4byte	.LFB34
+ 2683 0014 78000000 		.4byte	.LFE34-.LFB34
+ 2684 0018 00000000 		.4byte	.LFB35
+ 2685 001c 42000000 		.4byte	.LFE35-.LFB35
+ 2686 0020 00000000 		.4byte	.LFB38
+ 2687 0024 38000000 		.4byte	.LFE38-.LFB38
+ 2688 0028 00000000 		.4byte	.LFB39
+ 2689 002c 3E000000 		.4byte	.LFE39-.LFB39
+ 2690 0030 00000000 		.4byte	.LFB40
+ 2691 0034 3E000000 		.4byte	.LFE40-.LFB40
+ 2692 0038 00000000 		.4byte	.LFB41
+ 2693 003c 3E000000 		.4byte	.LFE41-.LFB41
+ 2694 0040 00000000 		.4byte	.LFB37
+ 2695 0044 6E000000 		.4byte	.LFE37-.LFB37
+ 2696 0048 00000000 		.4byte	.LFB36
+ 2697 004c 44000000 		.4byte	.LFE36-.LFB36
+ 2698 0050 00000000 		.4byte	.LFB42
+ 2699 0054 5C000000 		.4byte	.LFE42-.LFB42
+ 2700 0058 00000000 		.4byte	0
+ 2701 005c 00000000 		.4byte	0
+ 2702              		.section	.debug_ranges,"",%progbits
+ 2703              	.Ldebug_ranges0:
+ 2704 0000 00000000 		.4byte	.LFB34
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 55
+
+
+ 2705 0004 78000000 		.4byte	.LFE34
+ 2706 0008 00000000 		.4byte	.LFB35
+ 2707 000c 42000000 		.4byte	.LFE35
+ 2708 0010 00000000 		.4byte	.LFB38
+ 2709 0014 38000000 		.4byte	.LFE38
+ 2710 0018 00000000 		.4byte	.LFB39
+ 2711 001c 3E000000 		.4byte	.LFE39
+ 2712 0020 00000000 		.4byte	.LFB40
+ 2713 0024 3E000000 		.4byte	.LFE40
+ 2714 0028 00000000 		.4byte	.LFB41
+ 2715 002c 3E000000 		.4byte	.LFE41
+ 2716 0030 00000000 		.4byte	.LFB37
+ 2717 0034 6E000000 		.4byte	.LFE37
+ 2718 0038 00000000 		.4byte	.LFB36
+ 2719 003c 44000000 		.4byte	.LFE36
+ 2720 0040 00000000 		.4byte	.LFB42
+ 2721 0044 5C000000 		.4byte	.LFE42
+ 2722 0048 00000000 		.4byte	0
+ 2723 004c 00000000 		.4byte	0
+ 2724              		.section	.debug_line,"",%progbits
+ 2725              	.Ldebug_line0:
+ 2726 0000 B0030000 		.section	.debug_str,"MS",%progbits,1
+ 2726      02000602 
+ 2726      00000201 
+ 2726      FB0E0D00 
+ 2726      01010101 
+ 2727              	.LASF62:
+ 2728 0000 6C69706F 		.ascii	"lipo_exitConfig\000"
+ 2728      5F657869 
+ 2728      74436F6E 
+ 2728      66696700 
+ 2729              	.LASF55:
+ 2730 0010 6C69706F 		.ascii	"lipo_begin\000"
+ 2730      5F626567 
+ 2730      696E00
+ 2731              	.LASF16:
+ 2732 001b 646F7562 		.ascii	"double\000"
+ 2732      6C6500
+ 2733              	.LASF60:
+ 2734 0022 6C69706F 		.ascii	"lipo_setSOC1Thresholds\000"
+ 2734      5F736574 
+ 2734      534F4331 
+ 2734      54687265 
+ 2734      73686F6C 
+ 2735              	.LASF65:
+ 2736 0039 43795379 		.ascii	"CySysPmGetResetReason\000"
+ 2736      73506D47 
+ 2736      65745265 
+ 2736      73657452 
+ 2736      6561736F 
+ 2737              	.LASF72:
+ 2738 004f 433A5C55 		.ascii	"C:\\Users\\a85495\\Desktop\\PSoC-Quadcopter\\Sensor"
+ 2738      73657273 
+ 2738      5C613835 
+ 2738      3439355C 
+ 2738      4465736B 
+ 2739 007d 735C5365 		.ascii	"s\\Sensor Test\\Base Station_v2.cydsn\000"
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 56
+
+
+ 2739      6E736F72 
+ 2739      20546573 
+ 2739      745C4261 
+ 2739      73652053 
+ 2740              	.LASF2:
+ 2741 00a1 73686F72 		.ascii	"short int\000"
+ 2741      7420696E 
+ 2741      7400
+ 2742              	.LASF19:
+ 2743 00ab 73697A65 		.ascii	"sizetype\000"
+ 2743      74797065 
+ 2743      00
+ 2744              	.LASF48:
+ 2745 00b4 62757474 		.ascii	"butt_pin_ClearInterrupt\000"
+ 2745      5F70696E 
+ 2745      5F436C65 
+ 2745      6172496E 
+ 2745      74657272 
+ 2746              	.LASF73:
+ 2747 00cc 6D61696E 		.ascii	"main\000"
+ 2747      00
+ 2748              	.LASF30:
+ 2749 00d1 746F6767 		.ascii	"toggleRedLED\000"
+ 2749      6C655265 
+ 2749      644C4544 
+ 2749      00
+ 2750              	.LASF4:
+ 2751 00de 5F5F7569 		.ascii	"__uint16_t\000"
+ 2751      6E743136 
+ 2751      5F7400
+ 2752              	.LASF28:
+ 2753 00e9 64656C61 		.ascii	"delayBetweenBlinks\000"
+ 2753      79426574 
+ 2753      7765656E 
+ 2753      426C696E 
+ 2753      6B7300
+ 2754              	.LASF11:
+ 2755 00fc 75696E74 		.ascii	"uint8_t\000"
+ 2755      385F7400 
+ 2756              	.LASF13:
+ 2757 0104 75696E74 		.ascii	"uint8\000"
+ 2757      3800
+ 2758              	.LASF42:
+ 2759 010a 6C69706F 		.ascii	"lipo_soc\000"
+ 2759      5F736F63 
+ 2759      00
+ 2760              	.LASF32:
+ 2761 0113 746F6767 		.ascii	"toggleGreenLED\000"
+ 2761      6C654772 
+ 2761      65656E4C 
+ 2761      454400
+ 2762              	.LASF20:
+ 2763 0122 626F6F6C 		.ascii	"bool\000"
+ 2763      00
+ 2764              	.LASF68:
+ 2765 0127 43795379 		.ascii	"CySysPmFreezeIo\000"
+ 2765      73506D46 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 57
+
+
+ 2765      7265657A 
+ 2765      65496F00 
+ 2766              	.LASF41:
+ 2767 0137 424F4152 		.ascii	"BOARD_LED_Write\000"
+ 2767      445F4C45 
+ 2767      445F5772 
+ 2767      69746500 
+ 2768              	.LASF45:
+ 2769 0147 47524545 		.ascii	"GREEN_LED_Write\000"
+ 2769      4E5F4C45 
+ 2769      445F5772 
+ 2769      69746500 
+ 2770              	.LASF15:
+ 2771 0157 666C6F61 		.ascii	"float\000"
+ 2771      7400
+ 2772              	.LASF66:
+ 2773 015d 72656164 		.ascii	"read_battery_Disable\000"
+ 2773      5F626174 
+ 2773      74657279 
+ 2773      5F446973 
+ 2773      61626C65 
+ 2774              	.LASF8:
+ 2775 0172 6C6F6E67 		.ascii	"long long int\000"
+ 2775      206C6F6E 
+ 2775      6720696E 
+ 2775      7400
+ 2776              	.LASF18:
+ 2777 0180 63796973 		.ascii	"cyisraddress\000"
+ 2777      72616464 
+ 2777      72657373 
+ 2777      00
+ 2778              	.LASF33:
+ 2779 018d 73657475 		.ascii	"setupBQ27441\000"
+ 2779      70425132 
+ 2779      37343431 
+ 2779      00
+ 2780              	.LASF17:
+ 2781 019a 63686172 		.ascii	"char\000"
+ 2781      00
+ 2782              	.LASF6:
+ 2783 019f 6C6F6E67 		.ascii	"long int\000"
+ 2783      20696E74 
+ 2783      00
+ 2784              	.LASF47:
+ 2785 01a8 424F4152 		.ascii	"BOARD_LED_Read\000"
+ 2785      445F4C45 
+ 2785      445F5265 
+ 2785      616400
+ 2786              	.LASF3:
+ 2787 01b7 5F5F7569 		.ascii	"__uint8_t\000"
+ 2787      6E74385F 
+ 2787      7400
+ 2788              	.LASF56:
+ 2789 01c1 6C69706F 		.ascii	"lipo_enterConfig\000"
+ 2789      5F656E74 
+ 2789      6572436F 
+ 2789      6E666967 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 58
+
+
+ 2789      00
+ 2790              	.LASF69:
+ 2791 01d2 43795379 		.ascii	"CySysPmHibernate\000"
+ 2791      73506D48 
+ 2791      69626572 
+ 2791      6E617465 
+ 2791      00
+ 2792              	.LASF70:
+ 2793 01e3 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2793      4320342E 
+ 2793      392E3320 
+ 2793      32303135 
+ 2793      30333033 
+ 2794 0216 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 2794      20726576 
+ 2794      6973696F 
+ 2794      6E203232 
+ 2794      31323230 
+ 2795 0249 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2795      66756E63 
+ 2795      74696F6E 
+ 2795      2D736563 
+ 2795      74696F6E 
+ 2796              	.LASF1:
+ 2797 0271 756E7369 		.ascii	"unsigned char\000"
+ 2797      676E6564 
+ 2797      20636861 
+ 2797      7200
+ 2798              	.LASF29:
+ 2799 027f 70657263 		.ascii	"percentage\000"
+ 2799      656E7461 
+ 2799      676500
+ 2800              	.LASF31:
+ 2801 028a 746F6767 		.ascii	"toggleYellowLED\000"
+ 2801      6C655965 
+ 2801      6C6C6F77 
+ 2801      4C454400 
+ 2802              	.LASF49:
+ 2803 029a 6C69706F 		.ascii	"lipo_socfFlag\000"
+ 2803      5F736F63 
+ 2803      66466C61 
+ 2803      6700
+ 2804              	.LASF0:
+ 2805 02a8 7369676E 		.ascii	"signed char\000"
+ 2805      65642063 
+ 2805      68617200 
+ 2806              	.LASF9:
+ 2807 02b4 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2807      206C6F6E 
+ 2807      6720756E 
+ 2807      7369676E 
+ 2807      65642069 
+ 2808              	.LASF59:
+ 2809 02cb 6C69706F 		.ascii	"lipo_setGPOUTFunction\000"
+ 2809      5F736574 
+ 2809      47504F55 
+ 2809      5446756E 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 59
+
+
+ 2809      6374696F 
+ 2810              	.LASF61:
+ 2811 02e1 6C69706F 		.ascii	"lipo_setSOCFThresholds\000"
+ 2811      5F736574 
+ 2811      534F4346 
+ 2811      54687265 
+ 2811      73686F6C 
+ 2812              	.LASF10:
+ 2813 02f8 756E7369 		.ascii	"unsigned int\000"
+ 2813      676E6564 
+ 2813      20696E74 
+ 2813      00
+ 2814              	.LASF12:
+ 2815 0305 75696E74 		.ascii	"uint16_t\000"
+ 2815      31365F74 
+ 2815      00
+ 2816              	.LASF7:
+ 2817 030e 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2817      20756E73 
+ 2817      69676E65 
+ 2817      6420696E 
+ 2817      7400
+ 2818              	.LASF63:
+ 2819 0320 72656164 		.ascii	"read_battery_StartEx\000"
+ 2819      5F626174 
+ 2819      74657279 
+ 2819      5F537461 
+ 2819      72744578 
+ 2820              	.LASF22:
+ 2821 0335 4241545F 		.ascii	"BAT_LOW\000"
+ 2821      4C4F5700 
+ 2822              	.LASF24:
+ 2823 033d 72656164 		.ascii	"read_battery_Handler\000"
+ 2823      5F626174 
+ 2823      74657279 
+ 2823      5F48616E 
+ 2823      646C6572 
+ 2824              	.LASF5:
+ 2825 0352 73686F72 		.ascii	"short unsigned int\000"
+ 2825      7420756E 
+ 2825      7369676E 
+ 2825      65642069 
+ 2825      6E7400
+ 2826              	.LASF50:
+ 2827 0365 6C69706F 		.ascii	"lipo_socFlag\000"
+ 2827      5F736F63 
+ 2827      466C6167 
+ 2827      00
+ 2828              	.LASF40:
+ 2829 0372 534F4346 		.ascii	"SOCF_CLR\000"
+ 2829      5F434C52 
+ 2829      00
+ 2830              	.LASF36:
+ 2831 037b 42415454 		.ascii	"BATTERY_CAPACITY\000"
+ 2831      4552595F 
+ 2831      43415041 
+ 2831      43495459 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 60
+
+
+ 2831      00
+ 2832              	.LASF57:
+ 2833 038c 6C69706F 		.ascii	"lipo_setCapacity\000"
+ 2833      5F736574 
+ 2833      43617061 
+ 2833      63697479 
+ 2833      00
+ 2834              	.LASF38:
+ 2835 039d 534F4349 		.ascii	"SOCI_CLR\000"
+ 2835      5F434C52 
+ 2835      00
+ 2836              	.LASF26:
+ 2837 03a6 746F6767 		.ascii	"toggleBoardLED\000"
+ 2837      6C65426F 
+ 2837      6172644C 
+ 2837      454400
+ 2838              	.LASF64:
+ 2839 03b5 6C69706F 		.ascii	"lipo_gpout_StartEx\000"
+ 2839      5F67706F 
+ 2839      75745F53 
+ 2839      74617274 
+ 2839      457800
+ 2840              	.LASF14:
+ 2841 03c8 75696E74 		.ascii	"uint32\000"
+ 2841      333200
+ 2842              	.LASF71:
+ 2843 03cf 6D61696E 		.ascii	"main.c\000"
+ 2843      2E6300
+ 2844              	.LASF25:
+ 2845 03d6 62617474 		.ascii	"battery_critical_low_Handler\000"
+ 2845      6572795F 
+ 2845      63726974 
+ 2845      6963616C 
+ 2845      5F6C6F77 
+ 2846              	.LASF35:
+ 2847 03f3 64656C61 		.ascii	"delayBetweenSequenceToggle\000"
+ 2847      79426574 
+ 2847      7765656E 
+ 2847      53657175 
+ 2847      656E6365 
+ 2848              	.LASF27:
+ 2849 040e 6E756D62 		.ascii	"numberOfTimes\000"
+ 2849      65724F66 
+ 2849      54696D65 
+ 2849      7300
+ 2850              	.LASF53:
+ 2851 041c 59454C4C 		.ascii	"YELLOW_LED_Read\000"
+ 2851      4F575F4C 
+ 2851      45445F52 
+ 2851      65616400 
+ 2852              	.LASF51:
+ 2853 042c 47504F55 		.ascii	"GPOUT_ClearInterrupt\000"
+ 2853      545F436C 
+ 2853      65617249 
+ 2853      6E746572 
+ 2853      72757074 
+ 2854              	.LASF21:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 61
+
+
+ 2855 0441 534F435F 		.ascii	"SOC_INT\000"
+ 2855      494E5400 
+ 2856              	.LASF44:
+ 2857 0449 59454C4C 		.ascii	"YELLOW_LED_Write\000"
+ 2857      4F575F4C 
+ 2857      45445F57 
+ 2857      72697465 
+ 2857      00
+ 2858              	.LASF54:
+ 2859 045a 47524545 		.ascii	"GREEN_LED_Read\000"
+ 2859      4E5F4C45 
+ 2859      445F5265 
+ 2859      616400
+ 2860              	.LASF58:
+ 2861 0469 6C69706F 		.ascii	"lipo_setGPOUTPolarity\000"
+ 2861      5F736574 
+ 2861      47504F55 
+ 2861      54506F6C 
+ 2861      61726974 
+ 2862              	.LASF34:
+ 2863 047f 746F6767 		.ascii	"toggleSequenceLED\000"
+ 2863      6C655365 
+ 2863      7175656E 
+ 2863      63654C45 
+ 2863      4400
+ 2864              	.LASF39:
+ 2865 0491 534F4346 		.ascii	"SOCF_SET\000"
+ 2865      5F534554 
+ 2865      00
+ 2866              	.LASF52:
+ 2867 049a 5245445F 		.ascii	"RED_LED_Read\000"
+ 2867      4C45445F 
+ 2867      52656164 
+ 2867      00
+ 2868              	.LASF43:
+ 2869 04a7 5245445F 		.ascii	"RED_LED_Write\000"
+ 2869      4C45445F 
+ 2869      57726974 
+ 2869      6500
+ 2870              	.LASF46:
+ 2871 04b5 43794465 		.ascii	"CyDelay\000"
+ 2871      6C617900 
+ 2872              	.LASF23:
+ 2873 04bd 67706F75 		.ascii	"gpout_function\000"
+ 2873      745F6675 
+ 2873      6E637469 
+ 2873      6F6E00
+ 2874              	.LASF37:
+ 2875 04cc 534F4349 		.ascii	"SOCI_SET\000"
+ 2875      5F534554 
+ 2875      00
+ 2876              	.LASF67:
+ 2877 04d5 43795379 		.ascii	"CySysPmUnfreezeIo\000"
+ 2877      73506D55 
+ 2877      6E667265 
+ 2877      657A6549 
+ 2877      6F00
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccr0TJ7y.s 			page 62
+
+
+ 2878              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

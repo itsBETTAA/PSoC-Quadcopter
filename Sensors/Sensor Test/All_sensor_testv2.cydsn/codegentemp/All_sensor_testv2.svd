@@ -37,7 +37,7 @@
         <register>
           <name>deltaTimer_Control_Reg</name>
           <description>UDB Control Register - Assigned Control Register Value</description>
-          <addressOffset>0x40006476</addressOffset>
+          <addressOffset>0x40006474</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -259,7 +259,7 @@
         <register>
           <name>RX_xbeeSerial_RX_ADDRESS1</name>
           <description>RX Address1 Register</description>
-          <addressOffset>0x40006428</addressOffset>
+          <addressOffset>0x40006529</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -268,16 +268,7 @@
         <register>
           <name>RX_xbeeSerial_RX_ADDRESS2</name>
           <description>RX Address2 Register</description>
-          <addressOffset>0x40006438</addressOffset>
-          <size>8</size>
-          <access>read-write</access>
-          <resetValue>0</resetValue>
-          <resetMask>0</resetMask>
-        </register>
-        <register>
-          <name>TX_xbeeSerial_TX_DATA</name>
-          <description>TX Data Register</description>
-          <addressOffset>0x40006447</addressOffset>
+          <addressOffset>0x40006539</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -286,7 +277,16 @@
         <register>
           <name>RX_xbeeSerial_RX_DATA</name>
           <description>RX Data Register</description>
-          <addressOffset>0x40006448</addressOffset>
+          <addressOffset>0x40006549</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0</resetValue>
+          <resetMask>0</resetMask>
+        </register>
+        <register>
+          <name>TX_xbeeSerial_TX_DATA</name>
+          <description>TX Data Register</description>
+          <addressOffset>0x4000654B</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -295,7 +295,7 @@
         <register>
           <name>TX_xbeeSerial_TX_STATUS</name>
           <description>TX status register</description>
-          <addressOffset>0x40006467</addressOffset>
+          <addressOffset>0x40006568</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -334,7 +334,7 @@
         <register>
           <name>RX_xbeeSerial_RX_STATUS</name>
           <description>RX status register</description>
-          <addressOffset>0x40006568</addressOffset>
+          <addressOffset>0x4000656A</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -814,36 +814,9 @@
       </addressBlock>
       <registers>
         <register>
-          <name>RX_debugSerial_RX_ADDRESS1</name>
-          <description>RX Address1 Register</description>
-          <addressOffset>0x40006426</addressOffset>
-          <size>8</size>
-          <access>read-write</access>
-          <resetValue>0</resetValue>
-          <resetMask>0</resetMask>
-        </register>
-        <register>
-          <name>RX_debugSerial_RX_ADDRESS2</name>
-          <description>RX Address2 Register</description>
-          <addressOffset>0x40006436</addressOffset>
-          <size>8</size>
-          <access>read-write</access>
-          <resetValue>0</resetValue>
-          <resetMask>0</resetMask>
-        </register>
-        <register>
-          <name>RX_debugSerial_RX_DATA</name>
-          <description>RX Data Register</description>
-          <addressOffset>0x40006446</addressOffset>
-          <size>8</size>
-          <access>read-write</access>
-          <resetValue>0</resetValue>
-          <resetMask>0</resetMask>
-        </register>
-        <register>
           <name>TX_debugSerial_TX_DATA</name>
           <description>TX Data Register</description>
-          <addressOffset>0x40006544</addressOffset>
+          <addressOffset>0x40006447</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -852,7 +825,7 @@
         <register>
           <name>TX_debugSerial_TX_STATUS</name>
           <description>TX status register</description>
-          <addressOffset>0x40006566</addressOffset>
+          <addressOffset>0x40006463</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -891,7 +864,7 @@
         <register>
           <name>RX_debugSerial_RX_STATUS</name>
           <description>RX status register</description>
-          <addressOffset>0x4000656A</addressOffset>
+          <addressOffset>0x40006467</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -948,6 +921,33 @@
             </field>
           </fields>
         </register>
+        <register>
+          <name>RX_debugSerial_RX_ADDRESS1</name>
+          <description>RX Address1 Register</description>
+          <addressOffset>0x40006524</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0</resetValue>
+          <resetMask>0</resetMask>
+        </register>
+        <register>
+          <name>RX_debugSerial_RX_ADDRESS2</name>
+          <description>RX Address2 Register</description>
+          <addressOffset>0x40006534</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0</resetValue>
+          <resetMask>0</resetMask>
+        </register>
+        <register>
+          <name>RX_debugSerial_RX_DATA</name>
+          <description>RX Data Register</description>
+          <addressOffset>0x40006544</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0</resetValue>
+          <resetMask>0</resetMask>
+        </register>
       </registers>
     </peripheral>
     <peripheral>
@@ -963,7 +963,7 @@
         <register>
           <name>RX_gpsSerial_RX_ADDRESS1</name>
           <description>RX Address1 Register</description>
-          <addressOffset>0x40006421</addressOffset>
+          <addressOffset>0x40006426</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -972,16 +972,7 @@
         <register>
           <name>RX_gpsSerial_RX_ADDRESS2</name>
           <description>RX Address2 Register</description>
-          <addressOffset>0x40006431</addressOffset>
-          <size>8</size>
-          <access>read-write</access>
-          <resetValue>0</resetValue>
-          <resetMask>0</resetMask>
-        </register>
-        <register>
-          <name>RX_gpsSerial_RX_DATA</name>
-          <description>RX Data Register</description>
-          <addressOffset>0x40006441</addressOffset>
+          <addressOffset>0x40006436</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -990,7 +981,16 @@
         <register>
           <name>TX_gpsSerial_TX_DATA</name>
           <description>TX Data Register</description>
-          <addressOffset>0x40006449</addressOffset>
+          <addressOffset>0x40006440</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0</resetValue>
+          <resetMask>0</resetMask>
+        </register>
+        <register>
+          <name>RX_gpsSerial_RX_DATA</name>
+          <description>RX Data Register</description>
+          <addressOffset>0x40006446</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>
@@ -999,7 +999,7 @@
         <register>
           <name>RX_gpsSerial_RX_STATUS</name>
           <description>RX status register</description>
-          <addressOffset>0x40006462</addressOffset>
+          <addressOffset>0x40006466</addressOffset>
           <size>8</size>
           <access>read-write</access>
           <resetValue>0</resetValue>

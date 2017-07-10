@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<blockRegMap version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cypress.com/xsd/cyblockregmap cyblockregmap.xsd" xmlns="http://cypress.com/xsd/cyblockregmap">
+  <block name="cy_boot" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="cy_lfclk" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="StripLights" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false">
+    <block name="demux_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+    <block name="StripLights_StringSel" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false">
+      <register name="StripLights_StringSel_CONTROL_REG" address="0x400F0073" bitWidth="8" desc="" hidden="false" />
+    </block>
+    <block name="B_WS2811" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+    <block name="fisr" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+    <block name="ZeroTerminal_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+    <block name="HFCLK" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+    <block name="cisr" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  </block>
+  <block name="Pin_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+</blockRegMap>

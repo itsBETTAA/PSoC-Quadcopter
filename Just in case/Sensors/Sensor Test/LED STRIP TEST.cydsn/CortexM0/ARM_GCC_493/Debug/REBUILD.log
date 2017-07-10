@@ -1,0 +1,8 @@
+--------------- Rebuild Started: 07/05/2017 11:21:37 Project: main.c, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c main.c -o .\CortexM0\ARM_GCC_493\Debug\main.o
+In file included from main.c:15:0:
+Generated_Source\PSoC4/stripLights.c: In function 'StripLights_GetPixel':
+Generated_Source\PSoC4/stripLights.c:610:5: warning: 'color' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     return(color);
+     ^
+--------------- Rebuild Succeeded: 07/05/2017 11:21:37 ---------------

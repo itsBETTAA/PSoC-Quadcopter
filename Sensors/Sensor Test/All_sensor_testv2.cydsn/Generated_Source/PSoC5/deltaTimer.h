@@ -172,10 +172,10 @@ void deltaTimer_Wakeup(void)        ;
 #define deltaTimer_INIT_CAPTURE_MODE       ((uint8)((uint8)0u << deltaTimer_CTRL_CAP_MODE_SHIFT))
 #define deltaTimer_INIT_TRIGGER_MODE       ((uint8)((uint8)0u << deltaTimer_CTRL_TRIG_MODE_SHIFT))
 #if (deltaTimer_UsingFixedFunction)
-    #define deltaTimer_INIT_INTERRUPT_MODE (((uint8)((uint8)0u << deltaTimer_STATUS_TC_INT_MASK_SHIFT)) | \
+    #define deltaTimer_INIT_INTERRUPT_MODE (((uint8)((uint8)1u << deltaTimer_STATUS_TC_INT_MASK_SHIFT)) | \
                                                   ((uint8)((uint8)0 << deltaTimer_STATUS_CAPTURE_INT_MASK_SHIFT)))
 #else
-    #define deltaTimer_INIT_INTERRUPT_MODE (((uint8)((uint8)0u << deltaTimer_STATUS_TC_INT_MASK_SHIFT)) | \
+    #define deltaTimer_INIT_INTERRUPT_MODE (((uint8)((uint8)1u << deltaTimer_STATUS_TC_INT_MASK_SHIFT)) | \
                                                  ((uint8)((uint8)0 << deltaTimer_STATUS_CAPTURE_INT_MASK_SHIFT)) | \
                                                  ((uint8)((uint8)0 << deltaTimer_STATUS_FIFOFULL_INT_MASK_SHIFT)))
 #endif /* (deltaTimer_UsingFixedFunction) */

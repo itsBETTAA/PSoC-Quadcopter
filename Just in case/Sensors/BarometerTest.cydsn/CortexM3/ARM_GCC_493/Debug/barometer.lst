@@ -1,0 +1,2551 @@
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"barometer.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.sendCommand,"ax",%progbits
+  19              		.align	2
+  20              		.global	sendCommand
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	sendCommand, %function
+  24              	sendCommand:
+  25              	.LFB63:
+  26              		.file 1 "..\\barometer.c"
+   1:..\barometer.c **** 
+   2:..\barometer.c **** #include <barometer.h>
+   3:..\barometer.c **** #include <twi.h>
+   4:..\barometer.c **** #include <stdlib.h>
+   5:..\barometer.c **** #include "project.h"
+   6:..\barometer.c **** 
+   7:..\barometer.c **** //static variables/functions
+   8:..\barometer.c **** static void reset();
+   9:..\barometer.c **** 
+  10:..\barometer.c **** static int32_t  _Pres;
+  11:..\barometer.c **** static int32_t  _T;
+  12:..\barometer.c **** static int32_t  _dT;
+  13:..\barometer.c **** static uint16_t _Co[N_PROM_PARAMS];
+  14:..\barometer.c **** static uint32_t _lastTime;
+  15:..\barometer.c **** 
+  16:..\barometer.c **** //Things we need to know
+  17:..\barometer.c **** #define OSR 2 // 0-3
+  18:..\barometer.c **** #define CMD_RESET 0x1E
+  19:..\barometer.c **** #define CMD_ADC_READ 0x00
+  20:..\barometer.c **** #define CMD_CONV_D1_BASE 0x40
+  21:..\barometer.c **** #define CMD_CONV_D2_BASE 0x50
+  22:..\barometer.c **** #define CONV_REG_SIZE 0x02
+  23:..\barometer.c **** #define CMD_PROM_READ_BASE 0xA2
+  24:..\barometer.c **** #define PROM_REG_SIZE 0x02
+  25:..\barometer.c **** #define NBYTES_CONV 3
+  26:..\barometer.c **** #define NBYTES_PROM 2
+  27:..\barometer.c **** 
+  28:..\barometer.c **** // Temperature sampling period threshold [milliseconds]
+  29:..\barometer.c **** // Kindly read the comment bellow in getPressure() method
+  30:..\barometer.c **** #define T_THR 1000
+  31:..\barometer.c **** /*
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 2
+
+
+  32:..\barometer.c **** TODO:
+  33:..\barometer.c **** 1) Separate OSR for temperature and pressure
+  34:..\barometer.c **** 2) Timedelay empirical formula for temperature oversampling
+  35:..\barometer.c **** 3) Precidion pressure calibration for high temperature
+  36:..\barometer.c **** 4) Default and optional OSR
+  37:..\barometer.c **** 5) Documentation
+  38:..\barometer.c **** */
+  39:..\barometer.c **** 
+  40:..\barometer.c **** void sendCommand(uint8_t cmd)
+  41:..\barometer.c **** {
+  27              		.loc 1 41 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 00B5     		push	{lr}
+  33              		.cfi_def_cfa_offset 4
+  34              		.cfi_offset 14, -4
+  35 0002 83B0     		sub	sp, sp, #12
+  36              		.cfi_def_cfa_offset 16
+  42:..\barometer.c ****     /*
+  43:..\barometer.c **** 	Wire.beginTransmission(ADD_MS5611);
+  44:..\barometer.c **** 	Wire.write(cmd);
+  45:..\barometer.c **** 	Wire.endTransmission();
+  46:..\barometer.c **** */
+  47:..\barometer.c **** 
+  48:..\barometer.c ****     //to write, you want to write:  (1) The address you want to write to
+  49:..\barometer.c ****     //                              (2) The cmd you wish to write to the register
+  50:..\barometer.c **** 
+  51:..\barometer.c ****     uint8_t Write_Buf[1] = {0};
+  52:..\barometer.c ****     Write_Buf[0] = (uint8_t)cmd;
+  37              		.loc 1 52 0
+  38 0004 02A9     		add	r1, sp, #8
+  39 0006 01F8040D 		strb	r0, [r1, #-4]!
+  53:..\barometer.c **** 
+  54:..\barometer.c ****     I2C_MasterWriteBuf(MS5611_ADDRESS, (uint8 *)Write_Buf, sizeof(Write_Buf), I2C_MODE_COMPLETE_XFE
+  40              		.loc 1 54 0
+  41 000a 7720     		movs	r0, #119
+  42              	.LVL1:
+  43 000c 0122     		movs	r2, #1
+  44 000e 0023     		movs	r3, #0
+  45 0010 FFF7FEFF 		bl	I2C_MasterWriteBuf
+  46              	.LVL2:
+  47              	.L2:
+  55:..\barometer.c ****     while ((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT) == 0)
+  48              		.loc 1 55 0 discriminator 1
+  49 0014 FFF7FEFF 		bl	I2C_MasterStatus
+  50              	.LVL3:
+  51 0018 10F0020F 		tst	r0, #2
+  52 001c FAD0     		beq	.L2
+  56:..\barometer.c ****     {
+  57:..\barometer.c ****     }
+  58:..\barometer.c **** 
+  59:..\barometer.c ****     return; //return 1 if everything was successful
+  60:..\barometer.c **** }
+  53              		.loc 1 60 0
+  54 001e 03B0     		add	sp, sp, #12
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 3
+
+
+  55              		.cfi_def_cfa_offset 4
+  56              		@ sp needed
+  57 0020 5DF804FB 		ldr	pc, [sp], #4
+  58              		.cfi_endproc
+  59              	.LFE63:
+  60              		.size	sendCommand, .-sendCommand
+  61              		.section	.text.reset,"ax",%progbits
+  62              		.align	2
+  63              		.thumb
+  64              		.thumb_func
+  65              		.type	reset, %function
+  66              	reset:
+  67              	.LFB65:
+  61:..\barometer.c **** 
+  62:..\barometer.c **** uint32_t readnBytes(uint8_t nBytes)
+  63:..\barometer.c **** {
+  64:..\barometer.c ****     if ((0 < nBytes) & (nBytes < 5))
+  65:..\barometer.c ****     {
+  66:..\barometer.c ****         uint32_t data = 0;
+  67:..\barometer.c ****         uint8_t Read_Buf[5] = {0}; //create an array that will store the data read
+  68:..\barometer.c **** 
+  69:..\barometer.c ****         I2C_MasterReadBuf(MS5611_ADDRESS, (uint8 *)Read_Buf, nBytes, I2C_MODE_COMPLETE_XFER);
+  70:..\barometer.c ****         while ((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT) == 0)
+  71:..\barometer.c ****         {
+  72:..\barometer.c ****         } //wait till Master status indicates read is complete
+  73:..\barometer.c ****         
+  74:..\barometer.c ****         int8_t k;
+  75:..\barometer.c ****         for ( k = (nBytes - 1); k>=0 ; k--){
+  76:..\barometer.c **** 			data |= ( (uint32_t) Read_Buf[(nBytes-1)-k] << (8*k) ); 	// concantenate bytes
+  77:..\barometer.c ****         }
+  78:..\barometer.c ****         return data;   
+  79:..\barometer.c ****     }
+  80:..\barometer.c ****     return 0;
+  81:..\barometer.c **** }
+  82:..\barometer.c **** 
+  83:..\barometer.c **** static void reset(){
+  68              		.loc 1 83 0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  72 0000 08B5     		push	{r3, lr}
+  73              		.cfi_def_cfa_offset 8
+  74              		.cfi_offset 3, -8
+  75              		.cfi_offset 14, -4
+  84:..\barometer.c ****     sendCommand(CMD_RESET);
+  76              		.loc 1 84 0
+  77 0002 1E20     		movs	r0, #30
+  78 0004 FFF7FEFF 		bl	sendCommand
+  79              	.LVL4:
+  80 0008 08BD     		pop	{r3, pc}
+  81              		.cfi_endproc
+  82              	.LFE65:
+  83              		.size	reset, .-reset
+  84 000a 00BF     		.section	.text.readnBytes,"ax",%progbits
+  85              		.align	2
+  86              		.global	readnBytes
+  87              		.thumb
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 4
+
+
+  88              		.thumb_func
+  89              		.type	readnBytes, %function
+  90              	readnBytes:
+  91              	.LFB64:
+  63:..\barometer.c ****     if ((0 < nBytes) & (nBytes < 5))
+  92              		.loc 1 63 0
+  93              		.cfi_startproc
+  94              		@ args = 0, pretend = 0, frame = 8
+  95              		@ frame_needed = 0, uses_anonymous_args = 0
+  96              	.LVL5:
+  97 0000 30B5     		push	{r4, r5, lr}
+  98              		.cfi_def_cfa_offset 12
+  99              		.cfi_offset 4, -12
+ 100              		.cfi_offset 5, -8
+ 101              		.cfi_offset 14, -4
+ 102 0002 83B0     		sub	sp, sp, #12
+ 103              		.cfi_def_cfa_offset 24
+  64:..\barometer.c ****     {
+ 104              		.loc 1 64 0
+ 105 0004 421E     		subs	r2, r0, #1
+ 106 0006 D4B2     		uxtb	r4, r2
+ 107 0008 032C     		cmp	r4, #3
+ 108 000a 21D8     		bhi	.L11
+ 109 000c 0546     		mov	r5, r0
+ 110              	.LVL6:
+ 111              	.LBB2:
+  67:..\barometer.c **** 
+ 112              		.loc 1 67 0
+ 113 000e 0023     		movs	r3, #0
+ 114 0010 0093     		str	r3, [sp]
+ 115 0012 8DF80430 		strb	r3, [sp, #4]
+  69:..\barometer.c ****         while ((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT) == 0)
+ 116              		.loc 1 69 0
+ 117 0016 7720     		movs	r0, #119
+ 118              	.LVL7:
+ 119 0018 6946     		mov	r1, sp
+ 120 001a 2A46     		mov	r2, r5
+ 121 001c FFF7FEFF 		bl	I2C_MasterReadBuf
+ 122              	.LVL8:
+ 123              	.L8:
+  70:..\barometer.c ****         {
+ 124              		.loc 1 70 0 discriminator 1
+ 125 0020 FFF7FEFF 		bl	I2C_MasterStatus
+ 126              	.LVL9:
+ 127 0024 10F0010F 		tst	r0, #1
+ 128 0028 FAD0     		beq	.L8
+  75:..\barometer.c **** 			data |= ( (uint32_t) Read_Buf[(nBytes-1)-k] << (8*k) ); 	// concantenate bytes
+ 129              		.loc 1 75 0
+ 130 002a E2B2     		uxtb	r2, r4
+ 131              	.LVL10:
+  66:..\barometer.c ****         uint8_t Read_Buf[5] = {0}; //create an array that will store the data read
+ 132              		.loc 1 66 0
+ 133 002c 0020     		movs	r0, #0
+  75:..\barometer.c **** 			data |= ( (uint32_t) Read_Buf[(nBytes-1)-k] << (8*k) ); 	// concantenate bytes
+ 134              		.loc 1 75 0
+ 135 002e 0BE0     		b	.L9
+ 136              	.LVL11:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 5
+
+
+ 137              	.L10:
+  76:..\barometer.c ****         }
+ 138              		.loc 1 76 0 discriminator 3
+ 139 0030 6B1E     		subs	r3, r5, #1
+ 140 0032 51B2     		sxtb	r1, r2
+ 141 0034 5B1A     		subs	r3, r3, r1
+ 142 0036 02AC     		add	r4, sp, #8
+ 143 0038 2344     		add	r3, r3, r4
+ 144 003a 13F8083C 		ldrb	r3, [r3, #-8]	@ zero_extendqisi2
+ 145 003e C900     		lsls	r1, r1, #3
+ 146 0040 8B40     		lsls	r3, r3, r1
+ 147 0042 1843     		orrs	r0, r0, r3
+ 148              	.LVL12:
+  75:..\barometer.c **** 			data |= ( (uint32_t) Read_Buf[(nBytes-1)-k] << (8*k) ); 	// concantenate bytes
+ 149              		.loc 1 75 0 discriminator 3
+ 150 0044 013A     		subs	r2, r2, #1
+ 151              	.LVL13:
+ 152 0046 D2B2     		uxtb	r2, r2
+ 153              	.LVL14:
+ 154              	.L9:
+  75:..\barometer.c **** 			data |= ( (uint32_t) Read_Buf[(nBytes-1)-k] << (8*k) ); 	// concantenate bytes
+ 155              		.loc 1 75 0 is_stmt 0 discriminator 1
+ 156 0048 12F0800F 		tst	r2, #128
+ 157 004c F0D0     		beq	.L10
+ 158 004e 00E0     		b	.L7
+ 159              	.LVL15:
+ 160              	.L11:
+ 161              	.LBE2:
+  80:..\barometer.c **** }
+ 162              		.loc 1 80 0 is_stmt 1
+ 163 0050 0020     		movs	r0, #0
+ 164              	.LVL16:
+ 165              	.L7:
+  81:..\barometer.c **** 
+ 166              		.loc 1 81 0 discriminator 1
+ 167 0052 03B0     		add	sp, sp, #12
+ 168              		.cfi_def_cfa_offset 12
+ 169              		@ sp needed
+ 170 0054 30BD     		pop	{r4, r5, pc}
+ 171              		.cfi_endproc
+ 172              	.LFE64:
+ 173              		.size	readnBytes, .-readnBytes
+ 174 0056 00BF     		.section	.text.baro_getRawTemperature,"ax",%progbits
+ 175              		.align	2
+ 176              		.global	baro_getRawTemperature
+ 177              		.thumb
+ 178              		.thumb_func
+ 179              		.type	baro_getRawTemperature, %function
+ 180              	baro_getRawTemperature:
+ 181              	.LFB67:
+  85:..\barometer.c **** }
+  86:..\barometer.c **** 
+  87:..\barometer.c **** void baro_begin()
+  88:..\barometer.c **** {
+  89:..\barometer.c ****     _T = 0;
+  90:..\barometer.c ****     _Pres = 0;
+  91:..\barometer.c ****     _lastTime = T_THR;
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 6
+
+
+  92:..\barometer.c ****     uint8_t k;
+  93:..\barometer.c ****     for (k = 0; k < N_PROM_PARAMS; k++)
+  94:..\barometer.c ****     {
+  95:..\barometer.c ****         _Co[k] = 69;
+  96:..\barometer.c ****     }
+  97:..\barometer.c **** 
+  98:..\barometer.c ****     Wire_begin();
+  99:..\barometer.c ****     reset();
+ 100:..\barometer.c ****     CyDelay(100);
+ 101:..\barometer.c ****     baro_readCalibration();
+ 102:..\barometer.c **** }
+ 103:..\barometer.c **** 
+ 104:..\barometer.c **** uint32_t baro_getRawTemperature()
+ 105:..\barometer.c **** {
+ 182              		.loc 1 105 0
+ 183              		.cfi_startproc
+ 184              		@ args = 0, pretend = 0, frame = 0
+ 185              		@ frame_needed = 0, uses_anonymous_args = 0
+ 186 0000 08B5     		push	{r3, lr}
+ 187              		.cfi_def_cfa_offset 8
+ 188              		.cfi_offset 3, -8
+ 189              		.cfi_offset 14, -4
+ 106:..\barometer.c ****     sendCommand(CMD_CONV_D2_BASE + OSR * CONV_REG_SIZE); //read sensor, prepare a data
+ 190              		.loc 1 106 0
+ 191 0002 5420     		movs	r0, #84
+ 192 0004 FFF7FEFF 		bl	sendCommand
+ 193              	.LVL17:
+ 107:..\barometer.c ****     CyDelay(1 + 2 * OSR);                                  //wait at least 8.33us
+ 194              		.loc 1 107 0
+ 195 0008 0520     		movs	r0, #5
+ 196 000a FFF7FEFF 		bl	CyDelay
+ 197              	.LVL18:
+ 108:..\barometer.c ****     sendCommand(CMD_ADC_READ);                           //get ready for reading the data
+ 198              		.loc 1 108 0
+ 199 000e 0020     		movs	r0, #0
+ 200 0010 FFF7FEFF 		bl	sendCommand
+ 201              	.LVL19:
+ 109:..\barometer.c ****     return readnBytes(NBYTES_CONV);                      //reading the data
+ 202              		.loc 1 109 0
+ 203 0014 0320     		movs	r0, #3
+ 204 0016 FFF7FEFF 		bl	readnBytes
+ 205              	.LVL20:
+ 110:..\barometer.c **** }
+ 206              		.loc 1 110 0
+ 207 001a 08BD     		pop	{r3, pc}
+ 208              		.cfi_endproc
+ 209              	.LFE67:
+ 210              		.size	baro_getRawTemperature, .-baro_getRawTemperature
+ 211              		.section	.text.baro_getTemperature,"ax",%progbits
+ 212              		.align	2
+ 213              		.global	baro_getTemperature
+ 214              		.thumb
+ 215              		.thumb_func
+ 216              		.type	baro_getTemperature, %function
+ 217              	baro_getTemperature:
+ 218              	.LFB68:
+ 111:..\barometer.c **** 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 7
+
+
+ 112:..\barometer.c **** int32_t baro_getTemperature()
+ 113:..\barometer.c **** {
+ 219              		.loc 1 113 0
+ 220              		.cfi_startproc
+ 221              		@ args = 0, pretend = 0, frame = 0
+ 222              		@ frame_needed = 0, uses_anonymous_args = 0
+ 223 0000 38B5     		push	{r3, r4, r5, lr}
+ 224              		.cfi_def_cfa_offset 16
+ 225              		.cfi_offset 3, -16
+ 226              		.cfi_offset 4, -12
+ 227              		.cfi_offset 5, -8
+ 228              		.cfi_offset 14, -4
+ 114:..\barometer.c ****     // Code below can be uncommented for slight speedup:
+ 115:..\barometer.c ****     // NOTE: Be sure what you do! Notice that Delta 1C ~= Delta 2hPa
+ 116:..\barometer.c ****     //****************
+ 117:..\barometer.c ****     // if(abs(millis()-_lastTime)<T_THR)
+ 118:..\barometer.c ****     // 	return _T;
+ 119:..\barometer.c ****     //_lastTime = millis();
+ 120:..\barometer.c ****     //****************
+ 121:..\barometer.c ****     uint32_t D2;
+ 122:..\barometer.c ****     D2 = baro_getRawTemperature();
+ 229              		.loc 1 122 0
+ 230 0002 FFF7FEFF 		bl	baro_getRawTemperature
+ 231              	.LVL21:
+ 123:..\barometer.c ****     _dT = D2 - ((uint32_t)_Co[5 - 1] * 256); //update '_dT'
+ 232              		.loc 1 123 0
+ 233 0006 0E4A     		ldr	r2, .L18
+ 234 0008 1389     		ldrh	r3, [r2, #8]
+ 235 000a A0EB0320 		sub	r0, r0, r3, lsl #8
+ 236              	.LVL22:
+ 237 000e D060     		str	r0, [r2, #12]
+ 124:..\barometer.c ****     // Below, 'dT' and '_C[6-1]'' must be casted in order to prevent overflow
+ 125:..\barometer.c ****     // A bitwise division can not be dobe since it is unpredictible for signed integers
+ 126:..\barometer.c ****     _T = 2000 + ((int64_t)_dT * _Co[6 - 1]) / 8388608;
+ 238              		.loc 1 126 0
+ 239 0010 C517     		asrs	r5, r0, #31
+ 240 0012 5289     		ldrh	r2, [r2, #10]
+ 241 0014 A0FB0201 		umull	r0, r1, r0, r2
+ 242 0018 02FB0511 		mla	r1, r2, r5, r1
+ 243 001c 0246     		mov	r2, r0
+ 244 001e 0B46     		mov	r3, r1
+ 245 0020 0028     		cmp	r0, #0
+ 246 0022 71F10004 		sbcs	r4, r1, #0
+ 247 0026 03DA     		bge	.L16
+ 248 0028 064A     		ldr	r2, .L18+4
+ 249 002a 0023     		movs	r3, #0
+ 250 002c 1218     		adds	r2, r2, r0
+ 251 002e 4B41     		adcs	r3, r3, r1
+ 252              	.L16:
+ 253 0030 D00D     		lsrs	r0, r2, #23
+ 254 0032 40EA4320 		orr	r0, r0, r3, lsl #9
+ 255 0036 00F5FA60 		add	r0, r0, #2000
+ 256 003a 014B     		ldr	r3, .L18
+ 257 003c 1861     		str	r0, [r3, #16]
+ 127:..\barometer.c ****     return _T;
+ 128:..\barometer.c **** }
+ 258              		.loc 1 128 0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 8
+
+
+ 259 003e 38BD     		pop	{r3, r4, r5, pc}
+ 260              	.L19:
+ 261              		.align	2
+ 262              	.L18:
+ 263 0040 00000000 		.word	.LANCHOR0
+ 264 0044 FFFF7F00 		.word	8388607
+ 265              		.cfi_endproc
+ 266              	.LFE68:
+ 267              		.size	baro_getTemperature, .-baro_getTemperature
+ 268              		.section	.text.baro_getRawPressure,"ax",%progbits
+ 269              		.align	2
+ 270              		.global	baro_getRawPressure
+ 271              		.thumb
+ 272              		.thumb_func
+ 273              		.type	baro_getRawPressure, %function
+ 274              	baro_getRawPressure:
+ 275              	.LFB69:
+ 129:..\barometer.c **** 
+ 130:..\barometer.c **** uint32_t baro_getRawPressure() 
+ 131:..\barometer.c **** {
+ 276              		.loc 1 131 0
+ 277              		.cfi_startproc
+ 278              		@ args = 0, pretend = 0, frame = 0
+ 279              		@ frame_needed = 0, uses_anonymous_args = 0
+ 280 0000 08B5     		push	{r3, lr}
+ 281              		.cfi_def_cfa_offset 8
+ 282              		.cfi_offset 3, -8
+ 283              		.cfi_offset 14, -4
+ 132:..\barometer.c ****     sendCommand(CMD_CONV_D1_BASE+OSR*CONV_REG_SIZE);	//read sensor, prepare a data
+ 284              		.loc 1 132 0
+ 285 0002 4420     		movs	r0, #68
+ 286 0004 FFF7FEFF 		bl	sendCommand
+ 287              	.LVL23:
+ 133:..\barometer.c **** 	CyDelay(1+2*OSR); 									//wait at least 8.33us for full oversampling
+ 288              		.loc 1 133 0
+ 289 0008 0520     		movs	r0, #5
+ 290 000a FFF7FEFF 		bl	CyDelay
+ 291              	.LVL24:
+ 134:..\barometer.c **** 	sendCommand(CMD_ADC_READ); 							//get ready for reading the data
+ 292              		.loc 1 134 0
+ 293 000e 0020     		movs	r0, #0
+ 294 0010 FFF7FEFF 		bl	sendCommand
+ 295              	.LVL25:
+ 135:..\barometer.c **** 	return readnBytes(NBYTES_CONV);						//reading the data
+ 296              		.loc 1 135 0
+ 297 0014 0320     		movs	r0, #3
+ 298 0016 FFF7FEFF 		bl	readnBytes
+ 299              	.LVL26:
+ 136:..\barometer.c **** }
+ 300              		.loc 1 136 0
+ 301 001a 08BD     		pop	{r3, pc}
+ 302              		.cfi_endproc
+ 303              	.LFE69:
+ 304              		.size	baro_getRawPressure, .-baro_getRawPressure
+ 305              		.section	.text.baro_getPressure,"ax",%progbits
+ 306              		.align	2
+ 307              		.global	baro_getPressure
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 9
+
+
+ 308              		.thumb
+ 309              		.thumb_func
+ 310              		.type	baro_getPressure, %function
+ 311              	baro_getPressure:
+ 312              	.LFB70:
+ 137:..\barometer.c **** 
+ 138:..\barometer.c **** int32_t baro_getPressure()
+ 139:..\barometer.c **** {
+ 313              		.loc 1 139 0
+ 314              		.cfi_startproc
+ 315              		@ args = 0, pretend = 0, frame = 0
+ 316              		@ frame_needed = 0, uses_anonymous_args = 0
+ 317 0000 2DE9F84F 		push	{r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 318              		.cfi_def_cfa_offset 40
+ 319              		.cfi_offset 3, -40
+ 320              		.cfi_offset 4, -36
+ 321              		.cfi_offset 5, -32
+ 322              		.cfi_offset 6, -28
+ 323              		.cfi_offset 7, -24
+ 324              		.cfi_offset 8, -20
+ 325              		.cfi_offset 9, -16
+ 326              		.cfi_offset 10, -12
+ 327              		.cfi_offset 11, -8
+ 328              		.cfi_offset 14, -4
+ 140:..\barometer.c ****     baro_getTemperature(); //updates temperature _dT and _T
+ 329              		.loc 1 140 0
+ 330 0004 FFF7FEFF 		bl	baro_getTemperature
+ 331              	.LVL27:
+ 141:..\barometer.c ****     uint32_t D1 = baro_getRawPressure();
+ 332              		.loc 1 141 0
+ 333 0008 FFF7FEFF 		bl	baro_getRawPressure
+ 334              	.LVL28:
+ 142:..\barometer.c **** 
+ 143:..\barometer.c ****     int64_t OFF = (int64_t)_Co[2 - 1] * 65536 + (int64_t)_Co[4 - 1] * _dT / 128;
+ 335              		.loc 1 143 0
+ 336 000c 344B     		ldr	r3, .L28
+ 337 000e 5E88     		ldrh	r6, [r3, #2]
+ 338 0010 0025     		movs	r5, #0
+ 339 0012 45EA1645 		orr	r5, r5, r6, lsr #16
+ 340 0016 3404     		lsls	r4, r6, #16
+ 341 0018 B3F806A0 		ldrh	r10, [r3, #6]
+ 342 001c DB68     		ldr	r3, [r3, #12]
+ 343 001e 4FEAE379 		asr	r9, r3, #31
+ 344 0022 AAFB0367 		umull	r6, r7, r10, r3
+ 345 0026 0AFB0977 		mla	r7, r10, r9, r7
+ 346 002a B246     		mov	r10, r6
+ 347 002c BB46     		mov	fp, r7
+ 348 002e 002E     		cmp	r6, #0
+ 349 0030 77F10002 		sbcs	r2, r7, #0
+ 350 0034 03DA     		bge	.L23
+ 351 0036 16F17F0A 		adds	r10, r6, #127
+ 352 003a 47F1000B 		adc	fp, r7, #0
+ 353              	.L23:
+ 354 003e 4FEADA12 		lsr	r2, r10, #7
+ 355 0042 42EA4B66 		orr	r6, r2, fp, lsl #25
+ 356 0046 4FEAEB17 		asr	r7, fp, #7
+ 357 004a A419     		adds	r4, r4, r6
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 10
+
+
+ 358 004c 7D41     		adcs	r5, r5, r7
+ 359              	.LVL29:
+ 144:..\barometer.c **** 
+ 145:..\barometer.c ****     int64_t SENS = (int64_t)_Co[1 - 1] * 32768 + (int64_t)_Co[3 - 1] * _dT / 256;
+ 360              		.loc 1 145 0
+ 361 004e 244A     		ldr	r2, .L28
+ 362 0050 B2F800A0 		ldrh	r10, [r2]
+ 363 0054 0027     		movs	r7, #0
+ 364 0056 47EA5A47 		orr	r7, r7, r10, lsr #17
+ 365 005a 4FEACA36 		lsl	r6, r10, #15
+ 366 005e B2F804A0 		ldrh	r10, [r2, #4]
+ 367 0062 A3FB0A23 		umull	r2, r3, r3, r10
+ 368 0066 0AFB0933 		mla	r3, r10, r9, r3
+ 369 006a 9046     		mov	r8, r2
+ 370 006c 9946     		mov	r9, r3
+ 371 006e 002A     		cmp	r2, #0
+ 372 0070 73F10001 		sbcs	r1, r3, #0
+ 373 0074 03DA     		bge	.L24
+ 374 0076 12F1FF08 		adds	r8, r2, #255
+ 375 007a 43F10009 		adc	r9, r3, #0
+ 376              	.L24:
+ 377 007e 4FEA1821 		lsr	r1, r8, #8
+ 378 0082 41EA0962 		orr	r2, r1, r9, lsl #24
+ 379 0086 4FEA2923 		asr	r3, r9, #8
+ 380 008a B618     		adds	r6, r6, r2
+ 381 008c 5F41     		adcs	r7, r7, r3
+ 382              	.LVL30:
+ 146:..\barometer.c ****     _Pres = (D1 * SENS / 2097152 - OFF) / 32768;
+ 383              		.loc 1 146 0
+ 384 008e A0FB0623 		umull	r2, r3, r0, r6
+ 385 0092 00FB0733 		mla	r3, r0, r7, r3
+ 386 0096 1046     		mov	r0, r2
+ 387              	.LVL31:
+ 388 0098 1946     		mov	r1, r3
+ 389 009a 002A     		cmp	r2, #0
+ 390 009c 73F10006 		sbcs	r6, r3, #0
+ 391              	.LVL32:
+ 392 00a0 03DA     		bge	.L25
+ 393 00a2 1048     		ldr	r0, .L28+4
+ 394 00a4 0021     		movs	r1, #0
+ 395 00a6 8018     		adds	r0, r0, r2
+ 396 00a8 5941     		adcs	r1, r1, r3
+ 397              	.L25:
+ 398 00aa 400D     		lsrs	r0, r0, #21
+ 399 00ac 40EAC122 		orr	r2, r0, r1, lsl #11
+ 400 00b0 4B15     		asrs	r3, r1, #21
+ 401 00b2 121B     		subs	r2, r2, r4
+ 402 00b4 63EB0503 		sbc	r3, r3, r5
+ 403 00b8 1046     		mov	r0, r2
+ 404 00ba 1946     		mov	r1, r3
+ 405 00bc 002A     		cmp	r2, #0
+ 406 00be 73F10004 		sbcs	r4, r3, #0
+ 407              	.LVL33:
+ 408 00c2 04DA     		bge	.L26
+ 409 00c4 47F6FF70 		movw	r0, #32767
+ 410 00c8 0021     		movs	r1, #0
+ 411 00ca 8018     		adds	r0, r0, r2
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 11
+
+
+ 412 00cc 5941     		adcs	r1, r1, r3
+ 413              	.L26:
+ 414 00ce C30B     		lsrs	r3, r0, #15
+ 415 00d0 43EA4143 		orr	r3, r3, r1, lsl #17
+ 416 00d4 024A     		ldr	r2, .L28
+ 417 00d6 5361     		str	r3, [r2, #20]
+ 147:..\barometer.c ****     return _P;
+ 148:..\barometer.c **** }
+ 418              		.loc 1 148 0
+ 419 00d8 1020     		movs	r0, #16
+ 420 00da BDE8F88F 		pop	{r3, r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 421              	.L29:
+ 422 00de 00BF     		.align	2
+ 423              	.L28:
+ 424 00e0 00000000 		.word	.LANCHOR0
+ 425 00e4 FFFF1F00 		.word	2097151
+ 426              		.cfi_endproc
+ 427              	.LFE70:
+ 428              		.size	baro_getPressure, .-baro_getPressure
+ 429              		.section	.text.baro_readCalibration,"ax",%progbits
+ 430              		.align	2
+ 431              		.global	baro_readCalibration
+ 432              		.thumb
+ 433              		.thumb_func
+ 434              		.type	baro_readCalibration, %function
+ 435              	baro_readCalibration:
+ 436              	.LFB71:
+ 149:..\barometer.c **** 
+ 150:..\barometer.c **** void baro_readCalibration()
+ 151:..\barometer.c **** {
+ 437              		.loc 1 151 0
+ 438              		.cfi_startproc
+ 439              		@ args = 0, pretend = 0, frame = 0
+ 440              		@ frame_needed = 0, uses_anonymous_args = 0
+ 441 0000 10B5     		push	{r4, lr}
+ 442              		.cfi_def_cfa_offset 8
+ 443              		.cfi_offset 4, -8
+ 444              		.cfi_offset 14, -4
+ 445              	.LVL34:
+ 152:..\barometer.c ****     uint8_t k;
+ 153:..\barometer.c ****     for( k=0 ; k<6 ; k++ ){
+ 446              		.loc 1 153 0
+ 447 0002 0024     		movs	r4, #0
+ 448 0004 0EE0     		b	.L31
+ 449              	.LVL35:
+ 450              	.L32:
+ 154:..\barometer.c **** 		sendCommand(CMD_PROM_READ_BASE + k*2);
+ 451              		.loc 1 154 0 discriminator 3
+ 452 0006 04F15100 		add	r0, r4, #81
+ 453 000a 4000     		lsls	r0, r0, #1
+ 454 000c 00F0FE00 		and	r0, r0, #254
+ 455 0010 FFF7FEFF 		bl	sendCommand
+ 456              	.LVL36:
+ 155:..\barometer.c **** 		_Co[k] = (uint16_t) (readnBytes(NBYTES_PROM) & 0xFFFF); //masking out two LSB
+ 457              		.loc 1 155 0 discriminator 3
+ 458 0014 0220     		movs	r0, #2
+ 459 0016 FFF7FEFF 		bl	readnBytes
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 12
+
+
+ 460              	.LVL37:
+ 461 001a 044B     		ldr	r3, .L34
+ 462 001c 23F81400 		strh	r0, [r3, r4, lsl #1]	@ movhi
+ 153:..\barometer.c **** 		sendCommand(CMD_PROM_READ_BASE + k*2);
+ 463              		.loc 1 153 0 discriminator 3
+ 464 0020 0134     		adds	r4, r4, #1
+ 465              	.LVL38:
+ 466 0022 E4B2     		uxtb	r4, r4
+ 467              	.LVL39:
+ 468              	.L31:
+ 153:..\barometer.c **** 		sendCommand(CMD_PROM_READ_BASE + k*2);
+ 469              		.loc 1 153 0 is_stmt 0 discriminator 1
+ 470 0024 052C     		cmp	r4, #5
+ 471 0026 EED9     		bls	.L32
+ 156:..\barometer.c **** 	}
+ 157:..\barometer.c **** }
+ 472              		.loc 1 157 0 is_stmt 1
+ 473 0028 10BD     		pop	{r4, pc}
+ 474              	.LVL40:
+ 475              	.L35:
+ 476 002a 00BF     		.align	2
+ 477              	.L34:
+ 478 002c 00000000 		.word	.LANCHOR0
+ 479              		.cfi_endproc
+ 480              	.LFE71:
+ 481              		.size	baro_readCalibration, .-baro_readCalibration
+ 482              		.section	.text.baro_begin,"ax",%progbits
+ 483              		.align	2
+ 484              		.global	baro_begin
+ 485              		.thumb
+ 486              		.thumb_func
+ 487              		.type	baro_begin, %function
+ 488              	baro_begin:
+ 489              	.LFB66:
+  88:..\barometer.c ****     _T = 0;
+ 490              		.loc 1 88 0
+ 491              		.cfi_startproc
+ 492              		@ args = 0, pretend = 0, frame = 0
+ 493              		@ frame_needed = 0, uses_anonymous_args = 0
+ 494 0000 08B5     		push	{r3, lr}
+ 495              		.cfi_def_cfa_offset 8
+ 496              		.cfi_offset 3, -8
+ 497              		.cfi_offset 14, -4
+  89:..\barometer.c ****     _Pres = 0;
+ 498              		.loc 1 89 0
+ 499 0002 0D4A     		ldr	r2, .L40
+ 500 0004 0023     		movs	r3, #0
+ 501 0006 1361     		str	r3, [r2, #16]
+  90:..\barometer.c ****     _lastTime = T_THR;
+ 502              		.loc 1 90 0
+ 503 0008 5361     		str	r3, [r2, #20]
+  91:..\barometer.c ****     uint8_t k;
+ 504              		.loc 1 91 0
+ 505 000a 4FF47A71 		mov	r1, #1000
+ 506 000e 9161     		str	r1, [r2, #24]
+ 507              	.LVL41:
+  93:..\barometer.c ****     {
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 13
+
+
+ 508              		.loc 1 93 0
+ 509 0010 05E0     		b	.L37
+ 510              	.LVL42:
+ 511              	.L38:
+  95:..\barometer.c ****     }
+ 512              		.loc 1 95 0 discriminator 3
+ 513 0012 4521     		movs	r1, #69
+ 514 0014 084A     		ldr	r2, .L40
+ 515 0016 22F81310 		strh	r1, [r2, r3, lsl #1]	@ movhi
+  93:..\barometer.c ****     {
+ 516              		.loc 1 93 0 discriminator 3
+ 517 001a 0133     		adds	r3, r3, #1
+ 518              	.LVL43:
+ 519 001c DBB2     		uxtb	r3, r3
+ 520              	.LVL44:
+ 521              	.L37:
+  93:..\barometer.c ****     {
+ 522              		.loc 1 93 0 is_stmt 0 discriminator 1
+ 523 001e 052B     		cmp	r3, #5
+ 524 0020 F7D9     		bls	.L38
+  98:..\barometer.c ****     reset();
+ 525              		.loc 1 98 0 is_stmt 1
+ 526 0022 FFF7FEFF 		bl	Wire_begin
+ 527              	.LVL45:
+  99:..\barometer.c ****     CyDelay(100);
+ 528              		.loc 1 99 0
+ 529 0026 FFF7FEFF 		bl	reset
+ 530              	.LVL46:
+ 100:..\barometer.c ****     baro_readCalibration();
+ 531              		.loc 1 100 0
+ 532 002a 6420     		movs	r0, #100
+ 533 002c FFF7FEFF 		bl	CyDelay
+ 534              	.LVL47:
+ 101:..\barometer.c **** }
+ 535              		.loc 1 101 0
+ 536 0030 FFF7FEFF 		bl	baro_readCalibration
+ 537              	.LVL48:
+ 538 0034 08BD     		pop	{r3, pc}
+ 539              	.L41:
+ 540 0036 00BF     		.align	2
+ 541              	.L40:
+ 542 0038 00000000 		.word	.LANCHOR0
+ 543              		.cfi_endproc
+ 544              	.LFE66:
+ 545              		.size	baro_begin, .-baro_begin
+ 546              		.section	.text.baro_getCalibration,"ax",%progbits
+ 547              		.align	2
+ 548              		.global	baro_getCalibration
+ 549              		.thumb
+ 550              		.thumb_func
+ 551              		.type	baro_getCalibration, %function
+ 552              	baro_getCalibration:
+ 553              	.LFB72:
+ 158:..\barometer.c **** 
+ 159:..\barometer.c **** void baro_getCalibration(uint16_t *C)
+ 160:..\barometer.c **** {
+ 554              		.loc 1 160 0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 14
+
+
+ 555              		.cfi_startproc
+ 556              		@ args = 0, pretend = 0, frame = 0
+ 557              		@ frame_needed = 0, uses_anonymous_args = 0
+ 558              		@ link register save eliminated.
+ 559              	.LVL49:
+ 161:..\barometer.c ****     uint8_t k;
+ 162:..\barometer.c ****     for( k=0 ; k<N_PROM_PARAMS ; k++ )
+ 560              		.loc 1 162 0
+ 561 0000 0023     		movs	r3, #0
+ 562 0002 06E0     		b	.L43
+ 563              	.LVL50:
+ 564              	.L44:
+ 163:..\barometer.c **** 		C[k]=_Co[k];
+ 565              		.loc 1 163 0 discriminator 3
+ 566 0004 044A     		ldr	r2, .L45
+ 567 0006 32F81320 		ldrh	r2, [r2, r3, lsl #1]
+ 568 000a 20F81320 		strh	r2, [r0, r3, lsl #1]	@ movhi
+ 162:..\barometer.c **** 		C[k]=_Co[k];
+ 569              		.loc 1 162 0 discriminator 3
+ 570 000e 0133     		adds	r3, r3, #1
+ 571              	.LVL51:
+ 572 0010 DBB2     		uxtb	r3, r3
+ 573              	.LVL52:
+ 574              	.L43:
+ 162:..\barometer.c **** 		C[k]=_Co[k];
+ 575              		.loc 1 162 0 is_stmt 0 discriminator 1
+ 576 0012 052B     		cmp	r3, #5
+ 577 0014 F6D9     		bls	.L44
+ 164:..\barometer.c **** 	return;
+ 165:..\barometer.c **** }...
+ 578              		.loc 1 165 0 is_stmt 1
+ 579 0016 7047     		bx	lr
+ 580              	.L46:
+ 581              		.align	2
+ 582              	.L45:
+ 583 0018 00000000 		.word	.LANCHOR0
+ 584              		.cfi_endproc
+ 585              	.LFE72:
+ 586              		.size	baro_getCalibration, .-baro_getCalibration
+ 587              		.bss
+ 588              		.align	2
+ 589              		.set	.LANCHOR0,. + 0
+ 590              		.type	_Co, %object
+ 591              		.size	_Co, 12
+ 592              	_Co:
+ 593 0000 00000000 		.space	12
+ 593      00000000 
+ 593      00000000 
+ 594              		.type	_dT, %object
+ 595              		.size	_dT, 4
+ 596              	_dT:
+ 597 000c 00000000 		.space	4
+ 598              		.type	_T, %object
+ 599              		.size	_T, 4
+ 600              	_T:
+ 601 0010 00000000 		.space	4
+ 602              		.type	_Pres, %object
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 15
+
+
+ 603              		.size	_Pres, 4
+ 604              	_Pres:
+ 605 0014 00000000 		.space	4
+ 606              		.type	_lastTime, %object
+ 607              		.size	_lastTime, 4
+ 608              	_lastTime:
+ 609 0018 00000000 		.space	4
+ 610              		.text
+ 611              	.Letext0:
+ 612              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 613              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 614              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 615              		.file 5 "Generated_Source\\PSoC5/I2C.h"
+ 616              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 617              		.file 7 "Generated_Source\\PSoC5/CyLib.h"
+ 618              		.file 8 "../twi.h"
+ 619              		.section	.debug_info,"",%progbits
+ 620              	.Ldebug_info0:
+ 621 0000 59050000 		.4byte	0x559
+ 622 0004 0400     		.2byte	0x4
+ 623 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 624 000a 04       		.byte	0x4
+ 625 000b 01       		.uleb128 0x1
+ 626 000c 58010000 		.4byte	.LASF44
+ 627 0010 01       		.byte	0x1
+ 628 0011 9F020000 		.4byte	.LASF45
+ 629 0015 12020000 		.4byte	.LASF46
+ 630 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 631 001d 00000000 		.4byte	0
+ 632 0021 00000000 		.4byte	.Ldebug_line0
+ 633 0025 02       		.uleb128 0x2
+ 634 0026 08000000 		.4byte	.LASF0
+ 635 002a 02       		.byte	0x2
+ 636 002b 1B       		.byte	0x1b
+ 637 002c 30000000 		.4byte	0x30
+ 638 0030 03       		.uleb128 0x3
+ 639 0031 01       		.byte	0x1
+ 640 0032 06       		.byte	0x6
+ 641 0033 E9020000 		.4byte	.LASF2
+ 642 0037 02       		.uleb128 0x2
+ 643 0038 11000000 		.4byte	.LASF1
+ 644 003c 02       		.byte	0x2
+ 645 003d 1D       		.byte	0x1d
+ 646 003e 42000000 		.4byte	0x42
+ 647 0042 03       		.uleb128 0x3
+ 648 0043 01       		.byte	0x1
+ 649 0044 08       		.byte	0x8
+ 650 0045 B2000000 		.4byte	.LASF3
+ 651 0049 03       		.uleb128 0x3
+ 652 004a 02       		.byte	0x2
+ 653 004b 05       		.byte	0x5
+ 654 004c 47010000 		.4byte	.LASF4
+ 655 0050 02       		.uleb128 0x2
+ 656 0051 35010000 		.4byte	.LASF5
+ 657 0055 02       		.byte	0x2
+ 658 0056 2B       		.byte	0x2b
+ 659 0057 5B000000 		.4byte	0x5b
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 16
+
+
+ 660 005b 03       		.uleb128 0x3
+ 661 005c 02       		.byte	0x2
+ 662 005d 07       		.byte	0x7
+ 663 005e F6000000 		.4byte	.LASF6
+ 664 0062 02       		.uleb128 0x2
+ 665 0063 58000000 		.4byte	.LASF7
+ 666 0067 02       		.byte	0x2
+ 667 0068 3F       		.byte	0x3f
+ 668 0069 6D000000 		.4byte	0x6d
+ 669 006d 03       		.uleb128 0x3
+ 670 006e 04       		.byte	0x4
+ 671 006f 05       		.byte	0x5
+ 672 0070 E0020000 		.4byte	.LASF8
+ 673 0074 02       		.uleb128 0x2
+ 674 0075 D3000000 		.4byte	.LASF9
+ 675 0079 02       		.byte	0x2
+ 676 007a 41       		.byte	0x41
+ 677 007b 7F000000 		.4byte	0x7f
+ 678 007f 03       		.uleb128 0x3
+ 679 0080 04       		.byte	0x4
+ 680 0081 07       		.byte	0x7
+ 681 0082 DE000000 		.4byte	.LASF10
+ 682 0086 02       		.uleb128 0x2
+ 683 0087 2B010000 		.4byte	.LASF11
+ 684 008b 02       		.byte	0x2
+ 685 008c 59       		.byte	0x59
+ 686 008d 91000000 		.4byte	0x91
+ 687 0091 03       		.uleb128 0x3
+ 688 0092 08       		.byte	0x8
+ 689 0093 05       		.byte	0x5
+ 690 0094 7B020000 		.4byte	.LASF12
+ 691 0098 03       		.uleb128 0x3
+ 692 0099 08       		.byte	0x8
+ 693 009a 07       		.byte	0x7
+ 694 009b F3010000 		.4byte	.LASF13
+ 695 009f 04       		.uleb128 0x4
+ 696 00a0 04       		.byte	0x4
+ 697 00a1 05       		.byte	0x5
+ 698 00a2 696E7400 		.ascii	"int\000"
+ 699 00a6 03       		.uleb128 0x3
+ 700 00a7 04       		.byte	0x4
+ 701 00a8 07       		.byte	0x7
+ 702 00a9 E6010000 		.4byte	.LASF14
+ 703 00ad 02       		.uleb128 0x2
+ 704 00ae 9A000000 		.4byte	.LASF15
+ 705 00b2 03       		.byte	0x3
+ 706 00b3 14       		.byte	0x14
+ 707 00b4 25000000 		.4byte	0x25
+ 708 00b8 02       		.uleb128 0x2
+ 709 00b9 0A020000 		.4byte	.LASF16
+ 710 00bd 03       		.byte	0x3
+ 711 00be 15       		.byte	0x15
+ 712 00bf 37000000 		.4byte	0x37
+ 713 00c3 02       		.uleb128 0x2
+ 714 00c4 B4020000 		.4byte	.LASF17
+ 715 00c8 03       		.byte	0x3
+ 716 00c9 21       		.byte	0x21
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 17
+
+
+ 717 00ca 50000000 		.4byte	0x50
+ 718 00ce 02       		.uleb128 0x2
+ 719 00cf 56020000 		.4byte	.LASF18
+ 720 00d3 03       		.byte	0x3
+ 721 00d4 2C       		.byte	0x2c
+ 722 00d5 62000000 		.4byte	0x62
+ 723 00d9 02       		.uleb128 0x2
+ 724 00da D7020000 		.4byte	.LASF19
+ 725 00de 03       		.byte	0x3
+ 726 00df 2D       		.byte	0x2d
+ 727 00e0 74000000 		.4byte	0x74
+ 728 00e4 02       		.uleb128 0x2
+ 729 00e5 00000000 		.4byte	.LASF20
+ 730 00e9 03       		.byte	0x3
+ 731 00ea 38       		.byte	0x38
+ 732 00eb 86000000 		.4byte	0x86
+ 733 00ef 03       		.uleb128 0x3
+ 734 00f0 04       		.byte	0x4
+ 735 00f1 07       		.byte	0x7
+ 736 00f2 5E020000 		.4byte	.LASF21
+ 737 00f6 03       		.uleb128 0x3
+ 738 00f7 01       		.byte	0x1
+ 739 00f8 08       		.byte	0x8
+ 740 00f9 89020000 		.4byte	.LASF22
+ 741 00fd 05       		.uleb128 0x5
+ 742 00fe AC000000 		.4byte	.LASF23
+ 743 0102 04       		.byte	0x4
+ 744 0103 9201     		.2byte	0x192
+ 745 0105 42000000 		.4byte	0x42
+ 746 0109 05       		.uleb128 0x5
+ 747 010a 51010000 		.4byte	.LASF24
+ 748 010e 04       		.byte	0x4
+ 749 010f 9401     		.2byte	0x194
+ 750 0111 7F000000 		.4byte	0x7f
+ 751 0115 03       		.uleb128 0x3
+ 752 0116 04       		.byte	0x4
+ 753 0117 04       		.byte	0x4
+ 754 0118 A1000000 		.4byte	.LASF25
+ 755 011c 03       		.uleb128 0x3
+ 756 011d 08       		.byte	0x8
+ 757 011e 04       		.byte	0x4
+ 758 011f 40010000 		.4byte	.LASF26
+ 759 0123 06       		.uleb128 0x6
+ 760 0124 12010000 		.4byte	.LASF31
+ 761 0128 01       		.byte	0x1
+ 762 0129 28       		.byte	0x28
+ 763 012a 00000000 		.4byte	.LFB63
+ 764 012e 24000000 		.4byte	.LFE63-.LFB63
+ 765 0132 01       		.uleb128 0x1
+ 766 0133 9C       		.byte	0x9c
+ 767 0134 83010000 		.4byte	0x183
+ 768 0138 07       		.uleb128 0x7
+ 769 0139 636D6400 		.ascii	"cmd\000"
+ 770 013d 01       		.byte	0x1
+ 771 013e 28       		.byte	0x28
+ 772 013f B8000000 		.4byte	0xb8
+ 773 0143 00000000 		.4byte	.LLST0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 18
+
+
+ 774 0147 08       		.uleb128 0x8
+ 775 0148 4E000000 		.4byte	.LASF28
+ 776 014c 01       		.byte	0x1
+ 777 014d 33       		.byte	0x33
+ 778 014e 83010000 		.4byte	0x183
+ 779 0152 02       		.uleb128 0x2
+ 780 0153 91       		.byte	0x91
+ 781 0154 74       		.sleb128 -12
+ 782 0155 09       		.uleb128 0x9
+ 783 0156 14000000 		.4byte	.LVL2
+ 784 015a E9040000 		.4byte	0x4e9
+ 785 015e 79010000 		.4byte	0x179
+ 786 0162 0A       		.uleb128 0xa
+ 787 0163 01       		.uleb128 0x1
+ 788 0164 53       		.byte	0x53
+ 789 0165 01       		.uleb128 0x1
+ 790 0166 30       		.byte	0x30
+ 791 0167 0A       		.uleb128 0xa
+ 792 0168 01       		.uleb128 0x1
+ 793 0169 52       		.byte	0x52
+ 794 016a 01       		.uleb128 0x1
+ 795 016b 31       		.byte	0x31
+ 796 016c 0A       		.uleb128 0xa
+ 797 016d 01       		.uleb128 0x1
+ 798 016e 51       		.byte	0x51
+ 799 016f 02       		.uleb128 0x2
+ 800 0170 91       		.byte	0x91
+ 801 0171 74       		.sleb128 -12
+ 802 0172 0A       		.uleb128 0xa
+ 803 0173 01       		.uleb128 0x1
+ 804 0174 50       		.byte	0x50
+ 805 0175 02       		.uleb128 0x2
+ 806 0176 08       		.byte	0x8
+ 807 0177 77       		.byte	0x77
+ 808 0178 00       		.byte	0
+ 809 0179 0B       		.uleb128 0xb
+ 810 017a 18000000 		.4byte	.LVL3
+ 811 017e 13050000 		.4byte	0x513
+ 812 0182 00       		.byte	0
+ 813 0183 0C       		.uleb128 0xc
+ 814 0184 B8000000 		.4byte	0xb8
+ 815 0188 93010000 		.4byte	0x193
+ 816 018c 0D       		.uleb128 0xd
+ 817 018d EF000000 		.4byte	0xef
+ 818 0191 00       		.byte	0
+ 819 0192 00       		.byte	0
+ 820 0193 0E       		.uleb128 0xe
+ 821 0194 F0000000 		.4byte	.LASF47
+ 822 0198 01       		.byte	0x1
+ 823 0199 53       		.byte	0x53
+ 824 019a 00000000 		.4byte	.LFB65
+ 825 019e 0A000000 		.4byte	.LFE65-.LFB65
+ 826 01a2 01       		.uleb128 0x1
+ 827 01a3 9C       		.byte	0x9c
+ 828 01a4 B8010000 		.4byte	0x1b8
+ 829 01a8 0F       		.uleb128 0xf
+ 830 01a9 08000000 		.4byte	.LVL4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 19
+
+
+ 831 01ad 23010000 		.4byte	0x123
+ 832 01b1 0A       		.uleb128 0xa
+ 833 01b2 01       		.uleb128 0x1
+ 834 01b3 50       		.byte	0x50
+ 835 01b4 01       		.uleb128 0x1
+ 836 01b5 4E       		.byte	0x4e
+ 837 01b6 00       		.byte	0
+ 838 01b7 00       		.byte	0
+ 839 01b8 10       		.uleb128 0x10
+ 840 01b9 69000000 		.4byte	.LASF48
+ 841 01bd 01       		.byte	0x1
+ 842 01be 3E       		.byte	0x3e
+ 843 01bf D9000000 		.4byte	0xd9
+ 844 01c3 00000000 		.4byte	.LFB64
+ 845 01c7 56000000 		.4byte	.LFE64-.LFB64
+ 846 01cb 01       		.uleb128 0x1
+ 847 01cc 9C       		.byte	0x9c
+ 848 01cd 43020000 		.4byte	0x243
+ 849 01d1 11       		.uleb128 0x11
+ 850 01d2 62000000 		.4byte	.LASF27
+ 851 01d6 01       		.byte	0x1
+ 852 01d7 3E       		.byte	0x3e
+ 853 01d8 B8000000 		.4byte	0xb8
+ 854 01dc 2D000000 		.4byte	.LLST1
+ 855 01e0 12       		.uleb128 0x12
+ 856 01e1 0E000000 		.4byte	.LBB2
+ 857 01e5 42000000 		.4byte	.LBE2-.LBB2
+ 858 01e9 13       		.uleb128 0x13
+ 859 01ea A7000000 		.4byte	.LASF29
+ 860 01ee 01       		.byte	0x1
+ 861 01ef 42       		.byte	0x42
+ 862 01f0 D9000000 		.4byte	0xd9
+ 863 01f4 67000000 		.4byte	.LLST2
+ 864 01f8 08       		.uleb128 0x8
+ 865 01f9 09010000 		.4byte	.LASF30
+ 866 01fd 01       		.byte	0x1
+ 867 01fe 43       		.byte	0x43
+ 868 01ff 43020000 		.4byte	0x243
+ 869 0203 02       		.uleb128 0x2
+ 870 0204 91       		.byte	0x91
+ 871 0205 68       		.sleb128 -24
+ 872 0206 14       		.uleb128 0x14
+ 873 0207 6B00     		.ascii	"k\000"
+ 874 0209 01       		.byte	0x1
+ 875 020a 4A       		.byte	0x4a
+ 876 020b AD000000 		.4byte	0xad
+ 877 020f 86000000 		.4byte	.LLST3
+ 878 0213 09       		.uleb128 0x9
+ 879 0214 20000000 		.4byte	.LVL8
+ 880 0218 1E050000 		.4byte	0x51e
+ 881 021c 38020000 		.4byte	0x238
+ 882 0220 0A       		.uleb128 0xa
+ 883 0221 01       		.uleb128 0x1
+ 884 0222 53       		.byte	0x53
+ 885 0223 01       		.uleb128 0x1
+ 886 0224 30       		.byte	0x30
+ 887 0225 0A       		.uleb128 0xa
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 20
+
+
+ 888 0226 01       		.uleb128 0x1
+ 889 0227 52       		.byte	0x52
+ 890 0228 02       		.uleb128 0x2
+ 891 0229 75       		.byte	0x75
+ 892 022a 00       		.sleb128 0
+ 893 022b 0A       		.uleb128 0xa
+ 894 022c 01       		.uleb128 0x1
+ 895 022d 51       		.byte	0x51
+ 896 022e 02       		.uleb128 0x2
+ 897 022f 7D       		.byte	0x7d
+ 898 0230 00       		.sleb128 0
+ 899 0231 0A       		.uleb128 0xa
+ 900 0232 01       		.uleb128 0x1
+ 901 0233 50       		.byte	0x50
+ 902 0234 02       		.uleb128 0x2
+ 903 0235 08       		.byte	0x8
+ 904 0236 77       		.byte	0x77
+ 905 0237 00       		.byte	0
+ 906 0238 0B       		.uleb128 0xb
+ 907 0239 24000000 		.4byte	.LVL9
+ 908 023d 13050000 		.4byte	0x513
+ 909 0241 00       		.byte	0
+ 910 0242 00       		.byte	0
+ 911 0243 0C       		.uleb128 0xc
+ 912 0244 B8000000 		.4byte	0xb8
+ 913 0248 53020000 		.4byte	0x253
+ 914 024c 0D       		.uleb128 0xd
+ 915 024d EF000000 		.4byte	0xef
+ 916 0251 04       		.byte	0x4
+ 917 0252 00       		.byte	0
+ 918 0253 15       		.uleb128 0x15
+ 919 0254 37000000 		.4byte	.LASF32
+ 920 0258 01       		.byte	0x1
+ 921 0259 68       		.byte	0x68
+ 922 025a D9000000 		.4byte	0xd9
+ 923 025e 00000000 		.4byte	.LFB67
+ 924 0262 1C000000 		.4byte	.LFE67-.LFB67
+ 925 0266 01       		.uleb128 0x1
+ 926 0267 9C       		.byte	0x9c
+ 927 0268 B6020000 		.4byte	0x2b6
+ 928 026c 09       		.uleb128 0x9
+ 929 026d 08000000 		.4byte	.LVL17
+ 930 0271 23010000 		.4byte	0x123
+ 931 0275 80020000 		.4byte	0x280
+ 932 0279 0A       		.uleb128 0xa
+ 933 027a 01       		.uleb128 0x1
+ 934 027b 50       		.byte	0x50
+ 935 027c 02       		.uleb128 0x2
+ 936 027d 08       		.byte	0x8
+ 937 027e 54       		.byte	0x54
+ 938 027f 00       		.byte	0
+ 939 0280 09       		.uleb128 0x9
+ 940 0281 0E000000 		.4byte	.LVL18
+ 941 0285 42050000 		.4byte	0x542
+ 942 0289 93020000 		.4byte	0x293
+ 943 028d 0A       		.uleb128 0xa
+ 944 028e 01       		.uleb128 0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 21
+
+
+ 945 028f 50       		.byte	0x50
+ 946 0290 01       		.uleb128 0x1
+ 947 0291 35       		.byte	0x35
+ 948 0292 00       		.byte	0
+ 949 0293 09       		.uleb128 0x9
+ 950 0294 14000000 		.4byte	.LVL19
+ 951 0298 23010000 		.4byte	0x123
+ 952 029c A6020000 		.4byte	0x2a6
+ 953 02a0 0A       		.uleb128 0xa
+ 954 02a1 01       		.uleb128 0x1
+ 955 02a2 50       		.byte	0x50
+ 956 02a3 01       		.uleb128 0x1
+ 957 02a4 30       		.byte	0x30
+ 958 02a5 00       		.byte	0
+ 959 02a6 0F       		.uleb128 0xf
+ 960 02a7 1A000000 		.4byte	.LVL20
+ 961 02ab B8010000 		.4byte	0x1b8
+ 962 02af 0A       		.uleb128 0xa
+ 963 02b0 01       		.uleb128 0x1
+ 964 02b1 50       		.byte	0x50
+ 965 02b2 01       		.uleb128 0x1
+ 966 02b3 33       		.byte	0x33
+ 967 02b4 00       		.byte	0
+ 968 02b5 00       		.byte	0
+ 969 02b6 15       		.uleb128 0x15
+ 970 02b7 12030000 		.4byte	.LASF33
+ 971 02bb 01       		.byte	0x1
+ 972 02bc 70       		.byte	0x70
+ 973 02bd CE000000 		.4byte	0xce
+ 974 02c1 00000000 		.4byte	.LFB68
+ 975 02c5 48000000 		.4byte	.LFE68-.LFB68
+ 976 02c9 01       		.uleb128 0x1
+ 977 02ca 9C       		.byte	0x9c
+ 978 02cb E7020000 		.4byte	0x2e7
+ 979 02cf 14       		.uleb128 0x14
+ 980 02d0 443200   		.ascii	"D2\000"
+ 981 02d3 01       		.byte	0x1
+ 982 02d4 79       		.byte	0x79
+ 983 02d5 D9000000 		.4byte	0xd9
+ 984 02d9 A4000000 		.4byte	.LLST4
+ 985 02dd 0B       		.uleb128 0xb
+ 986 02de 06000000 		.4byte	.LVL21
+ 987 02e2 53020000 		.4byte	0x253
+ 988 02e6 00       		.byte	0
+ 989 02e7 15       		.uleb128 0x15
+ 990 02e8 74000000 		.4byte	.LASF34
+ 991 02ec 01       		.byte	0x1
+ 992 02ed 82       		.byte	0x82
+ 993 02ee D9000000 		.4byte	0xd9
+ 994 02f2 00000000 		.4byte	.LFB69
+ 995 02f6 1C000000 		.4byte	.LFE69-.LFB69
+ 996 02fa 01       		.uleb128 0x1
+ 997 02fb 9C       		.byte	0x9c
+ 998 02fc 4A030000 		.4byte	0x34a
+ 999 0300 09       		.uleb128 0x9
+ 1000 0301 08000000 		.4byte	.LVL23
+ 1001 0305 23010000 		.4byte	0x123
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 22
+
+
+ 1002 0309 14030000 		.4byte	0x314
+ 1003 030d 0A       		.uleb128 0xa
+ 1004 030e 01       		.uleb128 0x1
+ 1005 030f 50       		.byte	0x50
+ 1006 0310 02       		.uleb128 0x2
+ 1007 0311 08       		.byte	0x8
+ 1008 0312 44       		.byte	0x44
+ 1009 0313 00       		.byte	0
+ 1010 0314 09       		.uleb128 0x9
+ 1011 0315 0E000000 		.4byte	.LVL24
+ 1012 0319 42050000 		.4byte	0x542
+ 1013 031d 27030000 		.4byte	0x327
+ 1014 0321 0A       		.uleb128 0xa
+ 1015 0322 01       		.uleb128 0x1
+ 1016 0323 50       		.byte	0x50
+ 1017 0324 01       		.uleb128 0x1
+ 1018 0325 35       		.byte	0x35
+ 1019 0326 00       		.byte	0
+ 1020 0327 09       		.uleb128 0x9
+ 1021 0328 14000000 		.4byte	.LVL25
+ 1022 032c 23010000 		.4byte	0x123
+ 1023 0330 3A030000 		.4byte	0x33a
+ 1024 0334 0A       		.uleb128 0xa
+ 1025 0335 01       		.uleb128 0x1
+ 1026 0336 50       		.byte	0x50
+ 1027 0337 01       		.uleb128 0x1
+ 1028 0338 30       		.byte	0x30
+ 1029 0339 00       		.byte	0
+ 1030 033a 0F       		.uleb128 0xf
+ 1031 033b 1A000000 		.4byte	.LVL26
+ 1032 033f B8010000 		.4byte	0x1b8
+ 1033 0343 0A       		.uleb128 0xa
+ 1034 0344 01       		.uleb128 0x1
+ 1035 0345 50       		.byte	0x50
+ 1036 0346 01       		.uleb128 0x1
+ 1037 0347 33       		.byte	0x33
+ 1038 0348 00       		.byte	0
+ 1039 0349 00       		.byte	0
+ 1040 034a 15       		.uleb128 0x15
+ 1041 034b 26000000 		.4byte	.LASF35
+ 1042 034f 01       		.byte	0x1
+ 1043 0350 8A       		.byte	0x8a
+ 1044 0351 CE000000 		.4byte	0xce
+ 1045 0355 00000000 		.4byte	.LFB70
+ 1046 0359 E8000000 		.4byte	.LFE70-.LFB70
+ 1047 035d 01       		.uleb128 0x1
+ 1048 035e 9C       		.byte	0x9c
+ 1049 035f A2030000 		.4byte	0x3a2
+ 1050 0363 14       		.uleb128 0x14
+ 1051 0364 443100   		.ascii	"D1\000"
+ 1052 0367 01       		.byte	0x1
+ 1053 0368 8D       		.byte	0x8d
+ 1054 0369 D9000000 		.4byte	0xd9
+ 1055 036d B7000000 		.4byte	.LLST5
+ 1056 0371 14       		.uleb128 0x14
+ 1057 0372 4F464600 		.ascii	"OFF\000"
+ 1058 0376 01       		.byte	0x1
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 23
+
+
+ 1059 0377 8F       		.byte	0x8f
+ 1060 0378 E4000000 		.4byte	0xe4
+ 1061 037c CA000000 		.4byte	.LLST6
+ 1062 0380 13       		.uleb128 0x13
+ 1063 0381 BD020000 		.4byte	.LASF36
+ 1064 0385 01       		.byte	0x1
+ 1065 0386 91       		.byte	0x91
+ 1066 0387 E4000000 		.4byte	0xe4
+ 1067 038b E2000000 		.4byte	.LLST7
+ 1068 038f 0B       		.uleb128 0xb
+ 1069 0390 08000000 		.4byte	.LVL27
+ 1070 0394 B6020000 		.4byte	0x2b6
+ 1071 0398 0B       		.uleb128 0xb
+ 1072 0399 0C000000 		.4byte	.LVL28
+ 1073 039d E7020000 		.4byte	0x2e7
+ 1074 03a1 00       		.byte	0
+ 1075 03a2 16       		.uleb128 0x16
+ 1076 03a3 F5020000 		.4byte	.LASF37
+ 1077 03a7 01       		.byte	0x1
+ 1078 03a8 96       		.byte	0x96
+ 1079 03a9 00000000 		.4byte	.LFB71
+ 1080 03ad 30000000 		.4byte	.LFE71-.LFB71
+ 1081 03b1 01       		.uleb128 0x1
+ 1082 03b2 9C       		.byte	0x9c
+ 1083 03b3 EE030000 		.4byte	0x3ee
+ 1084 03b7 14       		.uleb128 0x14
+ 1085 03b8 6B00     		.ascii	"k\000"
+ 1086 03ba 01       		.byte	0x1
+ 1087 03bb 98       		.byte	0x98
+ 1088 03bc B8000000 		.4byte	0xb8
+ 1089 03c0 FA000000 		.4byte	.LLST8
+ 1090 03c4 09       		.uleb128 0x9
+ 1091 03c5 14000000 		.4byte	.LVL36
+ 1092 03c9 23010000 		.4byte	0x123
+ 1093 03cd DE030000 		.4byte	0x3de
+ 1094 03d1 0A       		.uleb128 0xa
+ 1095 03d2 01       		.uleb128 0x1
+ 1096 03d3 50       		.byte	0x50
+ 1097 03d4 08       		.uleb128 0x8
+ 1098 03d5 74       		.byte	0x74
+ 1099 03d6 D100     		.sleb128 81
+ 1100 03d8 31       		.byte	0x31
+ 1101 03d9 24       		.byte	0x24
+ 1102 03da 08       		.byte	0x8
+ 1103 03db FE       		.byte	0xfe
+ 1104 03dc 1A       		.byte	0x1a
+ 1105 03dd 00       		.byte	0
+ 1106 03de 0F       		.uleb128 0xf
+ 1107 03df 1A000000 		.4byte	.LVL37
+ 1108 03e3 B8010000 		.4byte	0x1b8
+ 1109 03e7 0A       		.uleb128 0xa
+ 1110 03e8 01       		.uleb128 0x1
+ 1111 03e9 50       		.byte	0x50
+ 1112 03ea 01       		.uleb128 0x1
+ 1113 03eb 32       		.byte	0x32
+ 1114 03ec 00       		.byte	0
+ 1115 03ed 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 24
+
+
+ 1116 03ee 16       		.uleb128 0x16
+ 1117 03ef 1B000000 		.4byte	.LASF38
+ 1118 03f3 01       		.byte	0x1
+ 1119 03f4 57       		.byte	0x57
+ 1120 03f5 00000000 		.4byte	.LFB66
+ 1121 03f9 3C000000 		.4byte	.LFE66-.LFB66
+ 1122 03fd 01       		.uleb128 0x1
+ 1123 03fe 9C       		.byte	0x9c
+ 1124 03ff 40040000 		.4byte	0x440
+ 1125 0403 14       		.uleb128 0x14
+ 1126 0404 6B00     		.ascii	"k\000"
+ 1127 0406 01       		.byte	0x1
+ 1128 0407 5C       		.byte	0x5c
+ 1129 0408 B8000000 		.4byte	0xb8
+ 1130 040c 24010000 		.4byte	.LLST9
+ 1131 0410 0B       		.uleb128 0xb
+ 1132 0411 26000000 		.4byte	.LVL45
+ 1133 0415 53050000 		.4byte	0x553
+ 1134 0419 0B       		.uleb128 0xb
+ 1135 041a 2A000000 		.4byte	.LVL46
+ 1136 041e 93010000 		.4byte	0x193
+ 1137 0422 09       		.uleb128 0x9
+ 1138 0423 30000000 		.4byte	.LVL47
+ 1139 0427 42050000 		.4byte	0x542
+ 1140 042b 36040000 		.4byte	0x436
+ 1141 042f 0A       		.uleb128 0xa
+ 1142 0430 01       		.uleb128 0x1
+ 1143 0431 50       		.byte	0x50
+ 1144 0432 02       		.uleb128 0x2
+ 1145 0433 08       		.byte	0x8
+ 1146 0434 64       		.byte	0x64
+ 1147 0435 00       		.byte	0
+ 1148 0436 0B       		.uleb128 0xb
+ 1149 0437 34000000 		.4byte	.LVL48
+ 1150 043b A2030000 		.4byte	0x3a2
+ 1151 043f 00       		.byte	0
+ 1152 0440 06       		.uleb128 0x6
+ 1153 0441 67020000 		.4byte	.LASF39
+ 1154 0445 01       		.byte	0x1
+ 1155 0446 9F       		.byte	0x9f
+ 1156 0447 00000000 		.4byte	.LFB72
+ 1157 044b 1C000000 		.4byte	.LFE72-.LFB72
+ 1158 044f 01       		.uleb128 0x1
+ 1159 0450 9C       		.byte	0x9c
+ 1160 0451 6E040000 		.4byte	0x46e
+ 1161 0455 17       		.uleb128 0x17
+ 1162 0456 4300     		.ascii	"C\000"
+ 1163 0458 01       		.byte	0x1
+ 1164 0459 9F       		.byte	0x9f
+ 1165 045a 6E040000 		.4byte	0x46e
+ 1166 045e 01       		.uleb128 0x1
+ 1167 045f 50       		.byte	0x50
+ 1168 0460 14       		.uleb128 0x14
+ 1169 0461 6B00     		.ascii	"k\000"
+ 1170 0463 01       		.byte	0x1
+ 1171 0464 A1       		.byte	0xa1
+ 1172 0465 B8000000 		.4byte	0xb8
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 25
+
+
+ 1173 0469 4E010000 		.4byte	.LLST10
+ 1174 046d 00       		.byte	0
+ 1175 046e 18       		.uleb128 0x18
+ 1176 046f 04       		.byte	0x4
+ 1177 0470 C3000000 		.4byte	0xc3
+ 1178 0474 08       		.uleb128 0x8
+ 1179 0475 AE020000 		.4byte	.LASF40
+ 1180 0479 01       		.byte	0x1
+ 1181 047a 0A       		.byte	0xa
+ 1182 047b CE000000 		.4byte	0xce
+ 1183 047f 05       		.uleb128 0x5
+ 1184 0480 03       		.byte	0x3
+ 1185 0481 14000000 		.4byte	_Pres
+ 1186 0485 19       		.uleb128 0x19
+ 1187 0486 5F5400   		.ascii	"_T\000"
+ 1188 0489 01       		.byte	0x1
+ 1189 048a 0B       		.byte	0xb
+ 1190 048b CE000000 		.4byte	0xce
+ 1191 048f 05       		.uleb128 0x5
+ 1192 0490 03       		.byte	0x3
+ 1193 0491 10000000 		.4byte	_T
+ 1194 0495 19       		.uleb128 0x19
+ 1195 0496 5F645400 		.ascii	"_dT\000"
+ 1196 049a 01       		.byte	0x1
+ 1197 049b 0C       		.byte	0xc
+ 1198 049c CE000000 		.4byte	0xce
+ 1199 04a0 05       		.uleb128 0x5
+ 1200 04a1 03       		.byte	0x3
+ 1201 04a2 0C000000 		.4byte	_dT
+ 1202 04a6 0C       		.uleb128 0xc
+ 1203 04a7 C3000000 		.4byte	0xc3
+ 1204 04ab B6040000 		.4byte	0x4b6
+ 1205 04af 0D       		.uleb128 0xd
+ 1206 04b0 EF000000 		.4byte	0xef
+ 1207 04b4 05       		.byte	0x5
+ 1208 04b5 00       		.byte	0
+ 1209 04b6 19       		.uleb128 0x19
+ 1210 04b7 5F436F00 		.ascii	"_Co\000"
+ 1211 04bb 01       		.byte	0x1
+ 1212 04bc 0D       		.byte	0xd
+ 1213 04bd A6040000 		.4byte	0x4a6
+ 1214 04c1 05       		.uleb128 0x5
+ 1215 04c2 03       		.byte	0x3
+ 1216 04c3 00000000 		.4byte	_Co
+ 1217 04c7 08       		.uleb128 0x8
+ 1218 04c8 CD020000 		.4byte	.LASF41
+ 1219 04cc 01       		.byte	0x1
+ 1220 04cd 0E       		.byte	0xe
+ 1221 04ce D9000000 		.4byte	0xd9
+ 1222 04d2 05       		.uleb128 0x5
+ 1223 04d3 03       		.byte	0x3
+ 1224 04d4 18000000 		.4byte	_lastTime
+ 1225 04d8 1A       		.uleb128 0x1a
+ 1226 04d9 1E010000 		.4byte	.LASF49
+ 1227 04dd 06       		.byte	0x6
+ 1228 04de 9606     		.2byte	0x696
+ 1229 04e0 E4040000 		.4byte	0x4e4
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 26
+
+
+ 1230 04e4 1B       		.uleb128 0x1b
+ 1231 04e5 CE000000 		.4byte	0xce
+ 1232 04e9 1C       		.uleb128 0x1c
+ 1233 04ea C0000000 		.4byte	.LASF42
+ 1234 04ee 05       		.byte	0x5
+ 1235 04ef A7       		.byte	0xa7
+ 1236 04f0 FD000000 		.4byte	0xfd
+ 1237 04f4 0D050000 		.4byte	0x50d
+ 1238 04f8 1D       		.uleb128 0x1d
+ 1239 04f9 FD000000 		.4byte	0xfd
+ 1240 04fd 1D       		.uleb128 0x1d
+ 1241 04fe 0D050000 		.4byte	0x50d
+ 1242 0502 1D       		.uleb128 0x1d
+ 1243 0503 FD000000 		.4byte	0xfd
+ 1244 0507 1D       		.uleb128 0x1d
+ 1245 0508 FD000000 		.4byte	0xfd
+ 1246 050c 00       		.byte	0
+ 1247 050d 18       		.uleb128 0x18
+ 1248 050e 04       		.byte	0x4
+ 1249 050f FD000000 		.4byte	0xfd
+ 1250 0513 1E       		.uleb128 0x1e
+ 1251 0514 8E020000 		.4byte	.LASF50
+ 1252 0518 05       		.byte	0x5
+ 1253 0519 A3       		.byte	0xa3
+ 1254 051a FD000000 		.4byte	0xfd
+ 1255 051e 1C       		.uleb128 0x1c
+ 1256 051f 88000000 		.4byte	.LASF43
+ 1257 0523 05       		.byte	0x5
+ 1258 0524 A9       		.byte	0xa9
+ 1259 0525 FD000000 		.4byte	0xfd
+ 1260 0529 42050000 		.4byte	0x542
+ 1261 052d 1D       		.uleb128 0x1d
+ 1262 052e FD000000 		.4byte	0xfd
+ 1263 0532 1D       		.uleb128 0x1d
+ 1264 0533 0D050000 		.4byte	0x50d
+ 1265 0537 1D       		.uleb128 0x1d
+ 1266 0538 FD000000 		.4byte	0xfd
+ 1267 053c 1D       		.uleb128 0x1d
+ 1268 053d FD000000 		.4byte	0xfd
+ 1269 0541 00       		.byte	0
+ 1270 0542 1F       		.uleb128 0x1f
+ 1271 0543 0A030000 		.4byte	.LASF51
+ 1272 0547 07       		.byte	0x7
+ 1273 0548 76       		.byte	0x76
+ 1274 0549 53050000 		.4byte	0x553
+ 1275 054d 1D       		.uleb128 0x1d
+ 1276 054e 09010000 		.4byte	0x109
+ 1277 0552 00       		.byte	0
+ 1278 0553 20       		.uleb128 0x20
+ 1279 0554 C2020000 		.4byte	.LASF52
+ 1280 0558 08       		.byte	0x8
+ 1281 0559 0A       		.byte	0xa
+ 1282 055a 21       		.uleb128 0x21
+ 1283 055b 00       		.byte	0
+ 1284 055c 00       		.byte	0
+ 1285              		.section	.debug_abbrev,"",%progbits
+ 1286              	.Ldebug_abbrev0:
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 27
+
+
+ 1287 0000 01       		.uleb128 0x1
+ 1288 0001 11       		.uleb128 0x11
+ 1289 0002 01       		.byte	0x1
+ 1290 0003 25       		.uleb128 0x25
+ 1291 0004 0E       		.uleb128 0xe
+ 1292 0005 13       		.uleb128 0x13
+ 1293 0006 0B       		.uleb128 0xb
+ 1294 0007 03       		.uleb128 0x3
+ 1295 0008 0E       		.uleb128 0xe
+ 1296 0009 1B       		.uleb128 0x1b
+ 1297 000a 0E       		.uleb128 0xe
+ 1298 000b 55       		.uleb128 0x55
+ 1299 000c 17       		.uleb128 0x17
+ 1300 000d 11       		.uleb128 0x11
+ 1301 000e 01       		.uleb128 0x1
+ 1302 000f 10       		.uleb128 0x10
+ 1303 0010 17       		.uleb128 0x17
+ 1304 0011 00       		.byte	0
+ 1305 0012 00       		.byte	0
+ 1306 0013 02       		.uleb128 0x2
+ 1307 0014 16       		.uleb128 0x16
+ 1308 0015 00       		.byte	0
+ 1309 0016 03       		.uleb128 0x3
+ 1310 0017 0E       		.uleb128 0xe
+ 1311 0018 3A       		.uleb128 0x3a
+ 1312 0019 0B       		.uleb128 0xb
+ 1313 001a 3B       		.uleb128 0x3b
+ 1314 001b 0B       		.uleb128 0xb
+ 1315 001c 49       		.uleb128 0x49
+ 1316 001d 13       		.uleb128 0x13
+ 1317 001e 00       		.byte	0
+ 1318 001f 00       		.byte	0
+ 1319 0020 03       		.uleb128 0x3
+ 1320 0021 24       		.uleb128 0x24
+ 1321 0022 00       		.byte	0
+ 1322 0023 0B       		.uleb128 0xb
+ 1323 0024 0B       		.uleb128 0xb
+ 1324 0025 3E       		.uleb128 0x3e
+ 1325 0026 0B       		.uleb128 0xb
+ 1326 0027 03       		.uleb128 0x3
+ 1327 0028 0E       		.uleb128 0xe
+ 1328 0029 00       		.byte	0
+ 1329 002a 00       		.byte	0
+ 1330 002b 04       		.uleb128 0x4
+ 1331 002c 24       		.uleb128 0x24
+ 1332 002d 00       		.byte	0
+ 1333 002e 0B       		.uleb128 0xb
+ 1334 002f 0B       		.uleb128 0xb
+ 1335 0030 3E       		.uleb128 0x3e
+ 1336 0031 0B       		.uleb128 0xb
+ 1337 0032 03       		.uleb128 0x3
+ 1338 0033 08       		.uleb128 0x8
+ 1339 0034 00       		.byte	0
+ 1340 0035 00       		.byte	0
+ 1341 0036 05       		.uleb128 0x5
+ 1342 0037 16       		.uleb128 0x16
+ 1343 0038 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 28
+
+
+ 1344 0039 03       		.uleb128 0x3
+ 1345 003a 0E       		.uleb128 0xe
+ 1346 003b 3A       		.uleb128 0x3a
+ 1347 003c 0B       		.uleb128 0xb
+ 1348 003d 3B       		.uleb128 0x3b
+ 1349 003e 05       		.uleb128 0x5
+ 1350 003f 49       		.uleb128 0x49
+ 1351 0040 13       		.uleb128 0x13
+ 1352 0041 00       		.byte	0
+ 1353 0042 00       		.byte	0
+ 1354 0043 06       		.uleb128 0x6
+ 1355 0044 2E       		.uleb128 0x2e
+ 1356 0045 01       		.byte	0x1
+ 1357 0046 3F       		.uleb128 0x3f
+ 1358 0047 19       		.uleb128 0x19
+ 1359 0048 03       		.uleb128 0x3
+ 1360 0049 0E       		.uleb128 0xe
+ 1361 004a 3A       		.uleb128 0x3a
+ 1362 004b 0B       		.uleb128 0xb
+ 1363 004c 3B       		.uleb128 0x3b
+ 1364 004d 0B       		.uleb128 0xb
+ 1365 004e 27       		.uleb128 0x27
+ 1366 004f 19       		.uleb128 0x19
+ 1367 0050 11       		.uleb128 0x11
+ 1368 0051 01       		.uleb128 0x1
+ 1369 0052 12       		.uleb128 0x12
+ 1370 0053 06       		.uleb128 0x6
+ 1371 0054 40       		.uleb128 0x40
+ 1372 0055 18       		.uleb128 0x18
+ 1373 0056 9742     		.uleb128 0x2117
+ 1374 0058 19       		.uleb128 0x19
+ 1375 0059 01       		.uleb128 0x1
+ 1376 005a 13       		.uleb128 0x13
+ 1377 005b 00       		.byte	0
+ 1378 005c 00       		.byte	0
+ 1379 005d 07       		.uleb128 0x7
+ 1380 005e 05       		.uleb128 0x5
+ 1381 005f 00       		.byte	0
+ 1382 0060 03       		.uleb128 0x3
+ 1383 0061 08       		.uleb128 0x8
+ 1384 0062 3A       		.uleb128 0x3a
+ 1385 0063 0B       		.uleb128 0xb
+ 1386 0064 3B       		.uleb128 0x3b
+ 1387 0065 0B       		.uleb128 0xb
+ 1388 0066 49       		.uleb128 0x49
+ 1389 0067 13       		.uleb128 0x13
+ 1390 0068 02       		.uleb128 0x2
+ 1391 0069 17       		.uleb128 0x17
+ 1392 006a 00       		.byte	0
+ 1393 006b 00       		.byte	0
+ 1394 006c 08       		.uleb128 0x8
+ 1395 006d 34       		.uleb128 0x34
+ 1396 006e 00       		.byte	0
+ 1397 006f 03       		.uleb128 0x3
+ 1398 0070 0E       		.uleb128 0xe
+ 1399 0071 3A       		.uleb128 0x3a
+ 1400 0072 0B       		.uleb128 0xb
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 29
+
+
+ 1401 0073 3B       		.uleb128 0x3b
+ 1402 0074 0B       		.uleb128 0xb
+ 1403 0075 49       		.uleb128 0x49
+ 1404 0076 13       		.uleb128 0x13
+ 1405 0077 02       		.uleb128 0x2
+ 1406 0078 18       		.uleb128 0x18
+ 1407 0079 00       		.byte	0
+ 1408 007a 00       		.byte	0
+ 1409 007b 09       		.uleb128 0x9
+ 1410 007c 898201   		.uleb128 0x4109
+ 1411 007f 01       		.byte	0x1
+ 1412 0080 11       		.uleb128 0x11
+ 1413 0081 01       		.uleb128 0x1
+ 1414 0082 31       		.uleb128 0x31
+ 1415 0083 13       		.uleb128 0x13
+ 1416 0084 01       		.uleb128 0x1
+ 1417 0085 13       		.uleb128 0x13
+ 1418 0086 00       		.byte	0
+ 1419 0087 00       		.byte	0
+ 1420 0088 0A       		.uleb128 0xa
+ 1421 0089 8A8201   		.uleb128 0x410a
+ 1422 008c 00       		.byte	0
+ 1423 008d 02       		.uleb128 0x2
+ 1424 008e 18       		.uleb128 0x18
+ 1425 008f 9142     		.uleb128 0x2111
+ 1426 0091 18       		.uleb128 0x18
+ 1427 0092 00       		.byte	0
+ 1428 0093 00       		.byte	0
+ 1429 0094 0B       		.uleb128 0xb
+ 1430 0095 898201   		.uleb128 0x4109
+ 1431 0098 00       		.byte	0
+ 1432 0099 11       		.uleb128 0x11
+ 1433 009a 01       		.uleb128 0x1
+ 1434 009b 31       		.uleb128 0x31
+ 1435 009c 13       		.uleb128 0x13
+ 1436 009d 00       		.byte	0
+ 1437 009e 00       		.byte	0
+ 1438 009f 0C       		.uleb128 0xc
+ 1439 00a0 01       		.uleb128 0x1
+ 1440 00a1 01       		.byte	0x1
+ 1441 00a2 49       		.uleb128 0x49
+ 1442 00a3 13       		.uleb128 0x13
+ 1443 00a4 01       		.uleb128 0x1
+ 1444 00a5 13       		.uleb128 0x13
+ 1445 00a6 00       		.byte	0
+ 1446 00a7 00       		.byte	0
+ 1447 00a8 0D       		.uleb128 0xd
+ 1448 00a9 21       		.uleb128 0x21
+ 1449 00aa 00       		.byte	0
+ 1450 00ab 49       		.uleb128 0x49
+ 1451 00ac 13       		.uleb128 0x13
+ 1452 00ad 2F       		.uleb128 0x2f
+ 1453 00ae 0B       		.uleb128 0xb
+ 1454 00af 00       		.byte	0
+ 1455 00b0 00       		.byte	0
+ 1456 00b1 0E       		.uleb128 0xe
+ 1457 00b2 2E       		.uleb128 0x2e
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 30
+
+
+ 1458 00b3 01       		.byte	0x1
+ 1459 00b4 03       		.uleb128 0x3
+ 1460 00b5 0E       		.uleb128 0xe
+ 1461 00b6 3A       		.uleb128 0x3a
+ 1462 00b7 0B       		.uleb128 0xb
+ 1463 00b8 3B       		.uleb128 0x3b
+ 1464 00b9 0B       		.uleb128 0xb
+ 1465 00ba 11       		.uleb128 0x11
+ 1466 00bb 01       		.uleb128 0x1
+ 1467 00bc 12       		.uleb128 0x12
+ 1468 00bd 06       		.uleb128 0x6
+ 1469 00be 40       		.uleb128 0x40
+ 1470 00bf 18       		.uleb128 0x18
+ 1471 00c0 9742     		.uleb128 0x2117
+ 1472 00c2 19       		.uleb128 0x19
+ 1473 00c3 01       		.uleb128 0x1
+ 1474 00c4 13       		.uleb128 0x13
+ 1475 00c5 00       		.byte	0
+ 1476 00c6 00       		.byte	0
+ 1477 00c7 0F       		.uleb128 0xf
+ 1478 00c8 898201   		.uleb128 0x4109
+ 1479 00cb 01       		.byte	0x1
+ 1480 00cc 11       		.uleb128 0x11
+ 1481 00cd 01       		.uleb128 0x1
+ 1482 00ce 31       		.uleb128 0x31
+ 1483 00cf 13       		.uleb128 0x13
+ 1484 00d0 00       		.byte	0
+ 1485 00d1 00       		.byte	0
+ 1486 00d2 10       		.uleb128 0x10
+ 1487 00d3 2E       		.uleb128 0x2e
+ 1488 00d4 01       		.byte	0x1
+ 1489 00d5 3F       		.uleb128 0x3f
+ 1490 00d6 19       		.uleb128 0x19
+ 1491 00d7 03       		.uleb128 0x3
+ 1492 00d8 0E       		.uleb128 0xe
+ 1493 00d9 3A       		.uleb128 0x3a
+ 1494 00da 0B       		.uleb128 0xb
+ 1495 00db 3B       		.uleb128 0x3b
+ 1496 00dc 0B       		.uleb128 0xb
+ 1497 00dd 27       		.uleb128 0x27
+ 1498 00de 19       		.uleb128 0x19
+ 1499 00df 49       		.uleb128 0x49
+ 1500 00e0 13       		.uleb128 0x13
+ 1501 00e1 11       		.uleb128 0x11
+ 1502 00e2 01       		.uleb128 0x1
+ 1503 00e3 12       		.uleb128 0x12
+ 1504 00e4 06       		.uleb128 0x6
+ 1505 00e5 40       		.uleb128 0x40
+ 1506 00e6 18       		.uleb128 0x18
+ 1507 00e7 9742     		.uleb128 0x2117
+ 1508 00e9 19       		.uleb128 0x19
+ 1509 00ea 01       		.uleb128 0x1
+ 1510 00eb 13       		.uleb128 0x13
+ 1511 00ec 00       		.byte	0
+ 1512 00ed 00       		.byte	0
+ 1513 00ee 11       		.uleb128 0x11
+ 1514 00ef 05       		.uleb128 0x5
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 31
+
+
+ 1515 00f0 00       		.byte	0
+ 1516 00f1 03       		.uleb128 0x3
+ 1517 00f2 0E       		.uleb128 0xe
+ 1518 00f3 3A       		.uleb128 0x3a
+ 1519 00f4 0B       		.uleb128 0xb
+ 1520 00f5 3B       		.uleb128 0x3b
+ 1521 00f6 0B       		.uleb128 0xb
+ 1522 00f7 49       		.uleb128 0x49
+ 1523 00f8 13       		.uleb128 0x13
+ 1524 00f9 02       		.uleb128 0x2
+ 1525 00fa 17       		.uleb128 0x17
+ 1526 00fb 00       		.byte	0
+ 1527 00fc 00       		.byte	0
+ 1528 00fd 12       		.uleb128 0x12
+ 1529 00fe 0B       		.uleb128 0xb
+ 1530 00ff 01       		.byte	0x1
+ 1531 0100 11       		.uleb128 0x11
+ 1532 0101 01       		.uleb128 0x1
+ 1533 0102 12       		.uleb128 0x12
+ 1534 0103 06       		.uleb128 0x6
+ 1535 0104 00       		.byte	0
+ 1536 0105 00       		.byte	0
+ 1537 0106 13       		.uleb128 0x13
+ 1538 0107 34       		.uleb128 0x34
+ 1539 0108 00       		.byte	0
+ 1540 0109 03       		.uleb128 0x3
+ 1541 010a 0E       		.uleb128 0xe
+ 1542 010b 3A       		.uleb128 0x3a
+ 1543 010c 0B       		.uleb128 0xb
+ 1544 010d 3B       		.uleb128 0x3b
+ 1545 010e 0B       		.uleb128 0xb
+ 1546 010f 49       		.uleb128 0x49
+ 1547 0110 13       		.uleb128 0x13
+ 1548 0111 02       		.uleb128 0x2
+ 1549 0112 17       		.uleb128 0x17
+ 1550 0113 00       		.byte	0
+ 1551 0114 00       		.byte	0
+ 1552 0115 14       		.uleb128 0x14
+ 1553 0116 34       		.uleb128 0x34
+ 1554 0117 00       		.byte	0
+ 1555 0118 03       		.uleb128 0x3
+ 1556 0119 08       		.uleb128 0x8
+ 1557 011a 3A       		.uleb128 0x3a
+ 1558 011b 0B       		.uleb128 0xb
+ 1559 011c 3B       		.uleb128 0x3b
+ 1560 011d 0B       		.uleb128 0xb
+ 1561 011e 49       		.uleb128 0x49
+ 1562 011f 13       		.uleb128 0x13
+ 1563 0120 02       		.uleb128 0x2
+ 1564 0121 17       		.uleb128 0x17
+ 1565 0122 00       		.byte	0
+ 1566 0123 00       		.byte	0
+ 1567 0124 15       		.uleb128 0x15
+ 1568 0125 2E       		.uleb128 0x2e
+ 1569 0126 01       		.byte	0x1
+ 1570 0127 3F       		.uleb128 0x3f
+ 1571 0128 19       		.uleb128 0x19
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 32
+
+
+ 1572 0129 03       		.uleb128 0x3
+ 1573 012a 0E       		.uleb128 0xe
+ 1574 012b 3A       		.uleb128 0x3a
+ 1575 012c 0B       		.uleb128 0xb
+ 1576 012d 3B       		.uleb128 0x3b
+ 1577 012e 0B       		.uleb128 0xb
+ 1578 012f 49       		.uleb128 0x49
+ 1579 0130 13       		.uleb128 0x13
+ 1580 0131 11       		.uleb128 0x11
+ 1581 0132 01       		.uleb128 0x1
+ 1582 0133 12       		.uleb128 0x12
+ 1583 0134 06       		.uleb128 0x6
+ 1584 0135 40       		.uleb128 0x40
+ 1585 0136 18       		.uleb128 0x18
+ 1586 0137 9742     		.uleb128 0x2117
+ 1587 0139 19       		.uleb128 0x19
+ 1588 013a 01       		.uleb128 0x1
+ 1589 013b 13       		.uleb128 0x13
+ 1590 013c 00       		.byte	0
+ 1591 013d 00       		.byte	0
+ 1592 013e 16       		.uleb128 0x16
+ 1593 013f 2E       		.uleb128 0x2e
+ 1594 0140 01       		.byte	0x1
+ 1595 0141 3F       		.uleb128 0x3f
+ 1596 0142 19       		.uleb128 0x19
+ 1597 0143 03       		.uleb128 0x3
+ 1598 0144 0E       		.uleb128 0xe
+ 1599 0145 3A       		.uleb128 0x3a
+ 1600 0146 0B       		.uleb128 0xb
+ 1601 0147 3B       		.uleb128 0x3b
+ 1602 0148 0B       		.uleb128 0xb
+ 1603 0149 11       		.uleb128 0x11
+ 1604 014a 01       		.uleb128 0x1
+ 1605 014b 12       		.uleb128 0x12
+ 1606 014c 06       		.uleb128 0x6
+ 1607 014d 40       		.uleb128 0x40
+ 1608 014e 18       		.uleb128 0x18
+ 1609 014f 9742     		.uleb128 0x2117
+ 1610 0151 19       		.uleb128 0x19
+ 1611 0152 01       		.uleb128 0x1
+ 1612 0153 13       		.uleb128 0x13
+ 1613 0154 00       		.byte	0
+ 1614 0155 00       		.byte	0
+ 1615 0156 17       		.uleb128 0x17
+ 1616 0157 05       		.uleb128 0x5
+ 1617 0158 00       		.byte	0
+ 1618 0159 03       		.uleb128 0x3
+ 1619 015a 08       		.uleb128 0x8
+ 1620 015b 3A       		.uleb128 0x3a
+ 1621 015c 0B       		.uleb128 0xb
+ 1622 015d 3B       		.uleb128 0x3b
+ 1623 015e 0B       		.uleb128 0xb
+ 1624 015f 49       		.uleb128 0x49
+ 1625 0160 13       		.uleb128 0x13
+ 1626 0161 02       		.uleb128 0x2
+ 1627 0162 18       		.uleb128 0x18
+ 1628 0163 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 33
+
+
+ 1629 0164 00       		.byte	0
+ 1630 0165 18       		.uleb128 0x18
+ 1631 0166 0F       		.uleb128 0xf
+ 1632 0167 00       		.byte	0
+ 1633 0168 0B       		.uleb128 0xb
+ 1634 0169 0B       		.uleb128 0xb
+ 1635 016a 49       		.uleb128 0x49
+ 1636 016b 13       		.uleb128 0x13
+ 1637 016c 00       		.byte	0
+ 1638 016d 00       		.byte	0
+ 1639 016e 19       		.uleb128 0x19
+ 1640 016f 34       		.uleb128 0x34
+ 1641 0170 00       		.byte	0
+ 1642 0171 03       		.uleb128 0x3
+ 1643 0172 08       		.uleb128 0x8
+ 1644 0173 3A       		.uleb128 0x3a
+ 1645 0174 0B       		.uleb128 0xb
+ 1646 0175 3B       		.uleb128 0x3b
+ 1647 0176 0B       		.uleb128 0xb
+ 1648 0177 49       		.uleb128 0x49
+ 1649 0178 13       		.uleb128 0x13
+ 1650 0179 02       		.uleb128 0x2
+ 1651 017a 18       		.uleb128 0x18
+ 1652 017b 00       		.byte	0
+ 1653 017c 00       		.byte	0
+ 1654 017d 1A       		.uleb128 0x1a
+ 1655 017e 34       		.uleb128 0x34
+ 1656 017f 00       		.byte	0
+ 1657 0180 03       		.uleb128 0x3
+ 1658 0181 0E       		.uleb128 0xe
+ 1659 0182 3A       		.uleb128 0x3a
+ 1660 0183 0B       		.uleb128 0xb
+ 1661 0184 3B       		.uleb128 0x3b
+ 1662 0185 05       		.uleb128 0x5
+ 1663 0186 49       		.uleb128 0x49
+ 1664 0187 13       		.uleb128 0x13
+ 1665 0188 3F       		.uleb128 0x3f
+ 1666 0189 19       		.uleb128 0x19
+ 1667 018a 3C       		.uleb128 0x3c
+ 1668 018b 19       		.uleb128 0x19
+ 1669 018c 00       		.byte	0
+ 1670 018d 00       		.byte	0
+ 1671 018e 1B       		.uleb128 0x1b
+ 1672 018f 35       		.uleb128 0x35
+ 1673 0190 00       		.byte	0
+ 1674 0191 49       		.uleb128 0x49
+ 1675 0192 13       		.uleb128 0x13
+ 1676 0193 00       		.byte	0
+ 1677 0194 00       		.byte	0
+ 1678 0195 1C       		.uleb128 0x1c
+ 1679 0196 2E       		.uleb128 0x2e
+ 1680 0197 01       		.byte	0x1
+ 1681 0198 3F       		.uleb128 0x3f
+ 1682 0199 19       		.uleb128 0x19
+ 1683 019a 03       		.uleb128 0x3
+ 1684 019b 0E       		.uleb128 0xe
+ 1685 019c 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 34
+
+
+ 1686 019d 0B       		.uleb128 0xb
+ 1687 019e 3B       		.uleb128 0x3b
+ 1688 019f 0B       		.uleb128 0xb
+ 1689 01a0 27       		.uleb128 0x27
+ 1690 01a1 19       		.uleb128 0x19
+ 1691 01a2 49       		.uleb128 0x49
+ 1692 01a3 13       		.uleb128 0x13
+ 1693 01a4 3C       		.uleb128 0x3c
+ 1694 01a5 19       		.uleb128 0x19
+ 1695 01a6 01       		.uleb128 0x1
+ 1696 01a7 13       		.uleb128 0x13
+ 1697 01a8 00       		.byte	0
+ 1698 01a9 00       		.byte	0
+ 1699 01aa 1D       		.uleb128 0x1d
+ 1700 01ab 05       		.uleb128 0x5
+ 1701 01ac 00       		.byte	0
+ 1702 01ad 49       		.uleb128 0x49
+ 1703 01ae 13       		.uleb128 0x13
+ 1704 01af 00       		.byte	0
+ 1705 01b0 00       		.byte	0
+ 1706 01b1 1E       		.uleb128 0x1e
+ 1707 01b2 2E       		.uleb128 0x2e
+ 1708 01b3 00       		.byte	0
+ 1709 01b4 3F       		.uleb128 0x3f
+ 1710 01b5 19       		.uleb128 0x19
+ 1711 01b6 03       		.uleb128 0x3
+ 1712 01b7 0E       		.uleb128 0xe
+ 1713 01b8 3A       		.uleb128 0x3a
+ 1714 01b9 0B       		.uleb128 0xb
+ 1715 01ba 3B       		.uleb128 0x3b
+ 1716 01bb 0B       		.uleb128 0xb
+ 1717 01bc 27       		.uleb128 0x27
+ 1718 01bd 19       		.uleb128 0x19
+ 1719 01be 49       		.uleb128 0x49
+ 1720 01bf 13       		.uleb128 0x13
+ 1721 01c0 3C       		.uleb128 0x3c
+ 1722 01c1 19       		.uleb128 0x19
+ 1723 01c2 00       		.byte	0
+ 1724 01c3 00       		.byte	0
+ 1725 01c4 1F       		.uleb128 0x1f
+ 1726 01c5 2E       		.uleb128 0x2e
+ 1727 01c6 01       		.byte	0x1
+ 1728 01c7 3F       		.uleb128 0x3f
+ 1729 01c8 19       		.uleb128 0x19
+ 1730 01c9 03       		.uleb128 0x3
+ 1731 01ca 0E       		.uleb128 0xe
+ 1732 01cb 3A       		.uleb128 0x3a
+ 1733 01cc 0B       		.uleb128 0xb
+ 1734 01cd 3B       		.uleb128 0x3b
+ 1735 01ce 0B       		.uleb128 0xb
+ 1736 01cf 27       		.uleb128 0x27
+ 1737 01d0 19       		.uleb128 0x19
+ 1738 01d1 3C       		.uleb128 0x3c
+ 1739 01d2 19       		.uleb128 0x19
+ 1740 01d3 01       		.uleb128 0x1
+ 1741 01d4 13       		.uleb128 0x13
+ 1742 01d5 00       		.byte	0
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 35
+
+
+ 1743 01d6 00       		.byte	0
+ 1744 01d7 20       		.uleb128 0x20
+ 1745 01d8 2E       		.uleb128 0x2e
+ 1746 01d9 01       		.byte	0x1
+ 1747 01da 3F       		.uleb128 0x3f
+ 1748 01db 19       		.uleb128 0x19
+ 1749 01dc 03       		.uleb128 0x3
+ 1750 01dd 0E       		.uleb128 0xe
+ 1751 01de 3A       		.uleb128 0x3a
+ 1752 01df 0B       		.uleb128 0xb
+ 1753 01e0 3B       		.uleb128 0x3b
+ 1754 01e1 0B       		.uleb128 0xb
+ 1755 01e2 3C       		.uleb128 0x3c
+ 1756 01e3 19       		.uleb128 0x19
+ 1757 01e4 00       		.byte	0
+ 1758 01e5 00       		.byte	0
+ 1759 01e6 21       		.uleb128 0x21
+ 1760 01e7 18       		.uleb128 0x18
+ 1761 01e8 00       		.byte	0
+ 1762 01e9 00       		.byte	0
+ 1763 01ea 00       		.byte	0
+ 1764 01eb 00       		.byte	0
+ 1765              		.section	.debug_loc,"",%progbits
+ 1766              	.Ldebug_loc0:
+ 1767              	.LLST0:
+ 1768 0000 00000000 		.4byte	.LVL0
+ 1769 0004 0C000000 		.4byte	.LVL1
+ 1770 0008 0100     		.2byte	0x1
+ 1771 000a 50       		.byte	0x50
+ 1772 000b 0C000000 		.4byte	.LVL1
+ 1773 000f 13000000 		.4byte	.LVL2-1
+ 1774 0013 0200     		.2byte	0x2
+ 1775 0015 71       		.byte	0x71
+ 1776 0016 00       		.sleb128 0
+ 1777 0017 13000000 		.4byte	.LVL2-1
+ 1778 001b 24000000 		.4byte	.LFE63
+ 1779 001f 0400     		.2byte	0x4
+ 1780 0021 F3       		.byte	0xf3
+ 1781 0022 01       		.uleb128 0x1
+ 1782 0023 50       		.byte	0x50
+ 1783 0024 9F       		.byte	0x9f
+ 1784 0025 00000000 		.4byte	0
+ 1785 0029 00000000 		.4byte	0
+ 1786              	.LLST1:
+ 1787 002d 00000000 		.4byte	.LVL5
+ 1788 0031 18000000 		.4byte	.LVL7
+ 1789 0035 0100     		.2byte	0x1
+ 1790 0037 50       		.byte	0x50
+ 1791 0038 18000000 		.4byte	.LVL7
+ 1792 003c 50000000 		.4byte	.LVL15
+ 1793 0040 0400     		.2byte	0x4
+ 1794 0042 F3       		.byte	0xf3
+ 1795 0043 01       		.uleb128 0x1
+ 1796 0044 50       		.byte	0x50
+ 1797 0045 9F       		.byte	0x9f
+ 1798 0046 50000000 		.4byte	.LVL15
+ 1799 004a 52000000 		.4byte	.LVL16
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 36
+
+
+ 1800 004e 0100     		.2byte	0x1
+ 1801 0050 50       		.byte	0x50
+ 1802 0051 52000000 		.4byte	.LVL16
+ 1803 0055 56000000 		.4byte	.LFE64
+ 1804 0059 0400     		.2byte	0x4
+ 1805 005b F3       		.byte	0xf3
+ 1806 005c 01       		.uleb128 0x1
+ 1807 005d 50       		.byte	0x50
+ 1808 005e 9F       		.byte	0x9f
+ 1809 005f 00000000 		.4byte	0
+ 1810 0063 00000000 		.4byte	0
+ 1811              	.LLST2:
+ 1812 0067 0E000000 		.4byte	.LVL6
+ 1813 006b 30000000 		.4byte	.LVL11
+ 1814 006f 0200     		.2byte	0x2
+ 1815 0071 30       		.byte	0x30
+ 1816 0072 9F       		.byte	0x9f
+ 1817 0073 30000000 		.4byte	.LVL11
+ 1818 0077 50000000 		.4byte	.LVL15
+ 1819 007b 0100     		.2byte	0x1
+ 1820 007d 50       		.byte	0x50
+ 1821 007e 00000000 		.4byte	0
+ 1822 0082 00000000 		.4byte	0
+ 1823              	.LLST3:
+ 1824 0086 2C000000 		.4byte	.LVL10
+ 1825 008a 46000000 		.4byte	.LVL13
+ 1826 008e 0100     		.2byte	0x1
+ 1827 0090 52       		.byte	0x52
+ 1828 0091 48000000 		.4byte	.LVL14
+ 1829 0095 50000000 		.4byte	.LVL15
+ 1830 0099 0100     		.2byte	0x1
+ 1831 009b 52       		.byte	0x52
+ 1832 009c 00000000 		.4byte	0
+ 1833 00a0 00000000 		.4byte	0
+ 1834              	.LLST4:
+ 1835 00a4 06000000 		.4byte	.LVL21
+ 1836 00a8 0E000000 		.4byte	.LVL22
+ 1837 00ac 0100     		.2byte	0x1
+ 1838 00ae 50       		.byte	0x50
+ 1839 00af 00000000 		.4byte	0
+ 1840 00b3 00000000 		.4byte	0
+ 1841              	.LLST5:
+ 1842 00b7 0C000000 		.4byte	.LVL28
+ 1843 00bb 98000000 		.4byte	.LVL31
+ 1844 00bf 0100     		.2byte	0x1
+ 1845 00c1 50       		.byte	0x50
+ 1846 00c2 00000000 		.4byte	0
+ 1847 00c6 00000000 		.4byte	0
+ 1848              	.LLST6:
+ 1849 00ca 4E000000 		.4byte	.LVL29
+ 1850 00ce C2000000 		.4byte	.LVL33
+ 1851 00d2 0600     		.2byte	0x6
+ 1852 00d4 54       		.byte	0x54
+ 1853 00d5 93       		.byte	0x93
+ 1854 00d6 04       		.uleb128 0x4
+ 1855 00d7 55       		.byte	0x55
+ 1856 00d8 93       		.byte	0x93
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 37
+
+
+ 1857 00d9 04       		.uleb128 0x4
+ 1858 00da 00000000 		.4byte	0
+ 1859 00de 00000000 		.4byte	0
+ 1860              	.LLST7:
+ 1861 00e2 8E000000 		.4byte	.LVL30
+ 1862 00e6 A0000000 		.4byte	.LVL32
+ 1863 00ea 0600     		.2byte	0x6
+ 1864 00ec 56       		.byte	0x56
+ 1865 00ed 93       		.byte	0x93
+ 1866 00ee 04       		.uleb128 0x4
+ 1867 00ef 57       		.byte	0x57
+ 1868 00f0 93       		.byte	0x93
+ 1869 00f1 04       		.uleb128 0x4
+ 1870 00f2 00000000 		.4byte	0
+ 1871 00f6 00000000 		.4byte	0
+ 1872              	.LLST8:
+ 1873 00fa 02000000 		.4byte	.LVL34
+ 1874 00fe 06000000 		.4byte	.LVL35
+ 1875 0102 0200     		.2byte	0x2
+ 1876 0104 30       		.byte	0x30
+ 1877 0105 9F       		.byte	0x9f
+ 1878 0106 06000000 		.4byte	.LVL35
+ 1879 010a 22000000 		.4byte	.LVL38
+ 1880 010e 0100     		.2byte	0x1
+ 1881 0110 54       		.byte	0x54
+ 1882 0111 24000000 		.4byte	.LVL39
+ 1883 0115 2A000000 		.4byte	.LVL40
+ 1884 0119 0100     		.2byte	0x1
+ 1885 011b 54       		.byte	0x54
+ 1886 011c 00000000 		.4byte	0
+ 1887 0120 00000000 		.4byte	0
+ 1888              	.LLST9:
+ 1889 0124 10000000 		.4byte	.LVL41
+ 1890 0128 12000000 		.4byte	.LVL42
+ 1891 012c 0200     		.2byte	0x2
+ 1892 012e 30       		.byte	0x30
+ 1893 012f 9F       		.byte	0x9f
+ 1894 0130 12000000 		.4byte	.LVL42
+ 1895 0134 1C000000 		.4byte	.LVL43
+ 1896 0138 0100     		.2byte	0x1
+ 1897 013a 53       		.byte	0x53
+ 1898 013b 1E000000 		.4byte	.LVL44
+ 1899 013f 25000000 		.4byte	.LVL45-1
+ 1900 0143 0100     		.2byte	0x1
+ 1901 0145 53       		.byte	0x53
+ 1902 0146 00000000 		.4byte	0
+ 1903 014a 00000000 		.4byte	0
+ 1904              	.LLST10:
+ 1905 014e 00000000 		.4byte	.LVL49
+ 1906 0152 04000000 		.4byte	.LVL50
+ 1907 0156 0200     		.2byte	0x2
+ 1908 0158 30       		.byte	0x30
+ 1909 0159 9F       		.byte	0x9f
+ 1910 015a 04000000 		.4byte	.LVL50
+ 1911 015e 10000000 		.4byte	.LVL51
+ 1912 0162 0100     		.2byte	0x1
+ 1913 0164 53       		.byte	0x53
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 38
+
+
+ 1914 0165 12000000 		.4byte	.LVL52
+ 1915 0169 1C000000 		.4byte	.LFE72
+ 1916 016d 0100     		.2byte	0x1
+ 1917 016f 53       		.byte	0x53
+ 1918 0170 00000000 		.4byte	0
+ 1919 0174 00000000 		.4byte	0
+ 1920              		.section	.debug_aranges,"",%progbits
+ 1921 0000 64000000 		.4byte	0x64
+ 1922 0004 0200     		.2byte	0x2
+ 1923 0006 00000000 		.4byte	.Ldebug_info0
+ 1924 000a 04       		.byte	0x4
+ 1925 000b 00       		.byte	0
+ 1926 000c 0000     		.2byte	0
+ 1927 000e 0000     		.2byte	0
+ 1928 0010 00000000 		.4byte	.LFB63
+ 1929 0014 24000000 		.4byte	.LFE63-.LFB63
+ 1930 0018 00000000 		.4byte	.LFB65
+ 1931 001c 0A000000 		.4byte	.LFE65-.LFB65
+ 1932 0020 00000000 		.4byte	.LFB64
+ 1933 0024 56000000 		.4byte	.LFE64-.LFB64
+ 1934 0028 00000000 		.4byte	.LFB67
+ 1935 002c 1C000000 		.4byte	.LFE67-.LFB67
+ 1936 0030 00000000 		.4byte	.LFB68
+ 1937 0034 48000000 		.4byte	.LFE68-.LFB68
+ 1938 0038 00000000 		.4byte	.LFB69
+ 1939 003c 1C000000 		.4byte	.LFE69-.LFB69
+ 1940 0040 00000000 		.4byte	.LFB70
+ 1941 0044 E8000000 		.4byte	.LFE70-.LFB70
+ 1942 0048 00000000 		.4byte	.LFB71
+ 1943 004c 30000000 		.4byte	.LFE71-.LFB71
+ 1944 0050 00000000 		.4byte	.LFB66
+ 1945 0054 3C000000 		.4byte	.LFE66-.LFB66
+ 1946 0058 00000000 		.4byte	.LFB72
+ 1947 005c 1C000000 		.4byte	.LFE72-.LFB72
+ 1948 0060 00000000 		.4byte	0
+ 1949 0064 00000000 		.4byte	0
+ 1950              		.section	.debug_ranges,"",%progbits
+ 1951              	.Ldebug_ranges0:
+ 1952 0000 00000000 		.4byte	.LFB63
+ 1953 0004 24000000 		.4byte	.LFE63
+ 1954 0008 00000000 		.4byte	.LFB65
+ 1955 000c 0A000000 		.4byte	.LFE65
+ 1956 0010 00000000 		.4byte	.LFB64
+ 1957 0014 56000000 		.4byte	.LFE64
+ 1958 0018 00000000 		.4byte	.LFB67
+ 1959 001c 1C000000 		.4byte	.LFE67
+ 1960 0020 00000000 		.4byte	.LFB68
+ 1961 0024 48000000 		.4byte	.LFE68
+ 1962 0028 00000000 		.4byte	.LFB69
+ 1963 002c 1C000000 		.4byte	.LFE69
+ 1964 0030 00000000 		.4byte	.LFB70
+ 1965 0034 E8000000 		.4byte	.LFE70
+ 1966 0038 00000000 		.4byte	.LFB71
+ 1967 003c 30000000 		.4byte	.LFE71
+ 1968 0040 00000000 		.4byte	.LFB66
+ 1969 0044 3C000000 		.4byte	.LFE66
+ 1970 0048 00000000 		.4byte	.LFB72
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 39
+
+
+ 1971 004c 1C000000 		.4byte	.LFE72
+ 1972 0050 00000000 		.4byte	0
+ 1973 0054 00000000 		.4byte	0
+ 1974              		.section	.debug_line,"",%progbits
+ 1975              	.Ldebug_line0:
+ 1976 0000 A3020000 		.section	.debug_str,"MS",%progbits,1
+ 1976      02006F01 
+ 1976      00000201 
+ 1976      FB0E0D00 
+ 1976      01010101 
+ 1977              	.LASF20:
+ 1978 0000 696E7436 		.ascii	"int64_t\000"
+ 1978      345F7400 
+ 1979              	.LASF0:
+ 1980 0008 5F5F696E 		.ascii	"__int8_t\000"
+ 1980      74385F74 
+ 1980      00
+ 1981              	.LASF1:
+ 1982 0011 5F5F7569 		.ascii	"__uint8_t\000"
+ 1982      6E74385F 
+ 1982      7400
+ 1983              	.LASF38:
+ 1984 001b 6261726F 		.ascii	"baro_begin\000"
+ 1984      5F626567 
+ 1984      696E00
+ 1985              	.LASF35:
+ 1986 0026 6261726F 		.ascii	"baro_getPressure\000"
+ 1986      5F676574 
+ 1986      50726573 
+ 1986      73757265 
+ 1986      00
+ 1987              	.LASF32:
+ 1988 0037 6261726F 		.ascii	"baro_getRawTemperature\000"
+ 1988      5F676574 
+ 1988      52617754 
+ 1988      656D7065 
+ 1988      72617475 
+ 1989              	.LASF28:
+ 1990 004e 57726974 		.ascii	"Write_Buf\000"
+ 1990      655F4275 
+ 1990      6600
+ 1991              	.LASF7:
+ 1992 0058 5F5F696E 		.ascii	"__int32_t\000"
+ 1992      7433325F 
+ 1992      7400
+ 1993              	.LASF27:
+ 1994 0062 6E427974 		.ascii	"nBytes\000"
+ 1994      657300
+ 1995              	.LASF48:
+ 1996 0069 72656164 		.ascii	"readnBytes\000"
+ 1996      6E427974 
+ 1996      657300
+ 1997              	.LASF34:
+ 1998 0074 6261726F 		.ascii	"baro_getRawPressure\000"
+ 1998      5F676574 
+ 1998      52617750 
+ 1998      72657373 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 40
+
+
+ 1998      75726500 
+ 1999              	.LASF43:
+ 2000 0088 4932435F 		.ascii	"I2C_MasterReadBuf\000"
+ 2000      4D617374 
+ 2000      65725265 
+ 2000      61644275 
+ 2000      6600
+ 2001              	.LASF15:
+ 2002 009a 696E7438 		.ascii	"int8_t\000"
+ 2002      5F7400
+ 2003              	.LASF25:
+ 2004 00a1 666C6F61 		.ascii	"float\000"
+ 2004      7400
+ 2005              	.LASF29:
+ 2006 00a7 64617461 		.ascii	"data\000"
+ 2006      00
+ 2007              	.LASF23:
+ 2008 00ac 75696E74 		.ascii	"uint8\000"
+ 2008      3800
+ 2009              	.LASF3:
+ 2010 00b2 756E7369 		.ascii	"unsigned char\000"
+ 2010      676E6564 
+ 2010      20636861 
+ 2010      7200
+ 2011              	.LASF42:
+ 2012 00c0 4932435F 		.ascii	"I2C_MasterWriteBuf\000"
+ 2012      4D617374 
+ 2012      65725772 
+ 2012      69746542 
+ 2012      756600
+ 2013              	.LASF9:
+ 2014 00d3 5F5F7569 		.ascii	"__uint32_t\000"
+ 2014      6E743332 
+ 2014      5F7400
+ 2015              	.LASF10:
+ 2016 00de 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2016      20756E73 
+ 2016      69676E65 
+ 2016      6420696E 
+ 2016      7400
+ 2017              	.LASF47:
+ 2018 00f0 72657365 		.ascii	"reset\000"
+ 2018      7400
+ 2019              	.LASF6:
+ 2020 00f6 73686F72 		.ascii	"short unsigned int\000"
+ 2020      7420756E 
+ 2020      7369676E 
+ 2020      65642069 
+ 2020      6E7400
+ 2021              	.LASF30:
+ 2022 0109 52656164 		.ascii	"Read_Buf\000"
+ 2022      5F427566 
+ 2022      00
+ 2023              	.LASF31:
+ 2024 0112 73656E64 		.ascii	"sendCommand\000"
+ 2024      436F6D6D 
+ 2024      616E6400 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 41
+
+
+ 2025              	.LASF49:
+ 2026 011e 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 2026      52784275 
+ 2026      66666572 
+ 2026      00
+ 2027              	.LASF11:
+ 2028 012b 5F5F696E 		.ascii	"__int64_t\000"
+ 2028      7436345F 
+ 2028      7400
+ 2029              	.LASF5:
+ 2030 0135 5F5F7569 		.ascii	"__uint16_t\000"
+ 2030      6E743136 
+ 2030      5F7400
+ 2031              	.LASF26:
+ 2032 0140 646F7562 		.ascii	"double\000"
+ 2032      6C6500
+ 2033              	.LASF4:
+ 2034 0147 73686F72 		.ascii	"short int\000"
+ 2034      7420696E 
+ 2034      7400
+ 2035              	.LASF24:
+ 2036 0151 75696E74 		.ascii	"uint32\000"
+ 2036      333200
+ 2037              	.LASF44:
+ 2038 0158 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2038      4320342E 
+ 2038      392E3320 
+ 2038      32303135 
+ 2038      30333033 
+ 2039 018b 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 2039      20726576 
+ 2039      6973696F 
+ 2039      6E203232 
+ 2039      31323230 
+ 2040 01be 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2040      66756E63 
+ 2040      74696F6E 
+ 2040      2D736563 
+ 2040      74696F6E 
+ 2041              	.LASF14:
+ 2042 01e6 756E7369 		.ascii	"unsigned int\000"
+ 2042      676E6564 
+ 2042      20696E74 
+ 2042      00
+ 2043              	.LASF13:
+ 2044 01f3 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2044      206C6F6E 
+ 2044      6720756E 
+ 2044      7369676E 
+ 2044      65642069 
+ 2045              	.LASF16:
+ 2046 020a 75696E74 		.ascii	"uint8_t\000"
+ 2046      385F7400 
+ 2047              	.LASF46:
+ 2048 0212 433A5C55 		.ascii	"C:\\Users\\a85495\\Desktop\\PSoC-Quadcopter\\Sensor"
+ 2048      73657273 
+ 2048      5C613835 
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 42
+
+
+ 2048      3439355C 
+ 2048      4465736B 
+ 2049 0240 735C4261 		.ascii	"s\\BarometerTest.cydsn\000"
+ 2049      726F6D65 
+ 2049      74657254 
+ 2049      6573742E 
+ 2049      63796473 
+ 2050              	.LASF18:
+ 2051 0256 696E7433 		.ascii	"int32_t\000"
+ 2051      325F7400 
+ 2052              	.LASF21:
+ 2053 025e 73697A65 		.ascii	"sizetype\000"
+ 2053      74797065 
+ 2053      00
+ 2054              	.LASF39:
+ 2055 0267 6261726F 		.ascii	"baro_getCalibration\000"
+ 2055      5F676574 
+ 2055      43616C69 
+ 2055      62726174 
+ 2055      696F6E00 
+ 2056              	.LASF12:
+ 2057 027b 6C6F6E67 		.ascii	"long long int\000"
+ 2057      206C6F6E 
+ 2057      6720696E 
+ 2057      7400
+ 2058              	.LASF22:
+ 2059 0289 63686172 		.ascii	"char\000"
+ 2059      00
+ 2060              	.LASF50:
+ 2061 028e 4932435F 		.ascii	"I2C_MasterStatus\000"
+ 2061      4D617374 
+ 2061      65725374 
+ 2061      61747573 
+ 2061      00
+ 2062              	.LASF45:
+ 2063 029f 2E2E5C62 		.ascii	"..\\barometer.c\000"
+ 2063      61726F6D 
+ 2063      65746572 
+ 2063      2E6300
+ 2064              	.LASF40:
+ 2065 02ae 5F507265 		.ascii	"_Pres\000"
+ 2065      7300
+ 2066              	.LASF17:
+ 2067 02b4 75696E74 		.ascii	"uint16_t\000"
+ 2067      31365F74 
+ 2067      00
+ 2068              	.LASF36:
+ 2069 02bd 53454E53 		.ascii	"SENS\000"
+ 2069      00
+ 2070              	.LASF52:
+ 2071 02c2 57697265 		.ascii	"Wire_begin\000"
+ 2071      5F626567 
+ 2071      696E00
+ 2072              	.LASF41:
+ 2073 02cd 5F6C6173 		.ascii	"_lastTime\000"
+ 2073      7454696D 
+ 2073      6500
+ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccN645Gy.s 			page 43
+
+
+ 2074              	.LASF19:
+ 2075 02d7 75696E74 		.ascii	"uint32_t\000"
+ 2075      33325F74 
+ 2075      00
+ 2076              	.LASF8:
+ 2077 02e0 6C6F6E67 		.ascii	"long int\000"
+ 2077      20696E74 
+ 2077      00
+ 2078              	.LASF2:
+ 2079 02e9 7369676E 		.ascii	"signed char\000"
+ 2079      65642063 
+ 2079      68617200 
+ 2080              	.LASF37:
+ 2081 02f5 6261726F 		.ascii	"baro_readCalibration\000"
+ 2081      5F726561 
+ 2081      6443616C 
+ 2081      69627261 
+ 2081      74696F6E 
+ 2082              	.LASF51:
+ 2083 030a 43794465 		.ascii	"CyDelay\000"
+ 2083      6C617900 
+ 2084              	.LASF33:
+ 2085 0312 6261726F 		.ascii	"baro_getTemperature\000"
+ 2085      5F676574 
+ 2085      54656D70 
+ 2085      65726174 
+ 2085      75726500 
+ 2086              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

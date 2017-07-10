@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <blockRegMap version="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cypress.com/xsd/cyblockregmap cyblockregmap.xsd" xmlns="http://cypress.com/xsd/cyblockregmap">
-  <block name="GND_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="D_2" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="R_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-  <block name="to_gps_rx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="D_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="left_arm_led" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="R_2" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="GND_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="deltTime" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="accel_mag_rst" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="cy_boot" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="clk_1khz" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="ZeroTerminal_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="deltaTimer" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false">
     <block name="VirtualMux_2" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
     <block name="VirtualMux_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
@@ -15,7 +20,7 @@
     <block name="ZeroTerminal_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
     <register name="deltaTimer_COUNTER" address="0x40006402" bitWidth="32" desc="UDB.A0 - Current Down Counter Value" hidden="false" />
     <register name="deltaTimer_PERIOD" address="0x40006422" bitWidth="32" desc="UDB.D0 - Assigned Period" hidden="false" />
-    <register name="deltaTimer_Control_Reg" address="0x40006476" bitWidth="8" desc="UDB Control Register - Assigned Control Register Value" hidden="false">
+    <register name="deltaTimer_Control_Reg" address="0x40006474" bitWidth="8" desc="UDB Control Register - Assigned Control Register Value" hidden="false">
       <field name="CTRL_ENABLE" from="7" to="7" access="RW" resetVal="" desc="Enable the Timer" hidden="false" />
       <field name="CTRL_CMODE" from="6" to="5" access="RW" resetVal="" desc="Capture Mode" hidden="false" />
       <field name="CTRL_TEN" from="4" to="4" access="RW" resetVal="" desc="Trigger Enable Bit" hidden="false" />
@@ -55,26 +60,22 @@
       </field>
     </register>
   </block>
-  <block name="deltTime" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-  <block name="cy_boot" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-  <block name="D_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-  <block name="clk_1khz" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-  <block name="ZeroTerminal_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="to_gps_rx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="xbeeSerial" BASE="0x0" SIZE="0x0" desc="UART" visible="true" hidden="false">
     <block name="IntClock" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
     <block name="VirtualMux_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
     <block name="BUART" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-    <register name="RX_xbeeSerial_RX_ADDRESS1" address="0x40006428" bitWidth="8" desc="RX Address1 Register" hidden="false" />
-    <register name="RX_xbeeSerial_RX_ADDRESS2" address="0x40006438" bitWidth="8" desc="RX Address2 Register" hidden="false" />
-    <register name="TX_xbeeSerial_TX_DATA" address="0x40006447" bitWidth="8" desc="TX Data Register" hidden="false" />
-    <register name="RX_xbeeSerial_RX_DATA" address="0x40006448" bitWidth="8" desc="RX Data Register" hidden="false" />
-    <register name="TX_xbeeSerial_TX_STATUS" address="0x40006467" bitWidth="8" desc="TX status register" hidden="false">
+    <register name="RX_xbeeSerial_RX_ADDRESS1" address="0x40006529" bitWidth="8" desc="RX Address1 Register" hidden="false" />
+    <register name="RX_xbeeSerial_RX_ADDRESS2" address="0x40006539" bitWidth="8" desc="RX Address2 Register" hidden="false" />
+    <register name="RX_xbeeSerial_RX_DATA" address="0x40006549" bitWidth="8" desc="RX Data Register" hidden="false" />
+    <register name="TX_xbeeSerial_TX_DATA" address="0x4000654B" bitWidth="8" desc="TX Data Register" hidden="false" />
+    <register name="TX_xbeeSerial_TX_STATUS" address="0x40006568" bitWidth="8" desc="TX status register" hidden="false">
       <field name="xbeeSerial_TX_STS_COMPLETE" from="0" to="0" access="R" resetVal="" desc="" hidden="false" />
       <field name="xbeeSerial_TX_STS_FIFO_EMPTY" from="1" to="1" access="R" resetVal="" desc="" hidden="false" />
       <field name="xbeeSerial_TX_STS_FIFO_FULL" from="2" to="2" access="R" resetVal="" desc="" hidden="false" />
       <field name="xbeeSerial_TX_STS_FIFO_NOT_FULL" from="3" to="3" access="R" resetVal="" desc="" hidden="false" />
     </register>
-    <register name="RX_xbeeSerial_RX_STATUS" address="0x40006568" bitWidth="8" desc="RX status register" hidden="false">
+    <register name="RX_xbeeSerial_RX_STATUS" address="0x4000656A" bitWidth="8" desc="RX status register" hidden="false">
       <field name="xbeeSerial_RX_STS_MRKSPC" from="0" to="0" access="R" resetVal="" desc="" hidden="false" />
       <field name="xbeeSerial_RX_STS_BREAK" from="1" to="1" access="R" resetVal="" desc="" hidden="false" />
       <field name="xbeeSerial_RX_STS_PAR_ERROR" from="2" to="2" access="R" resetVal="" desc="" hidden="false" />
@@ -84,8 +85,8 @@
       <field name="xbeeSerial_RX_STS_ADDR_MATCH" from="6" to="6" access="R" resetVal="" desc="" hidden="false" />
     </register>
   </block>
-  <block name="to_xbee_rx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="to_xbee_tx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="to_xbee_rx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="SDA" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="SCL" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="I2C" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false">
@@ -176,17 +177,14 @@
     <block name="IntClock" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
     <block name="VirtualMux_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
     <block name="BUART" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-    <register name="RX_debugSerial_RX_ADDRESS1" address="0x40006426" bitWidth="8" desc="RX Address1 Register" hidden="false" />
-    <register name="RX_debugSerial_RX_ADDRESS2" address="0x40006436" bitWidth="8" desc="RX Address2 Register" hidden="false" />
-    <register name="RX_debugSerial_RX_DATA" address="0x40006446" bitWidth="8" desc="RX Data Register" hidden="false" />
-    <register name="TX_debugSerial_TX_DATA" address="0x40006544" bitWidth="8" desc="TX Data Register" hidden="false" />
-    <register name="TX_debugSerial_TX_STATUS" address="0x40006566" bitWidth="8" desc="TX status register" hidden="false">
+    <register name="TX_debugSerial_TX_DATA" address="0x40006447" bitWidth="8" desc="TX Data Register" hidden="false" />
+    <register name="TX_debugSerial_TX_STATUS" address="0x40006463" bitWidth="8" desc="TX status register" hidden="false">
       <field name="debugSerial_TX_STS_COMPLETE" from="0" to="0" access="R" resetVal="" desc="" hidden="false" />
       <field name="debugSerial_TX_STS_FIFO_EMPTY" from="1" to="1" access="R" resetVal="" desc="" hidden="false" />
       <field name="debugSerial_TX_STS_FIFO_FULL" from="2" to="2" access="R" resetVal="" desc="" hidden="false" />
       <field name="debugSerial_TX_STS_FIFO_NOT_FULL" from="3" to="3" access="R" resetVal="" desc="" hidden="false" />
     </register>
-    <register name="RX_debugSerial_RX_STATUS" address="0x4000656A" bitWidth="8" desc="RX status register" hidden="false">
+    <register name="RX_debugSerial_RX_STATUS" address="0x40006467" bitWidth="8" desc="RX status register" hidden="false">
       <field name="debugSerial_RX_STS_MRKSPC" from="0" to="0" access="R" resetVal="" desc="" hidden="false" />
       <field name="debugSerial_RX_STS_BREAK" from="1" to="1" access="R" resetVal="" desc="" hidden="false" />
       <field name="debugSerial_RX_STS_PAR_ERROR" from="2" to="2" access="R" resetVal="" desc="" hidden="false" />
@@ -195,16 +193,19 @@
       <field name="debugSerial_RX_STS_FIFO_NOTEMPTY" from="5" to="5" access="R" resetVal="" desc="" hidden="false" />
       <field name="debugSerial_RX_STS_ADDR_MATCH" from="6" to="6" access="R" resetVal="" desc="" hidden="false" />
     </register>
+    <register name="RX_debugSerial_RX_ADDRESS1" address="0x40006524" bitWidth="8" desc="RX Address1 Register" hidden="false" />
+    <register name="RX_debugSerial_RX_ADDRESS2" address="0x40006534" bitWidth="8" desc="RX Address2 Register" hidden="false" />
+    <register name="RX_debugSerial_RX_DATA" address="0x40006544" bitWidth="8" desc="RX Data Register" hidden="false" />
   </block>
   <block name="gpsSerial" BASE="0x0" SIZE="0x0" desc="UART" visible="true" hidden="false">
     <block name="IntClock" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
     <block name="VirtualMux_1" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
     <block name="BUART" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-    <register name="RX_gpsSerial_RX_ADDRESS1" address="0x40006421" bitWidth="8" desc="RX Address1 Register" hidden="false" />
-    <register name="RX_gpsSerial_RX_ADDRESS2" address="0x40006431" bitWidth="8" desc="RX Address2 Register" hidden="false" />
-    <register name="RX_gpsSerial_RX_DATA" address="0x40006441" bitWidth="8" desc="RX Data Register" hidden="false" />
-    <register name="TX_gpsSerial_TX_DATA" address="0x40006449" bitWidth="8" desc="TX Data Register" hidden="false" />
-    <register name="RX_gpsSerial_RX_STATUS" address="0x40006462" bitWidth="8" desc="RX status register" hidden="false">
+    <register name="RX_gpsSerial_RX_ADDRESS1" address="0x40006426" bitWidth="8" desc="RX Address1 Register" hidden="false" />
+    <register name="RX_gpsSerial_RX_ADDRESS2" address="0x40006436" bitWidth="8" desc="RX Address2 Register" hidden="false" />
+    <register name="TX_gpsSerial_TX_DATA" address="0x40006440" bitWidth="8" desc="TX Data Register" hidden="false" />
+    <register name="RX_gpsSerial_RX_DATA" address="0x40006446" bitWidth="8" desc="RX Data Register" hidden="false" />
+    <register name="RX_gpsSerial_RX_STATUS" address="0x40006466" bitWidth="8" desc="RX status register" hidden="false">
       <field name="gpsSerial_RX_STS_MRKSPC" from="0" to="0" access="R" resetVal="" desc="" hidden="false" />
       <field name="gpsSerial_RX_STS_BREAK" from="1" to="1" access="R" resetVal="" desc="" hidden="false" />
       <field name="gpsSerial_RX_STS_PAR_ERROR" from="2" to="2" access="R" resetVal="" desc="" hidden="false" />
@@ -222,6 +223,6 @@
   </block>
   <block name="to_gps_tx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
   <block name="right_arm_led" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-  <block name="Tx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
-  <block name="Rx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="to_debug_rx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
+  <block name="to_debug_tx" BASE="0x0" SIZE="0x0" desc="" visible="true" hidden="false" />
 </blockRegMap>
