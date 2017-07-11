@@ -1,0 +1,6 @@
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|70505ed9-b6eb-4013-8dcc-1519db75f397
+C:\Users\A85590\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|afdc9bf1-ea07-438e-88ae-6208a8e1e411
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|f22e44fc-25ca-4de2-9db4-53567bfbc5ed
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|dbadc659-6ff2-42bf-9c8e-5e6e6a71acea
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|2845839a-ed70-48e3-9901-92f187df4425
+C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\SensorFusion.cyprj|5eb2ea69-2654-47ed-8315-f3b261bc6ebf
