@@ -1,6 +1,6 @@
--- Project:   C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\All_sensor_testv2.cyprj
--- Generated: 07/10/2017 12:47:03
--- PSoC Creator  4.0 Update 1
+-- Project:   C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\All_sensor_testv2.cyprj
+-- Generated: 07/11/2017 16:26:56
+-- PSoC Creator  4.1
 
 ENTITY All_sensor_testv2 IS
     PORT(

@@ -1,0 +1,1672 @@
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"twi.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.Wire_begin,"ax",%progbits
+  20              		.align	2
+  21              		.global	Wire_begin
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	Wire_begin, %function
+  25              	Wire_begin:
+  26              	.LFB63:
+  27              		.file 1 "..\\..\\twi.c"
+   1:..\../twi.c   **** #include "twi.h"
+   2:..\../twi.c   **** #include "project.h"
+   3:..\../twi.c   **** 
+   4:..\../twi.c   **** void Wire_begin(){
+  28              		.loc 1 4 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 08B5     		push	{r3, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 3, -8
+  35              		.cfi_offset 14, -4
+   5:..\../twi.c   ****     I2C_Start(); 
+  36              		.loc 1 5 0
+  37 0002 FFF7FEFF 		bl	I2C_Start
+  38              	.LVL0:
+  39 0006 08BD     		pop	{r3, pc}
+  40              		.cfi_endproc
+  41              	.LFE63:
+  42              		.size	Wire_begin, .-Wire_begin
+  43              		.section	.text.Wire_beginTransmission,"ax",%progbits
+  44              		.align	2
+  45              		.global	Wire_beginTransmission
+  46              		.thumb
+  47              		.thumb_func
+  48              		.type	Wire_beginTransmission, %function
+  49              	Wire_beginTransmission:
+  50              	.LFB64:
+   6:..\../twi.c   **** }
+   7:..\../twi.c   **** 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 2
+
+
+   8:..\../twi.c   **** void Wire_beginTransmission(uint8_t address, uint8_t R_nW)
+   9:..\../twi.c   **** {
+  51              		.loc 1 9 0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 0
+  54              		@ frame_needed = 0, uses_anonymous_args = 0
+  55              	.LVL1:
+  56 0000 08B5     		push	{r3, lr}
+  57              		.cfi_def_cfa_offset 8
+  58              		.cfi_offset 3, -8
+  59              		.cfi_offset 14, -4
+  10:..\../twi.c   ****     /*
+  11:..\../twi.c   ****     Description: 
+  12:..\../twi.c   ****         -This function generates a Start condition and sends the slave address with the 
+  13:..\../twi.c   ****          read/write bit. Disables the I2C interrupt. 
+  14:..\../twi.c   ****     
+  15:..\../twi.c   ****     Parameters: 
+  16:..\../twi.c   ****         -uint8 slaveAddress: Right-justified 7-bit slave address (valid range 0 to 127). 
+  17:..\../twi.c   ****         -uint8 R_nW: Set to zero, send write command; set to nonzero, send read command. 
+  18:..\../twi.c   ****     */
+  19:..\../twi.c   ****     I2C_MasterSendStart(address, R_nW); 
+  60              		.loc 1 19 0
+  61 0002 FFF7FEFF 		bl	I2C_MasterSendStart
+  62              	.LVL2:
+  63 0006 08BD     		pop	{r3, pc}
+  64              		.cfi_endproc
+  65              	.LFE64:
+  66              		.size	Wire_beginTransmission, .-Wire_beginTransmission
+  67              		.section	.text.Wire_write,"ax",%progbits
+  68              		.align	2
+  69              		.global	Wire_write
+  70              		.thumb
+  71              		.thumb_func
+  72              		.type	Wire_write, %function
+  73              	Wire_write:
+  74              	.LFB65:
+  20:..\../twi.c   **** }
+  21:..\../twi.c   **** 
+  22:..\../twi.c   **** int Wire_write(uint8_t address, uint8_t* writeBuffer, uint8_t length, uint8_t type)
+  23:..\../twi.c   **** {
+  75              		.loc 1 23 0
+  76              		.cfi_startproc
+  77              		@ args = 0, pretend = 0, frame = 0
+  78              		@ frame_needed = 0, uses_anonymous_args = 0
+  79              	.LVL3:
+  80 0000 08B5     		push	{r3, lr}
+  81              		.cfi_def_cfa_offset 8
+  82              		.cfi_offset 3, -8
+  83              		.cfi_offset 14, -4
+  84              	.LVL4:
+  24:..\../twi.c   ****     /*Wire_beginTransmission(address, 0);
+  25:..\../twi.c   ****     return (I2C_MasterWriteByte(data)); */
+  26:..\../twi.c   **** 
+  27:..\../twi.c   ****     /*
+  28:..\../twi.c   ****     Description:
+  29:..\../twi.c   ****         -This function automatically writes an entire buffer of data to a slave device. After the d
+  30:..\../twi.c   ****          transfer is initiated by this function, the included ISR manages further data transfer in 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 3
+
+
+  31:..\../twi.c   ****          byte mode. Enables the I2C interrupt.
+  32:..\../twi.c   ****    
+  33:..\../twi.c   ****     Parameters: 
+  34:..\../twi.c   ****         -uint8 slaveAddress: Right-justified 7-bit slave address (valid range 0 to 127).
+  35:..\../twi.c   ****         -uint8 wrData: Pointer to the buffer of the data to be sent.
+  36:..\../twi.c   ****         -uint8 cnt: Number of bytes of the buffer to send.
+  37:..\../twi.c   ****         -uint8 mode: Transfer mode defines: (1) Whether a Start or Restart condition is generated a
+  38:..\../twi.c   ****          the beginning of the transfer, and (2) Whether the transfer is completed or halted before 
+  39:..\../twi.c   ****          Stop condition is generated on the bus.
+  40:..\../twi.c   **** 
+  41:..\../twi.c   ****               1=>  I2C_MODE_COMPLETE_XFER = Perform complete transfer from Start to Stop. 
+  42:..\../twi.c   ****               2=>  I2C_MODE_REPEAT_START  = Send Repeat Start instead of Start. 
+  43:..\../twi.c   ****               3=>  I2C_MODE_NO_STOP       = Execute transfer without a Stop    
+  44:..\../twi.c   ****     */
+  45:..\../twi.c   **** 
+  46:..\../twi.c   ****     int ret = 0;
+  47:..\../twi.c   **** 
+  48:..\../twi.c   ****     if(type == 1){
+  85              		.loc 1 48 0
+  86 0002 012B     		cmp	r3, #1
+  87 0004 03D1     		bne	.L6
+  49:..\../twi.c   ****         ret = I2C_MasterWriteBuf(address, writeBuffer, length, I2C_MODE_COMPLETE_XFER);
+  88              		.loc 1 49 0
+  89 0006 0023     		movs	r3, #0
+  90              	.LVL5:
+  91 0008 FFF7FEFF 		bl	I2C_MasterWriteBuf
+  92              	.LVL6:
+  93 000c 08BD     		pop	{r3, pc}
+  94              	.LVL7:
+  95              	.L6:
+  50:..\../twi.c   ****     }
+  51:..\../twi.c   **** 
+  52:..\../twi.c   ****     else if(type == 2){
+  96              		.loc 1 52 0
+  97 000e 022B     		cmp	r3, #2
+  98 0010 03D1     		bne	.L8
+  53:..\../twi.c   ****         ret = I2C_MasterWriteBuf(address, writeBuffer, length, I2C_MODE_REPEAT_START);
+  99              		.loc 1 53 0
+ 100 0012 0123     		movs	r3, #1
+ 101              	.LVL8:
+ 102 0014 FFF7FEFF 		bl	I2C_MasterWriteBuf
+ 103              	.LVL9:
+ 104 0018 08BD     		pop	{r3, pc}
+ 105              	.LVL10:
+ 106              	.L8:
+  54:..\../twi.c   ****     }
+  55:..\../twi.c   **** 
+  56:..\../twi.c   ****     else if(type == 3){
+ 107              		.loc 1 56 0
+ 108 001a 032B     		cmp	r3, #3
+ 109 001c 03D1     		bne	.L9
+  57:..\../twi.c   ****         ret = I2C_MasterWriteBuf(address, writeBuffer, length, I2C_MODE_NO_STOP);
+ 110              		.loc 1 57 0
+ 111 001e 0223     		movs	r3, #2
+ 112              	.LVL11:
+ 113 0020 FFF7FEFF 		bl	I2C_MasterWriteBuf
+ 114              	.LVL12:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 4
+
+
+ 115 0024 08BD     		pop	{r3, pc}
+ 116              	.LVL13:
+ 117              	.L9:
+  58:..\../twi.c   ****     }
+  59:..\../twi.c   ****     else{
+  60:..\../twi.c   ****         ret = 0; //Signifies user inputed error
+ 118              		.loc 1 60 0
+ 119 0026 0020     		movs	r0, #0
+ 120              	.LVL14:
+  61:..\../twi.c   ****     }
+  62:..\../twi.c   **** 
+  63:..\../twi.c   ****     return ret;
+  64:..\../twi.c   **** }
+ 121              		.loc 1 64 0
+ 122 0028 08BD     		pop	{r3, pc}
+ 123              		.cfi_endproc
+ 124              	.LFE65:
+ 125              		.size	Wire_write, .-Wire_write
+ 126 002a 00BF     		.section	.text.Wire_requestFrom,"ax",%progbits
+ 127              		.align	2
+ 128              		.global	Wire_requestFrom
+ 129              		.thumb
+ 130              		.thumb_func
+ 131              		.type	Wire_requestFrom, %function
+ 132              	Wire_requestFrom:
+ 133              	.LFB67:
+  65:..\../twi.c   **** 
+  66:..\../twi.c   **** uint8_t Wire_read(uint8_t address)
+  67:..\../twi.c   **** {
+  68:..\../twi.c   ****    /*Wire_beginTransmission(address, 1);
+  69:..\../twi.c   ****     return (I2C_MasterReadByte()); */
+  70:..\../twi.c   ****      /*
+  71:..\../twi.c   ****     Description:
+  72:..\../twi.c   ****         -This function automatically reads an entire buffer of data from a slave device. Once this 
+  73:..\../twi.c   ****          function initiates the data transfer, the included ISR manages further data transfer in by
+  74:..\../twi.c   ****          byte mode. Enables the I2C interrupt.
+  75:..\../twi.c   ****    
+  76:..\../twi.c   ****     Parameters: 
+  77:..\../twi.c   ****         -uint8 slaveAddress: Right-justified 7-bit slave address (valid range 0 to 127).
+  78:..\../twi.c   ****         -uint8 rdData: Pointer to the buffer in which to put the data from the slave.
+  79:..\../twi.c   ****         -uint8 cnt: Number of bytes of the buffer to read.
+  80:..\../twi.c   ****         -uint8 mode: Transfer mode defines: (1) Whether a Start or Restart condition is generated a
+  81:..\../twi.c   ****          the beginning of the transfer, and (2) Whether the transfer is completed or halted before 
+  82:..\../twi.c   ****          Stop condition is generated on the bus.
+  83:..\../twi.c   **** 
+  84:..\../twi.c   ****                 I2C_MODE_COMPLETE_XFER = Perform complete transfer from Start to Stop. 
+  85:..\../twi.c   ****                 I2C_MODE_REPEAT_START  = Send Repeat Start instead of Start. 
+  86:..\../twi.c   ****                 I2C_MODE_NO_STOP       = Execute transfer without a Stop    
+  87:..\../twi.c   ****     */
+  88:..\../twi.c   **** 
+  89:..\../twi.c   ****     uint8_t readbuffer[1]; //creates an array of one slot
+  90:..\../twi.c   ****     Wire_requestFrom(address, sizeof(readbuffer), readbuffer); //do a blocking read
+  91:..\../twi.c   ****     return readbuffer[0]; //return retrieved buffer data
+  92:..\../twi.c   **** 
+  93:..\../twi.c   **** }
+  94:..\../twi.c   **** 
+  95:..\../twi.c   **** uint8_t Wire_requestFrom(uint8_t slaveAddress, uint8_t length, uint8_t *dataBuffer)
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 5
+
+
+  96:..\../twi.c   **** {
+ 134              		.loc 1 96 0
+ 135              		.cfi_startproc
+ 136              		@ args = 0, pretend = 0, frame = 0
+ 137              		@ frame_needed = 0, uses_anonymous_args = 0
+ 138              	.LVL15:
+ 139 0000 10B5     		push	{r4, lr}
+ 140              		.cfi_def_cfa_offset 8
+ 141              		.cfi_offset 4, -8
+ 142              		.cfi_offset 14, -4
+ 143 0002 1446     		mov	r4, r2
+  97:..\../twi.c   ****     //I2C_I2CMasterClearReadBuf();  /*I2C_MasterClearWriteBuf()*/
+  98:..\../twi.c   ****     //I2C_I2CMasterClearWriteBuf(); /*Resets the write buffer pointer back to the beginning of the 
+  99:..\../twi.c   **** 
+ 100:..\../twi.c   ****     /*
+ 101:..\../twi.c   ****     Description:
+ 102:..\../twi.c   ****         -This function automatically reads an entire buffer of data from a slave device. Once this 
+ 103:..\../twi.c   ****          function initiates the data transfer, the included ISR manages further data transfer in by
+ 104:..\../twi.c   ****          byte mode. Enables the I2C interrupt.
+ 105:..\../twi.c   ****    
+ 106:..\../twi.c   ****     Parameters: 
+ 107:..\../twi.c   ****         -uint8 slaveAddress: Right-justified 7-bit slave address (valid range 0 to 127).
+ 108:..\../twi.c   ****         -uint8 rdData: Pointer to the buffer in which to put the data from the slave.
+ 109:..\../twi.c   ****         -uint8 cnt: Number of bytes of the buffer to read.
+ 110:..\../twi.c   ****         -uint8 mode: Transfer mode defines: (1) Whether a Start or Restart condition is generated a
+ 111:..\../twi.c   ****          the beginning of the transfer, and (2) Whether the transfer is completed or halted before 
+ 112:..\../twi.c   ****          Stop condition is generated on the bus.
+ 113:..\../twi.c   **** 
+ 114:..\../twi.c   ****                 I2C_MODE_COMPLETE_XFER = Perform complete transfer from Start to Stop. 
+ 115:..\../twi.c   ****                 I2C_MODE_REPEAT_START  = Send Repeat Start instead of Start. 
+ 116:..\../twi.c   ****                 I2C_MODE_NO_STOP       = Execute transfer without a Stop    
+ 117:..\../twi.c   ****     */
+ 118:..\../twi.c   **** 
+ 119:..\../twi.c   ****     I2C_MasterReadBuf(slaveAddress, dataBuffer, length, I2C_MODE_COMPLETE_XFER);
+ 144              		.loc 1 119 0
+ 145 0004 0023     		movs	r3, #0
+ 146 0006 0A46     		mov	r2, r1
+ 147              	.LVL16:
+ 148 0008 2146     		mov	r1, r4
+ 149              	.LVL17:
+ 150 000a FFF7FEFF 		bl	I2C_MasterReadBuf
+ 151              	.LVL18:
+ 152              	.L12:
+ 120:..\../twi.c   **** 
+ 121:..\../twi.c   ****     while ((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT)==0){}
+ 153              		.loc 1 121 0 discriminator 1
+ 154 000e FFF7FEFF 		bl	I2C_MasterStatus
+ 155              	.LVL19:
+ 156 0012 10F0010F 		tst	r0, #1
+ 157 0016 FAD0     		beq	.L12
+ 122:..\../twi.c   **** 
+ 123:..\../twi.c   ****     return 1/*(I2C_I2CMasterGetReadBufSize())*/; /*Returns the byte count of data read since the 
+ 124:..\../twi.c   ****                                            I2C_MasterClearReadBuf() function was called. */
+ 125:..\../twi.c   **** }
+ 158              		.loc 1 125 0
+ 159 0018 0120     		movs	r0, #1
+ 160 001a 10BD     		pop	{r4, pc}
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 6
+
+
+ 161              		.cfi_endproc
+ 162              	.LFE67:
+ 163              		.size	Wire_requestFrom, .-Wire_requestFrom
+ 164              		.section	.text.Wire_read,"ax",%progbits
+ 165              		.align	2
+ 166              		.global	Wire_read
+ 167              		.thumb
+ 168              		.thumb_func
+ 169              		.type	Wire_read, %function
+ 170              	Wire_read:
+ 171              	.LFB66:
+  67:..\../twi.c   ****    /*Wire_beginTransmission(address, 1);
+ 172              		.loc 1 67 0
+ 173              		.cfi_startproc
+ 174              		@ args = 0, pretend = 0, frame = 8
+ 175              		@ frame_needed = 0, uses_anonymous_args = 0
+ 176              	.LVL20:
+ 177 0000 00B5     		push	{lr}
+ 178              		.cfi_def_cfa_offset 4
+ 179              		.cfi_offset 14, -4
+ 180 0002 83B0     		sub	sp, sp, #12
+ 181              		.cfi_def_cfa_offset 16
+  90:..\../twi.c   ****     return readbuffer[0]; //return retrieved buffer data
+ 182              		.loc 1 90 0
+ 183 0004 01AA     		add	r2, sp, #4
+ 184 0006 0121     		movs	r1, #1
+ 185 0008 FFF7FEFF 		bl	Wire_requestFrom
+ 186              	.LVL21:
+  93:..\../twi.c   **** 
+ 187              		.loc 1 93 0
+ 188 000c 9DF80400 		ldrb	r0, [sp, #4]	@ zero_extendqisi2
+ 189 0010 03B0     		add	sp, sp, #12
+ 190              		.cfi_def_cfa_offset 4
+ 191              		@ sp needed
+ 192 0012 5DF804FB 		ldr	pc, [sp], #4
+ 193              		.cfi_endproc
+ 194              	.LFE66:
+ 195              		.size	Wire_read, .-Wire_read
+ 196 0016 00BF     		.section	.text.Wire_endTransmission,"ax",%progbits
+ 197              		.align	2
+ 198              		.global	Wire_endTransmission
+ 199              		.thumb
+ 200              		.thumb_func
+ 201              		.type	Wire_endTransmission, %function
+ 202              	Wire_endTransmission:
+ 203              	.LFB68:
+ 126:..\../twi.c   **** 
+ 127:..\../twi.c   **** uint8_t Wire_endTransmission()
+ 128:..\../twi.c   **** {
+ 204              		.loc 1 128 0
+ 205              		.cfi_startproc
+ 206              		@ args = 0, pretend = 0, frame = 0
+ 207              		@ frame_needed = 0, uses_anonymous_args = 0
+ 208 0000 08B5     		push	{r3, lr}
+ 209              		.cfi_def_cfa_offset 8
+ 210              		.cfi_offset 3, -8
+ 211              		.cfi_offset 14, -4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 7
+
+
+ 129:..\../twi.c   ****     uint8_t ret = I2C_MasterSendStop();
+ 212              		.loc 1 129 0
+ 213 0002 FFF7FEFF 		bl	I2C_MasterSendStop
+ 214              	.LVL22:
+ 130:..\../twi.c   ****     return ret;
+ 131:..\../twi.c   **** }...
+ 215              		.loc 1 131 0
+ 216 0006 08BD     		pop	{r3, pc}
+ 217              		.cfi_endproc
+ 218              	.LFE68:
+ 219              		.size	Wire_endTransmission, .-Wire_endTransmission
+ 220              		.text
+ 221              	.Letext0:
+ 222              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 223              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 224              		.file 4 "Generated_Source\\PSoC5/I2C.h"
+ 225              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
+ 226              		.section	.debug_info,"",%progbits
+ 227              	.Ldebug_info0:
+ 228 0000 02030000 		.4byte	0x302
+ 229 0004 0400     		.2byte	0x4
+ 230 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 231 000a 04       		.byte	0x4
+ 232 000b 01       		.uleb128 0x1
+ 233 000c C5010000 		.4byte	.LASF37
+ 234 0010 0C       		.byte	0xc
+ 235 0011 88020000 		.4byte	.LASF38
+ 236 0015 00000000 		.4byte	.LASF39
+ 237 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 238 001d 00000000 		.4byte	0
+ 239 0021 00000000 		.4byte	.Ldebug_line0
+ 240 0025 02       		.uleb128 0x2
+ 241 0026 01       		.byte	0x1
+ 242 0027 06       		.byte	0x6
+ 243 0028 C3020000 		.4byte	.LASF0
+ 244 002c 03       		.uleb128 0x3
+ 245 002d 5E000000 		.4byte	.LASF4
+ 246 0031 02       		.byte	0x2
+ 247 0032 1D       		.byte	0x1d
+ 248 0033 37000000 		.4byte	0x37
+ 249 0037 02       		.uleb128 0x2
+ 250 0038 01       		.byte	0x1
+ 251 0039 08       		.byte	0x8
+ 252 003a E0000000 		.4byte	.LASF1
+ 253 003e 02       		.uleb128 0x2
+ 254 003f 02       		.byte	0x2
+ 255 0040 05       		.byte	0x5
+ 256 0041 99020000 		.4byte	.LASF2
+ 257 0045 02       		.uleb128 0x2
+ 258 0046 02       		.byte	0x2
+ 259 0047 07       		.byte	0x7
+ 260 0048 13010000 		.4byte	.LASF3
+ 261 004c 03       		.uleb128 0x3
+ 262 004d 9D000000 		.4byte	.LASF5
+ 263 0051 02       		.byte	0x2
+ 264 0052 3F       		.byte	0x3f
+ 265 0053 57000000 		.4byte	0x57
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 8
+
+
+ 266 0057 02       		.uleb128 0x2
+ 267 0058 04       		.byte	0x4
+ 268 0059 05       		.byte	0x5
+ 269 005a AE020000 		.4byte	.LASF6
+ 270 005e 02       		.uleb128 0x2
+ 271 005f 04       		.byte	0x4
+ 272 0060 07       		.byte	0x7
+ 273 0061 01010000 		.4byte	.LASF7
+ 274 0065 02       		.uleb128 0x2
+ 275 0066 08       		.byte	0x8
+ 276 0067 05       		.byte	0x5
+ 277 0068 64020000 		.4byte	.LASF8
+ 278 006c 02       		.uleb128 0x2
+ 279 006d 08       		.byte	0x8
+ 280 006e 07       		.byte	0x7
+ 281 006f 99010000 		.4byte	.LASF9
+ 282 0073 04       		.uleb128 0x4
+ 283 0074 04       		.byte	0x4
+ 284 0075 05       		.byte	0x5
+ 285 0076 696E7400 		.ascii	"int\000"
+ 286 007a 02       		.uleb128 0x2
+ 287 007b 04       		.byte	0x4
+ 288 007c 07       		.byte	0x7
+ 289 007d 84010000 		.4byte	.LASF10
+ 290 0081 03       		.uleb128 0x3
+ 291 0082 B0010000 		.4byte	.LASF11
+ 292 0086 03       		.byte	0x3
+ 293 0087 18       		.byte	0x18
+ 294 0088 2C000000 		.4byte	0x2c
+ 295 008c 03       		.uleb128 0x3
+ 296 008d 53020000 		.4byte	.LASF12
+ 297 0091 03       		.byte	0x3
+ 298 0092 2C       		.byte	0x2c
+ 299 0093 4C000000 		.4byte	0x4c
+ 300 0097 02       		.uleb128 0x2
+ 301 0098 04       		.byte	0x4
+ 302 0099 04       		.byte	0x4
+ 303 009a C8000000 		.4byte	.LASF13
+ 304 009e 02       		.uleb128 0x2
+ 305 009f 08       		.byte	0x8
+ 306 00a0 04       		.byte	0x4
+ 307 00a1 6D010000 		.4byte	.LASF14
+ 308 00a5 02       		.uleb128 0x2
+ 309 00a6 01       		.byte	0x1
+ 310 00a7 08       		.byte	0x8
+ 311 00a8 72020000 		.4byte	.LASF15
+ 312 00ac 02       		.uleb128 0x2
+ 313 00ad 08       		.byte	0x8
+ 314 00ae 04       		.byte	0x4
+ 315 00af B7020000 		.4byte	.LASF16
+ 316 00b3 02       		.uleb128 0x2
+ 317 00b4 04       		.byte	0x4
+ 318 00b5 07       		.byte	0x7
+ 319 00b6 5B020000 		.4byte	.LASF17
+ 320 00ba 05       		.uleb128 0x5
+ 321 00bb A3020000 		.4byte	.LASF40
+ 322 00bf 01       		.byte	0x1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 9
+
+
+ 323 00c0 04       		.byte	0x4
+ 324 00c1 00000000 		.4byte	.LFB63
+ 325 00c5 08000000 		.4byte	.LFE63-.LFB63
+ 326 00c9 01       		.uleb128 0x1
+ 327 00ca 9C       		.byte	0x9c
+ 328 00cb D9000000 		.4byte	0xd9
+ 329 00cf 06       		.uleb128 0x6
+ 330 00d0 06000000 		.4byte	.LVL0
+ 331 00d4 C3020000 		.4byte	0x2c3
+ 332 00d8 00       		.byte	0
+ 333 00d9 07       		.uleb128 0x7
+ 334 00da 7B000000 		.4byte	.LASF29
+ 335 00de 01       		.byte	0x1
+ 336 00df 08       		.byte	0x8
+ 337 00e0 00000000 		.4byte	.LFB64
+ 338 00e4 08000000 		.4byte	.LFE64-.LFB64
+ 339 00e8 01       		.uleb128 0x1
+ 340 00e9 9C       		.byte	0x9c
+ 341 00ea 16010000 		.4byte	0x116
+ 342 00ee 08       		.uleb128 0x8
+ 343 00ef 91010000 		.4byte	.LASF18
+ 344 00f3 01       		.byte	0x1
+ 345 00f4 08       		.byte	0x8
+ 346 00f5 81000000 		.4byte	0x81
+ 347 00f9 00000000 		.4byte	.LLST0
+ 348 00fd 08       		.uleb128 0x8
+ 349 00fe 7F010000 		.4byte	.LASF19
+ 350 0102 01       		.byte	0x1
+ 351 0103 08       		.byte	0x8
+ 352 0104 81000000 		.4byte	0x81
+ 353 0108 21000000 		.4byte	.LLST1
+ 354 010c 06       		.uleb128 0x6
+ 355 010d 06000000 		.4byte	.LVL2
+ 356 0111 CE020000 		.4byte	0x2ce
+ 357 0115 00       		.byte	0
+ 358 0116 09       		.uleb128 0x9
+ 359 0117 B3000000 		.4byte	.LASF23
+ 360 011b 01       		.byte	0x1
+ 361 011c 16       		.byte	0x16
+ 362 011d 73000000 		.4byte	0x73
+ 363 0121 00000000 		.4byte	.LFB65
+ 364 0125 2A000000 		.4byte	.LFE65-.LFB65
+ 365 0129 01       		.uleb128 0x1
+ 366 012a 9C       		.byte	0x9c
+ 367 012b B7010000 		.4byte	0x1b7
+ 368 012f 08       		.uleb128 0x8
+ 369 0130 91010000 		.4byte	.LASF18
+ 370 0134 01       		.byte	0x1
+ 371 0135 16       		.byte	0x16
+ 372 0136 81000000 		.4byte	0x81
+ 373 013a 42000000 		.4byte	.LLST2
+ 374 013e 08       		.uleb128 0x8
+ 375 013f A7000000 		.4byte	.LASF20
+ 376 0143 01       		.byte	0x1
+ 377 0144 16       		.byte	0x16
+ 378 0145 B7010000 		.4byte	0x1b7
+ 379 0149 AE000000 		.4byte	.LLST3
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 10
+
+
+ 380 014d 08       		.uleb128 0x8
+ 381 014e D9020000 		.4byte	.LASF21
+ 382 0152 01       		.byte	0x1
+ 383 0153 16       		.byte	0x16
+ 384 0154 81000000 		.4byte	0x81
+ 385 0158 0C010000 		.4byte	.LLST4
+ 386 015c 08       		.uleb128 0x8
+ 387 015d 94020000 		.4byte	.LASF22
+ 388 0161 01       		.byte	0x1
+ 389 0162 16       		.byte	0x16
+ 390 0163 81000000 		.4byte	0x81
+ 391 0167 6A010000 		.4byte	.LLST5
+ 392 016b 0A       		.uleb128 0xa
+ 393 016c 72657400 		.ascii	"ret\000"
+ 394 0170 01       		.byte	0x1
+ 395 0171 2E       		.byte	0x2e
+ 396 0172 73000000 		.4byte	0x73
+ 397 0176 C8010000 		.4byte	.LLST6
+ 398 017a 0B       		.uleb128 0xb
+ 399 017b 0C000000 		.4byte	.LVL6
+ 400 017f D9020000 		.4byte	0x2d9
+ 401 0183 94010000 		.4byte	0x194
+ 402 0187 0C       		.uleb128 0xc
+ 403 0188 01       		.uleb128 0x1
+ 404 0189 51       		.byte	0x51
+ 405 018a 03       		.uleb128 0x3
+ 406 018b F3       		.byte	0xf3
+ 407 018c 01       		.uleb128 0x1
+ 408 018d 51       		.byte	0x51
+ 409 018e 0C       		.uleb128 0xc
+ 410 018f 01       		.uleb128 0x1
+ 411 0190 53       		.byte	0x53
+ 412 0191 01       		.uleb128 0x1
+ 413 0192 30       		.byte	0x30
+ 414 0193 00       		.byte	0
+ 415 0194 0B       		.uleb128 0xb
+ 416 0195 18000000 		.4byte	.LVL9
+ 417 0199 D9020000 		.4byte	0x2d9
+ 418 019d A7010000 		.4byte	0x1a7
+ 419 01a1 0C       		.uleb128 0xc
+ 420 01a2 01       		.uleb128 0x1
+ 421 01a3 53       		.byte	0x53
+ 422 01a4 01       		.uleb128 0x1
+ 423 01a5 31       		.byte	0x31
+ 424 01a6 00       		.byte	0
+ 425 01a7 0D       		.uleb128 0xd
+ 426 01a8 24000000 		.4byte	.LVL12
+ 427 01ac D9020000 		.4byte	0x2d9
+ 428 01b0 0C       		.uleb128 0xc
+ 429 01b1 01       		.uleb128 0x1
+ 430 01b2 53       		.byte	0x53
+ 431 01b3 01       		.uleb128 0x1
+ 432 01b4 32       		.byte	0x32
+ 433 01b5 00       		.byte	0
+ 434 01b6 00       		.byte	0
+ 435 01b7 0E       		.uleb128 0xe
+ 436 01b8 04       		.byte	0x4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 11
+
+
+ 437 01b9 81000000 		.4byte	0x81
+ 438 01bd 09       		.uleb128 0x9
+ 439 01be 5C010000 		.4byte	.LASF24
+ 440 01c2 01       		.byte	0x1
+ 441 01c3 5F       		.byte	0x5f
+ 442 01c4 81000000 		.4byte	0x81
+ 443 01c8 00000000 		.4byte	.LFB67
+ 444 01cc 1C000000 		.4byte	.LFE67-.LFB67
+ 445 01d0 01       		.uleb128 0x1
+ 446 01d1 9C       		.byte	0x9c
+ 447 01d2 26020000 		.4byte	0x226
+ 448 01d6 08       		.uleb128 0x8
+ 449 01d7 B8010000 		.4byte	.LASF25
+ 450 01db 01       		.byte	0x1
+ 451 01dc 5F       		.byte	0x5f
+ 452 01dd 81000000 		.4byte	0x81
+ 453 01e1 2C020000 		.4byte	.LLST7
+ 454 01e5 08       		.uleb128 0x8
+ 455 01e6 D9020000 		.4byte	.LASF21
+ 456 01ea 01       		.byte	0x1
+ 457 01eb 5F       		.byte	0x5f
+ 458 01ec 81000000 		.4byte	0x81
+ 459 01f0 4D020000 		.4byte	.LLST8
+ 460 01f4 08       		.uleb128 0x8
+ 461 01f5 74010000 		.4byte	.LASF26
+ 462 01f9 01       		.byte	0x1
+ 463 01fa 5F       		.byte	0x5f
+ 464 01fb B7010000 		.4byte	0x1b7
+ 465 01ff 6E020000 		.4byte	.LLST9
+ 466 0203 0B       		.uleb128 0xb
+ 467 0204 0E000000 		.4byte	.LVL18
+ 468 0208 E4020000 		.4byte	0x2e4
+ 469 020c 1C020000 		.4byte	0x21c
+ 470 0210 0C       		.uleb128 0xc
+ 471 0211 01       		.uleb128 0x1
+ 472 0212 51       		.byte	0x51
+ 473 0213 02       		.uleb128 0x2
+ 474 0214 74       		.byte	0x74
+ 475 0215 00       		.sleb128 0
+ 476 0216 0C       		.uleb128 0xc
+ 477 0217 01       		.uleb128 0x1
+ 478 0218 53       		.byte	0x53
+ 479 0219 01       		.uleb128 0x1
+ 480 021a 30       		.byte	0x30
+ 481 021b 00       		.byte	0
+ 482 021c 06       		.uleb128 0x6
+ 483 021d 12000000 		.4byte	.LVL19
+ 484 0221 EF020000 		.4byte	0x2ef
+ 485 0225 00       		.byte	0
+ 486 0226 09       		.uleb128 0x9
+ 487 0227 CF020000 		.4byte	.LASF27
+ 488 022b 01       		.byte	0x1
+ 489 022c 42       		.byte	0x42
+ 490 022d 81000000 		.4byte	0x81
+ 491 0231 00000000 		.4byte	.LFB66
+ 492 0235 16000000 		.4byte	.LFE66-.LFB66
+ 493 0239 01       		.uleb128 0x1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 12
+
+
+ 494 023a 9C       		.byte	0x9c
+ 495 023b 72020000 		.4byte	0x272
+ 496 023f 08       		.uleb128 0x8
+ 497 0240 91010000 		.4byte	.LASF18
+ 498 0244 01       		.byte	0x1
+ 499 0245 42       		.byte	0x42
+ 500 0246 81000000 		.4byte	0x81
+ 501 024a 8C020000 		.4byte	.LLST10
+ 502 024e 0F       		.uleb128 0xf
+ 503 024f 92000000 		.4byte	.LASF28
+ 504 0253 01       		.byte	0x1
+ 505 0254 59       		.byte	0x59
+ 506 0255 72020000 		.4byte	0x272
+ 507 0259 02       		.uleb128 0x2
+ 508 025a 91       		.byte	0x91
+ 509 025b 74       		.sleb128 -12
+ 510 025c 0D       		.uleb128 0xd
+ 511 025d 0C000000 		.4byte	.LVL21
+ 512 0261 BD010000 		.4byte	0x1bd
+ 513 0265 0C       		.uleb128 0xc
+ 514 0266 01       		.uleb128 0x1
+ 515 0267 51       		.byte	0x51
+ 516 0268 01       		.uleb128 0x1
+ 517 0269 31       		.byte	0x31
+ 518 026a 0C       		.uleb128 0xc
+ 519 026b 01       		.uleb128 0x1
+ 520 026c 52       		.byte	0x52
+ 521 026d 02       		.uleb128 0x2
+ 522 026e 91       		.byte	0x91
+ 523 026f 74       		.sleb128 -12
+ 524 0270 00       		.byte	0
+ 525 0271 00       		.byte	0
+ 526 0272 10       		.uleb128 0x10
+ 527 0273 81000000 		.4byte	0x81
+ 528 0277 82020000 		.4byte	0x282
+ 529 027b 11       		.uleb128 0x11
+ 530 027c B3000000 		.4byte	0xb3
+ 531 0280 00       		.byte	0
+ 532 0281 00       		.byte	0
+ 533 0282 12       		.uleb128 0x12
+ 534 0283 3A010000 		.4byte	.LASF30
+ 535 0287 01       		.byte	0x1
+ 536 0288 7F       		.byte	0x7f
+ 537 0289 81000000 		.4byte	0x81
+ 538 028d 00000000 		.4byte	.LFB68
+ 539 0291 08000000 		.4byte	.LFE68-.LFB68
+ 540 0295 01       		.uleb128 0x1
+ 541 0296 9C       		.byte	0x9c
+ 542 0297 B2020000 		.4byte	0x2b2
+ 543 029b 13       		.uleb128 0x13
+ 544 029c 72657400 		.ascii	"ret\000"
+ 545 02a0 01       		.byte	0x1
+ 546 02a1 81       		.byte	0x81
+ 547 02a2 81000000 		.4byte	0x81
+ 548 02a6 01       		.uleb128 0x1
+ 549 02a7 50       		.byte	0x50
+ 550 02a8 06       		.uleb128 0x6
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 13
+
+
+ 551 02a9 06000000 		.4byte	.LVL22
+ 552 02ad FA020000 		.4byte	0x2fa
+ 553 02b1 00       		.byte	0
+ 554 02b2 14       		.uleb128 0x14
+ 555 02b3 4F010000 		.4byte	.LASF41
+ 556 02b7 05       		.byte	0x5
+ 557 02b8 9606     		.2byte	0x696
+ 558 02ba BE020000 		.4byte	0x2be
+ 559 02be 15       		.uleb128 0x15
+ 560 02bf 8C000000 		.4byte	0x8c
+ 561 02c3 16       		.uleb128 0x16
+ 562 02c4 BE000000 		.4byte	.LASF31
+ 563 02c8 BE000000 		.4byte	.LASF31
+ 564 02cc 04       		.byte	0x4
+ 565 02cd 93       		.byte	0x93
+ 566 02ce 16       		.uleb128 0x16
+ 567 02cf 26010000 		.4byte	.LASF32
+ 568 02d3 26010000 		.4byte	.LASF32
+ 569 02d7 04       		.byte	0x4
+ 570 02d8 B1       		.byte	0xb1
+ 571 02d9 16       		.uleb128 0x16
+ 572 02da EE000000 		.4byte	.LASF33
+ 573 02de EE000000 		.4byte	.LASF33
+ 574 02e2 04       		.byte	0x4
+ 575 02e3 A7       		.byte	0xa7
+ 576 02e4 16       		.uleb128 0x16
+ 577 02e5 CE000000 		.4byte	.LASF34
+ 578 02e9 CE000000 		.4byte	.LASF34
+ 579 02ed 04       		.byte	0x4
+ 580 02ee A9       		.byte	0xa9
+ 581 02ef 16       		.uleb128 0x16
+ 582 02f0 77020000 		.4byte	.LASF35
+ 583 02f4 77020000 		.4byte	.LASF35
+ 584 02f8 04       		.byte	0x4
+ 585 02f9 A3       		.byte	0xa3
+ 586 02fa 16       		.uleb128 0x16
+ 587 02fb 68000000 		.4byte	.LASF36
+ 588 02ff 68000000 		.4byte	.LASF36
+ 589 0303 04       		.byte	0x4
+ 590 0304 B5       		.byte	0xb5
+ 591 0305 00       		.byte	0
+ 592              		.section	.debug_abbrev,"",%progbits
+ 593              	.Ldebug_abbrev0:
+ 594 0000 01       		.uleb128 0x1
+ 595 0001 11       		.uleb128 0x11
+ 596 0002 01       		.byte	0x1
+ 597 0003 25       		.uleb128 0x25
+ 598 0004 0E       		.uleb128 0xe
+ 599 0005 13       		.uleb128 0x13
+ 600 0006 0B       		.uleb128 0xb
+ 601 0007 03       		.uleb128 0x3
+ 602 0008 0E       		.uleb128 0xe
+ 603 0009 1B       		.uleb128 0x1b
+ 604 000a 0E       		.uleb128 0xe
+ 605 000b 55       		.uleb128 0x55
+ 606 000c 17       		.uleb128 0x17
+ 607 000d 11       		.uleb128 0x11
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 14
+
+
+ 608 000e 01       		.uleb128 0x1
+ 609 000f 10       		.uleb128 0x10
+ 610 0010 17       		.uleb128 0x17
+ 611 0011 00       		.byte	0
+ 612 0012 00       		.byte	0
+ 613 0013 02       		.uleb128 0x2
+ 614 0014 24       		.uleb128 0x24
+ 615 0015 00       		.byte	0
+ 616 0016 0B       		.uleb128 0xb
+ 617 0017 0B       		.uleb128 0xb
+ 618 0018 3E       		.uleb128 0x3e
+ 619 0019 0B       		.uleb128 0xb
+ 620 001a 03       		.uleb128 0x3
+ 621 001b 0E       		.uleb128 0xe
+ 622 001c 00       		.byte	0
+ 623 001d 00       		.byte	0
+ 624 001e 03       		.uleb128 0x3
+ 625 001f 16       		.uleb128 0x16
+ 626 0020 00       		.byte	0
+ 627 0021 03       		.uleb128 0x3
+ 628 0022 0E       		.uleb128 0xe
+ 629 0023 3A       		.uleb128 0x3a
+ 630 0024 0B       		.uleb128 0xb
+ 631 0025 3B       		.uleb128 0x3b
+ 632 0026 0B       		.uleb128 0xb
+ 633 0027 49       		.uleb128 0x49
+ 634 0028 13       		.uleb128 0x13
+ 635 0029 00       		.byte	0
+ 636 002a 00       		.byte	0
+ 637 002b 04       		.uleb128 0x4
+ 638 002c 24       		.uleb128 0x24
+ 639 002d 00       		.byte	0
+ 640 002e 0B       		.uleb128 0xb
+ 641 002f 0B       		.uleb128 0xb
+ 642 0030 3E       		.uleb128 0x3e
+ 643 0031 0B       		.uleb128 0xb
+ 644 0032 03       		.uleb128 0x3
+ 645 0033 08       		.uleb128 0x8
+ 646 0034 00       		.byte	0
+ 647 0035 00       		.byte	0
+ 648 0036 05       		.uleb128 0x5
+ 649 0037 2E       		.uleb128 0x2e
+ 650 0038 01       		.byte	0x1
+ 651 0039 3F       		.uleb128 0x3f
+ 652 003a 19       		.uleb128 0x19
+ 653 003b 03       		.uleb128 0x3
+ 654 003c 0E       		.uleb128 0xe
+ 655 003d 3A       		.uleb128 0x3a
+ 656 003e 0B       		.uleb128 0xb
+ 657 003f 3B       		.uleb128 0x3b
+ 658 0040 0B       		.uleb128 0xb
+ 659 0041 11       		.uleb128 0x11
+ 660 0042 01       		.uleb128 0x1
+ 661 0043 12       		.uleb128 0x12
+ 662 0044 06       		.uleb128 0x6
+ 663 0045 40       		.uleb128 0x40
+ 664 0046 18       		.uleb128 0x18
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 15
+
+
+ 665 0047 9742     		.uleb128 0x2117
+ 666 0049 19       		.uleb128 0x19
+ 667 004a 01       		.uleb128 0x1
+ 668 004b 13       		.uleb128 0x13
+ 669 004c 00       		.byte	0
+ 670 004d 00       		.byte	0
+ 671 004e 06       		.uleb128 0x6
+ 672 004f 898201   		.uleb128 0x4109
+ 673 0052 00       		.byte	0
+ 674 0053 11       		.uleb128 0x11
+ 675 0054 01       		.uleb128 0x1
+ 676 0055 31       		.uleb128 0x31
+ 677 0056 13       		.uleb128 0x13
+ 678 0057 00       		.byte	0
+ 679 0058 00       		.byte	0
+ 680 0059 07       		.uleb128 0x7
+ 681 005a 2E       		.uleb128 0x2e
+ 682 005b 01       		.byte	0x1
+ 683 005c 3F       		.uleb128 0x3f
+ 684 005d 19       		.uleb128 0x19
+ 685 005e 03       		.uleb128 0x3
+ 686 005f 0E       		.uleb128 0xe
+ 687 0060 3A       		.uleb128 0x3a
+ 688 0061 0B       		.uleb128 0xb
+ 689 0062 3B       		.uleb128 0x3b
+ 690 0063 0B       		.uleb128 0xb
+ 691 0064 27       		.uleb128 0x27
+ 692 0065 19       		.uleb128 0x19
+ 693 0066 11       		.uleb128 0x11
+ 694 0067 01       		.uleb128 0x1
+ 695 0068 12       		.uleb128 0x12
+ 696 0069 06       		.uleb128 0x6
+ 697 006a 40       		.uleb128 0x40
+ 698 006b 18       		.uleb128 0x18
+ 699 006c 9742     		.uleb128 0x2117
+ 700 006e 19       		.uleb128 0x19
+ 701 006f 01       		.uleb128 0x1
+ 702 0070 13       		.uleb128 0x13
+ 703 0071 00       		.byte	0
+ 704 0072 00       		.byte	0
+ 705 0073 08       		.uleb128 0x8
+ 706 0074 05       		.uleb128 0x5
+ 707 0075 00       		.byte	0
+ 708 0076 03       		.uleb128 0x3
+ 709 0077 0E       		.uleb128 0xe
+ 710 0078 3A       		.uleb128 0x3a
+ 711 0079 0B       		.uleb128 0xb
+ 712 007a 3B       		.uleb128 0x3b
+ 713 007b 0B       		.uleb128 0xb
+ 714 007c 49       		.uleb128 0x49
+ 715 007d 13       		.uleb128 0x13
+ 716 007e 02       		.uleb128 0x2
+ 717 007f 17       		.uleb128 0x17
+ 718 0080 00       		.byte	0
+ 719 0081 00       		.byte	0
+ 720 0082 09       		.uleb128 0x9
+ 721 0083 2E       		.uleb128 0x2e
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 16
+
+
+ 722 0084 01       		.byte	0x1
+ 723 0085 3F       		.uleb128 0x3f
+ 724 0086 19       		.uleb128 0x19
+ 725 0087 03       		.uleb128 0x3
+ 726 0088 0E       		.uleb128 0xe
+ 727 0089 3A       		.uleb128 0x3a
+ 728 008a 0B       		.uleb128 0xb
+ 729 008b 3B       		.uleb128 0x3b
+ 730 008c 0B       		.uleb128 0xb
+ 731 008d 27       		.uleb128 0x27
+ 732 008e 19       		.uleb128 0x19
+ 733 008f 49       		.uleb128 0x49
+ 734 0090 13       		.uleb128 0x13
+ 735 0091 11       		.uleb128 0x11
+ 736 0092 01       		.uleb128 0x1
+ 737 0093 12       		.uleb128 0x12
+ 738 0094 06       		.uleb128 0x6
+ 739 0095 40       		.uleb128 0x40
+ 740 0096 18       		.uleb128 0x18
+ 741 0097 9742     		.uleb128 0x2117
+ 742 0099 19       		.uleb128 0x19
+ 743 009a 01       		.uleb128 0x1
+ 744 009b 13       		.uleb128 0x13
+ 745 009c 00       		.byte	0
+ 746 009d 00       		.byte	0
+ 747 009e 0A       		.uleb128 0xa
+ 748 009f 34       		.uleb128 0x34
+ 749 00a0 00       		.byte	0
+ 750 00a1 03       		.uleb128 0x3
+ 751 00a2 08       		.uleb128 0x8
+ 752 00a3 3A       		.uleb128 0x3a
+ 753 00a4 0B       		.uleb128 0xb
+ 754 00a5 3B       		.uleb128 0x3b
+ 755 00a6 0B       		.uleb128 0xb
+ 756 00a7 49       		.uleb128 0x49
+ 757 00a8 13       		.uleb128 0x13
+ 758 00a9 02       		.uleb128 0x2
+ 759 00aa 17       		.uleb128 0x17
+ 760 00ab 00       		.byte	0
+ 761 00ac 00       		.byte	0
+ 762 00ad 0B       		.uleb128 0xb
+ 763 00ae 898201   		.uleb128 0x4109
+ 764 00b1 01       		.byte	0x1
+ 765 00b2 11       		.uleb128 0x11
+ 766 00b3 01       		.uleb128 0x1
+ 767 00b4 31       		.uleb128 0x31
+ 768 00b5 13       		.uleb128 0x13
+ 769 00b6 01       		.uleb128 0x1
+ 770 00b7 13       		.uleb128 0x13
+ 771 00b8 00       		.byte	0
+ 772 00b9 00       		.byte	0
+ 773 00ba 0C       		.uleb128 0xc
+ 774 00bb 8A8201   		.uleb128 0x410a
+ 775 00be 00       		.byte	0
+ 776 00bf 02       		.uleb128 0x2
+ 777 00c0 18       		.uleb128 0x18
+ 778 00c1 9142     		.uleb128 0x2111
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 17
+
+
+ 779 00c3 18       		.uleb128 0x18
+ 780 00c4 00       		.byte	0
+ 781 00c5 00       		.byte	0
+ 782 00c6 0D       		.uleb128 0xd
+ 783 00c7 898201   		.uleb128 0x4109
+ 784 00ca 01       		.byte	0x1
+ 785 00cb 11       		.uleb128 0x11
+ 786 00cc 01       		.uleb128 0x1
+ 787 00cd 31       		.uleb128 0x31
+ 788 00ce 13       		.uleb128 0x13
+ 789 00cf 00       		.byte	0
+ 790 00d0 00       		.byte	0
+ 791 00d1 0E       		.uleb128 0xe
+ 792 00d2 0F       		.uleb128 0xf
+ 793 00d3 00       		.byte	0
+ 794 00d4 0B       		.uleb128 0xb
+ 795 00d5 0B       		.uleb128 0xb
+ 796 00d6 49       		.uleb128 0x49
+ 797 00d7 13       		.uleb128 0x13
+ 798 00d8 00       		.byte	0
+ 799 00d9 00       		.byte	0
+ 800 00da 0F       		.uleb128 0xf
+ 801 00db 34       		.uleb128 0x34
+ 802 00dc 00       		.byte	0
+ 803 00dd 03       		.uleb128 0x3
+ 804 00de 0E       		.uleb128 0xe
+ 805 00df 3A       		.uleb128 0x3a
+ 806 00e0 0B       		.uleb128 0xb
+ 807 00e1 3B       		.uleb128 0x3b
+ 808 00e2 0B       		.uleb128 0xb
+ 809 00e3 49       		.uleb128 0x49
+ 810 00e4 13       		.uleb128 0x13
+ 811 00e5 02       		.uleb128 0x2
+ 812 00e6 18       		.uleb128 0x18
+ 813 00e7 00       		.byte	0
+ 814 00e8 00       		.byte	0
+ 815 00e9 10       		.uleb128 0x10
+ 816 00ea 01       		.uleb128 0x1
+ 817 00eb 01       		.byte	0x1
+ 818 00ec 49       		.uleb128 0x49
+ 819 00ed 13       		.uleb128 0x13
+ 820 00ee 01       		.uleb128 0x1
+ 821 00ef 13       		.uleb128 0x13
+ 822 00f0 00       		.byte	0
+ 823 00f1 00       		.byte	0
+ 824 00f2 11       		.uleb128 0x11
+ 825 00f3 21       		.uleb128 0x21
+ 826 00f4 00       		.byte	0
+ 827 00f5 49       		.uleb128 0x49
+ 828 00f6 13       		.uleb128 0x13
+ 829 00f7 2F       		.uleb128 0x2f
+ 830 00f8 0B       		.uleb128 0xb
+ 831 00f9 00       		.byte	0
+ 832 00fa 00       		.byte	0
+ 833 00fb 12       		.uleb128 0x12
+ 834 00fc 2E       		.uleb128 0x2e
+ 835 00fd 01       		.byte	0x1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 18
+
+
+ 836 00fe 3F       		.uleb128 0x3f
+ 837 00ff 19       		.uleb128 0x19
+ 838 0100 03       		.uleb128 0x3
+ 839 0101 0E       		.uleb128 0xe
+ 840 0102 3A       		.uleb128 0x3a
+ 841 0103 0B       		.uleb128 0xb
+ 842 0104 3B       		.uleb128 0x3b
+ 843 0105 0B       		.uleb128 0xb
+ 844 0106 49       		.uleb128 0x49
+ 845 0107 13       		.uleb128 0x13
+ 846 0108 11       		.uleb128 0x11
+ 847 0109 01       		.uleb128 0x1
+ 848 010a 12       		.uleb128 0x12
+ 849 010b 06       		.uleb128 0x6
+ 850 010c 40       		.uleb128 0x40
+ 851 010d 18       		.uleb128 0x18
+ 852 010e 9742     		.uleb128 0x2117
+ 853 0110 19       		.uleb128 0x19
+ 854 0111 01       		.uleb128 0x1
+ 855 0112 13       		.uleb128 0x13
+ 856 0113 00       		.byte	0
+ 857 0114 00       		.byte	0
+ 858 0115 13       		.uleb128 0x13
+ 859 0116 34       		.uleb128 0x34
+ 860 0117 00       		.byte	0
+ 861 0118 03       		.uleb128 0x3
+ 862 0119 08       		.uleb128 0x8
+ 863 011a 3A       		.uleb128 0x3a
+ 864 011b 0B       		.uleb128 0xb
+ 865 011c 3B       		.uleb128 0x3b
+ 866 011d 0B       		.uleb128 0xb
+ 867 011e 49       		.uleb128 0x49
+ 868 011f 13       		.uleb128 0x13
+ 869 0120 02       		.uleb128 0x2
+ 870 0121 18       		.uleb128 0x18
+ 871 0122 00       		.byte	0
+ 872 0123 00       		.byte	0
+ 873 0124 14       		.uleb128 0x14
+ 874 0125 34       		.uleb128 0x34
+ 875 0126 00       		.byte	0
+ 876 0127 03       		.uleb128 0x3
+ 877 0128 0E       		.uleb128 0xe
+ 878 0129 3A       		.uleb128 0x3a
+ 879 012a 0B       		.uleb128 0xb
+ 880 012b 3B       		.uleb128 0x3b
+ 881 012c 05       		.uleb128 0x5
+ 882 012d 49       		.uleb128 0x49
+ 883 012e 13       		.uleb128 0x13
+ 884 012f 3F       		.uleb128 0x3f
+ 885 0130 19       		.uleb128 0x19
+ 886 0131 3C       		.uleb128 0x3c
+ 887 0132 19       		.uleb128 0x19
+ 888 0133 00       		.byte	0
+ 889 0134 00       		.byte	0
+ 890 0135 15       		.uleb128 0x15
+ 891 0136 35       		.uleb128 0x35
+ 892 0137 00       		.byte	0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 19
+
+
+ 893 0138 49       		.uleb128 0x49
+ 894 0139 13       		.uleb128 0x13
+ 895 013a 00       		.byte	0
+ 896 013b 00       		.byte	0
+ 897 013c 16       		.uleb128 0x16
+ 898 013d 2E       		.uleb128 0x2e
+ 899 013e 00       		.byte	0
+ 900 013f 3F       		.uleb128 0x3f
+ 901 0140 19       		.uleb128 0x19
+ 902 0141 3C       		.uleb128 0x3c
+ 903 0142 19       		.uleb128 0x19
+ 904 0143 6E       		.uleb128 0x6e
+ 905 0144 0E       		.uleb128 0xe
+ 906 0145 03       		.uleb128 0x3
+ 907 0146 0E       		.uleb128 0xe
+ 908 0147 3A       		.uleb128 0x3a
+ 909 0148 0B       		.uleb128 0xb
+ 910 0149 3B       		.uleb128 0x3b
+ 911 014a 0B       		.uleb128 0xb
+ 912 014b 00       		.byte	0
+ 913 014c 00       		.byte	0
+ 914 014d 00       		.byte	0
+ 915              		.section	.debug_loc,"",%progbits
+ 916              	.Ldebug_loc0:
+ 917              	.LLST0:
+ 918 0000 00000000 		.4byte	.LVL1
+ 919 0004 05000000 		.4byte	.LVL2-1
+ 920 0008 0100     		.2byte	0x1
+ 921 000a 50       		.byte	0x50
+ 922 000b 05000000 		.4byte	.LVL2-1
+ 923 000f 08000000 		.4byte	.LFE64
+ 924 0013 0400     		.2byte	0x4
+ 925 0015 F3       		.byte	0xf3
+ 926 0016 01       		.uleb128 0x1
+ 927 0017 50       		.byte	0x50
+ 928 0018 9F       		.byte	0x9f
+ 929 0019 00000000 		.4byte	0
+ 930 001d 00000000 		.4byte	0
+ 931              	.LLST1:
+ 932 0021 00000000 		.4byte	.LVL1
+ 933 0025 05000000 		.4byte	.LVL2-1
+ 934 0029 0100     		.2byte	0x1
+ 935 002b 51       		.byte	0x51
+ 936 002c 05000000 		.4byte	.LVL2-1
+ 937 0030 08000000 		.4byte	.LFE64
+ 938 0034 0400     		.2byte	0x4
+ 939 0036 F3       		.byte	0xf3
+ 940 0037 01       		.uleb128 0x1
+ 941 0038 51       		.byte	0x51
+ 942 0039 9F       		.byte	0x9f
+ 943 003a 00000000 		.4byte	0
+ 944 003e 00000000 		.4byte	0
+ 945              	.LLST2:
+ 946 0042 00000000 		.4byte	.LVL3
+ 947 0046 0B000000 		.4byte	.LVL6-1
+ 948 004a 0100     		.2byte	0x1
+ 949 004c 50       		.byte	0x50
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 20
+
+
+ 950 004d 0B000000 		.4byte	.LVL6-1
+ 951 0051 0E000000 		.4byte	.LVL7
+ 952 0055 0400     		.2byte	0x4
+ 953 0057 F3       		.byte	0xf3
+ 954 0058 01       		.uleb128 0x1
+ 955 0059 50       		.byte	0x50
+ 956 005a 9F       		.byte	0x9f
+ 957 005b 0E000000 		.4byte	.LVL7
+ 958 005f 17000000 		.4byte	.LVL9-1
+ 959 0063 0100     		.2byte	0x1
+ 960 0065 50       		.byte	0x50
+ 961 0066 17000000 		.4byte	.LVL9-1
+ 962 006a 1A000000 		.4byte	.LVL10
+ 963 006e 0400     		.2byte	0x4
+ 964 0070 F3       		.byte	0xf3
+ 965 0071 01       		.uleb128 0x1
+ 966 0072 50       		.byte	0x50
+ 967 0073 9F       		.byte	0x9f
+ 968 0074 1A000000 		.4byte	.LVL10
+ 969 0078 23000000 		.4byte	.LVL12-1
+ 970 007c 0100     		.2byte	0x1
+ 971 007e 50       		.byte	0x50
+ 972 007f 23000000 		.4byte	.LVL12-1
+ 973 0083 26000000 		.4byte	.LVL13
+ 974 0087 0400     		.2byte	0x4
+ 975 0089 F3       		.byte	0xf3
+ 976 008a 01       		.uleb128 0x1
+ 977 008b 50       		.byte	0x50
+ 978 008c 9F       		.byte	0x9f
+ 979 008d 26000000 		.4byte	.LVL13
+ 980 0091 28000000 		.4byte	.LVL14
+ 981 0095 0100     		.2byte	0x1
+ 982 0097 50       		.byte	0x50
+ 983 0098 28000000 		.4byte	.LVL14
+ 984 009c 2A000000 		.4byte	.LFE65
+ 985 00a0 0400     		.2byte	0x4
+ 986 00a2 F3       		.byte	0xf3
+ 987 00a3 01       		.uleb128 0x1
+ 988 00a4 50       		.byte	0x50
+ 989 00a5 9F       		.byte	0x9f
+ 990 00a6 00000000 		.4byte	0
+ 991 00aa 00000000 		.4byte	0
+ 992              	.LLST3:
+ 993 00ae 00000000 		.4byte	.LVL3
+ 994 00b2 0B000000 		.4byte	.LVL6-1
+ 995 00b6 0100     		.2byte	0x1
+ 996 00b8 51       		.byte	0x51
+ 997 00b9 0B000000 		.4byte	.LVL6-1
+ 998 00bd 0E000000 		.4byte	.LVL7
+ 999 00c1 0400     		.2byte	0x4
+ 1000 00c3 F3       		.byte	0xf3
+ 1001 00c4 01       		.uleb128 0x1
+ 1002 00c5 51       		.byte	0x51
+ 1003 00c6 9F       		.byte	0x9f
+ 1004 00c7 0E000000 		.4byte	.LVL7
+ 1005 00cb 17000000 		.4byte	.LVL9-1
+ 1006 00cf 0100     		.2byte	0x1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 21
+
+
+ 1007 00d1 51       		.byte	0x51
+ 1008 00d2 17000000 		.4byte	.LVL9-1
+ 1009 00d6 1A000000 		.4byte	.LVL10
+ 1010 00da 0400     		.2byte	0x4
+ 1011 00dc F3       		.byte	0xf3
+ 1012 00dd 01       		.uleb128 0x1
+ 1013 00de 51       		.byte	0x51
+ 1014 00df 9F       		.byte	0x9f
+ 1015 00e0 1A000000 		.4byte	.LVL10
+ 1016 00e4 23000000 		.4byte	.LVL12-1
+ 1017 00e8 0100     		.2byte	0x1
+ 1018 00ea 51       		.byte	0x51
+ 1019 00eb 23000000 		.4byte	.LVL12-1
+ 1020 00ef 26000000 		.4byte	.LVL13
+ 1021 00f3 0400     		.2byte	0x4
+ 1022 00f5 F3       		.byte	0xf3
+ 1023 00f6 01       		.uleb128 0x1
+ 1024 00f7 51       		.byte	0x51
+ 1025 00f8 9F       		.byte	0x9f
+ 1026 00f9 26000000 		.4byte	.LVL13
+ 1027 00fd 2A000000 		.4byte	.LFE65
+ 1028 0101 0100     		.2byte	0x1
+ 1029 0103 51       		.byte	0x51
+ 1030 0104 00000000 		.4byte	0
+ 1031 0108 00000000 		.4byte	0
+ 1032              	.LLST4:
+ 1033 010c 00000000 		.4byte	.LVL3
+ 1034 0110 0B000000 		.4byte	.LVL6-1
+ 1035 0114 0100     		.2byte	0x1
+ 1036 0116 52       		.byte	0x52
+ 1037 0117 0B000000 		.4byte	.LVL6-1
+ 1038 011b 0E000000 		.4byte	.LVL7
+ 1039 011f 0400     		.2byte	0x4
+ 1040 0121 F3       		.byte	0xf3
+ 1041 0122 01       		.uleb128 0x1
+ 1042 0123 52       		.byte	0x52
+ 1043 0124 9F       		.byte	0x9f
+ 1044 0125 0E000000 		.4byte	.LVL7
+ 1045 0129 17000000 		.4byte	.LVL9-1
+ 1046 012d 0100     		.2byte	0x1
+ 1047 012f 52       		.byte	0x52
+ 1048 0130 17000000 		.4byte	.LVL9-1
+ 1049 0134 1A000000 		.4byte	.LVL10
+ 1050 0138 0400     		.2byte	0x4
+ 1051 013a F3       		.byte	0xf3
+ 1052 013b 01       		.uleb128 0x1
+ 1053 013c 52       		.byte	0x52
+ 1054 013d 9F       		.byte	0x9f
+ 1055 013e 1A000000 		.4byte	.LVL10
+ 1056 0142 23000000 		.4byte	.LVL12-1
+ 1057 0146 0100     		.2byte	0x1
+ 1058 0148 52       		.byte	0x52
+ 1059 0149 23000000 		.4byte	.LVL12-1
+ 1060 014d 26000000 		.4byte	.LVL13
+ 1061 0151 0400     		.2byte	0x4
+ 1062 0153 F3       		.byte	0xf3
+ 1063 0154 01       		.uleb128 0x1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 22
+
+
+ 1064 0155 52       		.byte	0x52
+ 1065 0156 9F       		.byte	0x9f
+ 1066 0157 26000000 		.4byte	.LVL13
+ 1067 015b 2A000000 		.4byte	.LFE65
+ 1068 015f 0100     		.2byte	0x1
+ 1069 0161 52       		.byte	0x52
+ 1070 0162 00000000 		.4byte	0
+ 1071 0166 00000000 		.4byte	0
+ 1072              	.LLST5:
+ 1073 016a 00000000 		.4byte	.LVL3
+ 1074 016e 08000000 		.4byte	.LVL5
+ 1075 0172 0100     		.2byte	0x1
+ 1076 0174 53       		.byte	0x53
+ 1077 0175 08000000 		.4byte	.LVL5
+ 1078 0179 0E000000 		.4byte	.LVL7
+ 1079 017d 0400     		.2byte	0x4
+ 1080 017f F3       		.byte	0xf3
+ 1081 0180 01       		.uleb128 0x1
+ 1082 0181 53       		.byte	0x53
+ 1083 0182 9F       		.byte	0x9f
+ 1084 0183 0E000000 		.4byte	.LVL7
+ 1085 0187 14000000 		.4byte	.LVL8
+ 1086 018b 0100     		.2byte	0x1
+ 1087 018d 53       		.byte	0x53
+ 1088 018e 14000000 		.4byte	.LVL8
+ 1089 0192 1A000000 		.4byte	.LVL10
+ 1090 0196 0400     		.2byte	0x4
+ 1091 0198 F3       		.byte	0xf3
+ 1092 0199 01       		.uleb128 0x1
+ 1093 019a 53       		.byte	0x53
+ 1094 019b 9F       		.byte	0x9f
+ 1095 019c 1A000000 		.4byte	.LVL10
+ 1096 01a0 20000000 		.4byte	.LVL11
+ 1097 01a4 0100     		.2byte	0x1
+ 1098 01a6 53       		.byte	0x53
+ 1099 01a7 20000000 		.4byte	.LVL11
+ 1100 01ab 26000000 		.4byte	.LVL13
+ 1101 01af 0400     		.2byte	0x4
+ 1102 01b1 F3       		.byte	0xf3
+ 1103 01b2 01       		.uleb128 0x1
+ 1104 01b3 53       		.byte	0x53
+ 1105 01b4 9F       		.byte	0x9f
+ 1106 01b5 26000000 		.4byte	.LVL13
+ 1107 01b9 2A000000 		.4byte	.LFE65
+ 1108 01bd 0100     		.2byte	0x1
+ 1109 01bf 53       		.byte	0x53
+ 1110 01c0 00000000 		.4byte	0
+ 1111 01c4 00000000 		.4byte	0
+ 1112              	.LLST6:
+ 1113 01c8 02000000 		.4byte	.LVL4
+ 1114 01cc 0C000000 		.4byte	.LVL6
+ 1115 01d0 0200     		.2byte	0x2
+ 1116 01d2 30       		.byte	0x30
+ 1117 01d3 9F       		.byte	0x9f
+ 1118 01d4 0C000000 		.4byte	.LVL6
+ 1119 01d8 0E000000 		.4byte	.LVL7
+ 1120 01dc 0100     		.2byte	0x1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 23
+
+
+ 1121 01de 50       		.byte	0x50
+ 1122 01df 0E000000 		.4byte	.LVL7
+ 1123 01e3 18000000 		.4byte	.LVL9
+ 1124 01e7 0200     		.2byte	0x2
+ 1125 01e9 30       		.byte	0x30
+ 1126 01ea 9F       		.byte	0x9f
+ 1127 01eb 18000000 		.4byte	.LVL9
+ 1128 01ef 1A000000 		.4byte	.LVL10
+ 1129 01f3 0100     		.2byte	0x1
+ 1130 01f5 50       		.byte	0x50
+ 1131 01f6 1A000000 		.4byte	.LVL10
+ 1132 01fa 24000000 		.4byte	.LVL12
+ 1133 01fe 0200     		.2byte	0x2
+ 1134 0200 30       		.byte	0x30
+ 1135 0201 9F       		.byte	0x9f
+ 1136 0202 24000000 		.4byte	.LVL12
+ 1137 0206 26000000 		.4byte	.LVL13
+ 1138 020a 0100     		.2byte	0x1
+ 1139 020c 50       		.byte	0x50
+ 1140 020d 26000000 		.4byte	.LVL13
+ 1141 0211 28000000 		.4byte	.LVL14
+ 1142 0215 0200     		.2byte	0x2
+ 1143 0217 30       		.byte	0x30
+ 1144 0218 9F       		.byte	0x9f
+ 1145 0219 28000000 		.4byte	.LVL14
+ 1146 021d 2A000000 		.4byte	.LFE65
+ 1147 0221 0100     		.2byte	0x1
+ 1148 0223 50       		.byte	0x50
+ 1149 0224 00000000 		.4byte	0
+ 1150 0228 00000000 		.4byte	0
+ 1151              	.LLST7:
+ 1152 022c 00000000 		.4byte	.LVL15
+ 1153 0230 0D000000 		.4byte	.LVL18-1
+ 1154 0234 0100     		.2byte	0x1
+ 1155 0236 50       		.byte	0x50
+ 1156 0237 0D000000 		.4byte	.LVL18-1
+ 1157 023b 1C000000 		.4byte	.LFE67
+ 1158 023f 0400     		.2byte	0x4
+ 1159 0241 F3       		.byte	0xf3
+ 1160 0242 01       		.uleb128 0x1
+ 1161 0243 50       		.byte	0x50
+ 1162 0244 9F       		.byte	0x9f
+ 1163 0245 00000000 		.4byte	0
+ 1164 0249 00000000 		.4byte	0
+ 1165              	.LLST8:
+ 1166 024d 00000000 		.4byte	.LVL15
+ 1167 0251 0A000000 		.4byte	.LVL17
+ 1168 0255 0100     		.2byte	0x1
+ 1169 0257 51       		.byte	0x51
+ 1170 0258 0A000000 		.4byte	.LVL17
+ 1171 025c 1C000000 		.4byte	.LFE67
+ 1172 0260 0400     		.2byte	0x4
+ 1173 0262 F3       		.byte	0xf3
+ 1174 0263 01       		.uleb128 0x1
+ 1175 0264 51       		.byte	0x51
+ 1176 0265 9F       		.byte	0x9f
+ 1177 0266 00000000 		.4byte	0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 24
+
+
+ 1178 026a 00000000 		.4byte	0
+ 1179              	.LLST9:
+ 1180 026e 00000000 		.4byte	.LVL15
+ 1181 0272 08000000 		.4byte	.LVL16
+ 1182 0276 0100     		.2byte	0x1
+ 1183 0278 52       		.byte	0x52
+ 1184 0279 08000000 		.4byte	.LVL16
+ 1185 027d 1C000000 		.4byte	.LFE67
+ 1186 0281 0100     		.2byte	0x1
+ 1187 0283 54       		.byte	0x54
+ 1188 0284 00000000 		.4byte	0
+ 1189 0288 00000000 		.4byte	0
+ 1190              	.LLST10:
+ 1191 028c 00000000 		.4byte	.LVL20
+ 1192 0290 0B000000 		.4byte	.LVL21-1
+ 1193 0294 0100     		.2byte	0x1
+ 1194 0296 50       		.byte	0x50
+ 1195 0297 0B000000 		.4byte	.LVL21-1
+ 1196 029b 16000000 		.4byte	.LFE66
+ 1197 029f 0400     		.2byte	0x4
+ 1198 02a1 F3       		.byte	0xf3
+ 1199 02a2 01       		.uleb128 0x1
+ 1200 02a3 50       		.byte	0x50
+ 1201 02a4 9F       		.byte	0x9f
+ 1202 02a5 00000000 		.4byte	0
+ 1203 02a9 00000000 		.4byte	0
+ 1204              		.section	.debug_aranges,"",%progbits
+ 1205 0000 44000000 		.4byte	0x44
+ 1206 0004 0200     		.2byte	0x2
+ 1207 0006 00000000 		.4byte	.Ldebug_info0
+ 1208 000a 04       		.byte	0x4
+ 1209 000b 00       		.byte	0
+ 1210 000c 0000     		.2byte	0
+ 1211 000e 0000     		.2byte	0
+ 1212 0010 00000000 		.4byte	.LFB63
+ 1213 0014 08000000 		.4byte	.LFE63-.LFB63
+ 1214 0018 00000000 		.4byte	.LFB64
+ 1215 001c 08000000 		.4byte	.LFE64-.LFB64
+ 1216 0020 00000000 		.4byte	.LFB65
+ 1217 0024 2A000000 		.4byte	.LFE65-.LFB65
+ 1218 0028 00000000 		.4byte	.LFB67
+ 1219 002c 1C000000 		.4byte	.LFE67-.LFB67
+ 1220 0030 00000000 		.4byte	.LFB66
+ 1221 0034 16000000 		.4byte	.LFE66-.LFB66
+ 1222 0038 00000000 		.4byte	.LFB68
+ 1223 003c 08000000 		.4byte	.LFE68-.LFB68
+ 1224 0040 00000000 		.4byte	0
+ 1225 0044 00000000 		.4byte	0
+ 1226              		.section	.debug_ranges,"",%progbits
+ 1227              	.Ldebug_ranges0:
+ 1228 0000 00000000 		.4byte	.LFB63
+ 1229 0004 08000000 		.4byte	.LFE63
+ 1230 0008 00000000 		.4byte	.LFB64
+ 1231 000c 08000000 		.4byte	.LFE64
+ 1232 0010 00000000 		.4byte	.LFB65
+ 1233 0014 2A000000 		.4byte	.LFE65
+ 1234 0018 00000000 		.4byte	.LFB67
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 25
+
+
+ 1235 001c 1C000000 		.4byte	.LFE67
+ 1236 0020 00000000 		.4byte	.LFB66
+ 1237 0024 16000000 		.4byte	.LFE66
+ 1238 0028 00000000 		.4byte	.LFB68
+ 1239 002c 08000000 		.4byte	.LFE68
+ 1240 0030 00000000 		.4byte	0
+ 1241 0034 00000000 		.4byte	0
+ 1242              		.section	.debug_line,"",%progbits
+ 1243              	.Ldebug_line0:
+ 1244 0000 C9010000 		.section	.debug_str,"MS",%progbits,1
+ 1244      02004D01 
+ 1244      00000201 
+ 1244      FB0E0D00 
+ 1244      01010101 
+ 1245              	.LASF39:
+ 1246 0000 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\MyCodes\\PSoC-Quadcop"
+ 1246      73657273 
+ 1246      5C413835 
+ 1246      3539305C 
+ 1246      446F6375 
+ 1247 002e 7465725C 		.ascii	"ter\\Sensors\\Sensor Test\\All_sensor_testv2.cydsn\000"
+ 1247      53656E73 
+ 1247      6F72735C 
+ 1247      53656E73 
+ 1247      6F722054 
+ 1248              	.LASF4:
+ 1249 005e 5F5F7569 		.ascii	"__uint8_t\000"
+ 1249      6E74385F 
+ 1249      7400
+ 1250              	.LASF36:
+ 1251 0068 4932435F 		.ascii	"I2C_MasterSendStop\000"
+ 1251      4D617374 
+ 1251      65725365 
+ 1251      6E645374 
+ 1251      6F7000
+ 1252              	.LASF29:
+ 1253 007b 57697265 		.ascii	"Wire_beginTransmission\000"
+ 1253      5F626567 
+ 1253      696E5472 
+ 1253      616E736D 
+ 1253      69737369 
+ 1254              	.LASF28:
+ 1255 0092 72656164 		.ascii	"readbuffer\000"
+ 1255      62756666 
+ 1255      657200
+ 1256              	.LASF5:
+ 1257 009d 5F5F696E 		.ascii	"__int32_t\000"
+ 1257      7433325F 
+ 1257      7400
+ 1258              	.LASF20:
+ 1259 00a7 77726974 		.ascii	"writeBuffer\000"
+ 1259      65427566 
+ 1259      66657200 
+ 1260              	.LASF23:
+ 1261 00b3 57697265 		.ascii	"Wire_write\000"
+ 1261      5F777269 
+ 1261      746500
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 26
+
+
+ 1262              	.LASF31:
+ 1263 00be 4932435F 		.ascii	"I2C_Start\000"
+ 1263      53746172 
+ 1263      7400
+ 1264              	.LASF13:
+ 1265 00c8 666C6F61 		.ascii	"float\000"
+ 1265      7400
+ 1266              	.LASF34:
+ 1267 00ce 4932435F 		.ascii	"I2C_MasterReadBuf\000"
+ 1267      4D617374 
+ 1267      65725265 
+ 1267      61644275 
+ 1267      6600
+ 1268              	.LASF1:
+ 1269 00e0 756E7369 		.ascii	"unsigned char\000"
+ 1269      676E6564 
+ 1269      20636861 
+ 1269      7200
+ 1270              	.LASF33:
+ 1271 00ee 4932435F 		.ascii	"I2C_MasterWriteBuf\000"
+ 1271      4D617374 
+ 1271      65725772 
+ 1271      69746542 
+ 1271      756600
+ 1272              	.LASF7:
+ 1273 0101 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1273      20756E73 
+ 1273      69676E65 
+ 1273      6420696E 
+ 1273      7400
+ 1274              	.LASF3:
+ 1275 0113 73686F72 		.ascii	"short unsigned int\000"
+ 1275      7420756E 
+ 1275      7369676E 
+ 1275      65642069 
+ 1275      6E7400
+ 1276              	.LASF32:
+ 1277 0126 4932435F 		.ascii	"I2C_MasterSendStart\000"
+ 1277      4D617374 
+ 1277      65725365 
+ 1277      6E645374 
+ 1277      61727400 
+ 1278              	.LASF30:
+ 1279 013a 57697265 		.ascii	"Wire_endTransmission\000"
+ 1279      5F656E64 
+ 1279      5472616E 
+ 1279      736D6973 
+ 1279      73696F6E 
+ 1280              	.LASF41:
+ 1281 014f 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1281      52784275 
+ 1281      66666572 
+ 1281      00
+ 1282              	.LASF24:
+ 1283 015c 57697265 		.ascii	"Wire_requestFrom\000"
+ 1283      5F726571 
+ 1283      75657374 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 27
+
+
+ 1283      46726F6D 
+ 1283      00
+ 1284              	.LASF14:
+ 1285 016d 646F7562 		.ascii	"double\000"
+ 1285      6C6500
+ 1286              	.LASF26:
+ 1287 0174 64617461 		.ascii	"dataBuffer\000"
+ 1287      42756666 
+ 1287      657200
+ 1288              	.LASF19:
+ 1289 017f 525F6E57 		.ascii	"R_nW\000"
+ 1289      00
+ 1290              	.LASF10:
+ 1291 0184 756E7369 		.ascii	"unsigned int\000"
+ 1291      676E6564 
+ 1291      20696E74 
+ 1291      00
+ 1292              	.LASF18:
+ 1293 0191 61646472 		.ascii	"address\000"
+ 1293      65737300 
+ 1294              	.LASF9:
+ 1295 0199 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1295      206C6F6E 
+ 1295      6720756E 
+ 1295      7369676E 
+ 1295      65642069 
+ 1296              	.LASF11:
+ 1297 01b0 75696E74 		.ascii	"uint8_t\000"
+ 1297      385F7400 
+ 1298              	.LASF25:
+ 1299 01b8 736C6176 		.ascii	"slaveAddress\000"
+ 1299      65416464 
+ 1299      72657373 
+ 1299      00
+ 1300              	.LASF37:
+ 1301 01c5 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1301      43313120 
+ 1301      352E342E 
+ 1301      31203230 
+ 1301      31363036 
+ 1302 01f8 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 1302      20726576 
+ 1302      6973696F 
+ 1302      6E203233 
+ 1302      37373135 
+ 1303 022b 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1303      66756E63 
+ 1303      74696F6E 
+ 1303      2D736563 
+ 1303      74696F6E 
+ 1304              	.LASF12:
+ 1305 0253 696E7433 		.ascii	"int32_t\000"
+ 1305      325F7400 
+ 1306              	.LASF17:
+ 1307 025b 73697A65 		.ascii	"sizetype\000"
+ 1307      74797065 
+ 1307      00
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccUdrxTh.s 			page 28
+
+
+ 1308              	.LASF8:
+ 1309 0264 6C6F6E67 		.ascii	"long long int\000"
+ 1309      206C6F6E 
+ 1309      6720696E 
+ 1309      7400
+ 1310              	.LASF15:
+ 1311 0272 63686172 		.ascii	"char\000"
+ 1311      00
+ 1312              	.LASF35:
+ 1313 0277 4932435F 		.ascii	"I2C_MasterStatus\000"
+ 1313      4D617374 
+ 1313      65725374 
+ 1313      61747573 
+ 1313      00
+ 1314              	.LASF38:
+ 1315 0288 2E2E5C2E 		.ascii	"..\\..\\twi.c\000"
+ 1315      2E5C7477 
+ 1315      692E6300 
+ 1316              	.LASF22:
+ 1317 0294 74797065 		.ascii	"type\000"
+ 1317      00
+ 1318              	.LASF2:
+ 1319 0299 73686F72 		.ascii	"short int\000"
+ 1319      7420696E 
+ 1319      7400
+ 1320              	.LASF40:
+ 1321 02a3 57697265 		.ascii	"Wire_begin\000"
+ 1321      5F626567 
+ 1321      696E00
+ 1322              	.LASF6:
+ 1323 02ae 6C6F6E67 		.ascii	"long int\000"
+ 1323      20696E74 
+ 1323      00
+ 1324              	.LASF16:
+ 1325 02b7 6C6F6E67 		.ascii	"long double\000"
+ 1325      20646F75 
+ 1325      626C6500 
+ 1326              	.LASF0:
+ 1327 02c3 7369676E 		.ascii	"signed char\000"
+ 1327      65642063 
+ 1327      68617200 
+ 1328              	.LASF27:
+ 1329 02cf 57697265 		.ascii	"Wire_read\000"
+ 1329      5F726561 
+ 1329      6400
+ 1330              	.LASF21:
+ 1331 02d9 6C656E67 		.ascii	"length\000"
+ 1331      746800
+ 1332              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

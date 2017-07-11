@@ -2,7 +2,7 @@
 --	Conversion of All_sensor_testv2.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Mon Jul 10 12:46:56 2017
+--	Tue Jul 11 16:26:50 2017
 --
 
 USE cypress.cypress.all;
