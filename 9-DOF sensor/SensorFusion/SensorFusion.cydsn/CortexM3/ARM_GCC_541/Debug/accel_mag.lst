@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
   28:accel_mag.c   **** #define SENSORS_GRAVITY_SUN (275.0F)     /**< The sun's gravity in m/s^2 */
   29:accel_mag.c   **** #define SENSORS_GRAVITY_STANDARD (SENSORS_GRAVITY_EARTH)
   30:accel_mag.c   **** #define SENSORS_MAGFIELD_EARTH_MAX (60.0F)      /**< Maximum magnetic field on Earth's surface */
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 2
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 2
 
 
   31:accel_mag.c   **** #define SENSORS_MAGFIELD_EARTH_MIN (30.0F)      /**< Minimum magnetic field on Earth's surface */
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
   56 0020 FAD0     		beq	.L2
   57:accel_mag.c   ****     
   58:accel_mag.c   ****     return;                //return 1 if everything was successful
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 3
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 3
 
 
   59:accel_mag.c   **** }
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
   73:accel_mag.c   ****     while((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT) == 0){} //wait till Master status indicates tha
   97              		.loc 1 73 0 discriminator 1
   98 001a FFF7FEFF 		bl	I2C_MasterStatus
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 4
 
 
   99              	.LVL8:
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  139              		.cfi_offset 4, -8
  140              		.cfi_offset 14, -4
  141 0002 0446     		mov	r4, r0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 5
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 5
 
 
   88:accel_mag.c   ****     /* Enable I2C */
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  176 002e 0020     		movs	r0, #0
  177 0030 10BD     		pop	{r4, pc}
  178              	.LVL16:
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 6
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 6
 
 
  179              	.L9:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  217              	.L11:
  124:accel_mag.c   ****         break;
  125:accel_mag.c   ****     }
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 7
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 7
 
 
  126:accel_mag.c   ****     /* High resolution */
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  259              		.type	accel_mag_update, %function
  260              	accel_mag_update:
  261              	.LFB66:
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 8
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 8
 
 
  139:accel_mag.c   **** 
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  161:accel_mag.c   ****     if (I2C_I2C_MSTR_NO_ERROR != (I2C_I2CMasterWriteByte(FXOS8700_REGISTER_STATUS | 0x80)))
  162:accel_mag.c   ****     {
  163:accel_mag.c   ****         serial_UartPutString("here 4\r\n");
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 9
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 9
 
 
  164:accel_mag.c   ****         return false;
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  185:accel_mag.c   ****     //uint8_t status = Read_Buf[0]; //Status not used
  186:accel_mag.c   ****     uint8_t axhi = Read_Buf[1];
  327              		.loc 1 186 0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 10
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 10
 
 
  328 0052 9DF81D20 		ldrb	r2, [sp, #29]	@ zero_extendqisi2
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  367              		.loc 1 201 0
  368 008a 43EA0223 		orr	r3, r3, r2, lsl #8
  369              	.LVL42:
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 11
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 11
 
 
  370 008e 43F38D0B 		sbfx	fp, r3, #2, #14
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  419              	.LVL54:
  420 00ea 24B2     		sxth	r4, r4
  421 00ec 2046     		mov	r0, r4
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 12
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 12
 
 
  422 00ee FFF7FEFF 		bl	__aeabi_i2f
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  461              	.LVL58:
  462 012c 6060     		str	r0, [r4, #4]	@ float
  222:accel_mag.c   ****         accel.z *= ACCEL_MG_LSB_2G * SENSORS_GRAVITY_STANDARD;
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 13
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 13
 
 
  463              		.loc 1 222 0
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  233:accel_mag.c   ****         accel.z *= ACCEL_MG_LSB_8G * SENSORS_GRAVITY_STANDARD;
  507              		.loc 1 233 0
  508 0172 1249     		ldr	r1, .L26+24
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 14
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 14
 
 
  509 0174 4046     		mov	r0, r8
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  534 019c 0120     		movs	r0, #1
  535 019e 0DB0     		add	sp, sp, #52
  536              		.cfi_def_cfa_offset 36
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 15
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 15
 
 
  537              		@ sp needed
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  583              		.loc 1 270 0
  584 0010 5A68     		ldr	r2, [r3, #4]	@ float
  585 0012 6A60     		str	r2, [r5, #4]	@ float
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 16
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 16
 
 
  271:accel_mag.c   ****      _acceleration->z = accel.z;
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  630              		.loc 1 280 0
  631 0008 034B     		ldr	r3, .L34
  632 000a 1A68     		ldr	r2, [r3]	@ float
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 17
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 17
 
 
  633 000c 2260     		str	r2, [r4]	@ float
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  678 0012 9B68     		ldr	r3, [r3, #8]	@ float
  679 0014 A360     		str	r3, [r4, #8]	@ float
  680 0016 10BD     		pop	{r4, pc}
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 18
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 18
 
 
  681              	.LVL78:
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  301:accel_mag.c   **** */
  302:accel_mag.c   **** int16_t accel_getX(void){
  724              		.loc 1 302 0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 19
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 19
 
 
  725              		.cfi_startproc
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  773              	.L48:
  774 0010 00000000 		.word	accel
  775              		.cfi_endproc
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 20
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 20
 
 
  776              	.LFE72:
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  824              		.cfi_offset 14, -4
  315:accel_mag.c   ****     return (mag.x);
  825              		.loc 1 315 0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 21
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 21
 
 
  826 0002 034B     		ldr	r3, .L56
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  875              		.thumb_func
  876              		.type	mag_getZ, %function
  877              	mag_getZ:
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 22
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 22
 
 
  878              	.LFB76:
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  924              		.size	_range, 1
  925              	_range:
  926 0000 00       		.space	1
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 23
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 23
 
 
  927              		.text
@@ -1345,32 +1345,32 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  948 000c 06020000 		.4byte	.LASF140
  949 0010 0C       		.byte	0xc
  950 0011 DD010000 		.4byte	.LASF141
- 951 0015 B4050000 		.4byte	.LASF142
+ 951 0015 94020000 		.4byte	.LASF142
  952 0019 00000000 		.4byte	.Ldebug_ranges0+0
  953 001d 00000000 		.4byte	0
  954 0021 00000000 		.4byte	.Ldebug_line0
  955 0025 02       		.uleb128 0x2
  956 0026 01       		.byte	0x1
  957 0027 06       		.byte	0x6
- 958 0028 1E080000 		.4byte	.LASF0
+ 958 0028 36080000 		.4byte	.LASF0
  959 002c 03       		.uleb128 0x3
- 960 002d 39060000 		.4byte	.LASF2
+ 960 002d 51060000 		.4byte	.LASF2
  961 0031 02       		.byte	0x2
  962 0032 1D       		.byte	0x1d
  963 0033 37000000 		.4byte	0x37
  964 0037 02       		.uleb128 0x2
  965 0038 01       		.byte	0x1
  966 0039 08       		.byte	0x8
- 967 003a 96070000 		.4byte	.LASF1
+ 967 003a AE070000 		.4byte	.LASF1
  968 003e 03       		.uleb128 0x3
- 969 003f 38040000 		.4byte	.LASF3
+ 969 003f 97040000 		.4byte	.LASF3
  970 0043 02       		.byte	0x2
  971 0044 29       		.byte	0x29
  972 0045 49000000 		.4byte	0x49
  973 0049 02       		.uleb128 0x2
  974 004a 02       		.byte	0x2
  975 004b 05       		.byte	0x5
- 976 004c 4F050000 		.4byte	.LASF4
+ 976 004c AE050000 		.4byte	.LASF4
  977 0050 03       		.uleb128 0x3
  978 0051 BD010000 		.4byte	.LASF5
  979 0055 02       		.byte	0x2
@@ -1378,11 +1378,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  981 0057 5B000000 		.4byte	0x5b
  982 005b 02       		.uleb128 0x2
  983 005c 02       		.byte	0x2
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 24
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 24
 
 
  984 005d 07       		.byte	0x7
- 985 005e 2A080000 		.4byte	.LASF6
+ 985 005e 42080000 		.4byte	.LASF6
  986 0062 03       		.uleb128 0x3
  987 0063 F8000000 		.4byte	.LASF7
  988 0067 02       		.byte	0x2
@@ -1391,20 +1391,20 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  991 006d 02       		.uleb128 0x2
  992 006e 04       		.byte	0x4
  993 006f 05       		.byte	0x5
- 994 0070 68050000 		.4byte	.LASF8
+ 994 0070 C7050000 		.4byte	.LASF8
  995 0074 03       		.uleb128 0x3
- 996 0075 B5070000 		.4byte	.LASF9
+ 996 0075 CD070000 		.4byte	.LASF9
  997 0079 02       		.byte	0x2
  998 007a 41       		.byte	0x41
  999 007b 7F000000 		.4byte	0x7f
  1000 007f 02       		.uleb128 0x2
  1001 0080 04       		.byte	0x4
  1002 0081 07       		.byte	0x7
- 1003 0082 89060000 		.4byte	.LASF10
+ 1003 0082 A1060000 		.4byte	.LASF10
  1004 0086 02       		.uleb128 0x2
  1005 0087 08       		.byte	0x8
  1006 0088 05       		.byte	0x5
- 1007 0089 DA030000 		.4byte	.LASF11
+ 1007 0089 39040000 		.4byte	.LASF11
  1008 008d 02       		.uleb128 0x2
  1009 008e 08       		.byte	0x8
  1010 008f 07       		.byte	0x7
@@ -1418,7 +1418,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1018 009d 07       		.byte	0x7
  1019 009e AA000000 		.4byte	.LASF13
  1020 00a2 03       		.uleb128 0x3
- 1021 00a3 99030000 		.4byte	.LASF14
+ 1021 00a3 F8030000 		.4byte	.LASF14
  1022 00a7 03       		.byte	0x3
  1023 00a8 18       		.byte	0x18
  1024 00a9 2C000000 		.4byte	0x2c
@@ -1428,17 +1428,17 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1028 00b3 20       		.byte	0x20
  1029 00b4 3E000000 		.4byte	0x3e
  1030 00b8 03       		.uleb128 0x3
- 1031 00b9 E2040000 		.4byte	.LASF16
+ 1031 00b9 41050000 		.4byte	.LASF16
  1032 00bd 03       		.byte	0x3
  1033 00be 24       		.byte	0x24
  1034 00bf 50000000 		.4byte	0x50
  1035 00c3 03       		.uleb128 0x3
- 1036 00c4 B9060000 		.4byte	.LASF17
+ 1036 00c4 D1060000 		.4byte	.LASF17
  1037 00c8 03       		.byte	0x3
  1038 00c9 2C       		.byte	0x2c
  1039 00ca 62000000 		.4byte	0x62
  1040 00ce 03       		.uleb128 0x3
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 25
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 25
 
 
  1041 00cf 59010000 		.4byte	.LASF18
@@ -1452,67 +1452,67 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1049 00e0 17       		.byte	0x17
  1050 00e1 76010000 		.4byte	0x176
  1051 00e5 06       		.uleb128 0x6
- 1052 00e6 EB040000 		.4byte	.LASF19
+ 1052 00e6 4A050000 		.4byte	.LASF19
  1053 00ea 00       		.byte	0
  1054 00eb 06       		.uleb128 0x6
  1055 00ec 21010000 		.4byte	.LASF20
  1056 00f0 01       		.byte	0x1
  1057 00f1 06       		.uleb128 0x6
- 1058 00f2 58060000 		.4byte	.LASF21
+ 1058 00f2 70060000 		.4byte	.LASF21
  1059 00f6 02       		.byte	0x2
  1060 00f7 06       		.uleb128 0x6
- 1061 00f8 64070000 		.4byte	.LASF22
+ 1061 00f8 7C070000 		.4byte	.LASF22
  1062 00fc 03       		.byte	0x3
  1063 00fd 06       		.uleb128 0x6
- 1064 00fe 4D030000 		.4byte	.LASF23
+ 1064 00fe AC030000 		.4byte	.LASF23
  1065 0102 04       		.byte	0x4
  1066 0103 06       		.uleb128 0x6
- 1067 0104 A9030000 		.4byte	.LASF24
+ 1067 0104 08040000 		.4byte	.LASF24
  1068 0108 05       		.byte	0x5
  1069 0109 06       		.uleb128 0x6
  1070 010a B7000000 		.4byte	.LASF25
  1071 010e 06       		.byte	0x6
  1072 010f 06       		.uleb128 0x6
- 1073 0110 32030000 		.4byte	.LASF26
+ 1073 0110 91030000 		.4byte	.LASF26
  1074 0114 0D       		.byte	0xd
  1075 0115 06       		.uleb128 0x6
- 1076 0116 0A060000 		.4byte	.LASF27
+ 1076 0116 22060000 		.4byte	.LASF27
  1077 011a 0E       		.byte	0xe
  1078 011b 06       		.uleb128 0x6
- 1079 011c D8060000 		.4byte	.LASF28
+ 1079 011c F0060000 		.4byte	.LASF28
  1080 0120 2A       		.byte	0x2a
  1081 0121 06       		.uleb128 0x6
- 1082 0122 F4060000 		.4byte	.LASF29
+ 1082 0122 0C070000 		.4byte	.LASF29
  1083 0126 2B       		.byte	0x2b
  1084 0127 06       		.uleb128 0x6
- 1085 0128 10070000 		.4byte	.LASF30
+ 1085 0128 28070000 		.4byte	.LASF30
  1086 012c 2C       		.byte	0x2c
  1087 012d 06       		.uleb128 0x6
- 1088 012e 2C070000 		.4byte	.LASF31
+ 1088 012e 44070000 		.4byte	.LASF31
  1089 0132 2D       		.byte	0x2d
  1090 0133 06       		.uleb128 0x6
- 1091 0134 48070000 		.4byte	.LASF32
+ 1091 0134 60070000 		.4byte	.LASF32
  1092 0138 2E       		.byte	0x2e
  1093 0139 06       		.uleb128 0x6
- 1094 013a 35050000 		.4byte	.LASF33
+ 1094 013a 94050000 		.4byte	.LASF33
  1095 013e 32       		.byte	0x32
  1096 013f 06       		.uleb128 0x6
- 1097 0140 E6020000 		.4byte	.LASF34
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 26
+ 1097 0140 45030000 		.4byte	.LASF34
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 26
 
 
  1098 0144 33       		.byte	0x33
  1099 0145 06       		.uleb128 0x6
- 1100 0146 9D080000 		.4byte	.LASF35
+ 1100 0146 B5080000 		.4byte	.LASF35
  1101 014a 34       		.byte	0x34
  1102 014b 06       		.uleb128 0x6
  1103 014c 75000000 		.4byte	.LASF36
  1104 0150 35       		.byte	0x35
  1105 0151 06       		.uleb128 0x6
- 1106 0152 18050000 		.4byte	.LASF37
+ 1106 0152 77050000 		.4byte	.LASF37
  1107 0156 36       		.byte	0x36
  1108 0157 06       		.uleb128 0x6
- 1109 0158 90050000 		.4byte	.LASF38
+ 1109 0158 EF050000 		.4byte	.LASF38
  1110 015c 37       		.byte	0x37
  1111 015d 06       		.uleb128 0x6
  1112 015e E9010000 		.4byte	.LASF39
@@ -1534,17 +1534,17 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1128 017d 37       		.byte	0x37
  1129 017e 95010000 		.4byte	0x195
  1130 0182 06       		.uleb128 0x6
- 1131 0183 7E040000 		.4byte	.LASF43
+ 1131 0183 DD040000 		.4byte	.LASF43
  1132 0187 00       		.byte	0
  1133 0188 06       		.uleb128 0x6
- 1134 0189 59050000 		.4byte	.LASF44
+ 1134 0189 B8050000 		.4byte	.LASF44
  1135 018d 01       		.byte	0x1
  1136 018e 06       		.uleb128 0x6
- 1137 018f 7C080000 		.4byte	.LASF45
+ 1137 018f 94080000 		.4byte	.LASF45
  1138 0193 02       		.byte	0x2
  1139 0194 00       		.byte	0
  1140 0195 03       		.uleb128 0x3
- 1141 0196 3D080000 		.4byte	.LASF46
+ 1141 0196 55080000 		.4byte	.LASF46
  1142 019a 04       		.byte	0x4
  1143 019b 3B       		.byte	0x3b
  1144 019c 76010000 		.4byte	0x176
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1152 01ab 04       		.byte	0x4
  1153 01ac 43       		.byte	0x43
  1154 01ad AD000000 		.4byte	0xad
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 27
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 27
 
 
  1155 01b1 00       		.byte	0
@@ -1576,7 +1576,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1167 01c5 04       		.byte	0x4
  1168 01c6 00       		.byte	0
  1169 01c7 03       		.uleb128 0x3
- 1170 01c8 C1060000 		.4byte	.LASF47
+ 1170 01c8 D9060000 		.4byte	.LASF47
  1171 01cc 04       		.byte	0x4
  1172 01cd 46       		.byte	0x46
  1173 01ce A0010000 		.4byte	0x1a0
@@ -1614,31 +1614,31 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1205 0206 4D       		.byte	0x4d
  1206 0207 D2010000 		.4byte	0x1d2
  1207 020b 09       		.uleb128 0x9
- 1208 020c 8B080000 		.4byte	.LASF50
+ 1208 020c A3080000 		.4byte	.LASF50
  1209 0210 05       		.byte	0x5
  1210 0211 9201     		.2byte	0x192
  1211 0213 37000000 		.4byte	0x37
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 28
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 28
 
 
  1212 0217 02       		.uleb128 0x2
  1213 0218 08       		.byte	0x8
  1214 0219 04       		.byte	0x4
- 1215 021a 91080000 		.4byte	.LASF51
+ 1215 021a A9080000 		.4byte	.LASF51
  1216 021e 02       		.uleb128 0x2
  1217 021f 01       		.byte	0x1
  1218 0220 08       		.byte	0x8
- 1219 0221 2D030000 		.4byte	.LASF52
+ 1219 0221 8C030000 		.4byte	.LASF52
  1220 0225 02       		.uleb128 0x2
  1221 0226 08       		.byte	0x8
  1222 0227 04       		.byte	0x4
- 1223 0228 D6040000 		.4byte	.LASF53
+ 1223 0228 35050000 		.4byte	.LASF53
  1224 022c 02       		.uleb128 0x2
  1225 022d 04       		.byte	0x4
  1226 022e 07       		.byte	0x7
- 1227 022f 80060000 		.4byte	.LASF54
+ 1227 022f 98060000 		.4byte	.LASF54
  1228 0233 0A       		.uleb128 0xa
- 1229 0234 C5030000 		.4byte	.LASF56
+ 1229 0234 24040000 		.4byte	.LASF56
  1230 0238 06       		.byte	0x6
  1231 0239 06       		.byte	0x6
  1232 023a 44       		.byte	0x44
@@ -1663,12 +1663,12 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1251 025c 04       		.byte	0x4
  1252 025d 00       		.byte	0
  1253 025e 03       		.uleb128 0x3
- 1254 025f E8030000 		.4byte	.LASF55
+ 1254 025f 47040000 		.4byte	.LASF55
  1255 0263 06       		.byte	0x6
  1256 0264 49       		.byte	0x49
  1257 0265 33020000 		.4byte	0x233
  1258 0269 0A       		.uleb128 0xa
- 1259 026a A3060000 		.4byte	.LASF57
+ 1259 026a BB060000 		.4byte	.LASF57
  1260 026e 0C       		.byte	0xc
  1261 026f 06       		.byte	0x6
  1262 0270 4B       		.byte	0x4b
@@ -1678,7 +1678,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1266 0278 06       		.byte	0x6
  1267 0279 4D       		.byte	0x4d
  1268 027a F9010000 		.4byte	0x1f9
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 29
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 29
 
 
  1269 027e 00       		.byte	0
@@ -1696,7 +1696,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1281 0292 08       		.byte	0x8
  1282 0293 00       		.byte	0
  1283 0294 03       		.uleb128 0x3
- 1284 0295 AE060000 		.4byte	.LASF58
+ 1284 0295 C6060000 		.4byte	.LASF58
  1285 0299 06       		.byte	0x6
  1286 029a 50       		.byte	0x50
  1287 029b 69020000 		.4byte	0x269
@@ -1706,13 +1706,13 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1291 02a2 34       		.byte	0x34
  1292 02a3 F0020000 		.4byte	0x2f0
  1293 02a7 0B       		.uleb128 0xb
- 1294 02a8 9B060000 		.4byte	.LASF59
+ 1294 02a8 B3060000 		.4byte	.LASF59
  1295 02ac 07       		.byte	0x7
  1296 02ad 36       		.byte	0x36
  1297 02ae CE000000 		.4byte	0xce
  1298 02b2 00       		.byte	0
  1299 02b3 0B       		.uleb128 0xb
- 1300 02b4 04050000 		.4byte	.LASF60
+ 1300 02b4 63050000 		.4byte	.LASF60
  1301 02b8 07       		.byte	0x7
  1302 02b9 37       		.byte	0x37
  1303 02ba CE000000 		.4byte	0xce
@@ -1730,15 +1730,15 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1315 02d2 C3000000 		.4byte	0xc3
  1316 02d6 10       		.byte	0x10
  1317 02d7 0B       		.uleb128 0xb
- 1318 02d8 69030000 		.4byte	.LASF63
+ 1318 02d8 C8030000 		.4byte	.LASF63
  1319 02dc 07       		.byte	0x7
  1320 02dd 3B       		.byte	0x3b
  1321 02de 17020000 		.4byte	0x217
  1322 02e2 18       		.byte	0x18
  1323 02e3 0B       		.uleb128 0xb
- 1324 02e4 AB040000 		.4byte	.LASF64
+ 1324 02e4 0A050000 		.4byte	.LASF64
  1325 02e8 07       		.byte	0x7
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 30
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 30
 
 
  1326 02e9 3C       		.byte	0x3c
@@ -1746,42 +1746,42 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1328 02ee 20       		.byte	0x20
  1329 02ef 00       		.byte	0
  1330 02f0 03       		.uleb128 0x3
- 1331 02f1 A4070000 		.4byte	.LASF65
+ 1331 02f1 BC070000 		.4byte	.LASF65
  1332 02f5 07       		.byte	0x7
  1333 02f6 3D       		.byte	0x3d
  1334 02f7 9F020000 		.4byte	0x29f
  1335 02fb 0A       		.uleb128 0xa
- 1336 02fc A1030000 		.4byte	.LASF66
+ 1336 02fc 00040000 		.4byte	.LASF66
  1337 0300 44       		.byte	0x44
  1338 0301 08       		.byte	0x8
  1339 0302 52       		.byte	0x52
  1340 0303 40040000 		.4byte	0x440
  1341 0307 0B       		.uleb128 0xb
- 1342 0308 D3020000 		.4byte	.LASF67
+ 1342 0308 32030000 		.4byte	.LASF67
  1343 030c 08       		.byte	0x8
  1344 030d 54       		.byte	0x54
  1345 030e A2000000 		.4byte	0xa2
  1346 0312 00       		.byte	0
  1347 0313 0B       		.uleb128 0xb
- 1348 0314 D3030000 		.4byte	.LASF68
+ 1348 0314 32040000 		.4byte	.LASF68
  1349 0318 08       		.byte	0x8
  1350 0319 55       		.byte	0x55
  1351 031a A2000000 		.4byte	0xa2
  1352 031e 01       		.byte	0x1
  1353 031f 0B       		.uleb128 0xb
- 1354 0320 B7040000 		.4byte	.LASF69
+ 1354 0320 16050000 		.4byte	.LASF69
  1355 0324 08       		.byte	0x8
  1356 0325 56       		.byte	0x56
  1357 0326 A2000000 		.4byte	0xa2
  1358 032a 02       		.byte	0x2
  1359 032b 0B       		.uleb128 0xb
- 1360 032c D3060000 		.4byte	.LASF70
+ 1360 032c EB060000 		.4byte	.LASF70
  1361 0330 08       		.byte	0x8
  1362 0331 57       		.byte	0x57
  1363 0332 A2000000 		.4byte	0xa2
  1364 0336 03       		.byte	0x3
  1365 0337 0B       		.uleb128 0xb
- 1366 0338 9E020000 		.4byte	.LASF71
+ 1366 0338 FD020000 		.4byte	.LASF71
  1367 033c 08       		.byte	0x8
  1368 033d 58       		.byte	0x58
  1369 033e A2000000 		.4byte	0xa2
@@ -1798,53 +1798,53 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1380 0355 5A       		.byte	0x5a
  1381 0356 B8000000 		.4byte	0xb8
  1382 035a 06       		.byte	0x6
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 31
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 31
 
 
  1383 035b 0B       		.uleb128 0xb
- 1384 035c A4020000 		.4byte	.LASF73
+ 1384 035c 03030000 		.4byte	.LASF73
  1385 0360 08       		.byte	0x8
  1386 0361 5B       		.byte	0x5b
  1387 0362 F9010000 		.4byte	0x1f9
  1388 0366 08       		.byte	0x8
  1389 0367 0B       		.uleb128 0xb
- 1390 0368 03030000 		.4byte	.LASF74
+ 1390 0368 62030000 		.4byte	.LASF74
  1391 036c 08       		.byte	0x8
  1392 036d 5C       		.byte	0x5c
  1393 036e F9010000 		.4byte	0x1f9
  1394 0372 0C       		.byte	0xc
  1395 0373 0B       		.uleb128 0xb
- 1396 0374 07040000 		.4byte	.LASF75
+ 1396 0374 66040000 		.4byte	.LASF75
  1397 0378 08       		.byte	0x8
  1398 0379 5D       		.byte	0x5d
  1399 037a C3000000 		.4byte	0xc3
  1400 037e 10       		.byte	0x10
  1401 037f 0B       		.uleb128 0xb
- 1402 0380 6E040000 		.4byte	.LASF76
+ 1402 0380 CD040000 		.4byte	.LASF76
  1403 0384 08       		.byte	0x8
  1404 0385 5E       		.byte	0x5e
  1405 0386 C3000000 		.4byte	0xc3
  1406 038a 14       		.byte	0x14
  1407 038b 0B       		.uleb128 0xb
- 1408 038c 43060000 		.4byte	.LASF77
+ 1408 038c 5B060000 		.4byte	.LASF77
  1409 0390 08       		.byte	0x8
  1410 0391 5F       		.byte	0x5f
  1411 0392 F9010000 		.4byte	0x1f9
  1412 0396 18       		.byte	0x18
  1413 0397 0B       		.uleb128 0xb
- 1414 0398 C0070000 		.4byte	.LASF78
+ 1414 0398 D8070000 		.4byte	.LASF78
  1415 039c 08       		.byte	0x8
  1416 039d 60       		.byte	0x60
  1417 039e F9010000 		.4byte	0x1f9
  1418 03a2 1C       		.byte	0x1c
  1419 03a3 0B       		.uleb128 0xb
- 1420 03a4 74060000 		.4byte	.LASF79
+ 1420 03a4 8C060000 		.4byte	.LASF79
  1421 03a8 08       		.byte	0x8
  1422 03a9 61       		.byte	0x61
  1423 03aa F9010000 		.4byte	0x1f9
  1424 03ae 20       		.byte	0x20
  1425 03af 0B       		.uleb128 0xb
- 1426 03b0 8D040000 		.4byte	.LASF80
+ 1426 03b0 EC040000 		.4byte	.LASF80
  1427 03b4 08       		.byte	0x8
  1428 03b5 62       		.byte	0x62
  1429 03b6 F9010000 		.4byte	0x1f9
@@ -1856,22 +1856,22 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1435 03c2 F9010000 		.4byte	0x1f9
  1436 03c6 28       		.byte	0x28
  1437 03c7 0B       		.uleb128 0xb
- 1438 03c8 12050000 		.4byte	.LASF82
+ 1438 03c8 71050000 		.4byte	.LASF82
  1439 03cc 08       		.byte	0x8
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 32
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 32
 
 
  1440 03cd 64       		.byte	0x64
  1441 03ce F9010000 		.4byte	0x1f9
  1442 03d2 2C       		.byte	0x2c
  1443 03d3 0B       		.uleb128 0xb
- 1444 03d4 20030000 		.4byte	.LASF83
+ 1444 03d4 7F030000 		.4byte	.LASF83
  1445 03d8 08       		.byte	0x8
  1446 03d9 65       		.byte	0x65
  1447 03da F9010000 		.4byte	0x1f9
  1448 03de 30       		.byte	0x30
  1449 03df 0B       		.uleb128 0xb
- 1450 03e0 99020000 		.4byte	.LASF84
+ 1450 03e0 F8020000 		.4byte	.LASF84
  1451 03e4 08       		.byte	0x8
  1452 03e5 66       		.byte	0x66
  1453 03e6 F9010000 		.4byte	0x1f9
@@ -1901,34 +1901,34 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1477 0416 A2000000 		.4byte	0xa2
  1478 041a 3B       		.byte	0x3b
  1479 041b 0B       		.uleb128 0xb
- 1480 041c 13080000 		.4byte	.LASF85
+ 1480 041c 2B080000 		.4byte	.LASF85
  1481 0420 08       		.byte	0x8
  1482 0421 6B       		.byte	0x6b
  1483 0422 A2000000 		.4byte	0xa2
  1484 0426 3C       		.byte	0x3c
  1485 0427 0B       		.uleb128 0xb
- 1486 0428 EE070000 		.4byte	.LASF86
+ 1486 0428 06080000 		.4byte	.LASF86
  1487 042c 08       		.byte	0x8
  1488 042d 6C       		.byte	0x6c
  1489 042e A2000000 		.4byte	0xa2
  1490 0432 3D       		.byte	0x3d
  1491 0433 0B       		.uleb128 0xb
- 1492 0434 6C080000 		.4byte	.LASF87
+ 1492 0434 84080000 		.4byte	.LASF87
  1493 0438 08       		.byte	0x8
  1494 0439 6D       		.byte	0x6d
  1495 043a CE000000 		.4byte	0xce
  1496 043e 40       		.byte	0x40
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 33
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 33
 
 
  1497 043f 00       		.byte	0
  1498 0440 03       		.uleb128 0x3
- 1499 0441 2E040000 		.4byte	.LASF88
+ 1499 0441 8D040000 		.4byte	.LASF88
  1500 0445 08       		.byte	0x8
  1501 0446 6E       		.byte	0x6e
  1502 0447 FB020000 		.4byte	0x2fb
  1503 044b 0C       		.uleb128 0xc
- 1504 044c F6030000 		.4byte	.LASF94
+ 1504 044c 55040000 		.4byte	.LASF94
  1505 0450 01       		.byte	0x1
  1506 0451 2D       		.byte	0x2d
  1507 0452 00000000 		.4byte	.LFB63
@@ -1949,7 +1949,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1522 0476 A2000000 		.4byte	0xa2
  1523 047a 2D000000 		.4byte	.LLST1
  1524 047e 0F       		.uleb128 0xf
- 1525 047f 00060000 		.4byte	.LASF90
+ 1525 047f 18060000 		.4byte	.LASF90
  1526 0483 01       		.byte	0x1
  1527 0484 33       		.byte	0x33
  1528 0485 B9040000 		.4byte	0x4b9
@@ -1978,7 +1978,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1551 04a8 32       		.byte	0x32
  1552 04a9 11       		.uleb128 0x11
  1553 04aa 01       		.uleb128 0x1
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 34
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 34
 
 
  1554 04ab 53       		.byte	0x53
@@ -1997,7 +1997,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1567 04c7 01       		.byte	0x1
  1568 04c8 00       		.byte	0
  1569 04c9 15       		.uleb128 0x15
- 1570 04ca 29060000 		.4byte	.LASF92
+ 1570 04ca 41060000 		.4byte	.LASF92
  1571 04ce 01       		.byte	0x1
  1572 04cf 3D       		.byte	0x3d
  1573 04d0 A2000000 		.4byte	0xa2
@@ -2013,7 +2013,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1583 04e9 A2000000 		.4byte	0xa2
  1584 04ed 5A000000 		.4byte	.LLST2
  1585 04f1 0F       		.uleb128 0xf
- 1586 04f2 00060000 		.4byte	.LASF90
+ 1586 04f2 18060000 		.4byte	.LASF90
  1587 04f6 01       		.byte	0x1
  1588 04f7 43       		.byte	0x43
  1589 04f8 66050000 		.4byte	0x566
@@ -2038,7 +2038,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1608 051d 01       		.uleb128 0x1
  1609 051e 4F       		.byte	0x4f
  1610 051f 11       		.uleb128 0x11
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 35
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 35
 
 
  1611 0520 01       		.uleb128 0x1
@@ -2098,7 +2098,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1665 0574 00       		.byte	0
  1666 0575 00       		.byte	0
  1667 0576 13       		.uleb128 0x13
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 36
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 36
 
 
  1668 0577 0B020000 		.4byte	0x20b
@@ -2158,7 +2158,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1722 05f4 4B040000 		.4byte	0x44b
  1723 05f8 08060000 		.4byte	0x608
  1724 05fc 11       		.uleb128 0x11
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 37
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 37
 
 
  1725 05fd 01       		.uleb128 0x1
@@ -2218,7 +2218,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1779 064e 32       		.byte	0x32
  1780 064f 00       		.byte	0
  1781 0650 10       		.uleb128 0x10
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 38
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 38
 
 
  1782 0651 6E000000 		.4byte	.LVL22
@@ -2278,7 +2278,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1836 06a8 08       		.byte	0x8
  1837 06a9 5C       		.byte	0x5c
  1838 06aa 11       		.uleb128 0x11
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 39
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 39
 
 
  1839 06ab 01       		.uleb128 0x1
@@ -2289,7 +2289,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1844 06b0 00       		.byte	0
  1845 06b1 00       		.byte	0
  1846 06b2 18       		.uleb128 0x18
- 1847 06b3 42040000 		.4byte	.LASF95
+ 1847 06b3 A1040000 		.4byte	.LASF95
  1848 06b7 01       		.byte	0x1
  1849 06b8 8C       		.byte	0x8c
  1850 06b9 A2000000 		.4byte	0xa2
@@ -2299,7 +2299,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1854 06c6 9C       		.byte	0x9c
  1855 06c7 F4070000 		.4byte	0x7f4
  1856 06cb 0F       		.uleb128 0xf
- 1857 06cc 00060000 		.4byte	.LASF90
+ 1857 06cc 18060000 		.4byte	.LASF90
  1858 06d0 01       		.byte	0x1
  1859 06d1 A9       		.byte	0xa9
  1860 06d2 66050000 		.4byte	0x566
@@ -2321,28 +2321,28 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1876 06ee A2000000 		.4byte	0xa2
  1877 06f2 D0000000 		.4byte	.LLST5
  1878 06f6 19       		.uleb128 0x19
- 1879 06f7 94020000 		.4byte	.LASF97
+ 1879 06f7 F3020000 		.4byte	.LASF97
  1880 06fb 01       		.byte	0x1
  1881 06fc BB       		.byte	0xbb
  1882 06fd A2000000 		.4byte	0xa2
  1883 0701 E3000000 		.4byte	.LLST6
  1884 0705 19       		.uleb128 0x19
- 1885 0706 94030000 		.4byte	.LASF98
+ 1885 0706 F3030000 		.4byte	.LASF98
  1886 070a 01       		.byte	0x1
  1887 070b BC       		.byte	0xbc
  1888 070c A2000000 		.4byte	0xa2
  1889 0710 02010000 		.4byte	.LLST7
  1890 0714 19       		.uleb128 0x19
- 1891 0715 FB050000 		.4byte	.LASF99
+ 1891 0715 13060000 		.4byte	.LASF99
  1892 0719 01       		.byte	0x1
  1893 071a BD       		.byte	0xbd
  1894 071b A2000000 		.4byte	0xa2
  1895 071f 15010000 		.4byte	.LLST8
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 40
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 40
 
 
  1896 0723 19       		.uleb128 0x19
- 1897 0724 D1070000 		.4byte	.LASF100
+ 1897 0724 E9070000 		.4byte	.LASF100
  1898 0728 01       		.byte	0x1
  1899 0729 BE       		.byte	0xbe
  1900 072a A2000000 		.4byte	0xa2
@@ -2354,7 +2354,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1906 0739 A2000000 		.4byte	0xa2
  1907 073d 3B010000 		.4byte	.LLST10
  1908 0741 19       		.uleb128 0x19
- 1909 0742 98080000 		.4byte	.LASF102
+ 1909 0742 B0080000 		.4byte	.LASF102
  1910 0746 01       		.byte	0x1
  1911 0747 C0       		.byte	0xc0
  1912 0748 A2000000 		.4byte	0xa2
@@ -2366,19 +2366,19 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1918 0757 A2000000 		.4byte	0xa2
  1919 075b 61010000 		.4byte	.LLST12
  1920 075f 19       		.uleb128 0x19
- 1921 0760 CE020000 		.4byte	.LASF104
+ 1921 0760 2D030000 		.4byte	.LASF104
  1922 0764 01       		.byte	0x1
  1923 0765 C2       		.byte	0xc2
  1924 0766 A2000000 		.4byte	0xa2
  1925 076a 74010000 		.4byte	.LLST13
  1926 076e 19       		.uleb128 0x19
- 1927 076f 0D050000 		.4byte	.LASF105
+ 1927 076f 6C050000 		.4byte	.LASF105
  1928 0773 01       		.byte	0x1
  1929 0774 C3       		.byte	0xc3
  1930 0775 A2000000 		.4byte	0xa2
  1931 0779 88010000 		.4byte	.LLST14
  1932 077d 19       		.uleb128 0x19
- 1933 077e 53060000 		.4byte	.LASF106
+ 1933 077e 6B060000 		.4byte	.LASF106
  1934 0782 01       		.byte	0x1
  1935 0783 C4       		.byte	0xc4
  1936 0784 A2000000 		.4byte	0xa2
@@ -2398,7 +2398,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  1950 07aa 50       		.byte	0x50
  1951 07ab 01       		.uleb128 0x1
  1952 07ac 4F       		.byte	0x4f
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 41
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 41
 
 
  1953 07ad 11       		.uleb128 0x11
@@ -2458,11 +2458,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2007 07fe 2C020000 		.4byte	0x22c
  2008 0802 0D       		.byte	0xd
  2009 0803 00       		.byte	0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 42
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 42
 
 
  2010 0804 1A       		.uleb128 0x1a
- 2011 0805 0D030000 		.4byte	.LASF108
+ 2011 0805 6C030000 		.4byte	.LASF108
  2012 0809 01       		.byte	0x1
  2013 080a 0801     		.2byte	0x108
  2014 080c 00000000 		.4byte	.LFB67
@@ -2471,7 +2471,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2017 0815 9C       		.byte	0x9c
  2018 0816 44080000 		.4byte	0x844
  2019 081a 1B       		.uleb128 0x1b
- 2020 081b D8020000 		.4byte	.LASF109
+ 2020 081b 37030000 		.4byte	.LASF109
  2021 081f 01       		.byte	0x1
  2022 0820 0801     		.2byte	0x108
  2023 0822 44080000 		.4byte	0x844
@@ -2490,7 +2490,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2036 0845 04       		.byte	0x4
  2037 0846 00020000 		.4byte	0x200
  2038 084a 1A       		.uleb128 0x1a
- 2039 084b BF040000 		.4byte	.LASF111
+ 2039 084b 1E050000 		.4byte	.LASF111
  2040 084f 01       		.byte	0x1
  2041 0850 1601     		.2byte	0x116
  2042 0852 00000000 		.4byte	.LFB68
@@ -2499,7 +2499,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2045 085b 9C       		.byte	0x9c
  2046 085c 7A080000 		.4byte	0x87a
  2047 0860 1B       		.uleb128 0x1b
- 2048 0861 D8020000 		.4byte	.LASF109
+ 2048 0861 37030000 		.4byte	.LASF109
  2049 0865 01       		.byte	0x1
  2050 0866 1601     		.2byte	0x116
  2051 0868 44080000 		.4byte	0x844
@@ -2518,7 +2518,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2064 088b 9C       		.byte	0x9c
  2065 088c AA080000 		.4byte	0x8aa
  2066 0890 1B       		.uleb128 0x1b
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 43
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 43
 
 
  2067 0891 71010000 		.4byte	.LASF110
@@ -2557,7 +2557,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2100 08e9 86050000 		.4byte	0x586
  2101 08ed 00       		.byte	0
  2102 08ee 20       		.uleb128 0x20
- 2103 08ef AD020000 		.4byte	.LASF114
+ 2103 08ef 0C030000 		.4byte	.LASF114
  2104 08f3 01       		.byte	0x1
  2105 08f4 2E01     		.2byte	0x12e
  2106 08f6 AD000000 		.4byte	0xad
@@ -2566,7 +2566,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2109 0902 01       		.uleb128 0x1
  2110 0903 9C       		.byte	0x9c
  2111 0904 20       		.uleb128 0x20
- 2112 0905 B8020000 		.4byte	.LASF115
+ 2112 0905 17030000 		.4byte	.LASF115
  2113 0909 01       		.byte	0x1
  2114 090a 3201     		.2byte	0x132
  2115 090c AD000000 		.4byte	0xad
@@ -2575,10 +2575,10 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2118 0918 01       		.uleb128 0x1
  2119 0919 9C       		.byte	0x9c
  2120 091a 20       		.uleb128 0x20
- 2121 091b C3020000 		.4byte	.LASF116
+ 2121 091b 22030000 		.4byte	.LASF116
  2122 091f 01       		.byte	0x1
  2123 0920 3601     		.2byte	0x136
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 44
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 44
 
 
  2124 0922 AD000000 		.4byte	0xad
@@ -2587,7 +2587,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2127 092e 01       		.uleb128 0x1
  2128 092f 9C       		.byte	0x9c
  2129 0930 20       		.uleb128 0x20
- 2130 0931 53040000 		.4byte	.LASF117
+ 2130 0931 B2040000 		.4byte	.LASF117
  2131 0935 01       		.byte	0x1
  2132 0936 3A01     		.2byte	0x13a
  2133 0938 AD000000 		.4byte	0xad
@@ -2596,7 +2596,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2136 0944 01       		.uleb128 0x1
  2137 0945 9C       		.byte	0x9c
  2138 0946 20       		.uleb128 0x20
- 2139 0947 5C040000 		.4byte	.LASF118
+ 2139 0947 BB040000 		.4byte	.LASF118
  2140 094b 01       		.byte	0x1
  2141 094c 3E01     		.2byte	0x13e
  2142 094e AD000000 		.4byte	0xad
@@ -2605,7 +2605,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2145 095a 01       		.uleb128 0x1
  2146 095b 9C       		.byte	0x9c
  2147 095c 20       		.uleb128 0x20
- 2148 095d 65040000 		.4byte	.LASF119
+ 2148 095d C4040000 		.4byte	.LASF119
  2149 0961 01       		.byte	0x1
  2150 0962 4201     		.2byte	0x142
  2151 0964 AD000000 		.4byte	0xad
@@ -2614,7 +2614,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2154 0970 01       		.uleb128 0x1
  2155 0971 9C       		.byte	0x9c
  2156 0972 0F       		.uleb128 0xf
- 2157 0973 AD050000 		.4byte	.LASF120
+ 2157 0973 0C060000 		.4byte	.LASF120
  2158 0977 01       		.byte	0x1
  2159 0978 0F       		.byte	0xf
  2160 0979 95010000 		.4byte	0x195
@@ -2622,7 +2622,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2162 097e 03       		.byte	0x3
  2163 097f 00000000 		.4byte	_range
  2164 0983 21       		.uleb128 0x21
- 2165 0984 83050000 		.4byte	.LASF121
+ 2165 0984 E2050000 		.4byte	.LASF121
  2166 0988 09       		.byte	0x9
  2167 0989 1207     		.2byte	0x712
  2168 098b 8F090000 		.4byte	0x98f
@@ -2637,8 +2637,8 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2177 09a0 03       		.byte	0x3
  2178 09a1 00000000 		.4byte	accel_raw
  2179 09a5 23       		.uleb128 0x23
- 2180 09a6 CE040000 		.4byte	.LASF123
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 45
+ 2180 09a6 2D050000 		.4byte	.LASF123
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 45
 
 
  2181 09aa 0A       		.byte	0xa
@@ -2672,7 +2672,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2209 09e4 03       		.byte	0x3
  2210 09e5 00000000 		.4byte	gyro_raw
  2211 09e9 23       		.uleb128 0x23
- 2212 09ea B2040000 		.4byte	.LASF126
+ 2212 09ea 11050000 		.4byte	.LASF126
  2213 09ee 0A       		.byte	0xa
  2214 09ef 19       		.byte	0x19
  2215 09f0 94020000 		.4byte	0x294
@@ -2680,7 +2680,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2217 09f5 03       		.byte	0x3
  2218 09f6 00000000 		.4byte	gyro
  2219 09fa 23       		.uleb128 0x23
- 2220 09fb 81030000 		.4byte	.LASF127
+ 2220 09fb E0030000 		.4byte	.LASF127
  2221 09ff 0A       		.byte	0xa
  2222 0a00 1E       		.byte	0x1e
  2223 0a01 C3000000 		.4byte	0xc3
@@ -2688,7 +2688,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2225 0a06 03       		.byte	0x3
  2226 0a07 00000000 		.4byte	reference_pressure
  2227 0a0b 23       		.uleb128 0x23
- 2228 0a0c D6070000 		.4byte	.LASF128
+ 2228 0a0c EE070000 		.4byte	.LASF128
  2229 0a10 0A       		.byte	0xa
  2230 0a11 21       		.byte	0x21
  2231 0a12 CE000000 		.4byte	0xce
@@ -2696,9 +2696,9 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2233 0a17 03       		.byte	0x3
  2234 0a18 00000000 		.4byte	initial_raw_temperature
  2235 0a1c 23       		.uleb128 0x23
- 2236 0a1d 96040000 		.4byte	.LASF129
+ 2236 0a1d F5040000 		.4byte	.LASF129
  2237 0a21 0A       		.byte	0xa
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 46
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 46
 
 
  2238 0a22 22       		.byte	0x22
@@ -2707,7 +2707,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2241 0a28 03       		.byte	0x3
  2242 0a29 00000000 		.4byte	initial_raw_pressure
  2243 0a2d 23       		.uleb128 0x23
- 2244 0a2e 16040000 		.4byte	.LASF130
+ 2244 0a2e 75040000 		.4byte	.LASF130
  2245 0a32 0A       		.byte	0xa
  2246 0a33 25       		.byte	0x25
  2247 0a34 17020000 		.4byte	0x217
@@ -2715,7 +2715,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2249 0a39 03       		.byte	0x3
  2250 0a3a 00000000 		.4byte	initial_real_temprature
  2251 0a3e 23       		.uleb128 0x23
- 2252 0a3f 80070000 		.4byte	.LASF131
+ 2252 0a3f 98070000 		.4byte	.LASF131
  2253 0a43 0A       		.byte	0xa
  2254 0a44 26       		.byte	0x26
  2255 0a45 C3000000 		.4byte	0xc3
@@ -2723,7 +2723,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2257 0a4a 03       		.byte	0x3
  2258 0a4b 00000000 		.4byte	initial_real_pressure
  2259 0a4f 23       		.uleb128 0x23
- 2260 0a50 52080000 		.4byte	.LASF132
+ 2260 0a50 6A080000 		.4byte	.LASF132
  2261 0a54 0A       		.byte	0xa
  2262 0a55 2A       		.byte	0x2a
  2263 0a56 17020000 		.4byte	0x217
@@ -2731,7 +2731,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2265 0a5b 03       		.byte	0x3
  2266 0a5c 00000000 		.4byte	initial_absolute_altitude
  2267 0a60 23       		.uleb128 0x23
- 2268 0a61 F9070000 		.4byte	.LASF133
+ 2268 0a61 11080000 		.4byte	.LASF133
  2269 0a65 0A       		.byte	0xa
  2270 0a66 2B       		.byte	0x2b
  2271 0a67 17020000 		.4byte	0x217
@@ -2758,18 +2758,18 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2292 0a94 46010000 		.4byte	.LASF135
  2293 0a98 46010000 		.4byte	.LASF135
  2294 0a9c 0B       		.byte	0xb
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 47
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 47
 
 
  2295 0a9d A7       		.byte	0xa7
  2296 0a9e 25       		.uleb128 0x25
- 2297 0a9f 70030000 		.4byte	.LASF136
- 2298 0aa3 70030000 		.4byte	.LASF136
+ 2297 0a9f CF030000 		.4byte	.LASF136
+ 2298 0aa3 CF030000 		.4byte	.LASF136
  2299 0aa7 0B       		.byte	0xb
  2300 0aa8 A3       		.byte	0xa3
  2301 0aa9 25       		.uleb128 0x25
- 2302 0aaa 71050000 		.4byte	.LASF137
- 2303 0aae 71050000 		.4byte	.LASF137
+ 2302 0aaa D0050000 		.4byte	.LASF137
+ 2303 0aae D0050000 		.4byte	.LASF137
  2304 0ab2 0B       		.byte	0xb
  2305 0ab3 A9       		.byte	0xa9
  2306 0ab4 25       		.uleb128 0x25
@@ -2818,7 +2818,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2349 001e 03       		.uleb128 0x3
  2350 001f 16       		.uleb128 0x16
  2351 0020 00       		.byte	0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 48
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 48
 
 
  2352 0021 03       		.uleb128 0x3
@@ -2878,7 +2878,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2406 0057 01       		.uleb128 0x1
  2407 0058 13       		.uleb128 0x13
  2408 0059 00       		.byte	0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 49
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 49
 
 
  2409 005a 00       		.byte	0
@@ -2938,7 +2938,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2463 0090 13       		.uleb128 0x13
  2464 0091 38       		.uleb128 0x38
  2465 0092 0B       		.uleb128 0xb
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 50
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 50
 
 
  2466 0093 00       		.byte	0
@@ -2998,7 +2998,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2520 00ca 17       		.uleb128 0x17
  2521 00cb 00       		.byte	0
  2522 00cc 00       		.byte	0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 51
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 51
 
 
  2523 00cd 0F       		.uleb128 0xf
@@ -3058,7 +3058,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2577 010a 21       		.uleb128 0x21
  2578 010b 00       		.byte	0
  2579 010c 49       		.uleb128 0x49
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 52
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 52
 
 
  2580 010d 13       		.uleb128 0x13
@@ -3118,7 +3118,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2634 0146 00       		.byte	0
  2635 0147 00       		.byte	0
  2636 0148 18       		.uleb128 0x18
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 53
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 53
 
 
  2637 0149 2E       		.uleb128 0x2e
@@ -3178,7 +3178,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2691 0180 12       		.uleb128 0x12
  2692 0181 06       		.uleb128 0x6
  2693 0182 40       		.uleb128 0x40
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 54
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 54
 
 
  2694 0183 18       		.uleb128 0x18
@@ -3238,7 +3238,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2748 01bb 01       		.uleb128 0x1
  2749 01bc 13       		.uleb128 0x13
  2750 01bd 00       		.byte	0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 55
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 55
 
 
  2751 01be 00       		.byte	0
@@ -3298,7 +3298,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2805 01f5 00       		.byte	0
  2806 01f6 00       		.byte	0
  2807 01f7 21       		.uleb128 0x21
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 56
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 56
 
 
  2808 01f8 34       		.uleb128 0x34
@@ -3358,7 +3358,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2862 022e 18       		.uleb128 0x18
  2863 022f 00       		.byte	0
  2864 0230 00       		.byte	0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 57
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 57
 
 
  2865 0231 25       		.uleb128 0x25
@@ -3418,7 +3418,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2919 0050 51       		.byte	0x51
  2920 0051 9F       		.byte	0x9f
  2921 0052 00000000 		.4byte	0
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 58
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 58
 
 
  2922 0056 00000000 		.4byte	0
@@ -3478,7 +3478,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  2976 00cc 00000000 		.4byte	0
  2977              	.LLST5:
  2978 00d0 56000000 		.4byte	.LVL30
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 59
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 59
 
 
  2979 00d4 97000000 		.4byte	.LVL43-1
@@ -3538,7 +3538,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  3033 0165 EA000000 		.4byte	.LVL54
  3034 0169 0100     		.2byte	0x1
  3035 016b 54       		.byte	0x54
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 60
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 60
 
 
  3036 016c 00000000 		.4byte	0
@@ -3598,7 +3598,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  3090 01fb 30000000 		.4byte	.LFE67
  3091 01ff 0400     		.2byte	0x4
  3092 0201 F3       		.byte	0xf3
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 61
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 61
 
 
  3093 0202 01       		.uleb128 0x1
@@ -3658,7 +3658,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  3147 0286 01       		.uleb128 0x1
  3148 0287 50       		.byte	0x50
  3149 0288 9F       		.byte	0x9f
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 62
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 62
 
 
  3150 0289 00000000 		.4byte	0
@@ -3718,7 +3718,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  3204 0058 00000000 		.4byte	.LFB72
  3205 005c 14000000 		.4byte	.LFE72-.LFB72
  3206 0060 00000000 		.4byte	.LFB73
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 63
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 63
 
 
  3207 0064 14000000 		.4byte	.LFE73-.LFB73
@@ -3778,7 +3778,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  3254 000d 46584F53 		.ascii	"FXOS8700_REGISTER_MCTRL_REG1\000"
  3254      38373030 
  3254      5F524547 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 64
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 64
 
 
  3254      49535445 
@@ -3838,7 +3838,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  3277              	.LASF113:
  3278 00e3 61636365 		.ascii	"accel_mag_initialize\000"
  3278      6C5F6D61 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 65
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 65
 
 
  3278      675F696E 
@@ -3898,7 +3898,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  3304      365F7400 
  3305              	.LASF12:
  3306 0183 6C6F6E67 		.ascii	"long long unsigned int\000"
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 66
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 66
 
 
  3306      206C6F6E 
@@ -3958,517 +3958,518 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 1
  3328      74696F6E 
  3328      2D736563 
  3328      74696F6E 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 67
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 67
 
 
- 3329              	.LASF97:
- 3330 0294 61786C6F 		.ascii	"axlo\000"
- 3330      00
- 3331              	.LASF84:
- 3332 0299 48444F50 		.ascii	"HDOP\000"
- 3332      00
- 3333              	.LASF71:
- 3334 029e 6D6F6E74 		.ascii	"month\000"
- 3334      6800
- 3335              	.LASF73:
- 3336 02a4 6C617469 		.ascii	"latitude\000"
- 3336      74756465 
+ 3329              	.LASF142:
+ 3330 0294 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\MyCodes\\PSoC-Quadcop"
+ 3330      73657273 
+ 3330      5C413835 
+ 3330      3539305C 
+ 3330      446F6375 
+ 3331 02c2 7465725C 		.ascii	"ter\\9-DOF sensor\\SensorFusion\\SensorFusion.cydsn"
+ 3331      392D444F 
+ 3331      46207365 
+ 3331      6E736F72 
+ 3331      5C53656E 
+ 3332 02f2 00       		.ascii	"\000"
+ 3333              	.LASF97:
+ 3334 02f3 61786C6F 		.ascii	"axlo\000"
+ 3334      00
+ 3335              	.LASF84:
+ 3336 02f8 48444F50 		.ascii	"HDOP\000"
  3336      00
- 3337              	.LASF114:
- 3338 02ad 61636365 		.ascii	"accel_getX\000"
- 3338      6C5F6765 
- 3338      745800
- 3339              	.LASF115:
- 3340 02b8 61636365 		.ascii	"accel_getY\000"
- 3340      6C5F6765 
- 3340      745900
- 3341              	.LASF116:
- 3342 02c3 61636365 		.ascii	"accel_getZ\000"
+ 3337              	.LASF71:
+ 3338 02fd 6D6F6E74 		.ascii	"month\000"
+ 3338      6800
+ 3339              	.LASF73:
+ 3340 0303 6C617469 		.ascii	"latitude\000"
+ 3340      74756465 
+ 3340      00
+ 3341              	.LASF114:
+ 3342 030c 61636365 		.ascii	"accel_getX\000"
  3342      6C5F6765 
- 3342      745A00
- 3343              	.LASF104:
- 3344 02ce 6D796869 		.ascii	"myhi\000"
- 3344      00
- 3345              	.LASF67:
- 3346 02d3 686F7572 		.ascii	"hour\000"
- 3346      00
- 3347              	.LASF109:
- 3348 02d8 5F616363 		.ascii	"_acceleration\000"
- 3348      656C6572 
- 3348      6174696F 
- 3348      6E00
- 3349              	.LASF34:
- 3350 02e6 46584F53 		.ascii	"FXOS8700_REGISTER_MOUT_X_MSB\000"
- 3350      38373030 
- 3350      5F524547 
- 3350      49535445 
- 3350      525F4D4F 
- 3351              	.LASF74:
- 3352 0303 6C6F6E67 		.ascii	"longitude\000"
- 3352      69747564 
- 3352      6500
- 3353              	.LASF108:
- 3354 030d 61636365 		.ascii	"accel_mag_readData\000"
- 3354      6C5F6D61 
- 3354      675F7265 
- 3354      61644461 
- 3354      746100
- 3355              	.LASF83:
- 3356 0320 6D616776 		.ascii	"magvariation\000"
- 3356      61726961 
- 3356      74696F6E 
- 3356      00
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 68
+ 3342      745800
+ 3343              	.LASF115:
+ 3344 0317 61636365 		.ascii	"accel_getY\000"
+ 3344      6C5F6765 
+ 3344      745900
+ 3345              	.LASF116:
+ 3346 0322 61636365 		.ascii	"accel_getZ\000"
+ 3346      6C5F6765 
+ 3346      745A00
+ 3347              	.LASF104:
+ 3348 032d 6D796869 		.ascii	"myhi\000"
+ 3348      00
+ 3349              	.LASF67:
+ 3350 0332 686F7572 		.ascii	"hour\000"
+ 3350      00
+ 3351              	.LASF109:
+ 3352 0337 5F616363 		.ascii	"_acceleration\000"
+ 3352      656C6572 
+ 3352      6174696F 
+ 3352      6E00
+ 3353              	.LASF34:
+ 3354 0345 46584F53 		.ascii	"FXOS8700_REGISTER_MOUT_X_MSB\000"
+ 3354      38373030 
+ 3354      5F524547 
+ 3354      49535445 
+ 3354      525F4D4F 
+ 3355              	.LASF74:
+ 3356 0362 6C6F6E67 		.ascii	"longitude\000"
+ 3356      69747564 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 68
 
 
- 3357              	.LASF52:
- 3358 032d 63686172 		.ascii	"char\000"
- 3358      00
- 3359              	.LASF26:
- 3360 0332 46584F53 		.ascii	"FXOS8700_REGISTER_WHO_AM_I\000"
- 3360      38373030 
- 3360      5F524547 
- 3360      49535445 
- 3360      525F5748 
- 3361              	.LASF23:
- 3362 034d 46584F53 		.ascii	"FXOS8700_REGISTER_OUT_Y_LSB\000"
- 3362      38373030 
- 3362      5F524547 
- 3362      49535445 
- 3362      525F4F55 
- 3363              	.LASF63:
- 3364 0369 61627341 		.ascii	"absAlt\000"
- 3364      6C7400
- 3365              	.LASF136:
- 3366 0370 4932435F 		.ascii	"I2C_MasterStatus\000"
- 3366      4D617374 
- 3366      65725374 
- 3366      61747573 
- 3366      00
- 3367              	.LASF127:
- 3368 0381 72656665 		.ascii	"reference_pressure\000"
- 3368      72656E63 
- 3368      655F7072 
- 3368      65737375 
- 3368      726500
- 3369              	.LASF98:
- 3370 0394 61796869 		.ascii	"ayhi\000"
+ 3356      6500
+ 3357              	.LASF108:
+ 3358 036c 61636365 		.ascii	"accel_mag_readData\000"
+ 3358      6C5F6D61 
+ 3358      675F7265 
+ 3358      61644461 
+ 3358      746100
+ 3359              	.LASF83:
+ 3360 037f 6D616776 		.ascii	"magvariation\000"
+ 3360      61726961 
+ 3360      74696F6E 
+ 3360      00
+ 3361              	.LASF52:
+ 3362 038c 63686172 		.ascii	"char\000"
+ 3362      00
+ 3363              	.LASF26:
+ 3364 0391 46584F53 		.ascii	"FXOS8700_REGISTER_WHO_AM_I\000"
+ 3364      38373030 
+ 3364      5F524547 
+ 3364      49535445 
+ 3364      525F5748 
+ 3365              	.LASF23:
+ 3366 03ac 46584F53 		.ascii	"FXOS8700_REGISTER_OUT_Y_LSB\000"
+ 3366      38373030 
+ 3366      5F524547 
+ 3366      49535445 
+ 3366      525F4F55 
+ 3367              	.LASF63:
+ 3368 03c8 61627341 		.ascii	"absAlt\000"
+ 3368      6C7400
+ 3369              	.LASF136:
+ 3370 03cf 4932435F 		.ascii	"I2C_MasterStatus\000"
+ 3370      4D617374 
+ 3370      65725374 
+ 3370      61747573 
  3370      00
- 3371              	.LASF14:
- 3372 0399 75696E74 		.ascii	"uint8_t\000"
- 3372      385F7400 
- 3373              	.LASF66:
- 3374 03a1 67707364 		.ascii	"gpsdata\000"
- 3374      61746100 
- 3375              	.LASF24:
- 3376 03a9 46584F53 		.ascii	"FXOS8700_REGISTER_OUT_Z_MSB\000"
- 3376      38373030 
- 3376      5F524547 
- 3376      49535445 
- 3376      525F4F55 
- 3377              	.LASF56:
- 3378 03c5 6779726F 		.ascii	"gyroRawData_s\000"
- 3378      52617744 
- 3378      6174615F 
- 3378      7300
- 3379              	.LASF68:
- 3380 03d3 6D696E75 		.ascii	"minute\000"
- 3380      746500
- 3381              	.LASF11:
- 3382 03da 6C6F6E67 		.ascii	"long long int\000"
- 3382      206C6F6E 
- 3382      6720696E 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 69
+ 3371              	.LASF127:
+ 3372 03e0 72656665 		.ascii	"reference_pressure\000"
+ 3372      72656E63 
+ 3372      655F7072 
+ 3372      65737375 
+ 3372      726500
+ 3373              	.LASF98:
+ 3374 03f3 61796869 		.ascii	"ayhi\000"
+ 3374      00
+ 3375              	.LASF14:
+ 3376 03f8 75696E74 		.ascii	"uint8_t\000"
+ 3376      385F7400 
+ 3377              	.LASF66:
+ 3378 0400 67707364 		.ascii	"gpsdata\000"
+ 3378      61746100 
+ 3379              	.LASF24:
+ 3380 0408 46584F53 		.ascii	"FXOS8700_REGISTER_OUT_Z_MSB\000"
+ 3380      38373030 
+ 3380      5F524547 
+ 3380      49535445 
+ 3380      525F4F55 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 69
 
 
- 3382      7400
- 3383              	.LASF55:
- 3384 03e8 6779726F 		.ascii	"gyroRawData_t\000"
- 3384      52617744 
- 3384      6174615F 
- 3384      7400
- 3385              	.LASF94:
- 3386 03f6 61636365 		.ascii	"accel_mag_write8\000"
- 3386      6C5F6D61 
- 3386      675F7772 
- 3386      69746538 
- 3386      00
- 3387              	.LASF75:
- 3388 0407 6C617469 		.ascii	"latitude_fixed\000"
- 3388      74756465 
- 3388      5F666978 
- 3388      656400
- 3389              	.LASF130:
- 3390 0416 696E6974 		.ascii	"initial_real_temprature\000"
- 3390      69616C5F 
- 3390      7265616C 
- 3390      5F74656D 
- 3390      70726174 
- 3391              	.LASF88:
- 3392 042e 67707344 		.ascii	"gpsData_t\000"
- 3392      6174615F 
- 3392      7400
- 3393              	.LASF3:
- 3394 0438 5F5F696E 		.ascii	"__int16_t\000"
- 3394      7431365F 
- 3394      7400
- 3395              	.LASF95:
- 3396 0442 61636365 		.ascii	"accel_mag_update\000"
- 3396      6C5F6D61 
- 3396      675F7570 
- 3396      64617465 
- 3396      00
- 3397              	.LASF117:
- 3398 0453 6D61675F 		.ascii	"mag_getX\000"
- 3398      67657458 
- 3398      00
- 3399              	.LASF118:
- 3400 045c 6D61675F 		.ascii	"mag_getY\000"
- 3400      67657459 
+ 3381              	.LASF56:
+ 3382 0424 6779726F 		.ascii	"gyroRawData_s\000"
+ 3382      52617744 
+ 3382      6174615F 
+ 3382      7300
+ 3383              	.LASF68:
+ 3384 0432 6D696E75 		.ascii	"minute\000"
+ 3384      746500
+ 3385              	.LASF11:
+ 3386 0439 6C6F6E67 		.ascii	"long long int\000"
+ 3386      206C6F6E 
+ 3386      6720696E 
+ 3386      7400
+ 3387              	.LASF55:
+ 3388 0447 6779726F 		.ascii	"gyroRawData_t\000"
+ 3388      52617744 
+ 3388      6174615F 
+ 3388      7400
+ 3389              	.LASF94:
+ 3390 0455 61636365 		.ascii	"accel_mag_write8\000"
+ 3390      6C5F6D61 
+ 3390      675F7772 
+ 3390      69746538 
+ 3390      00
+ 3391              	.LASF75:
+ 3392 0466 6C617469 		.ascii	"latitude_fixed\000"
+ 3392      74756465 
+ 3392      5F666978 
+ 3392      656400
+ 3393              	.LASF130:
+ 3394 0475 696E6974 		.ascii	"initial_real_temprature\000"
+ 3394      69616C5F 
+ 3394      7265616C 
+ 3394      5F74656D 
+ 3394      70726174 
+ 3395              	.LASF88:
+ 3396 048d 67707344 		.ascii	"gpsData_t\000"
+ 3396      6174615F 
+ 3396      7400
+ 3397              	.LASF3:
+ 3398 0497 5F5F696E 		.ascii	"__int16_t\000"
+ 3398      7431365F 
+ 3398      7400
+ 3399              	.LASF95:
+ 3400 04a1 61636365 		.ascii	"accel_mag_update\000"
+ 3400      6C5F6D61 
+ 3400      675F7570 
+ 3400      64617465 
  3400      00
- 3401              	.LASF119:
- 3402 0465 6D61675F 		.ascii	"mag_getZ\000"
- 3402      6765745A 
+ 3401              	.LASF117:
+ 3402 04b2 6D61675F 		.ascii	"mag_getX\000"
+ 3402      67657458 
  3402      00
- 3403              	.LASF76:
- 3404 046e 6C6F6E67 		.ascii	"longitude_fixed\000"
- 3404      69747564 
- 3404      655F6669 
- 3404      78656400 
- 3405              	.LASF43:
- 3406 047e 41434345 		.ascii	"ACCEL_RANGE_2G\000"
- 3406      4C5F5241 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 70
+ 3403              	.LASF118:
+ 3404 04bb 6D61675F 		.ascii	"mag_getY\000"
+ 3404      67657459 
+ 3404      00
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 70
 
 
- 3406      4E47455F 
- 3406      324700
- 3407              	.LASF80:
- 3408 048d 616C7469 		.ascii	"altitude\000"
- 3408      74756465 
- 3408      00
- 3409              	.LASF129:
- 3410 0496 696E6974 		.ascii	"initial_raw_pressure\000"
- 3410      69616C5F 
- 3410      7261775F 
- 3410      70726573 
- 3410      73757265 
- 3411              	.LASF64:
- 3412 04ab 72656C41 		.ascii	"relAlt\000"
- 3412      6C7400
- 3413              	.LASF126:
- 3414 04b2 6779726F 		.ascii	"gyro\000"
- 3414      00
- 3415              	.LASF69:
- 3416 04b7 7365636F 		.ascii	"seconds\000"
- 3416      6E647300 
- 3417              	.LASF111:
- 3418 04bf 61636365 		.ascii	"accel_readData\000"
- 3418      6C5F7265 
- 3418      61644461 
- 3418      746100
- 3419              	.LASF123:
- 3420 04ce 6D61675F 		.ascii	"mag_raw\000"
- 3420      72617700 
- 3421              	.LASF53:
- 3422 04d6 6C6F6E67 		.ascii	"long double\000"
- 3422      20646F75 
- 3422      626C6500 
- 3423              	.LASF16:
- 3424 04e2 75696E74 		.ascii	"uint16_t\000"
- 3424      31365F74 
- 3424      00
- 3425              	.LASF19:
- 3426 04eb 46584F53 		.ascii	"FXOS8700_REGISTER_STATUS\000"
- 3426      38373030 
- 3426      5F524547 
- 3426      49535445 
- 3426      525F5354 
- 3427              	.LASF60:
- 3428 0504 72617750 		.ascii	"rawPress\000"
- 3428      72657373 
+ 3405              	.LASF119:
+ 3406 04c4 6D61675F 		.ascii	"mag_getZ\000"
+ 3406      6765745A 
+ 3406      00
+ 3407              	.LASF76:
+ 3408 04cd 6C6F6E67 		.ascii	"longitude_fixed\000"
+ 3408      69747564 
+ 3408      655F6669 
+ 3408      78656400 
+ 3409              	.LASF43:
+ 3410 04dd 41434345 		.ascii	"ACCEL_RANGE_2G\000"
+ 3410      4C5F5241 
+ 3410      4E47455F 
+ 3410      324700
+ 3411              	.LASF80:
+ 3412 04ec 616C7469 		.ascii	"altitude\000"
+ 3412      74756465 
+ 3412      00
+ 3413              	.LASF129:
+ 3414 04f5 696E6974 		.ascii	"initial_raw_pressure\000"
+ 3414      69616C5F 
+ 3414      7261775F 
+ 3414      70726573 
+ 3414      73757265 
+ 3415              	.LASF64:
+ 3416 050a 72656C41 		.ascii	"relAlt\000"
+ 3416      6C7400
+ 3417              	.LASF126:
+ 3418 0511 6779726F 		.ascii	"gyro\000"
+ 3418      00
+ 3419              	.LASF69:
+ 3420 0516 7365636F 		.ascii	"seconds\000"
+ 3420      6E647300 
+ 3421              	.LASF111:
+ 3422 051e 61636365 		.ascii	"accel_readData\000"
+ 3422      6C5F7265 
+ 3422      61644461 
+ 3422      746100
+ 3423              	.LASF123:
+ 3424 052d 6D61675F 		.ascii	"mag_raw\000"
+ 3424      72617700 
+ 3425              	.LASF53:
+ 3426 0535 6C6F6E67 		.ascii	"long double\000"
+ 3426      20646F75 
+ 3426      626C6500 
+ 3427              	.LASF16:
+ 3428 0541 75696E74 		.ascii	"uint16_t\000"
+ 3428      31365F74 
  3428      00
- 3429              	.LASF105:
- 3430 050d 6D796C6F 		.ascii	"mylo\000"
- 3430      00
- 3431              	.LASF82:
- 3432 0512 616E676C 		.ascii	"angle\000"
- 3432      6500
- 3433              	.LASF37:
- 3434 0518 46584F53 		.ascii	"FXOS8700_REGISTER_MOUT_Y_LSB\000"
- 3434      38373030 
- 3434      5F524547 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 71
+ 3429              	.LASF19:
+ 3430 054a 46584F53 		.ascii	"FXOS8700_REGISTER_STATUS\000"
+ 3430      38373030 
+ 3430      5F524547 
+ 3430      49535445 
+ 3430      525F5354 
+ 3431              	.LASF60:
+ 3432 0563 72617750 		.ascii	"rawPress\000"
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 71
 
 
- 3434      49535445 
- 3434      525F4D4F 
- 3435              	.LASF33:
- 3436 0535 46584F53 		.ascii	"FXOS8700_REGISTER_MSTATUS\000"
- 3436      38373030 
- 3436      5F524547 
- 3436      49535445 
- 3436      525F4D53 
- 3437              	.LASF4:
- 3438 054f 73686F72 		.ascii	"short int\000"
- 3438      7420696E 
- 3438      7400
- 3439              	.LASF44:
- 3440 0559 41434345 		.ascii	"ACCEL_RANGE_4G\000"
- 3440      4C5F5241 
- 3440      4E47455F 
- 3440      344700
- 3441              	.LASF8:
- 3442 0568 6C6F6E67 		.ascii	"long int\000"
- 3442      20696E74 
- 3442      00
- 3443              	.LASF137:
- 3444 0571 4932435F 		.ascii	"I2C_MasterReadBuf\000"
- 3444      4D617374 
- 3444      65725265 
- 3444      61644275 
- 3444      6600
- 3445              	.LASF121:
- 3446 0583 49544D5F 		.ascii	"ITM_RxBuffer\000"
- 3446      52784275 
- 3446      66666572 
+ 3432      72657373 
+ 3432      00
+ 3433              	.LASF105:
+ 3434 056c 6D796C6F 		.ascii	"mylo\000"
+ 3434      00
+ 3435              	.LASF82:
+ 3436 0571 616E676C 		.ascii	"angle\000"
+ 3436      6500
+ 3437              	.LASF37:
+ 3438 0577 46584F53 		.ascii	"FXOS8700_REGISTER_MOUT_Y_LSB\000"
+ 3438      38373030 
+ 3438      5F524547 
+ 3438      49535445 
+ 3438      525F4D4F 
+ 3439              	.LASF33:
+ 3440 0594 46584F53 		.ascii	"FXOS8700_REGISTER_MSTATUS\000"
+ 3440      38373030 
+ 3440      5F524547 
+ 3440      49535445 
+ 3440      525F4D53 
+ 3441              	.LASF4:
+ 3442 05ae 73686F72 		.ascii	"short int\000"
+ 3442      7420696E 
+ 3442      7400
+ 3443              	.LASF44:
+ 3444 05b8 41434345 		.ascii	"ACCEL_RANGE_4G\000"
+ 3444      4C5F5241 
+ 3444      4E47455F 
+ 3444      344700
+ 3445              	.LASF8:
+ 3446 05c7 6C6F6E67 		.ascii	"long int\000"
+ 3446      20696E74 
  3446      00
- 3447              	.LASF38:
- 3448 0590 46584F53 		.ascii	"FXOS8700_REGISTER_MOUT_Z_MSB\000"
- 3448      38373030 
- 3448      5F524547 
- 3448      49535445 
- 3448      525F4D4F 
- 3449              	.LASF120:
- 3450 05ad 5F72616E 		.ascii	"_range\000"
- 3450      676500
- 3451              	.LASF142:
- 3452 05b4 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\PSoC Creator\\SensorF"
- 3452      73657273 
- 3452      5C413835 
- 3452      3539305C 
- 3452      446F6375 
- 3453 05e2 7573696F 		.ascii	"usion\\SensorFusion.cydsn\000"
- 3453      6E5C5365 
- 3453      6E736F72 
- 3453      46757369 
- 3453      6F6E2E63 
- 3454              	.LASF99:
- 3455 05fb 61796C6F 		.ascii	"aylo\000"
- 3455      00
- 3456              	.LASF90:
- 3457 0600 57726974 		.ascii	"Write_Buf\000"
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 72
+ 3447              	.LASF137:
+ 3448 05d0 4932435F 		.ascii	"I2C_MasterReadBuf\000"
+ 3448      4D617374 
+ 3448      65725265 
+ 3448      61644275 
+ 3448      6600
+ 3449              	.LASF121:
+ 3450 05e2 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 3450      52784275 
+ 3450      66666572 
+ 3450      00
+ 3451              	.LASF38:
+ 3452 05ef 46584F53 		.ascii	"FXOS8700_REGISTER_MOUT_Z_MSB\000"
+ 3452      38373030 
+ 3452      5F524547 
+ 3452      49535445 
+ 3452      525F4D4F 
+ 3453              	.LASF120:
+ 3454 060c 5F72616E 		.ascii	"_range\000"
+ 3454      676500
+ 3455              	.LASF99:
+ 3456 0613 61796C6F 		.ascii	"aylo\000"
+ 3456      00
+ 3457              	.LASF90:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 72
 
 
- 3457      655F4275 
- 3457      6600
- 3458              	.LASF27:
- 3459 060a 46584F53 		.ascii	"FXOS8700_REGISTER_XYZ_DATA_CFG\000"
- 3459      38373030 
- 3459      5F524547 
- 3459      49535445 
- 3459      525F5859 
- 3460              	.LASF92:
- 3461 0629 61636365 		.ascii	"accel_mag_read8\000"
- 3461      6C5F6D61 
- 3461      675F7265 
- 3461      61643800 
- 3462              	.LASF2:
- 3463 0639 5F5F7569 		.ascii	"__uint8_t\000"
- 3463      6E74385F 
- 3463      7400
- 3464              	.LASF77:
- 3465 0643 6C617469 		.ascii	"latitudeDegrees\000"
- 3465      74756465 
- 3465      44656772 
- 3465      65657300 
- 3466              	.LASF106:
- 3467 0653 6D7A6869 		.ascii	"mzhi\000"
- 3467      00
- 3468              	.LASF21:
- 3469 0658 46584F53 		.ascii	"FXOS8700_REGISTER_OUT_X_LSB\000"
- 3469      38373030 
- 3469      5F524547 
- 3469      49535445 
- 3469      525F4F55 
- 3470              	.LASF79:
- 3471 0674 67656F69 		.ascii	"geoidheight\000"
- 3471      64686569 
- 3471      67687400 
- 3472              	.LASF54:
- 3473 0680 73697A65 		.ascii	"sizetype\000"
- 3473      74797065 
- 3473      00
- 3474              	.LASF10:
- 3475 0689 6C6F6E67 		.ascii	"long unsigned int\000"
- 3475      20756E73 
- 3475      69676E65 
- 3475      6420696E 
- 3475      7400
- 3476              	.LASF59:
- 3477 069b 72617754 		.ascii	"rawTemp\000"
- 3477      656D7000 
- 3478              	.LASF57:
- 3479 06a3 6779726F 		.ascii	"gyroData_s\000"
- 3479      44617461 
- 3479      5F7300
- 3480              	.LASF58:
- 3481 06ae 6779726F 		.ascii	"gyroData_t\000"
- 3481      44617461 
- 3481      5F7400
- 3482              	.LASF17:
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 73
+ 3458 0618 57726974 		.ascii	"Write_Buf\000"
+ 3458      655F4275 
+ 3458      6600
+ 3459              	.LASF27:
+ 3460 0622 46584F53 		.ascii	"FXOS8700_REGISTER_XYZ_DATA_CFG\000"
+ 3460      38373030 
+ 3460      5F524547 
+ 3460      49535445 
+ 3460      525F5859 
+ 3461              	.LASF92:
+ 3462 0641 61636365 		.ascii	"accel_mag_read8\000"
+ 3462      6C5F6D61 
+ 3462      675F7265 
+ 3462      61643800 
+ 3463              	.LASF2:
+ 3464 0651 5F5F7569 		.ascii	"__uint8_t\000"
+ 3464      6E74385F 
+ 3464      7400
+ 3465              	.LASF77:
+ 3466 065b 6C617469 		.ascii	"latitudeDegrees\000"
+ 3466      74756465 
+ 3466      44656772 
+ 3466      65657300 
+ 3467              	.LASF106:
+ 3468 066b 6D7A6869 		.ascii	"mzhi\000"
+ 3468      00
+ 3469              	.LASF21:
+ 3470 0670 46584F53 		.ascii	"FXOS8700_REGISTER_OUT_X_LSB\000"
+ 3470      38373030 
+ 3470      5F524547 
+ 3470      49535445 
+ 3470      525F4F55 
+ 3471              	.LASF79:
+ 3472 068c 67656F69 		.ascii	"geoidheight\000"
+ 3472      64686569 
+ 3472      67687400 
+ 3473              	.LASF54:
+ 3474 0698 73697A65 		.ascii	"sizetype\000"
+ 3474      74797065 
+ 3474      00
+ 3475              	.LASF10:
+ 3476 06a1 6C6F6E67 		.ascii	"long unsigned int\000"
+ 3476      20756E73 
+ 3476      69676E65 
+ 3476      6420696E 
+ 3476      7400
+ 3477              	.LASF59:
+ 3478 06b3 72617754 		.ascii	"rawTemp\000"
+ 3478      656D7000 
+ 3479              	.LASF57:
+ 3480 06bb 6779726F 		.ascii	"gyroData_s\000"
+ 3480      44617461 
+ 3480      5F7300
+ 3481              	.LASF58:
+ 3482 06c6 6779726F 		.ascii	"gyroData_t\000"
+ 3482      44617461 
+ 3482      5F7400
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 73
 
 
- 3483 06b9 696E7433 		.ascii	"int32_t\000"
- 3483      325F7400 
- 3484              	.LASF47:
- 3485 06c1 66786F73 		.ascii	"fxos8700RawData_t\000"
- 3485      38373030 
- 3485      52617744 
- 3485      6174615F 
- 3485      7400
- 3486              	.LASF70:
- 3487 06d3 79656172 		.ascii	"year\000"
- 3487      00
- 3488              	.LASF28:
- 3489 06d8 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG1\000"
- 3489      38373030 
- 3489      5F524547 
- 3489      49535445 
- 3489      525F4354 
- 3490              	.LASF29:
- 3491 06f4 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG2\000"
- 3491      38373030 
- 3491      5F524547 
- 3491      49535445 
- 3491      525F4354 
- 3492              	.LASF30:
- 3493 0710 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG3\000"
- 3493      38373030 
- 3493      5F524547 
- 3493      49535445 
- 3493      525F4354 
- 3494              	.LASF31:
- 3495 072c 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG4\000"
- 3495      38373030 
- 3495      5F524547 
- 3495      49535445 
- 3495      525F4354 
- 3496              	.LASF32:
- 3497 0748 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG5\000"
- 3497      38373030 
- 3497      5F524547 
- 3497      49535445 
- 3497      525F4354 
- 3498              	.LASF22:
- 3499 0764 46584F53 		.ascii	"FXOS8700_REGISTER_OUT_Y_MSB\000"
- 3499      38373030 
- 3499      5F524547 
- 3499      49535445 
- 3499      525F4F55 
- 3500              	.LASF131:
- 3501 0780 696E6974 		.ascii	"initial_real_pressure\000"
- 3501      69616C5F 
- 3501      7265616C 
- 3501      5F707265 
- 3501      73737572 
- 3502              	.LASF1:
- 3503 0796 756E7369 		.ascii	"unsigned char\000"
- 3503      676E6564 
- 3503      20636861 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 74
+ 3483              	.LASF17:
+ 3484 06d1 696E7433 		.ascii	"int32_t\000"
+ 3484      325F7400 
+ 3485              	.LASF47:
+ 3486 06d9 66786F73 		.ascii	"fxos8700RawData_t\000"
+ 3486      38373030 
+ 3486      52617744 
+ 3486      6174615F 
+ 3486      7400
+ 3487              	.LASF70:
+ 3488 06eb 79656172 		.ascii	"year\000"
+ 3488      00
+ 3489              	.LASF28:
+ 3490 06f0 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG1\000"
+ 3490      38373030 
+ 3490      5F524547 
+ 3490      49535445 
+ 3490      525F4354 
+ 3491              	.LASF29:
+ 3492 070c 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG2\000"
+ 3492      38373030 
+ 3492      5F524547 
+ 3492      49535445 
+ 3492      525F4354 
+ 3493              	.LASF30:
+ 3494 0728 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG3\000"
+ 3494      38373030 
+ 3494      5F524547 
+ 3494      49535445 
+ 3494      525F4354 
+ 3495              	.LASF31:
+ 3496 0744 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG4\000"
+ 3496      38373030 
+ 3496      5F524547 
+ 3496      49535445 
+ 3496      525F4354 
+ 3497              	.LASF32:
+ 3498 0760 46584F53 		.ascii	"FXOS8700_REGISTER_CTRL_REG5\000"
+ 3498      38373030 
+ 3498      5F524547 
+ 3498      49535445 
+ 3498      525F4354 
+ 3499              	.LASF22:
+ 3500 077c 46584F53 		.ascii	"FXOS8700_REGISTER_OUT_Y_MSB\000"
+ 3500      38373030 
+ 3500      5F524547 
+ 3500      49535445 
+ 3500      525F4F55 
+ 3501              	.LASF131:
+ 3502 0798 696E6974 		.ascii	"initial_real_pressure\000"
+ 3502      69616C5F 
+ 3502      7265616C 
+ 3502      5F707265 
+ 3502      73737572 
+ 3503              	.LASF1:
+ 3504 07ae 756E7369 		.ascii	"unsigned char\000"
+ 3504      676E6564 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 74
 
 
- 3503      7200
- 3504              	.LASF65:
- 3505 07a4 6261726F 		.ascii	"barometricData_t\000"
- 3505      6D657472 
- 3505      69634461 
- 3505      74615F74 
- 3505      00
- 3506              	.LASF9:
- 3507 07b5 5F5F7569 		.ascii	"__uint32_t\000"
- 3507      6E743332 
- 3507      5F7400
- 3508              	.LASF78:
- 3509 07c0 6C6F6E67 		.ascii	"longitudeDegrees\000"
- 3509      69747564 
- 3509      65446567 
- 3509      72656573 
- 3509      00
- 3510              	.LASF100:
- 3511 07d1 617A6869 		.ascii	"azhi\000"
- 3511      00
- 3512              	.LASF128:
- 3513 07d6 696E6974 		.ascii	"initial_raw_temperature\000"
- 3513      69616C5F 
- 3513      7261775F 
- 3513      74656D70 
- 3513      65726174 
- 3514              	.LASF86:
- 3515 07ee 73617465 		.ascii	"satellites\000"
- 3515      6C6C6974 
- 3515      657300
- 3516              	.LASF133:
- 3517 07f9 696E6974 		.ascii	"initial_relative_altitude\000"
- 3517      69616C5F 
- 3517      72656C61 
- 3517      74697665 
- 3517      5F616C74 
- 3518              	.LASF85:
- 3519 0813 66697871 		.ascii	"fixquality\000"
- 3519      75616C69 
- 3519      747900
- 3520              	.LASF0:
- 3521 081e 7369676E 		.ascii	"signed char\000"
- 3521      65642063 
- 3521      68617200 
- 3522              	.LASF6:
- 3523 082a 73686F72 		.ascii	"short unsigned int\000"
- 3523      7420756E 
- 3523      7369676E 
- 3523      65642069 
- 3523      6E7400
- 3524              	.LASF46:
- 3525 083d 66786F73 		.ascii	"fxos8700AccelRange_t\000"
- 3525      38373030 
- 3525      41636365 
- 3525      6C52616E 
- 3525      67655F74 
- 3526              	.LASF132:
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccjOxpCf.s 			page 75
+ 3504      20636861 
+ 3504      7200
+ 3505              	.LASF65:
+ 3506 07bc 6261726F 		.ascii	"barometricData_t\000"
+ 3506      6D657472 
+ 3506      69634461 
+ 3506      74615F74 
+ 3506      00
+ 3507              	.LASF9:
+ 3508 07cd 5F5F7569 		.ascii	"__uint32_t\000"
+ 3508      6E743332 
+ 3508      5F7400
+ 3509              	.LASF78:
+ 3510 07d8 6C6F6E67 		.ascii	"longitudeDegrees\000"
+ 3510      69747564 
+ 3510      65446567 
+ 3510      72656573 
+ 3510      00
+ 3511              	.LASF100:
+ 3512 07e9 617A6869 		.ascii	"azhi\000"
+ 3512      00
+ 3513              	.LASF128:
+ 3514 07ee 696E6974 		.ascii	"initial_raw_temperature\000"
+ 3514      69616C5F 
+ 3514      7261775F 
+ 3514      74656D70 
+ 3514      65726174 
+ 3515              	.LASF86:
+ 3516 0806 73617465 		.ascii	"satellites\000"
+ 3516      6C6C6974 
+ 3516      657300
+ 3517              	.LASF133:
+ 3518 0811 696E6974 		.ascii	"initial_relative_altitude\000"
+ 3518      69616C5F 
+ 3518      72656C61 
+ 3518      74697665 
+ 3518      5F616C74 
+ 3519              	.LASF85:
+ 3520 082b 66697871 		.ascii	"fixquality\000"
+ 3520      75616C69 
+ 3520      747900
+ 3521              	.LASF0:
+ 3522 0836 7369676E 		.ascii	"signed char\000"
+ 3522      65642063 
+ 3522      68617200 
+ 3523              	.LASF6:
+ 3524 0842 73686F72 		.ascii	"short unsigned int\000"
+ 3524      7420756E 
+ 3524      7369676E 
+ 3524      65642069 
+ 3524      6E7400
+ 3525              	.LASF46:
+ 3526 0855 66786F73 		.ascii	"fxos8700AccelRange_t\000"
+ 3526      38373030 
+ 3526      41636365 
+ 3526      6C52616E 
+ 3526      67655F74 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccdig8k2.s 			page 75
 
 
- 3527 0852 696E6974 		.ascii	"initial_absolute_altitude\000"
- 3527      69616C5F 
- 3527      6162736F 
- 3527      6C757465 
- 3527      5F616C74 
- 3528              	.LASF87:
- 3529 086c 6D696C6C 		.ascii	"millisTimeStamp\000"
- 3529      69735469 
- 3529      6D655374 
- 3529      616D7000 
- 3530              	.LASF45:
- 3531 087c 41434345 		.ascii	"ACCEL_RANGE_8G\000"
- 3531      4C5F5241 
- 3531      4E47455F 
- 3531      384700
- 3532              	.LASF50:
- 3533 088b 75696E74 		.ascii	"uint8\000"
- 3533      3800
- 3534              	.LASF51:
- 3535 0891 646F7562 		.ascii	"double\000"
- 3535      6C6500
- 3536              	.LASF102:
- 3537 0898 6D786869 		.ascii	"mxhi\000"
- 3537      00
- 3538              	.LASF35:
- 3539 089d 46584F53 		.ascii	"FXOS8700_REGISTER_MOUT_X_LSB\000"
- 3539      38373030 
- 3539      5F524547 
- 3539      49535445 
- 3539      525F4D4F 
- 3540              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
+ 3527              	.LASF132:
+ 3528 086a 696E6974 		.ascii	"initial_absolute_altitude\000"
+ 3528      69616C5F 
+ 3528      6162736F 
+ 3528      6C757465 
+ 3528      5F616C74 
+ 3529              	.LASF87:
+ 3530 0884 6D696C6C 		.ascii	"millisTimeStamp\000"
+ 3530      69735469 
+ 3530      6D655374 
+ 3530      616D7000 
+ 3531              	.LASF45:
+ 3532 0894 41434345 		.ascii	"ACCEL_RANGE_8G\000"
+ 3532      4C5F5241 
+ 3532      4E47455F 
+ 3532      384700
+ 3533              	.LASF50:
+ 3534 08a3 75696E74 		.ascii	"uint8\000"
+ 3534      3800
+ 3535              	.LASF51:
+ 3536 08a9 646F7562 		.ascii	"double\000"
+ 3536      6C6500
+ 3537              	.LASF102:
+ 3538 08b0 6D786869 		.ascii	"mxhi\000"
+ 3538      00
+ 3539              	.LASF35:
+ 3540 08b5 46584F53 		.ascii	"FXOS8700_REGISTER_MOUT_X_LSB\000"
+ 3540      38373030 
+ 3540      5F524547 
+ 3540      49535445 
+ 3540      525F4D4F 
+ 3541              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

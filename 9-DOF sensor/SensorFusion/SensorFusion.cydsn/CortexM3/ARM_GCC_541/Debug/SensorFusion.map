@@ -417,7 +417,7 @@ Discarded input sections
  .text.xbeeSerial_ClearTxBuffer
                 0x00000000       0x24 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
  .text.xbeeSerial_SendBreak
-                0x00000000       0x5c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
+                0x00000000       0x58 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
  .text.xbeeSerial_SetTxAddressMode
                 0x00000000        0x4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
  .text          0x00000000        0x0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
@@ -1354,7 +1354,7 @@ END GROUP
                 0x00000800                ee_size = (CY_APPL_LOADABLE && ! (CY_EE_IN_BTLDR))?(CY_EE_SIZE / CY_APPL_MAX):CY_EE_SIZE
                 [!provide]                PROVIDE (CY_ECC_OFFSET, ecc_offset)
 
-.text           0x00000000     0x2326
+.text           0x00000000     0x231e
  CREATE_OBJECT_SYMBOLS
                 0x00000000                PROVIDE (__cy_interrupt_vector, RomVectors)
  *(.romvectors)
@@ -1484,226 +1484,229 @@ END GROUP
                 0x00000dc8       0x68 .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
                 0x00000dc8                initialize_psoc
  .text.xbeeSerial_Init
-                0x00000e30       0x2c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
+                0x00000e30       0x28 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
                 0x00000e30                xbeeSerial_Init
  .text.xbeeSerial_Enable
-                0x00000e5c       0x38 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
-                0x00000e5c                xbeeSerial_Enable
+                0x00000e58       0x38 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
+                0x00000e58                xbeeSerial_Enable
  .text.xbeeSerial_Start
-                0x00000e94       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
-                0x00000e94                xbeeSerial_Start
+                0x00000e90       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
+                0x00000e90                xbeeSerial_Start
  .text.gpsSerial_Init
-                0x00000eb0       0x28 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
-                0x00000eb0                gpsSerial_Init
+                0x00000eac       0x24 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
+                0x00000eac                gpsSerial_Init
  .text.gpsSerial_Enable
-                0x00000ed8       0x3c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
-                0x00000ed8                gpsSerial_Enable
+                0x00000ed0       0x38 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
+                0x00000ed0                gpsSerial_Enable
  .text.gpsSerial_Start
-                0x00000f14       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
-                0x00000f14                gpsSerial_Start
+                0x00000f08       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
+                0x00000f08                gpsSerial_Start
  .text.debugSerial_Init
-                0x00000f30       0x24 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
-                0x00000f30                debugSerial_Init
+                0x00000f24       0x24 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+                0x00000f24                debugSerial_Init
  .text.debugSerial_Enable
-                0x00000f54       0x38 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
-                0x00000f54                debugSerial_Enable
+                0x00000f48       0x38 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+                0x00000f48                debugSerial_Enable
  .text.debugSerial_Start
-                0x00000f8c       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
-                0x00000f8c                debugSerial_Start
+                0x00000f80       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+                0x00000f80                debugSerial_Start
  .text.debugSerial_PutChar
-                0x00000fa8       0x18 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
-                0x00000fa8                debugSerial_PutChar
+                0x00000f9c       0x18 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+                0x00000f9c                debugSerial_PutChar
  .text.debugSerial_PutString
-                0x00000fc0       0x24 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
-                0x00000fc0                debugSerial_PutString
+                0x00000fb4       0x24 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+                0x00000fb4                debugSerial_PutString
  .text.debugSerial_PutCRLF
-                0x00000fe4       0x20 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
-                0x00000fe4                debugSerial_PutCRLF
+                0x00000fd8       0x20 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+                0x00000fd8                debugSerial_PutCRLF
  .text.I2C_Init
-                0x00001004       0x68 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
-                0x00001004                I2C_Init
+                0x00000ff8       0x68 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
+                0x00000ff8                I2C_Init
  .text.I2C_Enable
-                0x0000106c       0x24 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
-                0x0000106c                I2C_Enable
+                0x00001060       0x24 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
+                0x00001060                I2C_Enable
  .text.I2C_Start
-                0x00001090       0x28 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
-                0x00001090                I2C_Start
- .text.I2C_ISR  0x000010b8      0x2d0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_INT.o)
-                0x000010b8                I2C_ISR
+                0x00001084       0x28 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
+                0x00001084                I2C_Start
+ .text.I2C_ISR  0x000010ac      0x2d0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_INT.o)
+                0x000010ac                I2C_ISR
  .text.I2C_MasterWriteBuf
-                0x00001388       0xcc .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
-                0x00001388                I2C_MasterWriteBuf
+                0x0000137c       0xcc .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
+                0x0000137c                I2C_MasterWriteBuf
  .text.I2C_MasterReadBuf
-                0x00001454       0xd0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
-                0x00001454                I2C_MasterReadBuf
+                0x00001448       0xd0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
+                0x00001448                I2C_MasterReadBuf
  .text.I2C_MasterStatus
-                0x00001524       0x38 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
-                0x00001524                I2C_MasterStatus
+                0x00001518       0x38 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
+                0x00001518                I2C_MasterStatus
  .text.xbeeSerial_IntClock_Start
-                0x0000155c       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial_IntClock.o)
-                0x0000155c                xbeeSerial_IntClock_Start
+                0x00001550       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial_IntClock.o)
+                0x00001550                xbeeSerial_IntClock_Start
  .text.gpsSerial_IntClock_Start
-                0x00001578       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial_IntClock.o)
-                0x00001578                gpsSerial_IntClock_Start
+                0x0000156c       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial_IntClock.o)
+                0x0000156c                gpsSerial_IntClock_Start
  .text.debugSerial_IntClock_Start
-                0x00001594       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial_IntClock.o)
-                0x00001594                debugSerial_IntClock_Start
- .text.CyHalt   0x000015b0        0x4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
-                0x000015b0                CyHalt
- .text.CyDelay  0x000015b4       0x2c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
-                0x000015b4                CyDelay
+                0x00001588       0x1c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial_IntClock.o)
+                0x00001588                debugSerial_IntClock_Start
+ .text.CyHalt   0x000015a4        0x4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
+                0x000015a4                CyHalt
+ .text.CyDelay  0x000015a8       0x2c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
+                0x000015a8                CyDelay
  .text.CyIntSetVector
-                0x000015e0       0x28 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
-                0x000015e0                CyIntSetVector
+                0x000015d4       0x28 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
+                0x000015d4                CyIntSetVector
  .text.CyIntSetPriority
-                0x00001608       0x30 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
-                0x00001608                CyIntSetPriority
- .text          0x00001638       0x20 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyBootAsmGnu.o)
-                0x00001638                CyDelayCycles
-                0x00001648                CyEnterCriticalSection
-                0x00001650                CyExitCriticalSection
- .text          0x00001658      0x370 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libgcc.a(_arm_addsubdf3.o)
-                0x00001658                __aeabi_drsub
-                0x00001660                __aeabi_dsub
-                0x00001660                __subdf3
-                0x00001664                __aeabi_dadd
-                0x00001664                __adddf3
-                0x000018dc                __floatunsidf
-                0x000018dc                __aeabi_ui2d
-                0x000018fc                __floatsidf
-                0x000018fc                __aeabi_i2d
-                0x00001920                __aeabi_f2d
-                0x00001920                __extendsfdf2
-                0x0000195c                __floatundidf
-                0x0000195c                __aeabi_ul2d
-                0x0000196c                __floatdidf
-                0x0000196c                __aeabi_l2d
- .text          0x000019c8      0x424 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libgcc.a(_arm_muldivdf3.o)
-                0x000019c8                __aeabi_dmul
-                0x000019c8                __muldf3
-                0x00001c1c                __divdf3
-                0x00001c1c                __aeabi_ddiv
- .text          0x00001dec      0x21c c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libgcc.a(_arm_addsubsf3.o)
-                0x00001dec                __aeabi_frsub
-                0x00001df4                __subsf3
-                0x00001df4                __aeabi_fsub
-                0x00001df8                __aeabi_fadd
-                0x00001df8                __addsf3
-                0x00001f58                __aeabi_ui2f
-                0x00001f58                __floatunsisf
-                0x00001f60                __aeabi_i2f
-                0x00001f60                __floatsisf
-                0x00001f7c                __aeabi_ul2f
-                0x00001f7c                __floatundisf
-                0x00001f8c                __aeabi_l2f
-                0x00001f8c                __floatdisf
- .text          0x00002008      0x2a0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libgcc.a(_arm_muldivsf3.o)
-                0x00002008                __mulsf3
-                0x00002008                __aeabi_fmul
-                0x00002170                __aeabi_fdiv
-                0x00002170                __divsf3
- .text.__errno  0x000022a8        0xc c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-errno.o)
-                0x000022a8                __errno
+                0x000015fc       0x30 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
+                0x000015fc                CyIntSetPriority
+ *fill*         0x0000162c        0x4 
+ .text          0x00001630       0x20 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyBootAsmGnu.o)
+                0x00001630                CyDelayCycles
+                0x00001640                CyEnterCriticalSection
+                0x00001648                CyExitCriticalSection
+ .text          0x00001650      0x370 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libgcc.a(_arm_addsubdf3.o)
+                0x00001650                __aeabi_drsub
+                0x00001658                __aeabi_dsub
+                0x00001658                __subdf3
+                0x0000165c                __aeabi_dadd
+                0x0000165c                __adddf3
+                0x000018d4                __floatunsidf
+                0x000018d4                __aeabi_ui2d
+                0x000018f4                __floatsidf
+                0x000018f4                __aeabi_i2d
+                0x00001918                __aeabi_f2d
+                0x00001918                __extendsfdf2
+                0x00001954                __floatundidf
+                0x00001954                __aeabi_ul2d
+                0x00001964                __floatdidf
+                0x00001964                __aeabi_l2d
+ .text          0x000019c0      0x424 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libgcc.a(_arm_muldivdf3.o)
+                0x000019c0                __aeabi_dmul
+                0x000019c0                __muldf3
+                0x00001c14                __divdf3
+                0x00001c14                __aeabi_ddiv
+ .text          0x00001de4      0x21c c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libgcc.a(_arm_addsubsf3.o)
+                0x00001de4                __aeabi_frsub
+                0x00001dec                __subsf3
+                0x00001dec                __aeabi_fsub
+                0x00001df0                __aeabi_fadd
+                0x00001df0                __addsf3
+                0x00001f50                __aeabi_ui2f
+                0x00001f50                __floatunsisf
+                0x00001f58                __aeabi_i2f
+                0x00001f58                __floatsisf
+                0x00001f74                __aeabi_ul2f
+                0x00001f74                __floatundisf
+                0x00001f84                __aeabi_l2f
+                0x00001f84                __floatdisf
+ .text          0x00002000      0x2a0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m\libgcc.a(_arm_muldivsf3.o)
+                0x00002000                __mulsf3
+                0x00002000                __aeabi_fmul
+                0x00002168                __aeabi_fdiv
+                0x00002168                __divsf3
+ .text.__errno  0x000022a0        0xc c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-errno.o)
+                0x000022a0                __errno
  .text.__libc_init_array
-                0x000022b4       0x4c c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-init.o)
-                0x000022b4                __libc_init_array
- .text.memcpy   0x00002300       0x16 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memcpy-stub.o)
-                0x00002300                memcpy
- .text.memset   0x00002316       0x10 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memset.o)
-                0x00002316                memset
+                0x000022ac       0x4c c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-init.o)
+                0x000022ac                __libc_init_array
+ .text.memcpy   0x000022f8       0x16 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memcpy-stub.o)
+                0x000022f8                memcpy
+ .text.memset   0x0000230e       0x10 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-memset.o)
+                0x0000230e                memset
  *(.plt)
  *(.gnu.warning)
  *(.glue_7t)
- .glue_7t       0x00002326        0x0 linker stubs
+ .glue_7t       0x0000231e        0x0 linker stubs
  *(.glue_7)
- .glue_7        0x00002326        0x0 linker stubs
+ .glue_7        0x0000231e        0x0 linker stubs
  *(.vfp11_veneer)
- .vfp11_veneer  0x00002326        0x0 linker stubs
+ .vfp11_veneer  0x0000231e        0x0 linker stubs
  *(.bootloader)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
  *(.gcc_except_table)
 
-.v4_bx          0x00002328        0x0
- .v4_bx         0x00002328        0x0 linker stubs
+.v4_bx          0x00002320        0x0
+ .v4_bx         0x00002320        0x0 linker stubs
 
-.iplt           0x00002328        0x0
- .iplt          0x00002328        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+.iplt           0x00002320        0x0
+ .iplt          0x00002320        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
 
 .eh_frame_hdr
  *(.eh_frame_hdr)
 
-.eh_frame       0x00002328        0x4
+.eh_frame       0x00002320        0x4
  *(.eh_frame)
- .eh_frame      0x00002328        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
- .eh_frame      0x00002328        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtend.o
+ .eh_frame      0x00002320        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+ .eh_frame      0x00002320        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtend.o
                 [!provide]                PROVIDE (__exidx_start, .)
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000232c                __exidx_end = .
+                0x00002324                __exidx_end = .
 
-.rodata         0x0000232c       0xbc
+.rodata         0x00002324       0xcc
  *(.rodata .rodata.* .gnu.linkonce.r.*)
  .rodata.str1.4
-                0x0000232c       0x1f .\CortexM3\ARM_GCC_541\Debug\main.o
- *fill*         0x0000234b        0x1 
+                0x00002324       0x1f .\CortexM3\ARM_GCC_541\Debug\main.o
+ *fill*         0x00002343        0x1 
  .rodata.str1.4
-                0x0000234c       0x30 .\CortexM3\ARM_GCC_541\Debug\gyroscope.o
+                0x00002344       0x30 .\CortexM3\ARM_GCC_541\Debug\gyroscope.o
                                  0x2f (size before relaxing)
  .rodata.str1.4
-                0x0000237c       0x23 .\CortexM3\ARM_GCC_541\Debug\accel_mag.o
- .rodata        0x0000237c       0x36 .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o
+                0x00002374       0x23 .\CortexM3\ARM_GCC_541\Debug\accel_mag.o
+ .rodata        0x00002374       0x40 .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o
  .rodata.str1.1
-                0x000023b2        0x2 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-impure.o)
-                0x000023b4                . = ALIGN (0x4)
+                0x000023b4        0x2 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-impure.o)
+                0x000023b8                . = ALIGN (0x4)
+ *fill*         0x000023b6        0x2 
  *(.init)
- .init          0x000023b4        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crti.o
-                0x000023b4                _init
- .init          0x000023b8        0x8 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtn.o
-                0x000023c0                . = ALIGN (0x4)
-                0x000023c0                __preinit_array_start = .
+ .init          0x000023b8        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crti.o
+                0x000023b8                _init
+ .init          0x000023bc        0x8 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtn.o
+                0x000023c4                . = ALIGN (0x4)
+                0x000023c4                __preinit_array_start = .
  *(.preinit_array)
-                0x000023c0                __preinit_array_end = .
-                0x000023c0                . = ALIGN (0x4)
-                0x000023c0                __init_array_start = .
+                0x000023c4                __preinit_array_end = .
+                0x000023c4                . = ALIGN (0x4)
+                0x000023c4                __init_array_start = .
  *(SORT(.init_array.*))
  *(.init_array)
- .init_array    0x000023c0        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
- .init_array    0x000023c4        0x4 .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
-                0x000023c8                __init_array_end = .
-                0x000023c8                . = ALIGN (0x4)
+ .init_array    0x000023c4        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+ .init_array    0x000023c8        0x4 .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
+                0x000023cc                __init_array_end = .
+                0x000023cc                . = ALIGN (0x4)
  *(.fini)
- .fini          0x000023c8        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crti.o
-                0x000023c8                _fini
- .fini          0x000023cc        0x8 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtn.o
-                0x000023d4                . = ALIGN (0x4)
-                0x000023d4                __fini_array_start = .
- *(.fini_array)
- .fini_array    0x000023d4        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
- *(SORT(.fini_array.*))
-                0x000023d8                __fini_array_end = .
+ .fini          0x000023cc        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crti.o
+                0x000023cc                _fini
+ .fini          0x000023d0        0x8 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtn.o
                 0x000023d8                . = ALIGN (0x4)
+                0x000023d8                __fini_array_start = .
+ *(.fini_array)
+ .fini_array    0x000023d8        0x4 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+ *(SORT(.fini_array.*))
+                0x000023dc                __fini_array_end = .
+                0x000023dc                . = ALIGN (0x4)
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *crtend.o(.ctors)
-                0x000023d8                . = ALIGN (0x4)
+                0x000023dc                . = ALIGN (0x4)
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *crtend.o(.dtors)
-                0x000023d8                . = ALIGN (0x4)
-                0x000023d8                __cy_regions = .
-                0x000023d8        0x4 LONG 0x23e8 __cy_region_init_ram
-                0x000023dc        0x4 LONG 0x1fff80c8 __cy_region_start_data
-                0x000023e0        0x4 LONG 0x78 __cy_region_init_size_ram
-                0x000023e4        0x4 LONG 0x138 __cy_region_zero_size_ram
-                0x000023e8                __cy_regions_end = .
-                0x000023e8                . = ALIGN (0x8)
-                0x000023e8                _etext = .
+                0x000023dc                . = ALIGN (0x4)
+                0x000023dc                __cy_regions = .
+                0x000023dc        0x4 LONG 0x23f0 __cy_region_init_ram
+                0x000023e0        0x4 LONG 0x1fff80c8 __cy_region_start_data
+                0x000023e4        0x4 LONG 0x78 __cy_region_init_size_ram
+                0x000023e8        0x4 LONG 0x138 __cy_region_zero_size_ram
+                0x000023ec                __cy_regions_end = .
+                0x000023f0                . = ALIGN (0x8)
+ *fill*         0x000023ec        0x4 
+                0x000023f0                _etext = .
 
 .cy_checksum_exclude
-                0x000023e8        0x0
+                0x000023f0        0x0
  *(.cy_checksum_exclude)
 
 .ramvectors     0x1fff8000       0xc0
@@ -1717,7 +1720,7 @@ END GROUP
  .noinit        0x1fff80c0        0x1 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
                 0x1fff80c0                CyResetStatus
 
-.data           0x1fff80c8       0x78 load address 0x000023e8
+.data           0x1fff80c8       0x78 load address 0x000023f0
                 0x1fff80c8                __cy_region_start_data = .
  *(.jcr)
  .jcr           0x1fff80c8        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
@@ -1740,10 +1743,10 @@ END GROUP
  *(.ram)
                 0x1fff8140                _edata = .
 
-.igot.plt       0x1fff8140        0x0 load address 0x00002460
+.igot.plt       0x1fff8140        0x0 load address 0x00002468
  .igot.plt      0x1fff8140        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
 
-.bss            0x1fff8140      0x138 load address 0x00002460
+.bss            0x1fff8140      0x138 load address 0x00002468
                 0x1fff8140                PROVIDE (__bss_start__, .)
  *(.shbss)
  *(.bss .bss.* .gnu.linkonce.b.*)
@@ -1796,11 +1799,11 @@ END GROUP
                 0x1fff8278                __end = .
                 0x1fff8278                PROVIDE (end, .)
                 0x1fff8278                PROVIDE (__bss_end__, .)
-                0x000023e8                __cy_region_init_ram = LOADADDR (.data)
+                0x000023f0                __cy_region_init_ram = LOADADDR (.data)
                 0x00000078                __cy_region_init_size_ram = (_edata - ADDR (.data))
                 0x00000138                __cy_region_zero_size_ram = (_end - _edata)
 
-.heap           0x1fff8278       0x80 load address 0x00002460
+.heap           0x1fff8278       0x80 load address 0x00002468
                 0x1fff8278                . = _end
                 0x1fff82f8                . = (. + 0x80)
  *fill*         0x1fff8278       0x80 
@@ -1820,9 +1823,9 @@ END GROUP
 .cyloadablemeta
  *(.cyloadablemeta)
 
-.cyconfigecc    0x80000000      0xcf4
+.cyconfigecc    0x80000000      0xca8
  *(.cyconfigecc)
- .cyconfigecc   0x80000000      0xcf4 .\CortexM3\ARM_GCC_541\Debug\cymetadata.o
+ .cyconfigecc   0x80000000      0xca8 .\CortexM3\ARM_GCC_541\Debug\cymetadata.o
                 0x80000000                cy_meta_configecc
 
 .cycustnvl      0x90000000        0x4
@@ -1851,8 +1854,8 @@ END GROUP
  .cymeta        0x90500000        0xc .\CortexM3\ARM_GCC_541\Debug\cymetadata.o
                 0x90500000                cy_metadata
 
-.rel.dyn        0x00002460        0x0 load address 0x9050000c
- .rel.iplt      0x00002460        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
+.rel.dyn        0x00002468        0x0 load address 0x9050000c
+ .rel.iplt      0x00002468        0x0 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7-m/crtbegin.o
 
 .stab
  *(.stab)
@@ -1940,7 +1943,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0xa6cb
+.debug_info     0x00000000     0xa6f7
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x2b6 .\CortexM3\ARM_GCC_541\Debug\main.o
  .debug_info    0x000002b6      0x82d .\CortexM3\ARM_GCC_541\Debug\Madgwick.o
@@ -1952,27 +1955,27 @@ END GROUP
  .debug_info    0x00002d68     0x12f7 .\CortexM3\ARM_GCC_541\Debug\gps.o
  .debug_info    0x0000405f      0x462 .\CortexM3\ARM_GCC_541\Debug\debSerial.o
  .debug_info    0x000044c1      0x16d .\CortexM3\ARM_GCC_541\Debug\millis.o
- .debug_info    0x0000462e      0x603 .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_info    0x00004c31      0x139 .\CortexM3\ARM_GCC_541\Debug\cymetadata.o
- .debug_info    0x00004d6a      0x3bb .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
- .debug_info    0x00005125      0x60c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
- .debug_info    0x00005731      0x60c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
- .debug_info    0x00005d3d      0x60c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
- .debug_info    0x00006349      0x2f0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltaTimer.o)
- .debug_info    0x00006639      0x2d2 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltTime.o)
- .debug_info    0x0000690b      0x2ad .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
- .debug_info    0x00006bb8      0x184 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_INT.o)
- .debug_info    0x00006d3c      0x207 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_PM.o)
- .debug_info    0x00006f43      0x407 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
- .debug_info    0x0000734a      0x283 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial_IntClock.o)
- .debug_info    0x000075cd      0x283 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial_IntClock.o)
- .debug_info    0x00007850      0x283 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial_IntClock.o)
- .debug_info    0x00007ad3     0x13d4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
- .debug_info    0x00008ea7      0xa2a .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(cyPm.o)
- .debug_info    0x000098d1       0x95 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyBootAsmGnu.o)
- .debug_info    0x00009966      0x2c4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyScBoostClk.o)
- .debug_info    0x00009c2a      0x5b8 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyFlash.o)
- .debug_info    0x0000a1e2      0x4e9 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CySpc.o)
+ .debug_info    0x0000462e      0x617 .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_info    0x00004c45      0x139 .\CortexM3\ARM_GCC_541\Debug\cymetadata.o
+ .debug_info    0x00004d7e      0x3bb .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
+ .debug_info    0x00005139      0x60c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
+ .debug_info    0x00005745      0x60c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
+ .debug_info    0x00005d51      0x60c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+ .debug_info    0x0000635d      0x2f0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltaTimer.o)
+ .debug_info    0x0000664d      0x2d2 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltTime.o)
+ .debug_info    0x0000691f      0x2ad .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
+ .debug_info    0x00006bcc      0x184 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_INT.o)
+ .debug_info    0x00006d50      0x207 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_PM.o)
+ .debug_info    0x00006f57      0x407 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
+ .debug_info    0x0000735e      0x283 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial_IntClock.o)
+ .debug_info    0x000075e1      0x283 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial_IntClock.o)
+ .debug_info    0x00007864      0x283 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial_IntClock.o)
+ .debug_info    0x00007ae7     0x13d4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
+ .debug_info    0x00008ebb      0xa2a .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(cyPm.o)
+ .debug_info    0x000098e5       0xad .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyBootAsmGnu.o)
+ .debug_info    0x00009992      0x2c4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyScBoostClk.o)
+ .debug_info    0x00009c56      0x5b8 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyFlash.o)
+ .debug_info    0x0000a20e      0x4e9 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CySpc.o)
 
 .debug_abbrev   0x00000000     0x2b9a
  *(.debug_abbrev)
@@ -2109,70 +2112,70 @@ END GROUP
  .debug_frame   0x000032c4       0x5c c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-reent.o)
  .debug_frame   0x00003320       0x20 c:/program files (x86)/cypress/psoc creator/4.1/psoc creator/import/gnu/arm/5.4.1/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7-m\libg_nano.a(lib_a-nano-msizer.o)
 
-.debug_str      0x00000000     0x38ef
+.debug_str      0x00000000     0x394e
  *(.debug_str)
- .debug_str     0x00000000      0x2ac .\CortexM3\ARM_GCC_541\Debug\main.o
-                                0x2f4 (size before relaxing)
- .debug_str     0x000002ac      0x1ba .\CortexM3\ARM_GCC_541\Debug\Madgwick.o
+ .debug_str     0x00000000      0x2c4 .\CortexM3\ARM_GCC_541\Debug\main.o
+                                0x30c (size before relaxing)
+ .debug_str     0x000002c4      0x201 .\CortexM3\ARM_GCC_541\Debug\Madgwick.o
                                 0x344 (size before relaxing)
- .debug_str     0x00000466      0x23c .\CortexM3\ARM_GCC_541\Debug\gyroscope.o
-                                0x46f (size before relaxing)
- .debug_str     0x000006a2      0x205 .\CortexM3\ARM_GCC_541\Debug\SensorVal.o
+ .debug_str     0x000004c5      0x23c .\CortexM3\ARM_GCC_541\Debug\gyroscope.o
+                                0x487 (size before relaxing)
+ .debug_str     0x00000701      0x205 .\CortexM3\ARM_GCC_541\Debug\SensorVal.o
                                 0x424 (size before relaxing)
- .debug_str     0x000008a7      0x3aa .\CortexM3\ARM_GCC_541\Debug\accel_mag.o
-                                0x8ba (size before relaxing)
- .debug_str     0x00000c51       0xba .\CortexM3\ARM_GCC_541\Debug\twi.o
-                                0x2c3 (size before relaxing)
- .debug_str     0x00000d0b      0x278 .\CortexM3\ARM_GCC_541\Debug\barometer.o
-                                0x5dc (size before relaxing)
- .debug_str     0x00000f83      0x32a .\CortexM3\ARM_GCC_541\Debug\gps.o
-                                0x5f5 (size before relaxing)
- .debug_str     0x000012ad       0x9f .\CortexM3\ARM_GCC_541\Debug\debSerial.o
-                                0x2da (size before relaxing)
- .debug_str     0x0000134c       0x4d .\CortexM3\ARM_GCC_541\Debug\millis.o
-                                0x20d (size before relaxing)
- .debug_str     0x00001399      0x19e .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o
-                                0x349 (size before relaxing)
- .debug_str     0x00001537       0x75 .\CortexM3\ARM_GCC_541\Debug\cymetadata.o
-                                0x1e9 (size before relaxing)
- .debug_str     0x000015ac      0x13f .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
-                                0x30f (size before relaxing)
- .debug_str     0x000016eb      0x376 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
-                                0x534 (size before relaxing)
- .debug_str     0x00001a61      0x272 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
-                                0x515 (size before relaxing)
- .debug_str     0x00001cd3      0x2b0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
-                                0x553 (size before relaxing)
- .debug_str     0x00001f83      0x1bc .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltaTimer.o)
-                                0x39a (size before relaxing)
- .debug_str     0x0000213f      0x117 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltTime.o)
-                                0x2d5 (size before relaxing)
- .debug_str     0x00002256      0x102 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
-                                0x2e6 (size before relaxing)
- .debug_str     0x00002358       0x86 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_INT.o)
-                                0x264 (size before relaxing)
- .debug_str     0x000023de       0x56 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_PM.o)
-                                0x282 (size before relaxing)
- .debug_str     0x00002434      0x101 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
-                                0x3a9 (size before relaxing)
- .debug_str     0x00002535      0x1bf .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial_IntClock.o)
-                                0x383 (size before relaxing)
- .debug_str     0x000026f4      0x16a .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial_IntClock.o)
-                                0x377 (size before relaxing)
- .debug_str     0x0000285e      0x17e .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial_IntClock.o)
+ .debug_str     0x00000906      0x3aa .\CortexM3\ARM_GCC_541\Debug\accel_mag.o
+                                0x8d2 (size before relaxing)
+ .debug_str     0x00000cb0       0xba .\CortexM3\ARM_GCC_541\Debug\twi.o
+                                0x2db (size before relaxing)
+ .debug_str     0x00000d6a      0x278 .\CortexM3\ARM_GCC_541\Debug\barometer.o
+                                0x5f4 (size before relaxing)
+ .debug_str     0x00000fe2      0x32a .\CortexM3\ARM_GCC_541\Debug\gps.o
+                                0x60d (size before relaxing)
+ .debug_str     0x0000130c       0x9f .\CortexM3\ARM_GCC_541\Debug\debSerial.o
+                                0x2f2 (size before relaxing)
+ .debug_str     0x000013ab       0x4d .\CortexM3\ARM_GCC_541\Debug\millis.o
+                                0x225 (size before relaxing)
+ .debug_str     0x000013f8      0x19e .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o
+                                0x361 (size before relaxing)
+ .debug_str     0x00001596       0x75 .\CortexM3\ARM_GCC_541\Debug\cymetadata.o
+                                0x201 (size before relaxing)
+ .debug_str     0x0000160b      0x13f .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
+                                0x327 (size before relaxing)
+ .debug_str     0x0000174a      0x376 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
+                                0x54c (size before relaxing)
+ .debug_str     0x00001ac0      0x272 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
+                                0x52d (size before relaxing)
+ .debug_str     0x00001d32      0x2b0 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+                                0x56b (size before relaxing)
+ .debug_str     0x00001fe2      0x1bc .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltaTimer.o)
+                                0x3b2 (size before relaxing)
+ .debug_str     0x0000219e      0x117 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltTime.o)
+                                0x2ed (size before relaxing)
+ .debug_str     0x000022b5      0x102 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
+                                0x2fe (size before relaxing)
+ .debug_str     0x000023b7       0x86 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_INT.o)
+                                0x27c (size before relaxing)
+ .debug_str     0x0000243d       0x56 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_PM.o)
+                                0x29a (size before relaxing)
+ .debug_str     0x00002493      0x101 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
+                                0x3c1 (size before relaxing)
+ .debug_str     0x00002594      0x1bf .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial_IntClock.o)
+                                0x39b (size before relaxing)
+ .debug_str     0x00002753      0x16a .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial_IntClock.o)
                                 0x38f (size before relaxing)
- .debug_str     0x000029dc      0x7fa .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
-                                0xa95 (size before relaxing)
- .debug_str     0x000031d6      0x365 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(cyPm.o)
-                                0x738 (size before relaxing)
- .debug_str     0x0000353b      0x173 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyScBoostClk.o)
-                                0x374 (size before relaxing)
- .debug_str     0x000036ae      0x195 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyFlash.o)
-                                0x3a6 (size before relaxing)
- .debug_str     0x00003843       0xac .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CySpc.o)
-                                0x32f (size before relaxing)
+ .debug_str     0x000028bd      0x17e .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial_IntClock.o)
+                                0x3a7 (size before relaxing)
+ .debug_str     0x00002a3b      0x7fa .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
+                                0xaad (size before relaxing)
+ .debug_str     0x00003235      0x365 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(cyPm.o)
+                                0x750 (size before relaxing)
+ .debug_str     0x0000359a      0x173 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyScBoostClk.o)
+                                0x38c (size before relaxing)
+ .debug_str     0x0000370d      0x195 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyFlash.o)
+                                0x3be (size before relaxing)
+ .debug_str     0x000038a2       0xac .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CySpc.o)
+                                0x347 (size before relaxing)
 
-.debug_loc      0x00000000     0x491d
+.debug_loc      0x00000000     0x494c
  *(.debug_loc)
  .debug_loc     0x00000000      0xd43 .\CortexM3\ARM_GCC_541\Debug\Madgwick.o
  .debug_loc     0x00000d43      0x1e4 .\CortexM3\ARM_GCC_541\Debug\gyroscope.o
@@ -2181,25 +2184,25 @@ END GROUP
  .debug_loc     0x000014a5      0x345 .\CortexM3\ARM_GCC_541\Debug\barometer.o
  .debug_loc     0x000017ea      0x4ee .\CortexM3\ARM_GCC_541\Debug\gps.o
  .debug_loc     0x00001cd8      0x15c .\CortexM3\ARM_GCC_541\Debug\debSerial.o
- .debug_loc     0x00001e34      0x259 .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o
- .debug_loc     0x0000208d      0x144 .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
- .debug_loc     0x000021d1      0x258 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
- .debug_loc     0x00002429      0x258 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
- .debug_loc     0x00002681      0x258 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
- .debug_loc     0x000028d9       0x13 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltaTimer.o)
- .debug_loc     0x000028ec       0x56 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltTime.o)
- .debug_loc     0x00002942       0x39 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
- .debug_loc     0x0000297b       0x29 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_INT.o)
- .debug_loc     0x000029a4       0x13 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_PM.o)
- .debug_loc     0x000029b7      0x52f .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
- .debug_loc     0x00002ee6      0x12c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial_IntClock.o)
- .debug_loc     0x00003012      0x128 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial_IntClock.o)
- .debug_loc     0x0000313a      0x128 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial_IntClock.o)
- .debug_loc     0x00003262      0xa4b .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
- .debug_loc     0x00003cad      0x1e4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(cyPm.o)
- .debug_loc     0x00003e91      0x14d .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyScBoostClk.o)
- .debug_loc     0x00003fde      0x2f2 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyFlash.o)
- .debug_loc     0x000042d0      0x64d .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CySpc.o)
+ .debug_loc     0x00001e34      0x288 .\CortexM3\ARM_GCC_541\Debug\cyfitter_cfg.o
+ .debug_loc     0x000020bc      0x144 .\CortexM3\ARM_GCC_541\Debug\Cm3Start.o
+ .debug_loc     0x00002200      0x258 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial.o)
+ .debug_loc     0x00002458      0x258 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial.o)
+ .debug_loc     0x000026b0      0x258 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial.o)
+ .debug_loc     0x00002908       0x13 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltaTimer.o)
+ .debug_loc     0x0000291b       0x56 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(deltTime.o)
+ .debug_loc     0x00002971       0x39 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C.o)
+ .debug_loc     0x000029aa       0x29 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_INT.o)
+ .debug_loc     0x000029d3       0x13 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_PM.o)
+ .debug_loc     0x000029e6      0x52f .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(I2C_MASTER.o)
+ .debug_loc     0x00002f15      0x12c .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(xbeeSerial_IntClock.o)
+ .debug_loc     0x00003041      0x128 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(gpsSerial_IntClock.o)
+ .debug_loc     0x00003169      0x128 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(debugSerial_IntClock.o)
+ .debug_loc     0x00003291      0xa4b .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyLib.o)
+ .debug_loc     0x00003cdc      0x1e4 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(cyPm.o)
+ .debug_loc     0x00003ec0      0x14d .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyScBoostClk.o)
+ .debug_loc     0x0000400d      0x2f2 .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CyFlash.o)
+ .debug_loc     0x000042ff      0x64d .\CortexM3\ARM_GCC_541\Debug\SensorFusion.a(CySpc.o)
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -2463,4 +2466,4 @@ END GROUP
 
 /DISCARD/
  *(.note.GNU-stack)
-OUTPUT(C:\Users\A85590\Documents\PSoC Creator\SensorFusion\SensorFusion.cydsn\CortexM3\ARM_GCC_541\Debug\SensorFusion.elf elf32-littlearm)
+OUTPUT(C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\CortexM3\ARM_GCC_541\Debug\SensorFusion.elf elf32-littlearm)

@@ -6,7 +6,7 @@
 
 #Build Date:         Feb 27 2017 11:02:10
 
-#File Generated:     Jul 12 2017 09:17:54
+#File Generated:     Jul 12 2017 13:50:43
 
 #Purpose:            
 
@@ -102,102 +102,6 @@ Phase 7
                      Clock Summary 
 ======================================================================
 Number of clocks: 10
-Clock: CyBUS_CLK            | Frequency:   1.5 MHz | Target:  24.0 MHz
-Clock: CyBUS_CLK(fixed-function) | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
-Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
-Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyScBoostClk         | Frequency: N/A       | Target:  12.0 MHz
-Clock: debugSerial_IntClock | Frequency:   1.5 MHz | Target:   0.9 MHz
-Clock: gpsSerial_IntClock   | Frequency:   1.5 MHz | Target:   0.1 MHz
-Clock: xbeeSerial_IntClock  | Frequency:   1.5 MHz | Target:   0.9 MHz
-
-======================================================================
-                     End of Clock Summary
-######################################################################
-D2088: Phase 7, elapsed time : 0.2 (sec)
-
-Final Design Statistics
-    Number of Combinational MCs 	:	25
-    Number of Sequential MCs    	:	49
-    Number of DPs               	:	13
-    Number of Controls          	:	4
-    Number of Status            	:	7
-    Number of SyncCells         	:	0
-    Number of count7cells       	:	3
-    Number of IOs       	:	10
-
-Device Utilization Summary
-    Macrocells                  :	74/192
-    IOs                         :	10/72
-
-
-
-######################################################################
-Placement Timing Summary
-
-The timing summary is based on estimated routing delays after
-placement. For final timing report, please carry out the timing
-analysis after routing.
-======================================================================
-
-
-######################################################################
-                     Clock Summary 
-======================================================================
-Number of clocks: 10
-Clock: CyBUS_CLK            | Frequency:   1.5 MHz | Target:  24.0 MHz
-Clock: CyBUS_CLK(fixed-function) | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
-Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
-Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyScBoostClk         | Frequency: N/A       | Target:  12.0 MHz
-Clock: debugSerial_IntClock | Frequency:   1.5 MHz | Target:   0.9 MHz
-Clock: gpsSerial_IntClock   | Frequency:   1.5 MHz | Target:   0.1 MHz
-Clock: xbeeSerial_IntClock  | Frequency:   1.5 MHz | Target:   0.9 MHz
-
-======================================================================
-                     End of Clock Summary
-######################################################################
-
-Phase 6
-
-######################################################################
-Placement Timing Summary
-
-The timing summary is based on estimated routing delays after
-placement. For final timing report, please carry out the timing
-analysis after routing.
-======================================================================
-
-######################################################################
-                     Clock Summary 
-======================================================================
-Number of clocks: 10
-Clock: CyBUS_CLK            | Frequency:   1.4 MHz | Target:  24.0 MHz
-Clock: CyBUS_CLK(fixed-function) | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
-Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
-Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
-Clock: CyScBoostClk         | Frequency: N/A       | Target:  12.0 MHz
-Clock: debugSerial_IntClock | Frequency:   1.4 MHz | Target:   0.9 MHz
-Clock: gpsSerial_IntClock   | Frequency:   1.5 MHz | Target:   0.1 MHz
-Clock: xbeeSerial_IntClock  | Frequency:   1.4 MHz | Target:   0.9 MHz
-
-======================================================================
-                     End of Clock Summary
-######################################################################
-
-D2088: Phase 6, elapsed time : 0.1 (sec)
-
-Phase 7
-######################################################################
-                     Clock Summary 
-======================================================================
-Number of clocks: 10
 Clock: CyBUS_CLK            | Frequency:   1.4 MHz | Target:  24.0 MHz
 Clock: CyBUS_CLK(fixed-function) | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
@@ -212,7 +116,7 @@ Clock: xbeeSerial_IntClock  | Frequency:   1.4 MHz | Target:   0.9 MHz
 ======================================================================
                      End of Clock Summary
 ######################################################################
-D2088: Phase 7, elapsed time : 1.0 (sec)
+D2088: Phase 7, elapsed time : 1.1 (sec)
 
 Final Design Statistics
     Number of Combinational MCs 	:	25
@@ -250,7 +154,7 @@ Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyScBoostClk         | Frequency: N/A       | Target:  12.0 MHz
-Clock: debugSerial_IntClock | Frequency:   1.6 MHz | Target:   0.9 MHz
+Clock: debugSerial_IntClock | Frequency:   1.5 MHz | Target:   0.9 MHz
 Clock: gpsSerial_IntClock   | Frequency:   1.5 MHz | Target:   0.1 MHz
 Clock: xbeeSerial_IntClock  | Frequency:   1.4 MHz | Target:   0.9 MHz
 
@@ -263,5 +167,5 @@ D2088: Phase 8, elapsed time : 0.0 (sec)
 
 D2054: Placement of the design completed successfully
 
-I2076: Total run-time: 2.1 sec.
+I2076: Total run-time: 1.8 sec.
 

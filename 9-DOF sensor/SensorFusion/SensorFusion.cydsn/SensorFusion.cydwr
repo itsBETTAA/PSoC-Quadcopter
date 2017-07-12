@@ -15,6 +15,7 @@
       <Data key="5ca611b2-252b-4423-b6f2-ec22d0e72189" value="to_gps_tx" />
       <Data key="7f09af4b-355e-4090-ab16-b70d26b52a9a" value="Rx" />
       <Data key="6335f217-52c9-4ab5-bf04-e5aa47f7cc7d" value="left_arm_led" />
+      <Data key="22863ebe-a37b-476f-b252-6e49a8c00b12" value="SDA" />
       <Data key="411534ba-fcd8-4cab-98e4-ab639987cf7b" value="Tx" />
       <Data key="1425177d-0d0e-4468-8bcc-e638e5509a9b" value="to_xbee_rx" />
       <Data key="e851a3b9-efb8-48be-bbb8-b303b216c393" value="right_arm_led" />
@@ -3580,6 +3581,11 @@
     <Group key="6335f217-52c9-4ab5-bf04-e5aa47f7cc7d">
       <Group key="0">
         <Data key="Port Format" value="2,7" />
+      </Group>
+    </Group>
+    <Group key="22863ebe-a37b-476f-b252-6e49a8c00b12">
+      <Group key="0">
+        <Data key="Port Format" value="12,1" />
       </Group>
     </Group>
     <Group key="411534ba-fcd8-4cab-98e4-ab639987cf7b">

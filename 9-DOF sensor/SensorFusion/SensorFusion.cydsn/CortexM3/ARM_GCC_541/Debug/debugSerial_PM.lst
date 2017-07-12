@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
   28:Generated_Source\PSoC5/debugSerial_PM.c **** };
   29:Generated_Source\PSoC5/debugSerial_PM.c **** 
   30:Generated_Source\PSoC5/debugSerial_PM.c **** 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 2
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 2
 
 
   31:Generated_Source\PSoC5/debugSerial_PM.c **** 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
   68:Generated_Source\PSoC5/debugSerial_PM.c **** *  Does not restore the FIFO which is a set of nonretention registers.
   69:Generated_Source\PSoC5/debugSerial_PM.c **** *
   70:Generated_Source\PSoC5/debugSerial_PM.c **** * Parameters:
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 3
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 3
 
 
   71:Generated_Source\PSoC5/debugSerial_PM.c **** *  None.
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  108:Generated_Source\PSoC5/debugSerial_PM.c **** *  None.
  109:Generated_Source\PSoC5/debugSerial_PM.c **** *
  110:Generated_Source\PSoC5/debugSerial_PM.c **** * Return:
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 4
 
 
  111:Generated_Source\PSoC5/debugSerial_PM.c **** *  None.
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  140:Generated_Source\PSoC5/debugSerial_PM.c ****     #endif /* End debugSerial_RX_ENABLED || debugSerial_HD_ENABLED*/
  141:Generated_Source\PSoC5/debugSerial_PM.c **** 
  142:Generated_Source\PSoC5/debugSerial_PM.c ****     debugSerial_Stop();
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 5
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 5
 
 
   87              		.loc 1 142 0
@@ -248,7 +248,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
   91              	.L8:
   92              		.align	2
   93              	.L7:
-  94 0020 92640040 		.word	1073767570
+  94 0020 96640040 		.word	1073767574
   95 0024 00000000 		.word	.LANCHOR0
   96              		.cfi_endproc
   97              	.LFE2:
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  110              		@ frame_needed = 0, uses_anonymous_args = 0
  111 0000 08B5     		push	{r3, lr}
  112              		.cfi_def_cfa_offset 8
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 6
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 6
 
 
  113              		.cfi_offset 3, -8
@@ -354,11 +354,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  152 0006 00000000 		.4byte	.Ldebug_abbrev0
  153 000a 04       		.byte	0x4
  154 000b 01       		.uleb128 0x1
- 155 000c A8000000 		.4byte	.LASF25
+ 155 000c 91000000 		.4byte	.LASF25
  156 0010 0C       		.byte	0xc
- 157 0011 66010000 		.4byte	.LASF26
- 158 0015 B5010000 		.4byte	.LASF27
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 7
+ 157 0011 4F010000 		.4byte	.LASF26
+ 158 0015 53020000 		.4byte	.LASF27
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 7
 
 
  159 0019 00000000 		.4byte	.Ldebug_ranges0+0
@@ -367,35 +367,35 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  162 0025 02       		.uleb128 0x2
  163 0026 01       		.byte	0x1
  164 0027 06       		.byte	0x6
- 165 0028 8E020000 		.4byte	.LASF0
+ 165 0028 47020000 		.4byte	.LASF0
  166 002c 02       		.uleb128 0x2
  167 002d 01       		.byte	0x1
  168 002e 08       		.byte	0x8
- 169 002f 9A000000 		.4byte	.LASF1
+ 169 002f 83000000 		.4byte	.LASF1
  170 0033 02       		.uleb128 0x2
  171 0034 02       		.byte	0x2
  172 0035 05       		.byte	0x5
- 173 0036 63020000 		.4byte	.LASF2
+ 173 0036 1C020000 		.4byte	.LASF2
  174 003a 02       		.uleb128 0x2
  175 003b 02       		.byte	0x2
  176 003c 07       		.byte	0x7
- 177 003d 56000000 		.4byte	.LASF3
+ 177 003d 3F000000 		.4byte	.LASF3
  178 0041 02       		.uleb128 0x2
  179 0042 04       		.byte	0x4
  180 0043 05       		.byte	0x5
- 181 0044 6D020000 		.4byte	.LASF4
+ 181 0044 26020000 		.4byte	.LASF4
  182 0048 02       		.uleb128 0x2
  183 0049 04       		.byte	0x4
  184 004a 07       		.byte	0x7
- 185 004b 3B010000 		.4byte	.LASF5
+ 185 004b 24010000 		.4byte	.LASF5
  186 004f 02       		.uleb128 0x2
  187 0050 08       		.byte	0x8
  188 0051 05       		.byte	0x5
- 189 0052 36020000 		.4byte	.LASF6
+ 189 0052 EF010000 		.4byte	.LASF6
  190 0056 02       		.uleb128 0x2
  191 0057 08       		.byte	0x8
  192 0058 07       		.byte	0x7
- 193 0059 FC010000 		.4byte	.LASF7
+ 193 0059 B5010000 		.4byte	.LASF7
  194 005d 03       		.uleb128 0x3
  195 005e 04       		.byte	0x4
  196 005f 05       		.byte	0x5
@@ -403,29 +403,29 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  198 0064 02       		.uleb128 0x2
  199 0065 04       		.byte	0x4
  200 0066 07       		.byte	0x7
- 201 0067 A8010000 		.4byte	.LASF8
+ 201 0067 91010000 		.4byte	.LASF8
  202 006b 04       		.uleb128 0x4
- 203 006c 60010000 		.4byte	.LASF12
+ 203 006c 49010000 		.4byte	.LASF12
  204 0070 02       		.byte	0x2
  205 0071 9201     		.2byte	0x192
  206 0073 2C000000 		.4byte	0x2c
  207 0077 02       		.uleb128 0x2
  208 0078 04       		.byte	0x4
  209 0079 04       		.byte	0x4
- 210 007a 94000000 		.4byte	.LASF9
+ 210 007a 7D000000 		.4byte	.LASF9
  211 007e 02       		.uleb128 0x2
  212 007f 08       		.byte	0x8
  213 0080 04       		.byte	0x4
- 214 0081 8E010000 		.4byte	.LASF10
+ 214 0081 77010000 		.4byte	.LASF10
  215 0085 02       		.uleb128 0x2
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 8
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 8
 
 
  216 0086 01       		.byte	0x1
  217 0087 08       		.byte	0x8
- 218 0088 44020000 		.4byte	.LASF11
+ 218 0088 FD010000 		.4byte	.LASF11
  219 008c 04       		.uleb128 0x4
- 220 008d 36010000 		.4byte	.LASF13
+ 220 008d 1F010000 		.4byte	.LASF13
  221 0091 02       		.byte	0x2
  222 0092 3C02     		.2byte	0x23c
  223 0094 98000000 		.4byte	0x98
@@ -434,31 +434,31 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  226 009d 02       		.uleb128 0x2
  227 009e 08       		.byte	0x8
  228 009f 04       		.byte	0x4
- 229 00a0 82020000 		.4byte	.LASF14
+ 229 00a0 3B020000 		.4byte	.LASF14
  230 00a4 02       		.uleb128 0x2
  231 00a5 04       		.byte	0x4
  232 00a6 07       		.byte	0x7
- 233 00a7 2D020000 		.4byte	.LASF15
+ 233 00a7 E6010000 		.4byte	.LASF15
  234 00ab 06       		.uleb128 0x6
- 235 00ac 69000000 		.4byte	.LASF28
+ 235 00ac 52000000 		.4byte	.LASF28
  236 00b0 01       		.byte	0x1
  237 00b1 03       		.byte	0x3
  238 00b2 45       		.byte	0x45
  239 00b3 C4000000 		.4byte	0xc4
  240 00b7 07       		.uleb128 0x7
- 241 00b8 76020000 		.4byte	.LASF29
+ 241 00b8 2F020000 		.4byte	.LASF29
  242 00bc 03       		.byte	0x3
  243 00bd 47       		.byte	0x47
  244 00be 6B000000 		.4byte	0x6b
  245 00c2 00       		.byte	0
  246 00c3 00       		.byte	0
  247 00c4 08       		.uleb128 0x8
- 248 00c5 49020000 		.4byte	.LASF16
+ 248 00c5 02020000 		.4byte	.LASF16
  249 00c9 03       		.byte	0x3
  250 00ca 4D       		.byte	0x4d
  251 00cb AB000000 		.4byte	0xab
  252 00cf 09       		.uleb128 0x9
- 253 00d0 2D000000 		.4byte	.LASF17
+ 253 00d0 9E010000 		.4byte	.LASF17
  254 00d4 01       		.byte	0x1
  255 00d5 36       		.byte	0x36
  256 00d6 00000000 		.4byte	.LFB0
@@ -466,7 +466,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  258 00de 01       		.uleb128 0x1
  259 00df 9C       		.byte	0x9c
  260 00e0 09       		.uleb128 0x9
- 261 00e1 9A020000 		.4byte	.LASF18
+ 261 00e1 B2020000 		.4byte	.LASF18
  262 00e5 01       		.byte	0x1
  263 00e6 57       		.byte	0x57
  264 00e7 00000000 		.4byte	.LFB1
@@ -474,11 +474,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  266 00ef 01       		.uleb128 0x1
  267 00f0 9C       		.byte	0x9c
  268 00f1 0A       		.uleb128 0xa
- 269 00f2 44000000 		.4byte	.LASF19
+ 269 00f2 2D000000 		.4byte	.LASF19
  270 00f6 01       		.byte	0x1
  271 00f7 78       		.byte	0x78
  272 00f8 00000000 		.4byte	.LFB2
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 9
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 9
 
 
  273 00fc 28000000 		.4byte	.LFE2-.LFB2
@@ -490,7 +490,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  279 010b 52010000 		.4byte	0x152
  280 010f 00       		.byte	0
  281 0110 0A       		.uleb128 0xa
- 282 0111 95010000 		.4byte	.LASF20
+ 282 0111 7E010000 		.4byte	.LASF20
  283 0115 01       		.byte	0x1
  284 0116 AC       		.byte	0xac
  285 0117 00000000 		.4byte	.LFB3
@@ -509,7 +509,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  298 013c 73010000 		.4byte	0x173
  299 0140 00       		.byte	0
  300 0141 0C       		.uleb128 0xc
- 301 0142 4D010000 		.4byte	.LASF30
+ 301 0142 36010000 		.4byte	.LASF30
  302 0146 01       		.byte	0x1
  303 0147 18       		.byte	0x18
  304 0148 C4000000 		.4byte	0xc4
@@ -517,8 +517,8 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  306 014d 03       		.byte	0x3
  307 014e 00000000 		.4byte	debugSerial_backup
  308 0152 0D       		.uleb128 0xd
- 309 0153 83000000 		.4byte	.LASF21
- 310 0157 83000000 		.4byte	.LASF21
+ 309 0153 6C000000 		.4byte	.LASF21
+ 310 0157 6C000000 		.4byte	.LASF21
  311 015b 03       		.byte	0x3
  312 015c 55       		.byte	0x55
  313 015d 0D       		.uleb128 0xd
@@ -527,8 +527,8 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  316 0166 03       		.byte	0x3
  317 0167 75       		.byte	0x75
  318 0168 0D       		.uleb128 0xd
- 319 0169 13020000 		.4byte	.LASF23
- 320 016d 13020000 		.4byte	.LASF23
+ 319 0169 CC010000 		.4byte	.LASF23
+ 320 016d CC010000 		.4byte	.LASF23
  321 0171 03       		.byte	0x3
  322 0172 8F       		.byte	0x8f
  323 0173 0D       		.uleb128 0xd
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  327 017d 5A       		.byte	0x5a
  328 017e 00       		.byte	0
  329              		.section	.debug_abbrev,"",%progbits
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 10
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 10
 
 
  330              	.Ldebug_abbrev0:
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  384 0035 00       		.byte	0
  385 0036 05       		.uleb128 0x5
  386 0037 35       		.uleb128 0x35
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 11
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 11
 
 
  387 0038 00       		.byte	0
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  441 006e 0E       		.uleb128 0xe
  442 006f 3A       		.uleb128 0x3a
  443 0070 0B       		.uleb128 0xb
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 12
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 12
 
 
  444 0071 3B       		.uleb128 0x3b
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  498 00ab 0B       		.uleb128 0xb
  499 00ac 3B       		.uleb128 0x3b
  500 00ad 0B       		.uleb128 0xb
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 13
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 13
 
 
  501 00ae 49       		.uleb128 0x49
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  555              		.section	.debug_line,"",%progbits
  556              	.Ldebug_line0:
  557 0000 AC000000 		.section	.debug_str,"MS",%progbits,1
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 14
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 14
 
 
  557      02005C00 
@@ -797,172 +797,173 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 1
  561      69616C5F 
  561      456E6162 
  561      6C6500
- 562              	.LASF17:
- 563 002d 64656275 		.ascii	"debugSerial_SaveConfig\000"
+ 562              	.LASF19:
+ 563 002d 64656275 		.ascii	"debugSerial_Sleep\000"
  563      67536572 
  563      69616C5F 
- 563      53617665 
- 563      436F6E66 
- 564              	.LASF19:
- 565 0044 64656275 		.ascii	"debugSerial_Sleep\000"
- 565      67536572 
- 565      69616C5F 
- 565      536C6565 
- 565      7000
- 566              	.LASF3:
- 567 0056 73686F72 		.ascii	"short unsigned int\000"
- 567      7420756E 
- 567      7369676E 
- 567      65642069 
- 567      6E7400
- 568              	.LASF28:
- 569 0069 64656275 		.ascii	"debugSerial_backupStruct_\000"
+ 563      536C6565 
+ 563      7000
+ 564              	.LASF3:
+ 565 003f 73686F72 		.ascii	"short unsigned int\000"
+ 565      7420756E 
+ 565      7369676E 
+ 565      65642069 
+ 565      6E7400
+ 566              	.LASF28:
+ 567 0052 64656275 		.ascii	"debugSerial_backupStruct_\000"
+ 567      67536572 
+ 567      69616C5F 
+ 567      6261636B 
+ 567      75705374 
+ 568              	.LASF21:
+ 569 006c 64656275 		.ascii	"debugSerial_Stop\000"
  569      67536572 
  569      69616C5F 
- 569      6261636B 
- 569      75705374 
- 570              	.LASF21:
- 571 0083 64656275 		.ascii	"debugSerial_Stop\000"
- 571      67536572 
- 571      69616C5F 
- 571      53746F70 
- 571      00
- 572              	.LASF9:
- 573 0094 666C6F61 		.ascii	"float\000"
- 573      7400
- 574              	.LASF1:
- 575 009a 756E7369 		.ascii	"unsigned char\000"
- 575      676E6564 
- 575      20636861 
- 575      7200
- 576              	.LASF25:
- 577 00a8 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 577      43313120 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 15
+ 569      53746F70 
+ 569      00
+ 570              	.LASF9:
+ 571 007d 666C6F61 		.ascii	"float\000"
+ 571      7400
+ 572              	.LASF1:
+ 573 0083 756E7369 		.ascii	"unsigned char\000"
+ 573      676E6564 
+ 573      20636861 
+ 573      7200
+ 574              	.LASF25:
+ 575 0091 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 575      43313120 
+ 575      352E342E 
+ 575      31203230 
+ 575      31363036 
+ 576 00c4 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 576      20726576 
+ 576      6973696F 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 15
 
 
- 577      352E342E 
- 577      31203230 
- 577      31363036 
- 578 00db 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
- 578      20726576 
- 578      6973696F 
- 578      6E203233 
- 578      37373135 
- 579 010e 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
- 579      66756E63 
- 579      74696F6E 
- 579      2D736563 
- 579      74696F6E 
- 580              	.LASF13:
- 581 0136 72656738 		.ascii	"reg8\000"
- 581      00
- 582              	.LASF5:
- 583 013b 6C6F6E67 		.ascii	"long unsigned int\000"
- 583      20756E73 
- 583      69676E65 
- 583      6420696E 
- 583      7400
- 584              	.LASF30:
- 585 014d 64656275 		.ascii	"debugSerial_backup\000"
- 585      67536572 
- 585      69616C5F 
- 585      6261636B 
- 585      757000
- 586              	.LASF12:
- 587 0160 75696E74 		.ascii	"uint8\000"
- 587      3800
- 588              	.LASF26:
- 589 0166 47656E65 		.ascii	"Generated_Source\\PSoC5\\debugSerial_PM.c\000"
- 589      72617465 
- 589      645F536F 
- 589      75726365 
- 589      5C50536F 
- 590              	.LASF10:
- 591 018e 646F7562 		.ascii	"double\000"
- 591      6C6500
- 592              	.LASF20:
- 593 0195 64656275 		.ascii	"debugSerial_Wakeup\000"
- 593      67536572 
- 593      69616C5F 
- 593      57616B65 
- 593      757000
- 594              	.LASF8:
- 595 01a8 756E7369 		.ascii	"unsigned int\000"
- 595      676E6564 
- 595      20696E74 
- 595      00
- 596              	.LASF27:
- 597 01b5 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\PSoC Creator\\SensorF"
- 597      73657273 
- 597      5C413835 
- 597      3539305C 
- 597      446F6375 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 16
+ 576      6E203233 
+ 576      37373135 
+ 577 00f7 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 577      66756E63 
+ 577      74696F6E 
+ 577      2D736563 
+ 577      74696F6E 
+ 578              	.LASF13:
+ 579 011f 72656738 		.ascii	"reg8\000"
+ 579      00
+ 580              	.LASF5:
+ 581 0124 6C6F6E67 		.ascii	"long unsigned int\000"
+ 581      20756E73 
+ 581      69676E65 
+ 581      6420696E 
+ 581      7400
+ 582              	.LASF30:
+ 583 0136 64656275 		.ascii	"debugSerial_backup\000"
+ 583      67536572 
+ 583      69616C5F 
+ 583      6261636B 
+ 583      757000
+ 584              	.LASF12:
+ 585 0149 75696E74 		.ascii	"uint8\000"
+ 585      3800
+ 586              	.LASF26:
+ 587 014f 47656E65 		.ascii	"Generated_Source\\PSoC5\\debugSerial_PM.c\000"
+ 587      72617465 
+ 587      645F536F 
+ 587      75726365 
+ 587      5C50536F 
+ 588              	.LASF10:
+ 589 0177 646F7562 		.ascii	"double\000"
+ 589      6C6500
+ 590              	.LASF20:
+ 591 017e 64656275 		.ascii	"debugSerial_Wakeup\000"
+ 591      67536572 
+ 591      69616C5F 
+ 591      57616B65 
+ 591      757000
+ 592              	.LASF8:
+ 593 0191 756E7369 		.ascii	"unsigned int\000"
+ 593      676E6564 
+ 593      20696E74 
+ 593      00
+ 594              	.LASF17:
+ 595 019e 64656275 		.ascii	"debugSerial_SaveConfig\000"
+ 595      67536572 
+ 595      69616C5F 
+ 595      53617665 
+ 595      436F6E66 
+ 596              	.LASF7:
+ 597 01b5 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 597      206C6F6E 
+ 597      6720756E 
+ 597      7369676E 
+ 597      65642069 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 16
 
 
- 598 01e3 7573696F 		.ascii	"usion\\SensorFusion.cydsn\000"
- 598      6E5C5365 
- 598      6E736F72 
- 598      46757369 
- 598      6F6E2E63 
- 599              	.LASF7:
- 600 01fc 6C6F6E67 		.ascii	"long long unsigned int\000"
- 600      206C6F6E 
- 600      6720756E 
- 600      7369676E 
- 600      65642069 
- 601              	.LASF23:
- 602 0213 64656275 		.ascii	"debugSerial_ClearTxBuffer\000"
- 602      67536572 
- 602      69616C5F 
- 602      436C6561 
- 602      72547842 
- 603              	.LASF15:
- 604 022d 73697A65 		.ascii	"sizetype\000"
- 604      74797065 
- 604      00
- 605              	.LASF6:
- 606 0236 6C6F6E67 		.ascii	"long long int\000"
- 606      206C6F6E 
- 606      6720696E 
- 606      7400
- 607              	.LASF11:
- 608 0244 63686172 		.ascii	"char\000"
- 608      00
- 609              	.LASF16:
- 610 0249 64656275 		.ascii	"debugSerial_BACKUP_STRUCT\000"
- 610      67536572 
- 610      69616C5F 
- 610      4241434B 
- 610      55505F53 
- 611              	.LASF2:
- 612 0263 73686F72 		.ascii	"short int\000"
- 612      7420696E 
- 612      7400
- 613              	.LASF4:
- 614 026d 6C6F6E67 		.ascii	"long int\000"
- 614      20696E74 
- 614      00
- 615              	.LASF29:
- 616 0276 656E6162 		.ascii	"enableState\000"
- 616      6C655374 
- 616      61746500 
- 617              	.LASF14:
- 618 0282 6C6F6E67 		.ascii	"long double\000"
- 618      20646F75 
- 618      626C6500 
- 619              	.LASF0:
- 620 028e 7369676E 		.ascii	"signed char\000"
- 620      65642063 
- 620      68617200 
- 621              	.LASF18:
- 622 029a 64656275 		.ascii	"debugSerial_RestoreConfig\000"
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cc7omG0v.s 			page 17
+ 598              	.LASF23:
+ 599 01cc 64656275 		.ascii	"debugSerial_ClearTxBuffer\000"
+ 599      67536572 
+ 599      69616C5F 
+ 599      436C6561 
+ 599      72547842 
+ 600              	.LASF15:
+ 601 01e6 73697A65 		.ascii	"sizetype\000"
+ 601      74797065 
+ 601      00
+ 602              	.LASF6:
+ 603 01ef 6C6F6E67 		.ascii	"long long int\000"
+ 603      206C6F6E 
+ 603      6720696E 
+ 603      7400
+ 604              	.LASF11:
+ 605 01fd 63686172 		.ascii	"char\000"
+ 605      00
+ 606              	.LASF16:
+ 607 0202 64656275 		.ascii	"debugSerial_BACKUP_STRUCT\000"
+ 607      67536572 
+ 607      69616C5F 
+ 607      4241434B 
+ 607      55505F53 
+ 608              	.LASF2:
+ 609 021c 73686F72 		.ascii	"short int\000"
+ 609      7420696E 
+ 609      7400
+ 610              	.LASF4:
+ 611 0226 6C6F6E67 		.ascii	"long int\000"
+ 611      20696E74 
+ 611      00
+ 612              	.LASF29:
+ 613 022f 656E6162 		.ascii	"enableState\000"
+ 613      6C655374 
+ 613      61746500 
+ 614              	.LASF14:
+ 615 023b 6C6F6E67 		.ascii	"long double\000"
+ 615      20646F75 
+ 615      626C6500 
+ 616              	.LASF0:
+ 617 0247 7369676E 		.ascii	"signed char\000"
+ 617      65642063 
+ 617      68617200 
+ 618              	.LASF27:
+ 619 0253 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\MyCodes\\PSoC-Quadcop"
+ 619      73657273 
+ 619      5C413835 
+ 619      3539305C 
+ 619      446F6375 
+ 620 0281 7465725C 		.ascii	"ter\\9-DOF sensor\\SensorFusion\\SensorFusion.cydsn"
+ 620      392D444F 
+ 620      46207365 
+ 620      6E736F72 
+ 620      5C53656E 
+ 621 02b1 00       		.ascii	"\000"
+ 622              	.LASF18:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cckqLXTl.s 			page 17
 
 
- 622      67536572 
- 622      69616C5F 
- 622      52657374 
- 622      6F726543 
- 623              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
+ 623 02b2 64656275 		.ascii	"debugSerial_RestoreConfig\000"
+ 623      67536572 
+ 623      69616C5F 
+ 623      52657374 
+ 623      6F726543 
+ 624              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

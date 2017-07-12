@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Fusion\SensorFusion\Header Files\debSerial.h">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
 <ExpandedNodeIds>
 <v>Fusion</v>
 <v>Fusion\SensorFusion</v>
@@ -55,6 +55,12 @@
 <v>Fusion\SensorFusion\Generated_Source\PSoC5</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
+<v>Fusion</v>
+<v>Fusion\SensorFusion</v>
+<v>Fusion\SensorFusion\TopDesign</v>
+<v>Fusion\SensorFusion\SensorFusion.cydwr</v>
+<v>Fusion\SensorFusion\SensorFusion.cydwr\Pins</v>
+<v>Fusion\SensorFusion\SensorFusion.cydwr\Analog</v>
 <v>Fusion\SensorFusion\SensorFusion.cydwr\Clocks</v>
 <v>Fusion\SensorFusion\SensorFusion.cydwr\Interrupts</v>
 <v>Fusion\SensorFusion\SensorFusion.cydwr\DMA</v>
@@ -94,12 +100,6 @@
 <v>Fusion\SensorFusion\Generated_Source\PSoC4\cydevice_trm.h</v>
 <v>Fusion\SensorFusion\Generated_Source\PSoC4\cydevicegnu_trm.inc</v>
 <v>Fusion\SensorFusion\Generated_Source\PSoC4\cydeviceiar_trm.inc</v>
-<v>Fusion\SensorFusion\Generated_Source\PSoC4\cydevicerv_trm.inc</v>
-<v>Fusion\SensorFusion\Generated_Source\PSoC4\cydisabledsheets.h</v>
-<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfitter.h</v>
-<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfitter_cfg.c</v>
-<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfitter_cfg.h</v>
-<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfittergnu.inc</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
@@ -183,6 +183,49 @@
 <VisibleNodeIds>
 <v>Fusion</v>
 <v>Fusion\SensorFusion</v>
+<v>Fusion\SensorFusion\CortexM3</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\accel_mag.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\barometer.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\CyScBoostClk.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\debSerial.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_BOOT.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_INT.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_IntClock.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_PM.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\deltaTimer.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\deltaTimer_PM.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\deltTime.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\gps.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_BOOT.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_INT.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_IntClock.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_PM.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\gyroscope.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_BOOT.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_INT.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_MASTER.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_PM.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_SLAVE.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\left_arm_led.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\Madgwick.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>Fusion\SensorFusion\CortexM3\ARM_GCC_541\Debug\Listing Files\millis.lst</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>
@@ -243,9 +286,8 @@
 </CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
 <Unloaded />
 <OpenDocs>
-<name v=".\SensorFusion.cydsn\main.c" />
-<name v=".\SensorFusion.cydsn\SensorVal.h" />
-<name v=".\SensorFusion.cydsn\barometer.c" />
+<name v=".\SensorFusion.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\SensorFusion.cydsn\SensorFusion.cydwr" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -253,7 +295,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1602, 597" SelectedTabbedMdiWindow="e26f71ea-b3a2-40c9-82d0-0756b3b184b3"><ToolWindow Key="CyNoticeWindow:44d3d453-9474-4f2b-b928-4356f496bef0:Notice Window" Guid="e26f71ea-b3a2-40c9-82d0-0756b3b184b3" /><DocumentWindow Key="C:\Users\A85590\Documents\PSoC Creator\SensorFusion\SensorFusion.cydsn\main.c" Guid="0272553a-17a0-43b0-8938-669d060ef582" /><DocumentWindow Key="C:\Users\A85590\Documents\PSoC Creator\SensorFusion\SensorFusion.cydsn\SensorVal.h" Guid="aab471f2-2890-4e5d-8bd3-93a5d2c81622" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="dfb3ea00-b055-477c-9e05-50cd89987a51" /><DocumentWindow Key="C:\Users\A85590\Documents\PSoC Creator\SensorFusion\SensorFusion.cydsn\barometer.c" Guid="9d6c706b-b54b-4376-8079-5781465d0f82" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1602, 597" SelectedTabbedMdiWindow="e26f71ea-b3a2-40c9-82d0-0756b3b184b3"><ToolWindow Key="CyNoticeWindow:44d3d453-9474-4f2b-b928-4356f496bef0:Notice Window" Guid="e26f71ea-b3a2-40c9-82d0-0756b3b184b3" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="dfb3ea00-b055-477c-9e05-50cd89987a51" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\TopDesign\TopDesign.cysch" Guid="5251893d-0e7e-41f0-97eb-19da37cb1586" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\SensorFusion.cydwr" Guid="ad16576c-b4b5-4903-9043-89a0cb77d89c" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
