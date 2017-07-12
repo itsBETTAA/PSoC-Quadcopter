@@ -1,4 +1,5 @@
-#ifndef SENSORVAL_H
+
+    #ifndef SENSORVAL_H
 #define SENSORVAL_H
 
 #include <accel_mag.h>

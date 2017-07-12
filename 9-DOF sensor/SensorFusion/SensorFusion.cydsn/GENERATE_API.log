@@ -1,18 +1,3 @@
---------------- Build Started: 07/11/2017 16:01:43 Project: SensorFusion, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
-cydsfit.exe -.appdatapath "C:\Users\A85590\AppData\Local\Cypress Semiconductor\PSoC Creator\4.1" -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p "C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\SensorFusion.cyprj" -d CY8C4247LQI-BL483 -s "C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\Generated_Source\PSoC4" -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE
-Elaborating Design...
-ADD: sdb.M0050: error: Terminal "clock" requires connection when it is visible.
- * C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\TopDesign\TopDesign.cysch (Signal: Net_105)
- * C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\TopDesign\TopDesign.cysch (Shape_8.8)
-ADD: sdb.M0050: error: Terminal "sda" requires connection when it is visible.
- * C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\TopDesign\TopDesign.cysch (Signal: Net_104)
- * C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\TopDesign\TopDesign.cysch (Shape_8.3)
-ADD: sdb.M0058: error: Unable to find Verilog, schematic or API implementation for block 'I2C_v3_50' in schematic 'TopDesign'.
- * C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\TopDesign\TopDesign.cysch (Instance:I2C)
-ADD: fit.M0031: error: Clock Error: (Unable to find source clock 'BUS_CLK' for 'clk_1khz'.).
- * C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\SensorFusion.cydwr (clk_1khz)
- * C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\TopDesign\TopDesign.cysch (Instance:clk_1khz)
-ADD: sdb.M0059: error: Error in component: I2C. The I2C_v3_50 component (I2C) is not compatible with the selected device. Please check the component datasheet for details on updating to a compatible component.
- * C:\Users\A85590\Documents\PSoC Creator\AHRS\SensorFusion.cydsn\TopDesign\TopDesign.cysch (Instance:I2C)
-Error: fit.M0050: The fitter aborted due to errors, please address all errors and rebuild. (App=cydsfit)
---------------- Build Failed: 07/11/2017 16:01:46 ---------------
+--------------- Build Started: 07/12/2017 13:39:19 Project: SensorFusion, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+The code generation step is up to date.
+--------------- Build Skipped: 07/12/2017 13:39:19 ---------------

@@ -265,6 +265,14 @@
 <ExpandedNodeIds>
 <v>Sensor Test</v>
 <v>Sensor Test\All_sensor_test</v>
+<v>Sensor Test\All_sensor_test\CortexM3</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\All_sensor_test.elf</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\All_sensor_test.hex</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\All_sensor_test.map</v>
 <v>Sensor Test\All_sensor_test\All_sensor_test.gpdsc</v>
 <v>Sensor Test\All_sensor_test\All_sensor_test.rpt</v>
 <v>Sensor Test\All_sensor_test\All_sensor_test_timing.html</v>
@@ -343,6 +351,14 @@
 <VisibleNodeIds>
 <v>Sensor Test</v>
 <v>Sensor Test\All_sensor_test</v>
+<v>Sensor Test\All_sensor_test\CortexM3</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\All_sensor_test.elf</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\All_sensor_test.hex</v>
+<v>Sensor Test\All_sensor_test\CortexM3\ARM_GCC_541\Debug\All_sensor_test.map</v>
 <v>Sensor Test\All_sensor_test\All_sensor_test.gpdsc</v>
 <v>Sensor Test\All_sensor_test\All_sensor_test.rpt</v>
 <v>Sensor Test\All_sensor_test\All_sensor_test_timing.html</v>
@@ -378,14 +394,6 @@
 <v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_BOOT.lst</v>
 <v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_INT.lst</v>
 <v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_IntClock.lst</v>
-<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_PM.lst</v>
-<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gyroscope.lst</v>
-<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C.lst</v>
-<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_BOOT.lst</v>
-<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_INT.lst</v>
-<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_MASTER.lst</v>
-<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_PM.lst</v>
-<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_SLAVE.lst</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>
@@ -533,6 +541,7 @@
 <name v="..\accel_mag.c" />
 <name v="..\SensorVal.c" />
 <name v=".\All_sensor_test.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\All_sensor_test.cydsn\All_sensor_test.cydwr" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -540,7 +549,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1602, 597" SelectedTabbedMdiWindow="e26f71ea-b3a2-40c9-82d0-0756b3b184b3"><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="dfb3ea00-b055-477c-9e05-50cd89987a51" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\main.c" Guid="9f0f15bd-143a-4f58-8732-dfc35f76de38" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\debSerial.c" Guid="74566367-fb81-44f2-9edc-89b020dc8612" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\twi.c" Guid="8bae1ed0-6d20-4265-bafb-7676d2378776" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\accel_mag.c" Guid="006081e8-692d-4363-bd45-d0f27395f3b7" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\SensorVal.c" Guid="1172db0e-45a3-4100-85ae-ef3113112b6a" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\TopDesign\TopDesign.cysch" Guid="2508f70b-327f-46cc-8ad1-95889ec81257" /><ToolWindow Key="CyNoticeWindow:44d3d453-9474-4f2b-b928-4356f496bef0:Notice Window" Guid="e26f71ea-b3a2-40c9-82d0-0756b3b184b3" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1394, 597" SelectedTabbedMdiWindow="2508f70b-327f-46cc-8ad1-95889ec81257"><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="dfb3ea00-b055-477c-9e05-50cd89987a51" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\main.c" Guid="9f0f15bd-143a-4f58-8732-dfc35f76de38" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\debSerial.c" Guid="74566367-fb81-44f2-9edc-89b020dc8612" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\twi.c" Guid="8bae1ed0-6d20-4265-bafb-7676d2378776" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\accel_mag.c" Guid="006081e8-692d-4363-bd45-d0f27395f3b7" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\SensorVal.c" Guid="1172db0e-45a3-4100-85ae-ef3113112b6a" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\TopDesign\TopDesign.cysch" Guid="2508f70b-327f-46cc-8ad1-95889ec81257" /><ToolWindow Key="CyNoticeWindow:44d3d453-9474-4f2b-b928-4356f496bef0:Notice Window" Guid="e26f71ea-b3a2-40c9-82d0-0756b3b184b3" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\All_sensor_test.cydwr" Guid="e2d35be8-7625-4e22-944d-b2d7d42eca30" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

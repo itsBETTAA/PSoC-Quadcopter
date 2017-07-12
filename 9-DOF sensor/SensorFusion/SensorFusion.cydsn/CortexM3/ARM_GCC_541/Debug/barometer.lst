@@ -1,0 +1,5046 @@
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"barometer.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.baro_sendCommand,"ax",%progbits
+  20              		.align	2
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	baro_sendCommand, %function
+  24              	baro_sendCommand:
+  25              	.LFB63:
+  26              		.file 1 "barometer.c"
+   1:barometer.c   **** /*
+   2:barometer.c   **** *   This file includes the description of the function to read and calculate the
+   3:barometer.c   **** *   Barometric Pressure, Temprature, and Altitude from the MS5611 Barometric Pressure & Temperature
+   4:barometer.c   **** *   which is made by TE. 
+   5:barometer.c   **** *   We are using the chip on a breakout board that we got from Amazon called GY-63
+   6:barometer.c   **** */
+   7:barometer.c   **** 
+   8:barometer.c   **** #include "debSerial.h"
+   9:barometer.c   **** #include "barometer.h"
+  10:barometer.c   **** #include "twi.h"
+  11:barometer.c   **** #include "project.h"
+  12:barometer.c   **** #include "SensorVal.h"
+  13:barometer.c   **** #include "stdlib.h"
+  14:barometer.c   **** #include "math.h"
+  15:barometer.c   **** #include <stdint.h>
+  16:barometer.c   **** 
+  17:barometer.c   **** 
+  18:barometer.c   **** static uint16_t fc[6];
+  19:barometer.c   **** static uint8_t ct;
+  20:barometer.c   **** static uint8_t uosr;
+  21:barometer.c   **** static int32_t TEMP2;
+  22:barometer.c   **** static int64_t OFF2, SENS2;
+  23:barometer.c   **** static uint8_t _COMPENSATION = false;
+  24:barometer.c   **** 
+  25:barometer.c   **** static void baro_sendCommand(uint8_t cmd); //used to send one through I2C
+  26:barometer.c   **** static void baro_reset(void);              //used to send the reset command
+  27:barometer.c   **** static void baro_readPROM(void);           //used to read the PROM
+  28:barometer.c   **** 
+  29:barometer.c   **** static uint16_t baro_readRegister16(uint8_t reg); //reads and return 2 bytes of data
+  30:barometer.c   **** static uint32_t baro_readRegister24(uint8_t reg); //reads and return 3 bytes of data
+  31:barometer.c   **** 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 2
+
+
+  32:barometer.c   **** static void baro_sendCommand(uint8_t cmd)
+  33:barometer.c   **** {
+  27              		.loc 1 33 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 00B5     		push	{lr}
+  33              		.cfi_def_cfa_offset 4
+  34              		.cfi_offset 14, -4
+  35 0002 83B0     		sub	sp, sp, #12
+  36              		.cfi_def_cfa_offset 16
+  34:barometer.c   ****     //to write, you want to write:  (1) The address you want to write to
+  35:barometer.c   ****     //                              (2) The cmd you wish to write to the register
+  36:barometer.c   **** 
+  37:barometer.c   ****     uint8_t Write_Buf[1] = {0};
+  38:barometer.c   ****     Write_Buf[0] = (uint8_t)cmd;
+  37              		.loc 1 38 0
+  38 0004 02A9     		add	r1, sp, #8
+  39 0006 01F8040D 		strb	r0, [r1, #-4]!
+  39:barometer.c   **** 
+  40:barometer.c   ****     I2C_MasterWriteBuf(MS5611_ADDRESS, (uint8 *)Write_Buf, sizeof(Write_Buf), I2C_MODE_COMPLETE_XFE
+  40              		.loc 1 40 0
+  41 000a 0023     		movs	r3, #0
+  42 000c 0122     		movs	r2, #1
+  43 000e 7720     		movs	r0, #119
+  44              	.LVL1:
+  45 0010 FFF7FEFF 		bl	I2C_MasterWriteBuf
+  46              	.LVL2:
+  47              	.L2:
+  41:barometer.c   ****     while ((I2C_MasterStatus() & I2C_MSTAT_WR_CMPLT) == 0)
+  48              		.loc 1 41 0 discriminator 1
+  49 0014 FFF7FEFF 		bl	I2C_MasterStatus
+  50              	.LVL3:
+  51 0018 10F0020F 		tst	r0, #2
+  52 001c FAD0     		beq	.L2
+  42:barometer.c   ****     {
+  43:barometer.c   ****     }
+  44:barometer.c   **** 
+  45:barometer.c   ****     return; //return 1 if everything was successful
+  46:barometer.c   **** }
+  53              		.loc 1 46 0
+  54 001e 03B0     		add	sp, sp, #12
+  55              		.cfi_def_cfa_offset 4
+  56              		@ sp needed
+  57 0020 5DF804FB 		ldr	pc, [sp], #4
+  58              		.cfi_endproc
+  59              	.LFE63:
+  60              		.size	baro_sendCommand, .-baro_sendCommand
+  61              		.section	.text.baro_reset,"ax",%progbits
+  62              		.align	2
+  63              		.thumb
+  64              		.thumb_func
+  65              		.type	baro_reset, %function
+  66              	baro_reset:
+  67              	.LFB69:
+  47:barometer.c   **** 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 3
+
+
+  48:barometer.c   **** #if SPECIFY_OSR_AT_RUNTIME
+  49:barometer.c   **** 
+  50:barometer.c   **** void baro_initialize(ms5611_osr_t osr)
+  51:barometer.c   **** {
+  52:barometer.c   ****     serial_println("Initializing Barometeric Pressure and Temperature sensor:");
+  53:barometer.c   ****     while (!baro_begin(osr))
+  54:barometer.c   ****     {
+  55:barometer.c   ****         serial_println("//=======Could not find a valid Barometric sensor, check wiring!=======//")
+  56:barometer.c   ****     }
+  57:barometer.c   ****     baro_setCompensation(true);
+  58:barometer.c   **** 
+  59:barometer.c   ****     //read the reference Pressure to enable us to calculate the relative Altitude
+  60:barometer.c   ****     reference_pressure = baro_readPressure();
+  61:barometer.c   **** 
+  62:barometer.c   ****     //read the initial raw Temperature and Pressure just in case we later want some reference
+  63:barometer.c   ****     initial_raw_temperature = baro_readRawTemperature();
+  64:barometer.c   ****     initial_raw_pressure = baro_readRawPressure();
+  65:barometer.c   **** 
+  66:barometer.c   ****     //read the real compasated Temperature and Pressure just in case we want it later
+  67:barometer.c   ****     initial_real_temprature = baro_readTemperature();
+  68:barometer.c   ****     initial_real_pressure = baro_readPressure();
+  69:barometer.c   **** 
+  70:barometer.c   ****     //Calculate and store the initial absolute and relative altitude
+  71:barometer.c   ****     //The initial relative altitude should be less than 10, MAX
+  72:barometer.c   ****     initial_absolute_altitude = baro_getAbsoluteAltitude(reference_pressure);
+  73:barometer.c   ****     
+  74:barometer.c   ****     int32_t check_pressure = baro_readPressure();
+  75:barometer.c   ****     initial_relative_altitude = baro_getRelativeAltitude(check_pressure, reference_pressure);
+  76:barometer.c   ****     
+  77:barometer.c   ****     if (initial_relative_altitude > 10)
+  78:barometer.c   ****     {
+  79:barometer.c   ****         serial_println("There must be an issue with the Altitude calculation or pressure");
+  80:barometer.c   ****         serial_println("check code or restart quadcopter and don't touch.");
+  81:barometer.c   ****     }
+  82:barometer.c   **** 
+  83:barometer.c   **** //if the macro DEBUG is true (value is not 0)
+  84:barometer.c   **** #if BAROMETER_DEBUG
+  85:barometer.c   ****     Serial_print(" rawTemp = ");
+  86:barometer.c   ****     serial_printInt(initial_raw_temperature); //print an integer
+  87:barometer.c   ****     Serial_print(", realTemp = ");
+  88:barometer.c   ****     serial_printDouble(initial_raw_temperature); //print a double
+  89:barometer.c   ****     Serial_println(" *C");
+  90:barometer.c   **** 
+  91:barometer.c   ****     Serial_print(" rawPressure = ");
+  92:barometer.c   ****     serial_printInt(rawPressure); //print an integer
+  93:barometer.c   ****     Serial_print(", realPressure = ");
+  94:barometer.c   ****     serial_printInt(realPressure); //print an integer
+  95:barometer.c   ****     Serial_println(" Pa");
+  96:barometer.c   **** 
+  97:barometer.c   ****     Serial_print(" absoluteAltitude = ");
+  98:barometer.c   ****     serial_printDouble(absoluteAltitude); //print a double
+  99:barometer.c   ****     Serial_print(" m, relativeAltitude = ");
+ 100:barometer.c   ****     serial_printDouble(relativeAltitude); //print a double
+ 101:barometer.c   ****     Serial_println(" m");
+ 102:barometer.c   **** #endif
+ 103:barometer.c   **** }
+ 104:barometer.c   ****     
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 4
+
+
+ 105:barometer.c   **** uint8_t baro_begin(ms5611_osr_t osr)
+ 106:barometer.c   **** {
+ 107:barometer.c   ****     Wire_begin();
+ 108:barometer.c   ****     baro_reset();
+ 109:barometer.c   ****     baro_setOversampling(osr);
+ 110:barometer.c   ****     CyDelay(100);
+ 111:barometer.c   ****     baro_readPROM();
+ 112:barometer.c   ****     return true;
+ 113:barometer.c   **** }
+ 114:barometer.c   **** 
+ 115:barometer.c   **** #else
+ 116:barometer.c   ****     
+ 117:barometer.c   **** void baro_initialize(void)
+ 118:barometer.c   **** {
+ 119:barometer.c   ****     serial_println("Initializing Barometeric Pressure and Temperature sensor:");
+ 120:barometer.c   ****     while (!baro_begin())
+ 121:barometer.c   ****     {
+ 122:barometer.c   ****         serial_println("//=======Could not find a valid Barometric sensor, check wiring!=======//")
+ 123:barometer.c   ****     }
+ 124:barometer.c   **** 
+ 125:barometer.c   ****     //read the reference Pressure to enable us to calculate the relative Altitude
+ 126:barometer.c   ****     reference_pressure = baro_readPressure();
+ 127:barometer.c   **** 
+ 128:barometer.c   ****     //read the initial raw Temperature and Pressure just in case we later want some reference
+ 129:barometer.c   ****     initial_raw_temperature = baro_readRawTemperature();
+ 130:barometer.c   ****     initial_raw_pressure = baro_readRawPressure();
+ 131:barometer.c   **** 
+ 132:barometer.c   ****     //read the real compasated Temperature and Pressure just in case we want it later
+ 133:barometer.c   ****     initial_real_temprature = baro_readTemperature();
+ 134:barometer.c   ****     initial_real_pressure = baro_readPressure();
+ 135:barometer.c   **** 
+ 136:barometer.c   ****     //Calculate and store the initial absolute and relative altitude
+ 137:barometer.c   ****     //The initial relative altitude should be less than 10, MAX
+ 138:barometer.c   ****     initial_absolute_altitude = baro_getAbsoluteAltitude(reference_pressure);
+ 139:barometer.c   ****     
+ 140:barometer.c   ****     int32_t check_pressure = baro_readPressure();
+ 141:barometer.c   ****     initial_relative_altitude = baro_getRelativeAltitude(check_pressure, reference_pressure);
+ 142:barometer.c   ****     
+ 143:barometer.c   ****     if (initial_relative_altitude > 10)
+ 144:barometer.c   ****     {
+ 145:barometer.c   ****         serial_println("There must be an issue with the Altitude calculation or pressure");
+ 146:barometer.c   ****         serial_println("check code or restart quadcopter and don't touch.");
+ 147:barometer.c   ****     }
+ 148:barometer.c   **** 
+ 149:barometer.c   **** //if the macro DEBUG is true (value is not 0)
+ 150:barometer.c   **** #if BAROMETER_DEBUG
+ 151:barometer.c   ****     serial_print(" rawTemp = ");
+ 152:barometer.c   ****     serial_printInt(initial_raw_temperature); //print an integer
+ 153:barometer.c   ****     serial_print(", realTemp = ");
+ 154:barometer.c   ****     serial_printDouble(initial_raw_temperature); //print a double
+ 155:barometer.c   ****     serial_println(" *C");
+ 156:barometer.c   **** 
+ 157:barometer.c   ****     serial_print(" rawPressure = ");
+ 158:barometer.c   ****     serial_printInt(initial_raw_pressure); //print an integer
+ 159:barometer.c   ****     serial_print(", realPressure = ");
+ 160:barometer.c   ****     serial_printInt(initial_real_pressure); //print an integer
+ 161:barometer.c   ****     serial_println(" Pa");
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 5
+
+
+ 162:barometer.c   **** 
+ 163:barometer.c   ****     serial_print(" absoluteAltitude = ");
+ 164:barometer.c   ****     serial_printDouble(initial_absolute_altitude); //print a double
+ 165:barometer.c   ****     serial_print(" m, relativeAltitude = ");
+ 166:barometer.c   ****     serial_printDouble(initial_relative_altitude); //print a double
+ 167:barometer.c   ****     serial_println(" m");
+ 168:barometer.c   **** #endif
+ 169:barometer.c   **** }
+ 170:barometer.c   **** 
+ 171:barometer.c   **** uint8_t baro_begin()
+ 172:barometer.c   **** {
+ 173:barometer.c   ****     //This is like a default setting
+ 174:barometer.c   ****     ms5611_osr_t osr = MS5611_LOW_POWER;
+ 175:barometer.c   ****     Wire_begin();
+ 176:barometer.c   ****     baro_reset();
+ 177:barometer.c   ****     baro_setOversampling(osr);
+ 178:barometer.c   ****     CyDelay(100);
+ 179:barometer.c   ****     baro_readPROM();
+ 180:barometer.c   ****     return true;
+ 181:barometer.c   **** }
+ 182:barometer.c   **** 
+ 183:barometer.c   **** #endif
+ 184:barometer.c   **** 
+ 185:barometer.c   **** // Set oversampling value
+ 186:barometer.c   **** void baro_setOversampling(ms5611_osr_t osr)
+ 187:barometer.c   **** {
+ 188:barometer.c   ****     switch (osr)
+ 189:barometer.c   ****     {
+ 190:barometer.c   ****     case MS5611_ULTRA_LOW_POWER:
+ 191:barometer.c   ****         ct = 1;
+ 192:barometer.c   ****         break;
+ 193:barometer.c   ****     case MS5611_LOW_POWER:
+ 194:barometer.c   ****         ct = 2;
+ 195:barometer.c   ****         break;
+ 196:barometer.c   ****     case MS5611_STANDARD:
+ 197:barometer.c   ****         ct = 3;
+ 198:barometer.c   ****         break;
+ 199:barometer.c   ****     case MS5611_HIGH_RES:
+ 200:barometer.c   ****         ct = 5;
+ 201:barometer.c   ****         break;
+ 202:barometer.c   ****     case MS5611_ULTRA_HIGH_RES:
+ 203:barometer.c   ****         ct = 10;
+ 204:barometer.c   ****         break;
+ 205:barometer.c   ****     }
+ 206:barometer.c   **** 
+ 207:barometer.c   ****     uosr = osr;
+ 208:barometer.c   **** }
+ 209:barometer.c   **** 
+ 210:barometer.c   **** // Get oversampling value
+ 211:barometer.c   **** ms5611_osr_t baro_getOversampling(void)
+ 212:barometer.c   **** {
+ 213:barometer.c   ****     return (ms5611_osr_t)uosr;
+ 214:barometer.c   **** }
+ 215:barometer.c   **** 
+ 216:barometer.c   **** void baro_setCompensation(uint8_t val){
+ 217:barometer.c   ****     _COMPENSATION = val;
+ 218:barometer.c   **** }
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 6
+
+
+ 219:barometer.c   **** 
+ 220:barometer.c   **** 
+ 221:barometer.c   **** static void baro_reset(void)
+ 222:barometer.c   **** {
+  68              		.loc 1 222 0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  72 0000 08B5     		push	{r3, lr}
+  73              		.cfi_def_cfa_offset 8
+  74              		.cfi_offset 3, -8
+  75              		.cfi_offset 14, -4
+ 223:barometer.c   ****     baro_sendCommand(MS5611_CMD_RESET);
+  76              		.loc 1 223 0
+  77 0002 1E20     		movs	r0, #30
+  78 0004 FFF7FEFF 		bl	baro_sendCommand
+  79              	.LVL4:
+  80 0008 08BD     		pop	{r3, pc}
+  81              		.cfi_endproc
+  82              	.LFE69:
+  83              		.size	baro_reset, .-baro_reset
+  84 000a 00BF     		.section	.text.baro_readRegister16,"ax",%progbits
+  85              		.align	2
+  86              		.thumb
+  87              		.thumb_func
+  88              		.type	baro_readRegister16, %function
+  89              	baro_readRegister16:
+  90              	.LFB78:
+ 224:barometer.c   **** }
+ 225:barometer.c   **** 
+ 226:barometer.c   **** static void baro_readPROM(void)
+ 227:barometer.c   **** {
+ 228:barometer.c   ****     uint8_t offset = 0;
+ 229:barometer.c   ****     for (offset = 0; offset < 6; offset++)
+ 230:barometer.c   ****     {
+ 231:barometer.c   ****         fc[offset] = baro_readRegister16(MS5611_CMD_READ_PROM + (offset * 2));
+ 232:barometer.c   ****     }
+ 233:barometer.c   **** }
+ 234:barometer.c   **** 
+ 235:barometer.c   **** uint32_t baro_readRawTemperature(void)
+ 236:barometer.c   **** {
+ 237:barometer.c   ****     baro_sendCommand(MS5611_CMD_CONV_D2 + uosr);
+ 238:barometer.c   ****     CyDelay(ct);
+ 239:barometer.c   ****     return baro_readRegister24(MS5611_CMD_ADC_READ);
+ 240:barometer.c   **** }
+ 241:barometer.c   **** 
+ 242:barometer.c   **** uint32_t baro_readRawPressure(void)
+ 243:barometer.c   **** {
+ 244:barometer.c   ****     baro_sendCommand(MS5611_CMD_CONV_D2 + uosr);
+ 245:barometer.c   ****     CyDelay(ct);
+ 246:barometer.c   ****     return baro_readRegister24(MS5611_CMD_ADC_READ);
+ 247:barometer.c   **** }
+ 248:barometer.c   **** 
+ 249:barometer.c   **** int32_t baro_readPressure(void)
+ 250:barometer.c   **** {
+ 251:barometer.c   ****     uint32_t D1 = baro_readRawPressure();
+ 252:barometer.c   **** 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 7
+
+
+ 253:barometer.c   ****     uint32_t D2 = baro_readRawTemperature();
+ 254:barometer.c   ****     int32_t dT = D2 - (uint32_t)fc[4] * 256;
+ 255:barometer.c   **** 
+ 256:barometer.c   ****     int64_t OFF = (int64_t)fc[1] * 65536 + (int64_t)fc[3] * dT / 128;
+ 257:barometer.c   ****     int64_t SENS = (int64_t)fc[0] * 32768 + (int64_t)fc[2] * dT / 256;
+ 258:barometer.c   **** 
+ 259:barometer.c   ****     if (_COMPENSATION)
+ 260:barometer.c   ****     {
+ 261:barometer.c   ****         int32_t TEMP = 2000 + ((int64_t)dT * fc[5]) / 8388608;
+ 262:barometer.c   **** 
+ 263:barometer.c   ****         OFF2 = 0;
+ 264:barometer.c   ****         SENS2 = 0;
+ 265:barometer.c   **** 
+ 266:barometer.c   ****         if (TEMP < 2000)
+ 267:barometer.c   ****         {
+ 268:barometer.c   ****             OFF2 = 5 * ((TEMP - 2000) * (TEMP - 2000)) / 2;
+ 269:barometer.c   ****             SENS2 = 5 * ((TEMP - 2000) * (TEMP - 2000)) / 4;
+ 270:barometer.c   ****         }
+ 271:barometer.c   **** 
+ 272:barometer.c   ****         if (TEMP < -1500)
+ 273:barometer.c   ****         {
+ 274:barometer.c   ****             OFF2 = OFF2 + 7 * ((TEMP + 1500) * (TEMP + 1500));
+ 275:barometer.c   ****             SENS2 = SENS2 + 11 * ((TEMP + 1500) * (TEMP + 1500)) / 2;
+ 276:barometer.c   ****         }
+ 277:barometer.c   **** 
+ 278:barometer.c   ****         OFF = OFF - OFF2;
+ 279:barometer.c   ****         SENS = SENS - SENS2;
+ 280:barometer.c   ****     }
+ 281:barometer.c   **** 
+ 282:barometer.c   ****     uint32_t P = (D1 * SENS / 2097152 - OFF) / 32768;
+ 283:barometer.c   **** 
+ 284:barometer.c   ****     return P;
+ 285:barometer.c   **** }
+ 286:barometer.c   **** 
+ 287:barometer.c   **** double baro_readTemperature(void)
+ 288:barometer.c   **** {
+ 289:barometer.c   ****     uint32_t D2 = baro_readRawTemperature();
+ 290:barometer.c   ****     int32_t dT = D2 - (uint32_t)fc[4] * 256;
+ 291:barometer.c   **** 
+ 292:barometer.c   ****     int32_t TEMP = 2000 + ((int64_t)dT * fc[5]) / 8388608;
+ 293:barometer.c   **** 
+ 294:barometer.c   ****     TEMP2 = 0;
+ 295:barometer.c   **** 
+ 296:barometer.c   ****     if (_COMPENSATION)
+ 297:barometer.c   ****     {
+ 298:barometer.c   ****         if (TEMP < 2000)
+ 299:barometer.c   ****         {
+ 300:barometer.c   ****             TEMP2 = (dT * dT) / (2 << 30);
+ 301:barometer.c   ****         }
+ 302:barometer.c   ****     }
+ 303:barometer.c   **** 
+ 304:barometer.c   ****     TEMP = TEMP - TEMP2;
+ 305:barometer.c   **** 
+ 306:barometer.c   ****     return ((double)TEMP / 100);
+ 307:barometer.c   **** }
+ 308:barometer.c   **** 
+ 309:barometer.c   **** // Calculate altitude from Pressure & Sea level pressure
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 8
+
+
+ 310:barometer.c   **** double baro_getAbsoluteAltitude(int32_t pressure)
+ 311:barometer.c   **** {
+ 312:barometer.c   ****     double seaLevelPressure = 101325;
+ 313:barometer.c   ****     double ret = (44330.0f * (1.0f - pow(((double)pressure / (double)seaLevelPressure), 0.19029490f
+ 314:barometer.c   ****     return ret;
+ 315:barometer.c   **** }
+ 316:barometer.c   **** 
+ 317:barometer.c   **** // Calculate altitude from Pressure & initial pressure
+ 318:barometer.c   **** double baro_getRelativeAltitude(int32_t pressure, int32_t initialPressure)
+ 319:barometer.c   **** {
+ 320:barometer.c   ****     double ret = (44330.0f * (1.0f - pow(((double)pressure / (double)initialPressure), 0.1902949f))
+ 321:barometer.c   ****     return ret;
+ 322:barometer.c   **** }
+ 323:barometer.c   **** 
+ 324:barometer.c   **** // Calculate sea level from Pressure given on specific altitude
+ 325:barometer.c   **** double baro_getSeaLevel(int32_t pressure, int32_t altitude)
+ 326:barometer.c   **** {
+ 327:barometer.c   ****     double ret = ((double)pressure / pow((1.0) - ((double)altitude / (44330.0)), (5.255)));
+ 328:barometer.c   ****     return ret;
+ 329:barometer.c   **** }
+ 330:barometer.c   **** 
+ 331:barometer.c   **** // Read 16-bit from register (oops MSB, LSB)
+ 332:barometer.c   **** uint16_t baro_readRegister16(uint8_t reg)
+ 333:barometer.c   **** {
+  91              		.loc 1 333 0
+  92              		.cfi_startproc
+  93              		@ args = 0, pretend = 0, frame = 8
+  94              		@ frame_needed = 0, uses_anonymous_args = 0
+  95              	.LVL5:
+  96 0000 30B5     		push	{r4, r5, lr}
+  97              		.cfi_def_cfa_offset 12
+  98              		.cfi_offset 4, -12
+  99              		.cfi_offset 5, -8
+ 100              		.cfi_offset 14, -4
+ 101 0002 83B0     		sub	sp, sp, #12
+ 102              		.cfi_def_cfa_offset 24
+ 334:barometer.c   ****     uint16_t value;
+ 335:barometer.c   ****     uint8_t Read_Buf[2] = {0}; //create an array that will store the data read
+ 103              		.loc 1 335 0
+ 104 0004 0025     		movs	r5, #0
+ 105 0006 02AC     		add	r4, sp, #8
+ 106 0008 24F8045D 		strh	r5, [r4, #-4]!	@ movhi
+ 336:barometer.c   **** 
+ 337:barometer.c   ****     // First command sets up the system into the correct read mode (ex:PROM).
+ 338:barometer.c   ****     baro_sendCommand(reg);
+ 107              		.loc 1 338 0
+ 108 000c FFF7FEFF 		bl	baro_sendCommand
+ 109              	.LVL6:
+ 339:barometer.c   ****     //The second part gets the data from the system.
+ 340:barometer.c   ****     I2C_MasterReadBuf(MS5611_ADDRESS, (uint8 *)Read_Buf, sizeof(Read_Buf), I2C_MODE_COMPLETE_XFER);
+ 110              		.loc 1 340 0
+ 111 0010 2B46     		mov	r3, r5
+ 112 0012 0222     		movs	r2, #2
+ 113 0014 2146     		mov	r1, r4
+ 114 0016 7720     		movs	r0, #119
+ 115 0018 FFF7FEFF 		bl	I2C_MasterReadBuf
+ 116              	.LVL7:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 9
+
+
+ 117              	.L7:
+ 341:barometer.c   ****     while ((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT) == 0)
+ 118              		.loc 1 341 0 discriminator 1
+ 119 001c FFF7FEFF 		bl	I2C_MasterStatus
+ 120              	.LVL8:
+ 121 0020 10F0010F 		tst	r0, #1
+ 122 0024 FAD0     		beq	.L7
+ 342:barometer.c   ****     {
+ 343:barometer.c   ****     } //wait till Master status indicates read is complete
+ 344:barometer.c   **** 
+ 345:barometer.c   ****     uint8_t vha = Read_Buf[0];
+ 123              		.loc 1 345 0
+ 124 0026 9DF80400 		ldrb	r0, [sp, #4]	@ zero_extendqisi2
+ 125              	.LVL9:
+ 346:barometer.c   ****     uint8_t vla = Read_Buf[1];
+ 126              		.loc 1 346 0
+ 127 002a 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 128              	.LVL10:
+ 347:barometer.c   **** 
+ 348:barometer.c   ****     value = vha << 8 | vla;
+ 349:barometer.c   **** 
+ 350:barometer.c   ****     return value;
+ 351:barometer.c   **** }
+ 129              		.loc 1 351 0
+ 130 002e 43EA0020 		orr	r0, r3, r0, lsl #8
+ 131              	.LVL11:
+ 132 0032 03B0     		add	sp, sp, #12
+ 133              		.cfi_def_cfa_offset 12
+ 134              		@ sp needed
+ 135 0034 30BD     		pop	{r4, r5, pc}
+ 136              		.cfi_endproc
+ 137              	.LFE78:
+ 138              		.size	baro_readRegister16, .-baro_readRegister16
+ 139 0036 00BF     		.section	.text.baro_readPROM,"ax",%progbits
+ 140              		.align	2
+ 141              		.thumb
+ 142              		.thumb_func
+ 143              		.type	baro_readPROM, %function
+ 144              	baro_readPROM:
+ 145              	.LFB70:
+ 227:barometer.c   ****     uint8_t offset = 0;
+ 146              		.loc 1 227 0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150 0000 10B5     		push	{r4, lr}
+ 151              		.cfi_def_cfa_offset 8
+ 152              		.cfi_offset 4, -8
+ 153              		.cfi_offset 14, -4
+ 154              	.LVL12:
+ 229:barometer.c   ****     {
+ 155              		.loc 1 229 0
+ 156 0002 0024     		movs	r4, #0
+ 157 0004 0BE0     		b	.L10
+ 158              	.LVL13:
+ 159              	.L11:
+ 231:barometer.c   ****     }
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 10
+
+
+ 160              		.loc 1 231 0 discriminator 3
+ 161 0006 04F15100 		add	r0, r4, #81
+ 162 000a 4000     		lsls	r0, r0, #1
+ 163 000c 00F0FE00 		and	r0, r0, #254
+ 164 0010 FFF7FEFF 		bl	baro_readRegister16
+ 165              	.LVL14:
+ 166 0014 034B     		ldr	r3, .L13
+ 167 0016 23F81400 		strh	r0, [r3, r4, lsl #1]	@ movhi
+ 229:barometer.c   ****     {
+ 168              		.loc 1 229 0 discriminator 3
+ 169 001a 0134     		adds	r4, r4, #1
+ 170              	.LVL15:
+ 171 001c E4B2     		uxtb	r4, r4
+ 172              	.LVL16:
+ 173              	.L10:
+ 229:barometer.c   ****     {
+ 174              		.loc 1 229 0 is_stmt 0 discriminator 1
+ 175 001e 052C     		cmp	r4, #5
+ 176 0020 F1D9     		bls	.L11
+ 233:barometer.c   **** 
+ 177              		.loc 1 233 0 is_stmt 1
+ 178 0022 10BD     		pop	{r4, pc}
+ 179              	.LVL17:
+ 180              	.L14:
+ 181              		.align	2
+ 182              	.L13:
+ 183 0024 00000000 		.word	.LANCHOR0
+ 184              		.cfi_endproc
+ 185              	.LFE70:
+ 186              		.size	baro_readPROM, .-baro_readPROM
+ 187              		.section	.text.baro_readRegister24,"ax",%progbits
+ 188              		.align	2
+ 189              		.thumb
+ 190              		.thumb_func
+ 191              		.type	baro_readRegister24, %function
+ 192              	baro_readRegister24:
+ 193              	.LFB79:
+ 352:barometer.c   **** 
+ 353:barometer.c   **** // Read 24-bit from register (oops XSB, MSB, LSB)
+ 354:barometer.c   **** uint32_t baro_readRegister24(uint8_t reg)
+ 355:barometer.c   **** {
+ 194              		.loc 1 355 0
+ 195              		.cfi_startproc
+ 196              		@ args = 0, pretend = 0, frame = 8
+ 197              		@ frame_needed = 0, uses_anonymous_args = 0
+ 198              	.LVL18:
+ 199 0000 10B5     		push	{r4, lr}
+ 200              		.cfi_def_cfa_offset 8
+ 201              		.cfi_offset 4, -8
+ 202              		.cfi_offset 14, -4
+ 203 0002 82B0     		sub	sp, sp, #8
+ 204              		.cfi_def_cfa_offset 16
+ 356:barometer.c   ****     uint32_t value;
+ 357:barometer.c   ****     uint8_t Read_Buf[3] = {0}; //create an array that will store the data read
+ 205              		.loc 1 357 0
+ 206 0004 0024     		movs	r4, #0
+ 207 0006 ADF80440 		strh	r4, [sp, #4]	@ movhi
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 11
+
+
+ 208 000a 8DF80640 		strb	r4, [sp, #6]
+ 358:barometer.c   **** 
+ 359:barometer.c   ****     // First command sets up the system into the correct read mode (ex:ADC Conversion read).
+ 360:barometer.c   ****     baro_sendCommand(reg);
+ 209              		.loc 1 360 0
+ 210 000e FFF7FEFF 		bl	baro_sendCommand
+ 211              	.LVL19:
+ 361:barometer.c   ****     //The second part gets the data from the system.
+ 362:barometer.c   ****     I2C_MasterReadBuf(MS5611_ADDRESS, (uint8 *)Read_Buf, sizeof(Read_Buf), I2C_MODE_COMPLETE_XFER);
+ 212              		.loc 1 362 0
+ 213 0012 2346     		mov	r3, r4
+ 214 0014 0322     		movs	r2, #3
+ 215 0016 01A9     		add	r1, sp, #4
+ 216 0018 7720     		movs	r0, #119
+ 217 001a FFF7FEFF 		bl	I2C_MasterReadBuf
+ 218              	.LVL20:
+ 219              	.L16:
+ 363:barometer.c   ****     while ((I2C_MasterStatus() & I2C_MSTAT_RD_CMPLT) == 0)
+ 220              		.loc 1 363 0 discriminator 1
+ 221 001e FFF7FEFF 		bl	I2C_MasterStatus
+ 222              	.LVL21:
+ 223 0022 10F0010F 		tst	r0, #1
+ 224 0026 FAD0     		beq	.L16
+ 364:barometer.c   ****     {
+ 365:barometer.c   ****     } //wait till Master status indicates read is complete
+ 366:barometer.c   **** 
+ 367:barometer.c   ****     uint8_t vxa = Read_Buf[0];
+ 225              		.loc 1 367 0
+ 226 0028 9DF80420 		ldrb	r2, [sp, #4]	@ zero_extendqisi2
+ 227              	.LVL22:
+ 368:barometer.c   ****     uint8_t vha = Read_Buf[1];
+ 228              		.loc 1 368 0
+ 229 002c 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 230              	.LVL23:
+ 369:barometer.c   ****     uint8_t vla = Read_Buf[2];
+ 231              		.loc 1 369 0
+ 232 0030 9DF80600 		ldrb	r0, [sp, #6]	@ zero_extendqisi2
+ 233              	.LVL24:
+ 370:barometer.c   **** 
+ 371:barometer.c   ****     value = ((int32_t)vxa << 16) | ((int32_t)vha << 8) | vla;
+ 234              		.loc 1 371 0
+ 235 0034 1B02     		lsls	r3, r3, #8
+ 236              	.LVL25:
+ 237 0036 43EA0243 		orr	r3, r3, r2, lsl #16
+ 238              	.LVL26:
+ 372:barometer.c   ****     //serial_printIntln(value);
+ 373:barometer.c   ****     return value;
+ 374:barometer.c   **** }
+ 239              		.loc 1 374 0
+ 240 003a 1843     		orrs	r0, r0, r3
+ 241              	.LVL27:
+ 242 003c 02B0     		add	sp, sp, #8
+ 243              		.cfi_def_cfa_offset 8
+ 244              		@ sp needed
+ 245 003e 10BD     		pop	{r4, pc}
+ 246              		.cfi_endproc
+ 247              	.LFE79:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 12
+
+
+ 248              		.size	baro_readRegister24, .-baro_readRegister24
+ 249              		.section	.text.baro_setOversampling,"ax",%progbits
+ 250              		.align	2
+ 251              		.global	baro_setOversampling
+ 252              		.thumb
+ 253              		.thumb_func
+ 254              		.type	baro_setOversampling, %function
+ 255              	baro_setOversampling:
+ 256              	.LFB66:
+ 187:barometer.c   ****     switch (osr)
+ 257              		.loc 1 187 0
+ 258              		.cfi_startproc
+ 259              		@ args = 0, pretend = 0, frame = 0
+ 260              		@ frame_needed = 0, uses_anonymous_args = 0
+ 261              		@ link register save eliminated.
+ 262              	.LVL28:
+ 188:barometer.c   ****     {
+ 263              		.loc 1 188 0
+ 264 0000 0828     		cmp	r0, #8
+ 265 0002 19D8     		bhi	.L19
+ 266 0004 DFE800F0 		tbb	[pc, r0]
+ 267              	.L21:
+ 268 0008 05       		.byte	(.L20-.L21)/2
+ 269 0009 18       		.byte	(.L19-.L21)/2
+ 270 000a 09       		.byte	(.L22-.L21)/2
+ 271 000b 18       		.byte	(.L19-.L21)/2
+ 272 000c 0D       		.byte	(.L23-.L21)/2
+ 273 000d 18       		.byte	(.L19-.L21)/2
+ 274 000e 11       		.byte	(.L24-.L21)/2
+ 275 000f 18       		.byte	(.L19-.L21)/2
+ 276 0010 15       		.byte	(.L25-.L21)/2
+ 277 0011 00       		.p2align 1
+ 278              	.L20:
+ 191:barometer.c   ****         break;
+ 279              		.loc 1 191 0
+ 280 0012 0122     		movs	r2, #1
+ 281 0014 0A4B     		ldr	r3, .L26
+ 282 0016 1A73     		strb	r2, [r3, #12]
+ 192:barometer.c   ****     case MS5611_LOW_POWER:
+ 283              		.loc 1 192 0
+ 284 0018 0EE0     		b	.L19
+ 285              	.L22:
+ 194:barometer.c   ****         break;
+ 286              		.loc 1 194 0
+ 287 001a 0222     		movs	r2, #2
+ 288 001c 084B     		ldr	r3, .L26
+ 289 001e 1A73     		strb	r2, [r3, #12]
+ 195:barometer.c   ****     case MS5611_STANDARD:
+ 290              		.loc 1 195 0
+ 291 0020 0AE0     		b	.L19
+ 292              	.L23:
+ 197:barometer.c   ****         break;
+ 293              		.loc 1 197 0
+ 294 0022 0322     		movs	r2, #3
+ 295 0024 064B     		ldr	r3, .L26
+ 296 0026 1A73     		strb	r2, [r3, #12]
+ 198:barometer.c   ****     case MS5611_HIGH_RES:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 13
+
+
+ 297              		.loc 1 198 0
+ 298 0028 06E0     		b	.L19
+ 299              	.L24:
+ 200:barometer.c   ****         break;
+ 300              		.loc 1 200 0
+ 301 002a 0522     		movs	r2, #5
+ 302 002c 044B     		ldr	r3, .L26
+ 303 002e 1A73     		strb	r2, [r3, #12]
+ 201:barometer.c   ****     case MS5611_ULTRA_HIGH_RES:
+ 304              		.loc 1 201 0
+ 305 0030 02E0     		b	.L19
+ 306              	.L25:
+ 203:barometer.c   ****         break;
+ 307              		.loc 1 203 0
+ 308 0032 0A22     		movs	r2, #10
+ 309 0034 024B     		ldr	r3, .L26
+ 310 0036 1A73     		strb	r2, [r3, #12]
+ 311              	.L19:
+ 207:barometer.c   **** }
+ 312              		.loc 1 207 0
+ 313 0038 014B     		ldr	r3, .L26
+ 314 003a 5873     		strb	r0, [r3, #13]
+ 315 003c 7047     		bx	lr
+ 316              	.L27:
+ 317 003e 00BF     		.align	2
+ 318              	.L26:
+ 319 0040 00000000 		.word	.LANCHOR0
+ 320              		.cfi_endproc
+ 321              	.LFE66:
+ 322              		.size	baro_setOversampling, .-baro_setOversampling
+ 323              		.section	.text.baro_begin,"ax",%progbits
+ 324              		.align	2
+ 325              		.global	baro_begin
+ 326              		.thumb
+ 327              		.thumb_func
+ 328              		.type	baro_begin, %function
+ 329              	baro_begin:
+ 330              	.LFB65:
+ 172:barometer.c   ****     //This is like a default setting
+ 331              		.loc 1 172 0
+ 332              		.cfi_startproc
+ 333              		@ args = 0, pretend = 0, frame = 0
+ 334              		@ frame_needed = 0, uses_anonymous_args = 0
+ 335 0000 08B5     		push	{r3, lr}
+ 336              		.cfi_def_cfa_offset 8
+ 337              		.cfi_offset 3, -8
+ 338              		.cfi_offset 14, -4
+ 339              	.LVL29:
+ 175:barometer.c   ****     baro_reset();
+ 340              		.loc 1 175 0
+ 341 0002 FFF7FEFF 		bl	Wire_begin
+ 342              	.LVL30:
+ 176:barometer.c   ****     baro_setOversampling(osr);
+ 343              		.loc 1 176 0
+ 344 0006 FFF7FEFF 		bl	baro_reset
+ 345              	.LVL31:
+ 177:barometer.c   ****     CyDelay(100);
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 14
+
+
+ 346              		.loc 1 177 0
+ 347 000a 0220     		movs	r0, #2
+ 348 000c FFF7FEFF 		bl	baro_setOversampling
+ 349              	.LVL32:
+ 178:barometer.c   ****     baro_readPROM();
+ 350              		.loc 1 178 0
+ 351 0010 6420     		movs	r0, #100
+ 352 0012 FFF7FEFF 		bl	CyDelay
+ 353              	.LVL33:
+ 179:barometer.c   ****     return true;
+ 354              		.loc 1 179 0
+ 355 0016 FFF7FEFF 		bl	baro_readPROM
+ 356              	.LVL34:
+ 181:barometer.c   **** 
+ 357              		.loc 1 181 0
+ 358 001a 0120     		movs	r0, #1
+ 359 001c 08BD     		pop	{r3, pc}
+ 360              		.cfi_endproc
+ 361              	.LFE65:
+ 362              		.size	baro_begin, .-baro_begin
+ 363 001e 00BF     		.section	.text.baro_getOversampling,"ax",%progbits
+ 364              		.align	2
+ 365              		.global	baro_getOversampling
+ 366              		.thumb
+ 367              		.thumb_func
+ 368              		.type	baro_getOversampling, %function
+ 369              	baro_getOversampling:
+ 370              	.LFB67:
+ 212:barometer.c   ****     return (ms5611_osr_t)uosr;
+ 371              		.loc 1 212 0
+ 372              		.cfi_startproc
+ 373              		@ args = 0, pretend = 0, frame = 0
+ 374              		@ frame_needed = 0, uses_anonymous_args = 0
+ 375              		@ link register save eliminated.
+ 214:barometer.c   **** 
+ 376              		.loc 1 214 0
+ 377 0000 014B     		ldr	r3, .L31
+ 378 0002 587B     		ldrb	r0, [r3, #13]	@ zero_extendqisi2
+ 379 0004 7047     		bx	lr
+ 380              	.L32:
+ 381 0006 00BF     		.align	2
+ 382              	.L31:
+ 383 0008 00000000 		.word	.LANCHOR0
+ 384              		.cfi_endproc
+ 385              	.LFE67:
+ 386              		.size	baro_getOversampling, .-baro_getOversampling
+ 387              		.section	.text.baro_setCompensation,"ax",%progbits
+ 388              		.align	2
+ 389              		.global	baro_setCompensation
+ 390              		.thumb
+ 391              		.thumb_func
+ 392              		.type	baro_setCompensation, %function
+ 393              	baro_setCompensation:
+ 394              	.LFB68:
+ 216:barometer.c   ****     _COMPENSATION = val;
+ 395              		.loc 1 216 0
+ 396              		.cfi_startproc
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 15
+
+
+ 397              		@ args = 0, pretend = 0, frame = 0
+ 398              		@ frame_needed = 0, uses_anonymous_args = 0
+ 399              		@ link register save eliminated.
+ 400              	.LVL35:
+ 217:barometer.c   **** }
+ 401              		.loc 1 217 0
+ 402 0000 014B     		ldr	r3, .L34
+ 403 0002 9873     		strb	r0, [r3, #14]
+ 404 0004 7047     		bx	lr
+ 405              	.L35:
+ 406 0006 00BF     		.align	2
+ 407              	.L34:
+ 408 0008 00000000 		.word	.LANCHOR0
+ 409              		.cfi_endproc
+ 410              	.LFE68:
+ 411              		.size	baro_setCompensation, .-baro_setCompensation
+ 412              		.section	.text.baro_readRawTemperature,"ax",%progbits
+ 413              		.align	2
+ 414              		.global	baro_readRawTemperature
+ 415              		.thumb
+ 416              		.thumb_func
+ 417              		.type	baro_readRawTemperature, %function
+ 418              	baro_readRawTemperature:
+ 419              	.LFB71:
+ 236:barometer.c   ****     baro_sendCommand(MS5611_CMD_CONV_D2 + uosr);
+ 420              		.loc 1 236 0
+ 421              		.cfi_startproc
+ 422              		@ args = 0, pretend = 0, frame = 0
+ 423              		@ frame_needed = 0, uses_anonymous_args = 0
+ 424 0000 10B5     		push	{r4, lr}
+ 425              		.cfi_def_cfa_offset 8
+ 426              		.cfi_offset 4, -8
+ 427              		.cfi_offset 14, -4
+ 237:barometer.c   ****     CyDelay(ct);
+ 428              		.loc 1 237 0
+ 429 0002 064C     		ldr	r4, .L38
+ 430 0004 607B     		ldrb	r0, [r4, #13]	@ zero_extendqisi2
+ 431 0006 5030     		adds	r0, r0, #80
+ 432 0008 C0B2     		uxtb	r0, r0
+ 433 000a FFF7FEFF 		bl	baro_sendCommand
+ 434              	.LVL36:
+ 238:barometer.c   ****     return baro_readRegister24(MS5611_CMD_ADC_READ);
+ 435              		.loc 1 238 0
+ 436 000e 207B     		ldrb	r0, [r4, #12]	@ zero_extendqisi2
+ 437 0010 FFF7FEFF 		bl	CyDelay
+ 438              	.LVL37:
+ 239:barometer.c   **** }
+ 439              		.loc 1 239 0
+ 440 0014 0020     		movs	r0, #0
+ 441 0016 FFF7FEFF 		bl	baro_readRegister24
+ 442              	.LVL38:
+ 240:barometer.c   **** 
+ 443              		.loc 1 240 0
+ 444 001a 10BD     		pop	{r4, pc}
+ 445              	.L39:
+ 446              		.align	2
+ 447              	.L38:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 16
+
+
+ 448 001c 00000000 		.word	.LANCHOR0
+ 449              		.cfi_endproc
+ 450              	.LFE71:
+ 451              		.size	baro_readRawTemperature, .-baro_readRawTemperature
+ 452              		.section	.text.baro_readRawPressure,"ax",%progbits
+ 453              		.align	2
+ 454              		.global	baro_readRawPressure
+ 455              		.thumb
+ 456              		.thumb_func
+ 457              		.type	baro_readRawPressure, %function
+ 458              	baro_readRawPressure:
+ 459              	.LFB72:
+ 243:barometer.c   ****     baro_sendCommand(MS5611_CMD_CONV_D2 + uosr);
+ 460              		.loc 1 243 0
+ 461              		.cfi_startproc
+ 462              		@ args = 0, pretend = 0, frame = 0
+ 463              		@ frame_needed = 0, uses_anonymous_args = 0
+ 464 0000 10B5     		push	{r4, lr}
+ 465              		.cfi_def_cfa_offset 8
+ 466              		.cfi_offset 4, -8
+ 467              		.cfi_offset 14, -4
+ 244:barometer.c   ****     CyDelay(ct);
+ 468              		.loc 1 244 0
+ 469 0002 064C     		ldr	r4, .L42
+ 470 0004 607B     		ldrb	r0, [r4, #13]	@ zero_extendqisi2
+ 471 0006 5030     		adds	r0, r0, #80
+ 472 0008 C0B2     		uxtb	r0, r0
+ 473 000a FFF7FEFF 		bl	baro_sendCommand
+ 474              	.LVL39:
+ 245:barometer.c   ****     return baro_readRegister24(MS5611_CMD_ADC_READ);
+ 475              		.loc 1 245 0
+ 476 000e 207B     		ldrb	r0, [r4, #12]	@ zero_extendqisi2
+ 477 0010 FFF7FEFF 		bl	CyDelay
+ 478              	.LVL40:
+ 246:barometer.c   **** }
+ 479              		.loc 1 246 0
+ 480 0014 0020     		movs	r0, #0
+ 481 0016 FFF7FEFF 		bl	baro_readRegister24
+ 482              	.LVL41:
+ 247:barometer.c   **** 
+ 483              		.loc 1 247 0
+ 484 001a 10BD     		pop	{r4, pc}
+ 485              	.L43:
+ 486              		.align	2
+ 487              	.L42:
+ 488 001c 00000000 		.word	.LANCHOR0
+ 489              		.cfi_endproc
+ 490              	.LFE72:
+ 491              		.size	baro_readRawPressure, .-baro_readRawPressure
+ 492              		.section	.text.baro_readPressure,"ax",%progbits
+ 493              		.align	2
+ 494              		.global	baro_readPressure
+ 495              		.thumb
+ 496              		.thumb_func
+ 497              		.type	baro_readPressure, %function
+ 498              	baro_readPressure:
+ 499              	.LFB73:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 17
+
+
+ 250:barometer.c   ****     uint32_t D1 = baro_readRawPressure();
+ 500              		.loc 1 250 0
+ 501              		.cfi_startproc
+ 502              		@ args = 0, pretend = 0, frame = 8
+ 503              		@ frame_needed = 0, uses_anonymous_args = 0
+ 504 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 505              		.cfi_def_cfa_offset 36
+ 506              		.cfi_offset 4, -36
+ 507              		.cfi_offset 5, -32
+ 508              		.cfi_offset 6, -28
+ 509              		.cfi_offset 7, -24
+ 510              		.cfi_offset 8, -20
+ 511              		.cfi_offset 9, -16
+ 512              		.cfi_offset 10, -12
+ 513              		.cfi_offset 11, -8
+ 514              		.cfi_offset 14, -4
+ 515 0004 83B0     		sub	sp, sp, #12
+ 516              		.cfi_def_cfa_offset 48
+ 251:barometer.c   **** 
+ 517              		.loc 1 251 0
+ 518 0006 FFF7FEFF 		bl	baro_readRawPressure
+ 519              	.LVL42:
+ 520 000a 0190     		str	r0, [sp, #4]
+ 521              	.LVL43:
+ 253:barometer.c   ****     int32_t dT = D2 - (uint32_t)fc[4] * 256;
+ 522              		.loc 1 253 0
+ 523 000c FFF7FEFF 		bl	baro_readRawTemperature
+ 524              	.LVL44:
+ 254:barometer.c   **** 
+ 525              		.loc 1 254 0
+ 526 0010 664B     		ldr	r3, .L55
+ 527 0012 1A89     		ldrh	r2, [r3, #8]
+ 528 0014 A0EB0220 		sub	r0, r0, r2, lsl #8
+ 529              	.LVL45:
+ 256:barometer.c   ****     int64_t SENS = (int64_t)fc[0] * 32768 + (int64_t)fc[2] * dT / 256;
+ 530              		.loc 1 256 0
+ 531 0018 5E88     		ldrh	r6, [r3, #2]
+ 532 001a 0025     		movs	r5, #0
+ 533 001c 3404     		lsls	r4, r6, #16
+ 534 001e B3F80680 		ldrh	r8, [r3, #6]
+ 535 0022 C717     		asrs	r7, r0, #31
+ 536 0024 A8FB0023 		umull	r2, r3, r8, r0
+ 537 0028 08FB0733 		mla	r3, r8, r7, r3
+ 538 002c 9046     		mov	r8, r2
+ 539 002e 9946     		mov	r9, r3
+ 540 0030 002A     		cmp	r2, #0
+ 541 0032 73F10001 		sbcs	r1, r3, #0
+ 542 0036 03DA     		bge	.L45
+ 543 0038 12F17F08 		adds	r8, r2, #127
+ 544 003c 43F10009 		adc	r9, r3, #0
+ 545              	.L45:
+ 546 0040 4FEAD811 		lsr	r1, r8, #7
+ 547 0044 41EA4962 		orr	r2, r1, r9, lsl #25
+ 548 0048 4FEAE913 		asr	r3, r9, #7
+ 549 004c A418     		adds	r4, r4, r2
+ 550 004e 5D41     		adcs	r5, r5, r3
+ 551              	.LVL46:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 18
+
+
+ 257:barometer.c   **** 
+ 552              		.loc 1 257 0
+ 553 0050 5649     		ldr	r1, .L55
+ 554 0052 0A88     		ldrh	r2, [r1]
+ 555 0054 4FF0000B 		mov	fp, #0
+ 556 0058 4FEAC23A 		lsl	r10, r2, #15
+ 557 005c B1F80480 		ldrh	r8, [r1, #4]
+ 558 0060 A0FB0823 		umull	r2, r3, r0, r8
+ 559 0064 08FB0733 		mla	r3, r8, r7, r3
+ 560 0068 9046     		mov	r8, r2
+ 561 006a 9946     		mov	r9, r3
+ 562 006c 002A     		cmp	r2, #0
+ 563 006e 73F10001 		sbcs	r1, r3, #0
+ 564 0072 03DA     		bge	.L46
+ 565 0074 12F1FF08 		adds	r8, r2, #255
+ 566 0078 43F10009 		adc	r9, r3, #0
+ 567              	.L46:
+ 568 007c 4FEA1821 		lsr	r1, r8, #8
+ 569 0080 41EA0962 		orr	r2, r1, r9, lsl #24
+ 570 0084 4FEA2923 		asr	r3, r9, #8
+ 571 0088 12EB0A02 		adds	r2, r2, r10
+ 572 008c 43EB0B03 		adc	r3, r3, fp
+ 573              	.LVL47:
+ 259:barometer.c   ****     {
+ 574              		.loc 1 259 0
+ 575 0090 4649     		ldr	r1, .L55
+ 576 0092 897B     		ldrb	r1, [r1, #14]	@ zero_extendqisi2
+ 577 0094 0029     		cmp	r1, #0
+ 578 0096 61D0     		beq	.L47
+ 579              	.LBB2:
+ 261:barometer.c   **** 
+ 580              		.loc 1 261 0
+ 581 0098 4449     		ldr	r1, .L55
+ 582 009a B1F80A80 		ldrh	r8, [r1, #10]
+ 583 009e A8FB0001 		umull	r0, r1, r8, r0
+ 584              	.LVL48:
+ 585 00a2 08FB0711 		mla	r1, r8, r7, r1
+ 586 00a6 0646     		mov	r6, r0
+ 587 00a8 0F46     		mov	r7, r1
+ 588 00aa 0028     		cmp	r0, #0
+ 589 00ac 71F1000E 		sbcs	lr, r1, #0
+ 590 00b0 03DA     		bge	.L48
+ 591 00b2 3F4E     		ldr	r6, .L55+4
+ 592 00b4 0027     		movs	r7, #0
+ 593 00b6 3618     		adds	r6, r6, r0
+ 594 00b8 4F41     		adcs	r7, r7, r1
+ 595              	.L48:
+ 596 00ba F10D     		lsrs	r1, r6, #23
+ 597 00bc 41EA4721 		orr	r1, r1, r7, lsl #9
+ 598 00c0 01F5FA61 		add	r1, r1, #2000
+ 599              	.LVL49:
+ 263:barometer.c   ****         SENS2 = 0;
+ 600              		.loc 1 263 0
+ 601 00c4 3948     		ldr	r0, .L55
+ 602 00c6 0026     		movs	r6, #0
+ 603 00c8 0027     		movs	r7, #0
+ 604 00ca C0E90467 		strd	r6, [r0, #16]
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 19
+
+
+ 264:barometer.c   **** 
+ 605              		.loc 1 264 0
+ 606 00ce C0E90667 		strd	r6, [r0, #24]
+ 266:barometer.c   ****         {
+ 607              		.loc 1 266 0
+ 608 00d2 B1F5FA6F 		cmp	r1, #2000
+ 609 00d6 16DA     		bge	.L49
+ 268:barometer.c   ****             SENS2 = 5 * ((TEMP - 2000) * (TEMP - 2000)) / 4;
+ 610              		.loc 1 268 0
+ 611 00d8 A1F5FA60 		sub	r0, r1, #2000
+ 612 00dc 00FB00F0 		mul	r0, r0, r0
+ 613 00e0 00EB8000 		add	r0, r0, r0, lsl #2
+ 614 00e4 00EBD076 		add	r6, r0, r0, lsr #31
+ 615 00e8 7610     		asrs	r6, r6, #1
+ 616 00ea F717     		asrs	r7, r6, #31
+ 617 00ec DFF8BCE0 		ldr	lr, .L55
+ 618 00f0 CEE90467 		strd	r6, [lr, #16]
+ 269:barometer.c   ****         }
+ 619              		.loc 1 269 0
+ 620 00f4 0646     		mov	r6, r0
+ 621 00f6 0028     		cmp	r0, #0
+ 622 00f8 00DA     		bge	.L50
+ 623 00fa C61C     		adds	r6, r0, #3
+ 624              	.L50:
+ 625 00fc B610     		asrs	r6, r6, #2
+ 626 00fe F717     		asrs	r7, r6, #31
+ 627 0100 2A48     		ldr	r0, .L55
+ 628 0102 C0E90667 		strd	r6, [r0, #24]
+ 629              	.L49:
+ 272:barometer.c   ****         {
+ 630              		.loc 1 272 0
+ 631 0106 2B48     		ldr	r0, .L55+8
+ 632 0108 8142     		cmp	r1, r0
+ 633 010a 1CDA     		bge	.L51
+ 274:barometer.c   ****             SENS2 = SENS2 + 11 * ((TEMP + 1500) * (TEMP + 1500)) / 2;
+ 634              		.loc 1 274 0
+ 635 010c 01F2DC56 		addw	r6, r1, #1500
+ 636 0110 06FB06F6 		mul	r6, r6, r6
+ 637 0114 C6EBC60E 		rsb	lr, r6, r6, lsl #3
+ 638 0118 244F     		ldr	r7, .L55
+ 639 011a D7E90401 		ldrd	r0, [r7, #16]
+ 640 011e 10EB0E00 		adds	r0, r0, lr
+ 641 0122 41EBEE71 		adc	r1, r1, lr, asr #31
+ 642              	.LVL50:
+ 643 0126 C7E90401 		strd	r0, [r7, #16]
+ 275:barometer.c   ****         }
+ 644              		.loc 1 275 0
+ 645 012a 06EB8601 		add	r1, r6, r6, lsl #2
+ 646 012e 06EB4106 		add	r6, r6, r1, lsl #1
+ 647 0132 06EBD676 		add	r6, r6, r6, lsr #31
+ 648 0136 7610     		asrs	r6, r6, #1
+ 649 0138 D7E90601 		ldrd	r0, [r7, #24]
+ 650 013c 8019     		adds	r0, r0, r6
+ 651 013e 41EBE671 		adc	r1, r1, r6, asr #31
+ 652 0142 C7E90601 		strd	r0, [r7, #24]
+ 653              	.L51:
+ 278:barometer.c   ****         SENS = SENS - SENS2;
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 20
+
+
+ 654              		.loc 1 278 0
+ 655 0146 194E     		ldr	r6, .L55
+ 656 0148 D6E90401 		ldrd	r0, [r6, #16]
+ 657 014c 241A     		subs	r4, r4, r0
+ 658              	.LVL51:
+ 659 014e 65EB0105 		sbc	r5, r5, r1
+ 660              	.LVL52:
+ 279:barometer.c   ****     }
+ 661              		.loc 1 279 0
+ 662 0152 D6E90601 		ldrd	r0, [r6, #24]
+ 663 0156 121A     		subs	r2, r2, r0
+ 664              	.LVL53:
+ 665 0158 63EB0103 		sbc	r3, r3, r1
+ 666              	.LVL54:
+ 667              	.L47:
+ 668              	.LBE2:
+ 282:barometer.c   **** 
+ 669              		.loc 1 282 0
+ 670 015c 019E     		ldr	r6, [sp, #4]
+ 671 015e A6FB0201 		umull	r0, r1, r6, r2
+ 672 0162 06FB0311 		mla	r1, r6, r3, r1
+ 673 0166 0646     		mov	r6, r0
+ 674 0168 0F46     		mov	r7, r1
+ 675 016a 0028     		cmp	r0, #0
+ 676 016c 71F10003 		sbcs	r3, r1, #0
+ 677 0170 03DA     		bge	.L52
+ 678 0172 114E     		ldr	r6, .L55+12
+ 679 0174 0027     		movs	r7, #0
+ 680 0176 3618     		adds	r6, r6, r0
+ 681 0178 4F41     		adcs	r7, r7, r1
+ 682              	.L52:
+ 683 017a 710D     		lsrs	r1, r6, #21
+ 684 017c 41EAC722 		orr	r2, r1, r7, lsl #11
+ 685              	.LVL55:
+ 686 0180 7B15     		asrs	r3, r7, #21
+ 687 0182 141B     		subs	r4, r2, r4
+ 688              	.LVL56:
+ 689 0184 63EB0505 		sbc	r5, r3, r5
+ 690 0188 2246     		mov	r2, r4
+ 691 018a 2B46     		mov	r3, r5
+ 692 018c 002C     		cmp	r4, #0
+ 693 018e 75F10001 		sbcs	r1, r5, #0
+ 694 0192 04DA     		bge	.L53
+ 695 0194 47F6FF72 		movw	r2, #32767
+ 696 0198 0023     		movs	r3, #0
+ 697 019a 1219     		adds	r2, r2, r4
+ 698 019c 6B41     		adcs	r3, r3, r5
+ 699              	.L53:
+ 700 019e D00B     		lsrs	r0, r2, #15
+ 701              	.LVL57:
+ 285:barometer.c   **** 
+ 702              		.loc 1 285 0
+ 703 01a0 40EA4340 		orr	r0, r0, r3, lsl #17
+ 704              	.LVL58:
+ 705 01a4 03B0     		add	sp, sp, #12
+ 706              		.cfi_def_cfa_offset 36
+ 707              		@ sp needed
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 21
+
+
+ 708 01a6 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 709              	.LVL59:
+ 710              	.L56:
+ 711 01aa 00BF     		.align	2
+ 712              	.L55:
+ 713 01ac 00000000 		.word	.LANCHOR0
+ 714 01b0 FFFF7F00 		.word	8388607
+ 715 01b4 24FAFFFF 		.word	-1500
+ 716 01b8 FFFF1F00 		.word	2097151
+ 717              		.cfi_endproc
+ 718              	.LFE73:
+ 719              		.size	baro_readPressure, .-baro_readPressure
+ 720              		.global	__aeabi_i2d
+ 721              		.global	__aeabi_ddiv
+ 722              		.section	.text.baro_readTemperature,"ax",%progbits
+ 723              		.align	2
+ 724              		.global	baro_readTemperature
+ 725              		.thumb
+ 726              		.thumb_func
+ 727              		.type	baro_readTemperature, %function
+ 728              	baro_readTemperature:
+ 729              	.LFB74:
+ 288:barometer.c   ****     uint32_t D2 = baro_readRawTemperature();
+ 730              		.loc 1 288 0
+ 731              		.cfi_startproc
+ 732              		@ args = 0, pretend = 0, frame = 0
+ 733              		@ frame_needed = 0, uses_anonymous_args = 0
+ 734 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 735              		.cfi_def_cfa_offset 24
+ 736              		.cfi_offset 3, -24
+ 737              		.cfi_offset 4, -20
+ 738              		.cfi_offset 5, -16
+ 739              		.cfi_offset 6, -12
+ 740              		.cfi_offset 7, -8
+ 741              		.cfi_offset 14, -4
+ 289:barometer.c   ****     int32_t dT = D2 - (uint32_t)fc[4] * 256;
+ 742              		.loc 1 289 0
+ 743 0002 FFF7FEFF 		bl	baro_readRawTemperature
+ 744              	.LVL60:
+ 290:barometer.c   **** 
+ 745              		.loc 1 290 0
+ 746 0006 1A4A     		ldr	r2, .L61
+ 747 0008 1389     		ldrh	r3, [r2, #8]
+ 748 000a A0EB0323 		sub	r3, r0, r3, lsl #8
+ 749              	.LVL61:
+ 292:barometer.c   **** 
+ 750              		.loc 1 292 0
+ 751 000e DF17     		asrs	r7, r3, #31
+ 752 0010 5489     		ldrh	r4, [r2, #10]
+ 753 0012 A4FB0301 		umull	r0, r1, r4, r3
+ 754              	.LVL62:
+ 755 0016 04FB0711 		mla	r1, r4, r7, r1
+ 756 001a 0446     		mov	r4, r0
+ 757 001c 0D46     		mov	r5, r1
+ 758 001e 0028     		cmp	r0, #0
+ 759 0020 71F10002 		sbcs	r2, r1, #0
+ 760 0024 03DA     		bge	.L58
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 22
+
+
+ 761 0026 134C     		ldr	r4, .L61+4
+ 762 0028 0025     		movs	r5, #0
+ 763 002a 2418     		adds	r4, r4, r0
+ 764 002c 4D41     		adcs	r5, r5, r1
+ 765              	.L58:
+ 766 002e E00D     		lsrs	r0, r4, #23
+ 767 0030 40EA4520 		orr	r0, r0, r5, lsl #9
+ 768 0034 00F5FA60 		add	r0, r0, #2000
+ 769              	.LVL63:
+ 294:barometer.c   **** 
+ 770              		.loc 1 294 0
+ 771 0038 0D4A     		ldr	r2, .L61
+ 772 003a 0021     		movs	r1, #0
+ 773 003c 1162     		str	r1, [r2, #32]
+ 296:barometer.c   ****     {
+ 774              		.loc 1 296 0
+ 775 003e 927B     		ldrb	r2, [r2, #14]	@ zero_extendqisi2
+ 776 0040 5AB1     		cbz	r2, .L59
+ 298:barometer.c   ****         {
+ 777              		.loc 1 298 0
+ 778 0042 B0F5FA6F 		cmp	r0, #2000
+ 779 0046 08DA     		bge	.L59
+ 300:barometer.c   ****         }
+ 780              		.loc 1 300 0
+ 781 0048 03FB03F3 		mul	r3, r3, r3
+ 782              	.LVL64:
+ 783 004c B3F1004F 		cmp	r3, #-2147483648
+ 784 0050 14BF     		ite	ne
+ 785 0052 0023     		movne	r3, #0
+ 786 0054 0123     		moveq	r3, #1
+ 787 0056 064A     		ldr	r2, .L61
+ 788 0058 1362     		str	r3, [r2, #32]
+ 789              	.L59:
+ 304:barometer.c   **** 
+ 790              		.loc 1 304 0
+ 791 005a 054B     		ldr	r3, .L61
+ 792 005c 1B6A     		ldr	r3, [r3, #32]
+ 793              	.LVL65:
+ 306:barometer.c   **** }
+ 794              		.loc 1 306 0
+ 795 005e C01A     		subs	r0, r0, r3
+ 796              	.LVL66:
+ 797 0060 FFF7FEFF 		bl	__aeabi_i2d
+ 798              	.LVL67:
+ 799 0064 0022     		movs	r2, #0
+ 800 0066 044B     		ldr	r3, .L61+8
+ 801 0068 FFF7FEFF 		bl	__aeabi_ddiv
+ 802              	.LVL68:
+ 307:barometer.c   **** 
+ 803              		.loc 1 307 0
+ 804 006c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 805              	.L62:
+ 806 006e 00BF     		.align	2
+ 807              	.L61:
+ 808 0070 00000000 		.word	.LANCHOR0
+ 809 0074 FFFF7F00 		.word	8388607
+ 810 0078 00005940 		.word	1079574528
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 23
+
+
+ 811              		.cfi_endproc
+ 812              	.LFE74:
+ 813              		.size	baro_readTemperature, .-baro_readTemperature
+ 814              		.global	__aeabi_dsub
+ 815              		.global	__aeabi_dmul
+ 816              		.section	.text.baro_getAbsoluteAltitude,"ax",%progbits
+ 817              		.align	2
+ 818              		.global	baro_getAbsoluteAltitude
+ 819              		.thumb
+ 820              		.thumb_func
+ 821              		.type	baro_getAbsoluteAltitude, %function
+ 822              	baro_getAbsoluteAltitude:
+ 823              	.LFB75:
+ 311:barometer.c   ****     double seaLevelPressure = 101325;
+ 824              		.loc 1 311 0
+ 825              		.cfi_startproc
+ 826              		@ args = 0, pretend = 0, frame = 0
+ 827              		@ frame_needed = 0, uses_anonymous_args = 0
+ 828              	.LVL69:
+ 829 0000 08B5     		push	{r3, lr}
+ 830              		.cfi_def_cfa_offset 8
+ 831              		.cfi_offset 3, -8
+ 832              		.cfi_offset 14, -4
+ 833              	.LVL70:
+ 313:barometer.c   ****     return ret;
+ 834              		.loc 1 313 0
+ 835 0002 FFF7FEFF 		bl	__aeabi_i2d
+ 836              	.LVL71:
+ 837 0006 0CA3     		adr	r3, .L65
+ 838 0008 D3E90023 		ldrd	r2, [r3]
+ 839 000c FFF7FEFF 		bl	__aeabi_ddiv
+ 840              	.LVL72:
+ 841 0010 0BA3     		adr	r3, .L65+8
+ 842 0012 D3E90023 		ldrd	r2, [r3]
+ 843 0016 FFF7FEFF 		bl	pow
+ 844              	.LVL73:
+ 845 001a 0246     		mov	r2, r0
+ 846 001c 0B46     		mov	r3, r1
+ 847 001e 0020     		movs	r0, #0
+ 848 0020 0B49     		ldr	r1, .L65+24
+ 849 0022 FFF7FEFF 		bl	__aeabi_dsub
+ 850              	.LVL74:
+ 851 0026 08A3     		adr	r3, .L65+16
+ 852 0028 D3E90023 		ldrd	r2, [r3]
+ 853 002c FFF7FEFF 		bl	__aeabi_dmul
+ 854              	.LVL75:
+ 315:barometer.c   **** 
+ 855              		.loc 1 315 0
+ 856 0030 08BD     		pop	{r3, pc}
+ 857              	.L66:
+ 858 0032 00BFAFF3 		.align	3
+ 858      0080
+ 859              	.L65:
+ 860 0038 00000000 		.word	0
+ 861 003c D0BCF840 		.word	1090043088
+ 862 0040 00000060 		.word	1610612736
+ 863 0044 955BC83F 		.word	1070095253
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 24
+
+
+ 864 0048 00000000 		.word	0
+ 865 004c 40A5E540 		.word	1088791872
+ 866 0050 0000F03F 		.word	1072693248
+ 867              		.cfi_endproc
+ 868              	.LFE75:
+ 869              		.size	baro_getAbsoluteAltitude, .-baro_getAbsoluteAltitude
+ 870              		.section	.text.baro_getRelativeAltitude,"ax",%progbits
+ 871              		.align	2
+ 872              		.global	baro_getRelativeAltitude
+ 873              		.thumb
+ 874              		.thumb_func
+ 875              		.type	baro_getRelativeAltitude, %function
+ 876              	baro_getRelativeAltitude:
+ 877              	.LFB76:
+ 319:barometer.c   ****     double ret = (44330.0f * (1.0f - pow(((double)pressure / (double)initialPressure), 0.1902949f))
+ 878              		.loc 1 319 0
+ 879              		.cfi_startproc
+ 880              		@ args = 0, pretend = 0, frame = 0
+ 881              		@ frame_needed = 0, uses_anonymous_args = 0
+ 882              	.LVL76:
+ 883 0000 70B5     		push	{r4, r5, r6, lr}
+ 884              		.cfi_def_cfa_offset 16
+ 885              		.cfi_offset 4, -16
+ 886              		.cfi_offset 5, -12
+ 887              		.cfi_offset 6, -8
+ 888              		.cfi_offset 14, -4
+ 889 0002 0E46     		mov	r6, r1
+ 320:barometer.c   ****     return ret;
+ 890              		.loc 1 320 0
+ 891 0004 FFF7FEFF 		bl	__aeabi_i2d
+ 892              	.LVL77:
+ 893 0008 0446     		mov	r4, r0
+ 894 000a 0D46     		mov	r5, r1
+ 895 000c 3046     		mov	r0, r6
+ 896 000e FFF7FEFF 		bl	__aeabi_i2d
+ 897              	.LVL78:
+ 898 0012 0246     		mov	r2, r0
+ 899 0014 0B46     		mov	r3, r1
+ 900 0016 2046     		mov	r0, r4
+ 901 0018 2946     		mov	r1, r5
+ 902 001a FFF7FEFF 		bl	__aeabi_ddiv
+ 903              	.LVL79:
+ 904 001e 08A3     		adr	r3, .L69
+ 905 0020 D3E90023 		ldrd	r2, [r3]
+ 906 0024 FFF7FEFF 		bl	pow
+ 907              	.LVL80:
+ 908 0028 0246     		mov	r2, r0
+ 909 002a 0B46     		mov	r3, r1
+ 910 002c 0020     		movs	r0, #0
+ 911 002e 0849     		ldr	r1, .L69+16
+ 912 0030 FFF7FEFF 		bl	__aeabi_dsub
+ 913              	.LVL81:
+ 914 0034 04A3     		adr	r3, .L69+8
+ 915 0036 D3E90023 		ldrd	r2, [r3]
+ 916 003a FFF7FEFF 		bl	__aeabi_dmul
+ 917              	.LVL82:
+ 322:barometer.c   **** 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 25
+
+
+ 918              		.loc 1 322 0
+ 919 003e 70BD     		pop	{r4, r5, r6, pc}
+ 920              	.LVL83:
+ 921              	.L70:
+ 922              		.align	3
+ 923              	.L69:
+ 924 0040 00000060 		.word	1610612736
+ 925 0044 955BC83F 		.word	1070095253
+ 926 0048 00000000 		.word	0
+ 927 004c 40A5E540 		.word	1088791872
+ 928 0050 0000F03F 		.word	1072693248
+ 929              		.cfi_endproc
+ 930              	.LFE76:
+ 931              		.size	baro_getRelativeAltitude, .-baro_getRelativeAltitude
+ 932              		.global	__aeabi_dcmpgt
+ 933              		.section	.text.baro_initialize,"ax",%progbits
+ 934              		.align	2
+ 935              		.global	baro_initialize
+ 936              		.thumb
+ 937              		.thumb_func
+ 938              		.type	baro_initialize, %function
+ 939              	baro_initialize:
+ 940              	.LFB64:
+ 118:barometer.c   ****     serial_println("Initializing Barometeric Pressure and Temperature sensor:");
+ 941              		.loc 1 118 0
+ 942              		.cfi_startproc
+ 943              		@ args = 0, pretend = 0, frame = 0
+ 944              		@ frame_needed = 0, uses_anonymous_args = 0
+ 945 0000 10B5     		push	{r4, lr}
+ 946              		.cfi_def_cfa_offset 8
+ 947              		.cfi_offset 4, -8
+ 948              		.cfi_offset 14, -4
+ 119:barometer.c   ****     while (!baro_begin())
+ 949              		.loc 1 119 0
+ 950 0002 1D48     		ldr	r0, .L78
+ 951 0004 FFF7FEFF 		bl	serial_println
+ 952              	.LVL84:
+ 120:barometer.c   ****     {
+ 953              		.loc 1 120 0
+ 954 0008 02E0     		b	.L72
+ 955              	.L73:
+ 122:barometer.c   ****     }
+ 956              		.loc 1 122 0
+ 957 000a 1C48     		ldr	r0, .L78+4
+ 958 000c FFF7FEFF 		bl	serial_println
+ 959              	.LVL85:
+ 960              	.L72:
+ 120:barometer.c   ****     {
+ 961              		.loc 1 120 0
+ 962 0010 FFF7FEFF 		bl	baro_begin
+ 963              	.LVL86:
+ 964 0014 0028     		cmp	r0, #0
+ 965 0016 F8D0     		beq	.L73
+ 126:barometer.c   **** 
+ 966              		.loc 1 126 0
+ 967 0018 FFF7FEFF 		bl	baro_readPressure
+ 968              	.LVL87:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 26
+
+
+ 969 001c 184C     		ldr	r4, .L78+8
+ 970 001e 2060     		str	r0, [r4]
+ 129:barometer.c   ****     initial_raw_pressure = baro_readRawPressure();
+ 971              		.loc 1 129 0
+ 972 0020 FFF7FEFF 		bl	baro_readRawTemperature
+ 973              	.LVL88:
+ 974 0024 174B     		ldr	r3, .L78+12
+ 975 0026 1860     		str	r0, [r3]
+ 130:barometer.c   **** 
+ 976              		.loc 1 130 0
+ 977 0028 FFF7FEFF 		bl	baro_readRawPressure
+ 978              	.LVL89:
+ 979 002c 164B     		ldr	r3, .L78+16
+ 980 002e 1860     		str	r0, [r3]
+ 133:barometer.c   ****     initial_real_pressure = baro_readPressure();
+ 981              		.loc 1 133 0
+ 982 0030 FFF7FEFF 		bl	baro_readTemperature
+ 983              	.LVL90:
+ 984 0034 154B     		ldr	r3, .L78+20
+ 985 0036 C3E90001 		strd	r0, [r3]
+ 134:barometer.c   **** 
+ 986              		.loc 1 134 0
+ 987 003a FFF7FEFF 		bl	baro_readPressure
+ 988              	.LVL91:
+ 989 003e 144B     		ldr	r3, .L78+24
+ 990 0040 1860     		str	r0, [r3]
+ 138:barometer.c   ****     
+ 991              		.loc 1 138 0
+ 992 0042 2068     		ldr	r0, [r4]
+ 993 0044 FFF7FEFF 		bl	baro_getAbsoluteAltitude
+ 994              	.LVL92:
+ 995 0048 124B     		ldr	r3, .L78+28
+ 996 004a C3E90001 		strd	r0, [r3]
+ 140:barometer.c   ****     initial_relative_altitude = baro_getRelativeAltitude(check_pressure, reference_pressure);
+ 997              		.loc 1 140 0
+ 998 004e FFF7FEFF 		bl	baro_readPressure
+ 999              	.LVL93:
+ 141:barometer.c   ****     
+ 1000              		.loc 1 141 0
+ 1001 0052 2168     		ldr	r1, [r4]
+ 1002 0054 FFF7FEFF 		bl	baro_getRelativeAltitude
+ 1003              	.LVL94:
+ 1004 0058 0F4B     		ldr	r3, .L78+32
+ 1005 005a C3E90001 		strd	r0, [r3]
+ 143:barometer.c   ****     {
+ 1006              		.loc 1 143 0
+ 1007 005e 0022     		movs	r2, #0
+ 1008 0060 0E4B     		ldr	r3, .L78+36
+ 1009 0062 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 1010              	.LVL95:
+ 1011 0066 28B1     		cbz	r0, .L71
+ 145:barometer.c   ****         serial_println("check code or restart quadcopter and don't touch.");
+ 1012              		.loc 1 145 0
+ 1013 0068 0D48     		ldr	r0, .L78+40
+ 1014 006a FFF7FEFF 		bl	serial_println
+ 1015              	.LVL96:
+ 146:barometer.c   ****     }
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 27
+
+
+ 1016              		.loc 1 146 0
+ 1017 006e 0D48     		ldr	r0, .L78+44
+ 1018 0070 FFF7FEFF 		bl	serial_println
+ 1019              	.LVL97:
+ 1020              	.L71:
+ 1021 0074 10BD     		pop	{r4, pc}
+ 1022              	.L79:
+ 1023 0076 00BF     		.align	2
+ 1024              	.L78:
+ 1025 0078 00000000 		.word	.LC0
+ 1026 007c 3C000000 		.word	.LC1
+ 1027 0080 00000000 		.word	reference_pressure
+ 1028 0084 00000000 		.word	initial_raw_temperature
+ 1029 0088 00000000 		.word	initial_raw_pressure
+ 1030 008c 00000000 		.word	initial_real_temprature
+ 1031 0090 00000000 		.word	initial_real_pressure
+ 1032 0094 00000000 		.word	initial_absolute_altitude
+ 1033 0098 00000000 		.word	initial_relative_altitude
+ 1034 009c 00002440 		.word	1076101120
+ 1035 00a0 88000000 		.word	.LC2
+ 1036 00a4 CC000000 		.word	.LC3
+ 1037              		.cfi_endproc
+ 1038              	.LFE64:
+ 1039              		.size	baro_initialize, .-baro_initialize
+ 1040              		.section	.text.baro_getSeaLevel,"ax",%progbits
+ 1041              		.align	2
+ 1042              		.global	baro_getSeaLevel
+ 1043              		.thumb
+ 1044              		.thumb_func
+ 1045              		.type	baro_getSeaLevel, %function
+ 1046              	baro_getSeaLevel:
+ 1047              	.LFB77:
+ 326:barometer.c   ****     double ret = ((double)pressure / pow((1.0) - ((double)altitude / (44330.0)), (5.255)));
+ 1048              		.loc 1 326 0
+ 1049              		.cfi_startproc
+ 1050              		@ args = 0, pretend = 0, frame = 0
+ 1051              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1052              	.LVL98:
+ 1053 0000 70B5     		push	{r4, r5, r6, lr}
+ 1054              		.cfi_def_cfa_offset 16
+ 1055              		.cfi_offset 4, -16
+ 1056              		.cfi_offset 5, -12
+ 1057              		.cfi_offset 6, -8
+ 1058              		.cfi_offset 14, -4
+ 1059 0002 0E46     		mov	r6, r1
+ 327:barometer.c   ****     return ret;
+ 1060              		.loc 1 327 0
+ 1061 0004 FFF7FEFF 		bl	__aeabi_i2d
+ 1062              	.LVL99:
+ 1063 0008 0446     		mov	r4, r0
+ 1064 000a 0D46     		mov	r5, r1
+ 1065 000c 3046     		mov	r0, r6
+ 1066 000e FFF7FEFF 		bl	__aeabi_i2d
+ 1067              	.LVL100:
+ 1068 0012 0BA3     		adr	r3, .L82
+ 1069 0014 D3E90023 		ldrd	r2, [r3]
+ 1070 0018 FFF7FEFF 		bl	__aeabi_ddiv
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 28
+
+
+ 1071              	.LVL101:
+ 1072 001c 0246     		mov	r2, r0
+ 1073 001e 0B46     		mov	r3, r1
+ 1074 0020 0020     		movs	r0, #0
+ 1075 0022 0B49     		ldr	r1, .L82+16
+ 1076 0024 FFF7FEFF 		bl	__aeabi_dsub
+ 1077              	.LVL102:
+ 1078 0028 07A3     		adr	r3, .L82+8
+ 1079 002a D3E90023 		ldrd	r2, [r3]
+ 1080 002e FFF7FEFF 		bl	pow
+ 1081              	.LVL103:
+ 1082 0032 0246     		mov	r2, r0
+ 1083 0034 0B46     		mov	r3, r1
+ 1084 0036 2046     		mov	r0, r4
+ 1085 0038 2946     		mov	r1, r5
+ 1086 003a FFF7FEFF 		bl	__aeabi_ddiv
+ 1087              	.LVL104:
+ 329:barometer.c   **** 
+ 1088              		.loc 1 329 0
+ 1089 003e 70BD     		pop	{r4, r5, r6, pc}
+ 1090              	.LVL105:
+ 1091              	.L83:
+ 1092              		.align	3
+ 1093              	.L82:
+ 1094 0040 00000000 		.word	0
+ 1095 0044 40A5E540 		.word	1088791872
+ 1096 0048 85EB51B8 		.word	-1202590843
+ 1097 004c 1E051540 		.word	1075119390
+ 1098 0050 0000F03F 		.word	1072693248
+ 1099              		.cfi_endproc
+ 1100              	.LFE77:
+ 1101              		.size	baro_getSeaLevel, .-baro_getSeaLevel
+ 1102              		.section	.text.baro_update,"ax",%progbits
+ 1103              		.align	2
+ 1104              		.global	baro_update
+ 1105              		.thumb
+ 1106              		.thumb_func
+ 1107              		.type	baro_update, %function
+ 1108              	baro_update:
+ 1109              	.LFB80:
+ 375:barometer.c   **** 
+ 376:barometer.c   **** void baro_update()
+ 377:barometer.c   **** {
+ 1110              		.loc 1 377 0
+ 1111              		.cfi_startproc
+ 1112              		@ args = 0, pretend = 0, frame = 0
+ 1113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1114 0000 10B5     		push	{r4, lr}
+ 1115              		.cfi_def_cfa_offset 8
+ 1116              		.cfi_offset 4, -8
+ 1117              		.cfi_offset 14, -4
+ 378:barometer.c   ****     //update the Barometric Pressure and Temperature Sensor values
+ 379:barometer.c   ****     baro.rawTemp = baro_readRawTemperature();
+ 1118              		.loc 1 379 0
+ 1119 0002 FFF7FEFF 		bl	baro_readRawTemperature
+ 1120              	.LVL106:
+ 1121 0006 0C4C     		ldr	r4, .L86
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 29
+
+
+ 1122 0008 2060     		str	r0, [r4]
+ 380:barometer.c   ****     baro.rawPress = baro_readRawPressure();
+ 1123              		.loc 1 380 0
+ 1124 000a FFF7FEFF 		bl	baro_readRawPressure
+ 1125              	.LVL107:
+ 1126 000e 6060     		str	r0, [r4, #4]
+ 381:barometer.c   ****     baro.temperature = baro_readTemperature();
+ 1127              		.loc 1 381 0
+ 1128 0010 FFF7FEFF 		bl	baro_readTemperature
+ 1129              	.LVL108:
+ 1130 0014 C4E90201 		strd	r0, [r4, #8]
+ 382:barometer.c   ****     baro.pressure = baro_readPressure();
+ 1131              		.loc 1 382 0
+ 1132 0018 FFF7FEFF 		bl	baro_readPressure
+ 1133              	.LVL109:
+ 1134 001c 2061     		str	r0, [r4, #16]
+ 383:barometer.c   **** 
+ 384:barometer.c   ****     baro.absAlt = baro_getAbsoluteAltitude(baro.pressure);
+ 1135              		.loc 1 384 0
+ 1136 001e FFF7FEFF 		bl	baro_getAbsoluteAltitude
+ 1137              	.LVL110:
+ 1138 0022 C4E90601 		strd	r0, [r4, #24]
+ 385:barometer.c   ****     baro.relAlt = baro_getRelativeAltitude((baro.pressure), (reference_pressure));
+ 1139              		.loc 1 385 0
+ 1140 0026 054B     		ldr	r3, .L86+4
+ 1141 0028 1968     		ldr	r1, [r3]
+ 1142 002a 2069     		ldr	r0, [r4, #16]
+ 1143 002c FFF7FEFF 		bl	baro_getRelativeAltitude
+ 1144              	.LVL111:
+ 1145 0030 C4E90801 		strd	r0, [r4, #32]
+ 1146 0034 10BD     		pop	{r4, pc}
+ 1147              	.L87:
+ 1148 0036 00BF     		.align	2
+ 1149              	.L86:
+ 1150 0038 00000000 		.word	baro
+ 1151 003c 00000000 		.word	reference_pressure
+ 1152              		.cfi_endproc
+ 1153              	.LFE80:
+ 1154              		.size	baro_update, .-baro_update
+ 1155              		.section	.text.baro_getRawTemp,"ax",%progbits
+ 1156              		.align	2
+ 1157              		.global	baro_getRawTemp
+ 1158              		.thumb
+ 1159              		.thumb_func
+ 1160              		.type	baro_getRawTemp, %function
+ 1161              	baro_getRawTemp:
+ 1162              	.LFB81:
+ 386:barometer.c   **** 
+ 387:barometer.c   **** //if the macro DEBUG is true (value is not 0)
+ 388:barometer.c   **** #if BAROMETER_DEBUG
+ 389:barometer.c   ****     //serial_print(" rawTemp = ");
+ 390:barometer.c   ****     //serial_printInt(baro_getRawTemp()); //print an integer
+ 391:barometer.c   ****     serial_print(" realTemp = ");
+ 392:barometer.c   ****     serial_printDouble(baro_getTemp()); //print a double
+ 393:barometer.c   ****     serial_print(" *C  |  ");
+ 394:barometer.c   **** 
+ 395:barometer.c   ****     //serial_print(" rawPressure = ");
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 30
+
+
+ 396:barometer.c   ****     //serial_printInt(baro_getRawPress()); //print an integer
+ 397:barometer.c   ****     serial_print(" realPressure = ");
+ 398:barometer.c   ****     serial_printInt(baro_getPress()); //print an integer
+ 399:barometer.c   ****     serial_print(" Pa  |  ");
+ 400:barometer.c   **** 
+ 401:barometer.c   ****     serial_print(" absoluteAltitude = ");
+ 402:barometer.c   ****     serial_printFloat(baro_getAbsAlt()); //print a double
+ 403:barometer.c   ****     serial_print(" m, relativeAltitude = ");
+ 404:barometer.c   ****     serial_printFloat(baro_getRelAlt()); //print a double
+ 405:barometer.c   ****     serial_println(" m");
+ 406:barometer.c   ****     
+ 407:barometer.c   **** #endif
+ 408:barometer.c   **** }
+ 409:barometer.c   **** 
+ 410:barometer.c   **** /*  These functions are provided to allow the user to extract
+ 411:barometer.c   ****  *  single pieces of data from the sensor readings safely
+ 412:barometer.c   ****  *  instead of just calling the sensor variables directly
+ 413:barometer.c   **** */
+ 414:barometer.c   **** uint32_t baro_getRawTemp(void){
+ 1163              		.loc 1 414 0
+ 1164              		.cfi_startproc
+ 1165              		@ args = 0, pretend = 0, frame = 0
+ 1166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1167              		@ link register save eliminated.
+ 415:barometer.c   ****     return (baro.rawTemp);
+ 416:barometer.c   **** }
+ 1168              		.loc 1 416 0
+ 1169 0000 014B     		ldr	r3, .L89
+ 1170 0002 1868     		ldr	r0, [r3]
+ 1171 0004 7047     		bx	lr
+ 1172              	.L90:
+ 1173 0006 00BF     		.align	2
+ 1174              	.L89:
+ 1175 0008 00000000 		.word	baro
+ 1176              		.cfi_endproc
+ 1177              	.LFE81:
+ 1178              		.size	baro_getRawTemp, .-baro_getRawTemp
+ 1179              		.section	.text.baro_getRawPress,"ax",%progbits
+ 1180              		.align	2
+ 1181              		.global	baro_getRawPress
+ 1182              		.thumb
+ 1183              		.thumb_func
+ 1184              		.type	baro_getRawPress, %function
+ 1185              	baro_getRawPress:
+ 1186              	.LFB82:
+ 417:barometer.c   **** 
+ 418:barometer.c   **** uint32_t baro_getRawPress(void){
+ 1187              		.loc 1 418 0
+ 1188              		.cfi_startproc
+ 1189              		@ args = 0, pretend = 0, frame = 0
+ 1190              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1191              		@ link register save eliminated.
+ 419:barometer.c   ****     return (baro.rawPress);
+ 420:barometer.c   **** }
+ 1192              		.loc 1 420 0
+ 1193 0000 014B     		ldr	r3, .L92
+ 1194 0002 5868     		ldr	r0, [r3, #4]
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 31
+
+
+ 1195 0004 7047     		bx	lr
+ 1196              	.L93:
+ 1197 0006 00BF     		.align	2
+ 1198              	.L92:
+ 1199 0008 00000000 		.word	baro
+ 1200              		.cfi_endproc
+ 1201              	.LFE82:
+ 1202              		.size	baro_getRawPress, .-baro_getRawPress
+ 1203              		.section	.text.baro_getTemp,"ax",%progbits
+ 1204              		.align	2
+ 1205              		.global	baro_getTemp
+ 1206              		.thumb
+ 1207              		.thumb_func
+ 1208              		.type	baro_getTemp, %function
+ 1209              	baro_getTemp:
+ 1210              	.LFB83:
+ 421:barometer.c   **** 
+ 422:barometer.c   **** double baro_getTemp(void){
+ 1211              		.loc 1 422 0
+ 1212              		.cfi_startproc
+ 1213              		@ args = 0, pretend = 0, frame = 0
+ 1214              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1215              		@ link register save eliminated.
+ 423:barometer.c   ****     return (baro.temperature);
+ 424:barometer.c   **** }
+ 1216              		.loc 1 424 0
+ 1217 0000 014B     		ldr	r3, .L95
+ 1218 0002 D3E90201 		ldrd	r0, [r3, #8]
+ 1219 0006 7047     		bx	lr
+ 1220              	.L96:
+ 1221              		.align	2
+ 1222              	.L95:
+ 1223 0008 00000000 		.word	baro
+ 1224              		.cfi_endproc
+ 1225              	.LFE83:
+ 1226              		.size	baro_getTemp, .-baro_getTemp
+ 1227              		.section	.text.baro_getPress,"ax",%progbits
+ 1228              		.align	2
+ 1229              		.global	baro_getPress
+ 1230              		.thumb
+ 1231              		.thumb_func
+ 1232              		.type	baro_getPress, %function
+ 1233              	baro_getPress:
+ 1234              	.LFB84:
+ 425:barometer.c   **** 
+ 426:barometer.c   **** int32_t baro_getPress(void){
+ 1235              		.loc 1 426 0
+ 1236              		.cfi_startproc
+ 1237              		@ args = 0, pretend = 0, frame = 0
+ 1238              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1239              		@ link register save eliminated.
+ 427:barometer.c   ****     return (baro.pressure);
+ 428:barometer.c   **** }
+ 1240              		.loc 1 428 0
+ 1241 0000 014B     		ldr	r3, .L98
+ 1242 0002 1869     		ldr	r0, [r3, #16]
+ 1243 0004 7047     		bx	lr
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 32
+
+
+ 1244              	.L99:
+ 1245 0006 00BF     		.align	2
+ 1246              	.L98:
+ 1247 0008 00000000 		.word	baro
+ 1248              		.cfi_endproc
+ 1249              	.LFE84:
+ 1250              		.size	baro_getPress, .-baro_getPress
+ 1251              		.section	.text.baro_getAbsAlt,"ax",%progbits
+ 1252              		.align	2
+ 1253              		.global	baro_getAbsAlt
+ 1254              		.thumb
+ 1255              		.thumb_func
+ 1256              		.type	baro_getAbsAlt, %function
+ 1257              	baro_getAbsAlt:
+ 1258              	.LFB85:
+ 429:barometer.c   **** 
+ 430:barometer.c   **** double baro_getAbsAlt(void){
+ 1259              		.loc 1 430 0
+ 1260              		.cfi_startproc
+ 1261              		@ args = 0, pretend = 0, frame = 0
+ 1262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1263              		@ link register save eliminated.
+ 431:barometer.c   ****     return (baro.absAlt);
+ 432:barometer.c   **** }
+ 1264              		.loc 1 432 0
+ 1265 0000 014B     		ldr	r3, .L101
+ 1266 0002 D3E90601 		ldrd	r0, [r3, #24]
+ 1267 0006 7047     		bx	lr
+ 1268              	.L102:
+ 1269              		.align	2
+ 1270              	.L101:
+ 1271 0008 00000000 		.word	baro
+ 1272              		.cfi_endproc
+ 1273              	.LFE85:
+ 1274              		.size	baro_getAbsAlt, .-baro_getAbsAlt
+ 1275              		.section	.text.baro_getRelAlt,"ax",%progbits
+ 1276              		.align	2
+ 1277              		.global	baro_getRelAlt
+ 1278              		.thumb
+ 1279              		.thumb_func
+ 1280              		.type	baro_getRelAlt, %function
+ 1281              	baro_getRelAlt:
+ 1282              	.LFB86:
+ 433:barometer.c   **** 
+ 434:barometer.c   **** double baro_getRelAlt(void){
+ 1283              		.loc 1 434 0
+ 1284              		.cfi_startproc
+ 1285              		@ args = 0, pretend = 0, frame = 0
+ 1286              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1287              		@ link register save eliminated.
+ 435:barometer.c   ****     return baro.relAlt;
+ 436:barometer.c   **** }
+ 1288              		.loc 1 436 0
+ 1289 0000 014B     		ldr	r3, .L104
+ 1290 0002 D3E90801 		ldrd	r0, [r3, #32]
+ 1291 0006 7047     		bx	lr
+ 1292              	.L105:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 33
+
+
+ 1293              		.align	2
+ 1294              	.L104:
+ 1295 0008 00000000 		.word	baro
+ 1296              		.cfi_endproc
+ 1297              	.LFE86:
+ 1298              		.size	baro_getRelAlt, .-baro_getRelAlt
+ 1299              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 1300              		.align	2
+ 1301              	.LC0:
+ 1302 0000 496E6974 		.ascii	"Initializing Barometeric Pressure and Temperature s"
+ 1302      69616C69 
+ 1302      7A696E67 
+ 1302      20426172 
+ 1302      6F6D6574 
+ 1303 0033 656E736F 		.ascii	"ensor:\000"
+ 1303      723A00
+ 1304 003a 0000     		.space	2
+ 1305              	.LC1:
+ 1306 003c 2F2F3D3D 		.ascii	"//=======Could not find a valid Barometric sensor, "
+ 1306      3D3D3D3D 
+ 1306      3D436F75 
+ 1306      6C64206E 
+ 1306      6F742066 
+ 1307 006f 63686563 		.ascii	"check wiring!=======//\000"
+ 1307      6B207769 
+ 1307      72696E67 
+ 1307      213D3D3D 
+ 1307      3D3D3D3D 
+ 1308 0086 0000     		.space	2
+ 1309              	.LC2:
+ 1310 0088 54686572 		.ascii	"There must be an issue with the Altitude calculatio"
+ 1310      65206D75 
+ 1310      73742062 
+ 1310      6520616E 
+ 1310      20697373 
+ 1311 00bb 6E206F72 		.ascii	"n or pressure\000"
+ 1311      20707265 
+ 1311      73737572 
+ 1311      6500
+ 1312 00c9 000000   		.space	3
+ 1313              	.LC3:
+ 1314 00cc 63686563 		.ascii	"check code or restart quadcopter and don't touch.\000"
+ 1314      6B20636F 
+ 1314      6465206F 
+ 1314      72207265 
+ 1314      73746172 
+ 1315              		.bss
+ 1316              		.align	3
+ 1317              		.set	.LANCHOR0,. + 0
+ 1318              		.type	fc, %object
+ 1319              		.size	fc, 12
+ 1320              	fc:
+ 1321 0000 00000000 		.space	12
+ 1321      00000000 
+ 1321      00000000 
+ 1322              		.type	ct, %object
+ 1323              		.size	ct, 1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 34
+
+
+ 1324              	ct:
+ 1325 000c 00       		.space	1
+ 1326              		.type	uosr, %object
+ 1327              		.size	uosr, 1
+ 1328              	uosr:
+ 1329 000d 00       		.space	1
+ 1330              		.type	_COMPENSATION, %object
+ 1331              		.size	_COMPENSATION, 1
+ 1332              	_COMPENSATION:
+ 1333 000e 00       		.space	1
+ 1334 000f 00       		.space	1
+ 1335              		.type	OFF2, %object
+ 1336              		.size	OFF2, 8
+ 1337              	OFF2:
+ 1338 0010 00000000 		.space	8
+ 1338      00000000 
+ 1339              		.type	SENS2, %object
+ 1340              		.size	SENS2, 8
+ 1341              	SENS2:
+ 1342 0018 00000000 		.space	8
+ 1342      00000000 
+ 1343              		.type	TEMP2, %object
+ 1344              		.size	TEMP2, 4
+ 1345              	TEMP2:
+ 1346 0020 00000000 		.space	4
+ 1347              		.text
+ 1348              	.Letext0:
+ 1349              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 1350              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 1351              		.file 4 "barometer.h"
+ 1352              		.file 5 "Generated_Source\\PSoC5/cytypes.h"
+ 1353              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 1354              		.file 7 "SensorVal.h"
+ 1355              		.file 8 "Generated_Source\\PSoC5/I2C.h"
+ 1356              		.file 9 "twi.h"
+ 1357              		.file 10 "Generated_Source\\PSoC5/CyLib.h"
+ 1358              		.file 11 "debSerial.h"
+ 1359              		.file 12 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4
+ 1360              		.section	.debug_info,"",%progbits
+ 1361              	.Ldebug_info0:
+ 1362 0000 250A0000 		.4byte	0xa25
+ 1363 0004 0400     		.2byte	0x4
+ 1364 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1365 000a 04       		.byte	0x4
+ 1366 000b 01       		.uleb128 0x1
+ 1367 000c 12050000 		.4byte	.LASF92
+ 1368 0010 0C       		.byte	0xc
+ 1369 0011 B9000000 		.4byte	.LASF93
+ 1370 0015 80030000 		.4byte	.LASF94
+ 1371 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1372 001d 00000000 		.4byte	0
+ 1373 0021 00000000 		.4byte	.Ldebug_line0
+ 1374 0025 02       		.uleb128 0x2
+ 1375 0026 08       		.byte	0x8
+ 1376 0027 04       		.byte	0x4
+ 1377 0028 15000000 		.4byte	.LASF0
+ 1378 002c 02       		.uleb128 0x2
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 35
+
+
+ 1379 002d 01       		.byte	0x1
+ 1380 002e 06       		.byte	0x6
+ 1381 002f F3020000 		.4byte	.LASF1
+ 1382 0033 03       		.uleb128 0x3
+ 1383 0034 4A020000 		.4byte	.LASF4
+ 1384 0038 02       		.byte	0x2
+ 1385 0039 1D       		.byte	0x1d
+ 1386 003a 3E000000 		.4byte	0x3e
+ 1387 003e 02       		.uleb128 0x2
+ 1388 003f 01       		.byte	0x1
+ 1389 0040 08       		.byte	0x8
+ 1390 0041 CB020000 		.4byte	.LASF2
+ 1391 0045 02       		.uleb128 0x2
+ 1392 0046 02       		.byte	0x2
+ 1393 0047 05       		.byte	0x5
+ 1394 0048 F6000000 		.4byte	.LASF3
+ 1395 004c 03       		.uleb128 0x3
+ 1396 004d CE000000 		.4byte	.LASF5
+ 1397 0051 02       		.byte	0x2
+ 1398 0052 2B       		.byte	0x2b
+ 1399 0053 57000000 		.4byte	0x57
+ 1400 0057 02       		.uleb128 0x2
+ 1401 0058 02       		.byte	0x2
+ 1402 0059 07       		.byte	0x7
+ 1403 005a 59030000 		.4byte	.LASF6
+ 1404 005e 03       		.uleb128 0x3
+ 1405 005f 83040000 		.4byte	.LASF7
+ 1406 0063 02       		.byte	0x2
+ 1407 0064 3F       		.byte	0x3f
+ 1408 0065 69000000 		.4byte	0x69
+ 1409 0069 02       		.uleb128 0x2
+ 1410 006a 04       		.byte	0x4
+ 1411 006b 05       		.byte	0x5
+ 1412 006c 19020000 		.4byte	.LASF8
+ 1413 0070 03       		.uleb128 0x3
+ 1414 0071 AE000000 		.4byte	.LASF9
+ 1415 0075 02       		.byte	0x2
+ 1416 0076 41       		.byte	0x41
+ 1417 0077 7B000000 		.4byte	0x7b
+ 1418 007b 02       		.uleb128 0x2
+ 1419 007c 04       		.byte	0x4
+ 1420 007d 07       		.byte	0x7
+ 1421 007e 30040000 		.4byte	.LASF10
+ 1422 0082 03       		.uleb128 0x3
+ 1423 0083 22020000 		.4byte	.LASF11
+ 1424 0087 02       		.byte	0x2
+ 1425 0088 59       		.byte	0x59
+ 1426 0089 8D000000 		.4byte	0x8d
+ 1427 008d 02       		.uleb128 0x2
+ 1428 008e 08       		.byte	0x8
+ 1429 008f 05       		.byte	0x5
+ 1430 0090 E4010000 		.4byte	.LASF12
+ 1431 0094 02       		.uleb128 0x2
+ 1432 0095 08       		.byte	0x8
+ 1433 0096 07       		.byte	0x7
+ 1434 0097 F2010000 		.4byte	.LASF13
+ 1435 009b 04       		.uleb128 0x4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 36
+
+
+ 1436 009c 04       		.byte	0x4
+ 1437 009d 05       		.byte	0x5
+ 1438 009e 696E7400 		.ascii	"int\000"
+ 1439 00a2 02       		.uleb128 0x2
+ 1440 00a3 04       		.byte	0x4
+ 1441 00a4 07       		.byte	0x7
+ 1442 00a5 1B030000 		.4byte	.LASF14
+ 1443 00a9 03       		.uleb128 0x3
+ 1444 00aa 3D010000 		.4byte	.LASF15
+ 1445 00ae 03       		.byte	0x3
+ 1446 00af 18       		.byte	0x18
+ 1447 00b0 33000000 		.4byte	0x33
+ 1448 00b4 03       		.uleb128 0x3
+ 1449 00b5 28030000 		.4byte	.LASF16
+ 1450 00b9 03       		.byte	0x3
+ 1451 00ba 24       		.byte	0x24
+ 1452 00bb 4C000000 		.4byte	0x4c
+ 1453 00bf 03       		.uleb128 0x3
+ 1454 00c0 F2030000 		.4byte	.LASF17
+ 1455 00c4 03       		.byte	0x3
+ 1456 00c5 2C       		.byte	0x2c
+ 1457 00c6 5E000000 		.4byte	0x5e
+ 1458 00ca 03       		.uleb128 0x3
+ 1459 00cb 12030000 		.4byte	.LASF18
+ 1460 00cf 03       		.byte	0x3
+ 1461 00d0 30       		.byte	0x30
+ 1462 00d1 70000000 		.4byte	0x70
+ 1463 00d5 03       		.uleb128 0x3
+ 1464 00d6 0F010000 		.4byte	.LASF19
+ 1465 00da 03       		.byte	0x3
+ 1466 00db 38       		.byte	0x38
+ 1467 00dc 82000000 		.4byte	0x82
+ 1468 00e0 05       		.uleb128 0x5
+ 1469 00e1 01       		.byte	0x1
+ 1470 00e2 3E000000 		.4byte	0x3e
+ 1471 00e6 04       		.byte	0x4
+ 1472 00e7 2C       		.byte	0x2c
+ 1473 00e8 0B010000 		.4byte	0x10b
+ 1474 00ec 06       		.uleb128 0x6
+ 1475 00ed CE010000 		.4byte	.LASF20
+ 1476 00f1 08       		.byte	0x8
+ 1477 00f2 06       		.uleb128 0x6
+ 1478 00f3 E6000000 		.4byte	.LASF21
+ 1479 00f7 06       		.byte	0x6
+ 1480 00f8 06       		.uleb128 0x6
+ 1481 00f9 BD050000 		.4byte	.LASF22
+ 1482 00fd 04       		.byte	0x4
+ 1483 00fe 06       		.uleb128 0x6
+ 1484 00ff 9D000000 		.4byte	.LASF23
+ 1485 0103 02       		.byte	0x2
+ 1486 0104 06       		.uleb128 0x6
+ 1487 0105 2C020000 		.4byte	.LASF24
+ 1488 0109 00       		.byte	0
+ 1489 010a 00       		.byte	0
+ 1490 010b 03       		.uleb128 0x3
+ 1491 010c 68010000 		.4byte	.LASF25
+ 1492 0110 04       		.byte	0x4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 37
+
+
+ 1493 0111 32       		.byte	0x32
+ 1494 0112 E0000000 		.4byte	0xe0
+ 1495 0116 07       		.uleb128 0x7
+ 1496 0117 28       		.byte	0x28
+ 1497 0118 04       		.byte	0x4
+ 1498 0119 34       		.byte	0x34
+ 1499 011a 67010000 		.4byte	0x167
+ 1500 011e 08       		.uleb128 0x8
+ 1501 011f 1C000000 		.4byte	.LASF26
+ 1502 0123 04       		.byte	0x4
+ 1503 0124 36       		.byte	0x36
+ 1504 0125 CA000000 		.4byte	0xca
+ 1505 0129 00       		.byte	0
+ 1506 012a 08       		.uleb128 0x8
+ 1507 012b 34010000 		.4byte	.LASF27
+ 1508 012f 04       		.byte	0x4
+ 1509 0130 37       		.byte	0x37
+ 1510 0131 CA000000 		.4byte	0xca
+ 1511 0135 04       		.byte	0x4
+ 1512 0136 08       		.uleb128 0x8
+ 1513 0137 77040000 		.4byte	.LASF28
+ 1514 013b 04       		.byte	0x4
+ 1515 013c 38       		.byte	0x38
+ 1516 013d 25000000 		.4byte	0x25
+ 1517 0141 08       		.byte	0x8
+ 1518 0142 08       		.uleb128 0x8
+ 1519 0143 4E010000 		.4byte	.LASF29
+ 1520 0147 04       		.byte	0x4
+ 1521 0148 39       		.byte	0x39
+ 1522 0149 BF000000 		.4byte	0xbf
+ 1523 014d 10       		.byte	0x10
+ 1524 014e 08       		.uleb128 0x8
+ 1525 014f 52030000 		.4byte	.LASF30
+ 1526 0153 04       		.byte	0x4
+ 1527 0154 3B       		.byte	0x3b
+ 1528 0155 25000000 		.4byte	0x25
+ 1529 0159 18       		.byte	0x18
+ 1530 015a 08       		.uleb128 0x8
+ 1531 015b 1D010000 		.4byte	.LASF31
+ 1532 015f 04       		.byte	0x4
+ 1533 0160 3C       		.byte	0x3c
+ 1534 0161 25000000 		.4byte	0x25
+ 1535 0165 20       		.byte	0x20
+ 1536 0166 00       		.byte	0
+ 1537 0167 03       		.uleb128 0x3
+ 1538 0168 42040000 		.4byte	.LASF32
+ 1539 016c 04       		.byte	0x4
+ 1540 016d 3D       		.byte	0x3d
+ 1541 016e 16010000 		.4byte	0x116
+ 1542 0172 09       		.uleb128 0x9
+ 1543 0173 FA030000 		.4byte	.LASF33
+ 1544 0177 05       		.byte	0x5
+ 1545 0178 9201     		.2byte	0x192
+ 1546 017a 3E000000 		.4byte	0x3e
+ 1547 017e 02       		.uleb128 0x2
+ 1548 017f 04       		.byte	0x4
+ 1549 0180 04       		.byte	0x4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 38
+
+
+ 1550 0181 AB010000 		.4byte	.LASF34
+ 1551 0185 02       		.uleb128 0x2
+ 1552 0186 01       		.byte	0x1
+ 1553 0187 08       		.byte	0x8
+ 1554 0188 C7030000 		.4byte	.LASF35
+ 1555 018c 02       		.uleb128 0x2
+ 1556 018d 08       		.byte	0x8
+ 1557 018e 04       		.byte	0x4
+ 1558 018f AD020000 		.4byte	.LASF36
+ 1559 0193 02       		.uleb128 0x2
+ 1560 0194 04       		.byte	0x4
+ 1561 0195 07       		.byte	0x7
+ 1562 0196 93040000 		.4byte	.LASF37
+ 1563 019a 0A       		.uleb128 0xa
+ 1564 019b 9A010000 		.4byte	.LASF38
+ 1565 019f 01       		.byte	0x1
+ 1566 01a0 20       		.byte	0x20
+ 1567 01a1 00000000 		.4byte	.LFB63
+ 1568 01a5 24000000 		.4byte	.LFE63-.LFB63
+ 1569 01a9 01       		.uleb128 0x1
+ 1570 01aa 9C       		.byte	0x9c
+ 1571 01ab FA010000 		.4byte	0x1fa
+ 1572 01af 0B       		.uleb128 0xb
+ 1573 01b0 636D6400 		.ascii	"cmd\000"
+ 1574 01b4 01       		.byte	0x1
+ 1575 01b5 20       		.byte	0x20
+ 1576 01b6 A9000000 		.4byte	0xa9
+ 1577 01ba 00000000 		.4byte	.LLST0
+ 1578 01be 0C       		.uleb128 0xc
+ 1579 01bf 93000000 		.4byte	.LASF40
+ 1580 01c3 01       		.byte	0x1
+ 1581 01c4 25       		.byte	0x25
+ 1582 01c5 FA010000 		.4byte	0x1fa
+ 1583 01c9 02       		.uleb128 0x2
+ 1584 01ca 91       		.byte	0x91
+ 1585 01cb 74       		.sleb128 -12
+ 1586 01cc 0D       		.uleb128 0xd
+ 1587 01cd 14000000 		.4byte	.LVL2
+ 1588 01d1 DB090000 		.4byte	0x9db
+ 1589 01d5 F0010000 		.4byte	0x1f0
+ 1590 01d9 0E       		.uleb128 0xe
+ 1591 01da 01       		.uleb128 0x1
+ 1592 01db 50       		.byte	0x50
+ 1593 01dc 02       		.uleb128 0x2
+ 1594 01dd 08       		.byte	0x8
+ 1595 01de 77       		.byte	0x77
+ 1596 01df 0E       		.uleb128 0xe
+ 1597 01e0 01       		.uleb128 0x1
+ 1598 01e1 51       		.byte	0x51
+ 1599 01e2 02       		.uleb128 0x2
+ 1600 01e3 91       		.byte	0x91
+ 1601 01e4 74       		.sleb128 -12
+ 1602 01e5 0E       		.uleb128 0xe
+ 1603 01e6 01       		.uleb128 0x1
+ 1604 01e7 52       		.byte	0x52
+ 1605 01e8 01       		.uleb128 0x1
+ 1606 01e9 31       		.byte	0x31
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 39
+
+
+ 1607 01ea 0E       		.uleb128 0xe
+ 1608 01eb 01       		.uleb128 0x1
+ 1609 01ec 53       		.byte	0x53
+ 1610 01ed 01       		.uleb128 0x1
+ 1611 01ee 30       		.byte	0x30
+ 1612 01ef 00       		.byte	0
+ 1613 01f0 0F       		.uleb128 0xf
+ 1614 01f1 18000000 		.4byte	.LVL3
+ 1615 01f5 E6090000 		.4byte	0x9e6
+ 1616 01f9 00       		.byte	0
+ 1617 01fa 10       		.uleb128 0x10
+ 1618 01fb A9000000 		.4byte	0xa9
+ 1619 01ff 0A020000 		.4byte	0x20a
+ 1620 0203 11       		.uleb128 0x11
+ 1621 0204 93010000 		.4byte	0x193
+ 1622 0208 00       		.byte	0
+ 1623 0209 00       		.byte	0
+ 1624 020a 0A       		.uleb128 0xa
+ 1625 020b 61000000 		.4byte	.LASF39
+ 1626 020f 01       		.byte	0x1
+ 1627 0210 DD       		.byte	0xdd
+ 1628 0211 00000000 		.4byte	.LFB69
+ 1629 0215 0A000000 		.4byte	.LFE69-.LFB69
+ 1630 0219 01       		.uleb128 0x1
+ 1631 021a 9C       		.byte	0x9c
+ 1632 021b 2F020000 		.4byte	0x22f
+ 1633 021f 12       		.uleb128 0x12
+ 1634 0220 08000000 		.4byte	.LVL4
+ 1635 0224 9A010000 		.4byte	0x19a
+ 1636 0228 0E       		.uleb128 0xe
+ 1637 0229 01       		.uleb128 0x1
+ 1638 022a 50       		.byte	0x50
+ 1639 022b 01       		.uleb128 0x1
+ 1640 022c 4E       		.byte	0x4e
+ 1641 022d 00       		.byte	0
+ 1642 022e 00       		.byte	0
+ 1643 022f 13       		.uleb128 0x13
+ 1644 0230 6C030000 		.4byte	.LASF45
+ 1645 0234 01       		.byte	0x1
+ 1646 0235 4C01     		.2byte	0x14c
+ 1647 0237 B4000000 		.4byte	0xb4
+ 1648 023b 00000000 		.4byte	.LFB78
+ 1649 023f 36000000 		.4byte	.LFE78-.LFB78
+ 1650 0243 01       		.uleb128 0x1
+ 1651 0244 9C       		.byte	0x9c
+ 1652 0245 CE020000 		.4byte	0x2ce
+ 1653 0249 14       		.uleb128 0x14
+ 1654 024a 72656700 		.ascii	"reg\000"
+ 1655 024e 01       		.byte	0x1
+ 1656 024f 4C01     		.2byte	0x14c
+ 1657 0251 A9000000 		.4byte	0xa9
+ 1658 0255 2D000000 		.4byte	.LLST1
+ 1659 0259 15       		.uleb128 0x15
+ 1660 025a 17010000 		.4byte	.LASF41
+ 1661 025e 01       		.byte	0x1
+ 1662 025f 4E01     		.2byte	0x14e
+ 1663 0261 B4000000 		.4byte	0xb4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 40
+
+
+ 1664 0265 4E000000 		.4byte	.LLST2
+ 1665 0269 16       		.uleb128 0x16
+ 1666 026a C5000000 		.4byte	.LASF42
+ 1667 026e 01       		.byte	0x1
+ 1668 026f 4F01     		.2byte	0x14f
+ 1669 0271 CE020000 		.4byte	0x2ce
+ 1670 0275 02       		.uleb128 0x2
+ 1671 0276 91       		.byte	0x91
+ 1672 0277 6C       		.sleb128 -20
+ 1673 0278 17       		.uleb128 0x17
+ 1674 0279 76686100 		.ascii	"vha\000"
+ 1675 027d 01       		.byte	0x1
+ 1676 027e 5901     		.2byte	0x159
+ 1677 0280 A9000000 		.4byte	0xa9
+ 1678 0284 7F000000 		.4byte	.LLST3
+ 1679 0288 18       		.uleb128 0x18
+ 1680 0289 766C6100 		.ascii	"vla\000"
+ 1681 028d 01       		.byte	0x1
+ 1682 028e 5A01     		.2byte	0x15a
+ 1683 0290 A9000000 		.4byte	0xa9
+ 1684 0294 01       		.uleb128 0x1
+ 1685 0295 53       		.byte	0x53
+ 1686 0296 0F       		.uleb128 0xf
+ 1687 0297 10000000 		.4byte	.LVL6
+ 1688 029b 9A010000 		.4byte	0x19a
+ 1689 029f 0D       		.uleb128 0xd
+ 1690 02a0 1C000000 		.4byte	.LVL7
+ 1691 02a4 F1090000 		.4byte	0x9f1
+ 1692 02a8 C4020000 		.4byte	0x2c4
+ 1693 02ac 0E       		.uleb128 0xe
+ 1694 02ad 01       		.uleb128 0x1
+ 1695 02ae 50       		.byte	0x50
+ 1696 02af 02       		.uleb128 0x2
+ 1697 02b0 08       		.byte	0x8
+ 1698 02b1 77       		.byte	0x77
+ 1699 02b2 0E       		.uleb128 0xe
+ 1700 02b3 01       		.uleb128 0x1
+ 1701 02b4 51       		.byte	0x51
+ 1702 02b5 02       		.uleb128 0x2
+ 1703 02b6 74       		.byte	0x74
+ 1704 02b7 00       		.sleb128 0
+ 1705 02b8 0E       		.uleb128 0xe
+ 1706 02b9 01       		.uleb128 0x1
+ 1707 02ba 52       		.byte	0x52
+ 1708 02bb 01       		.uleb128 0x1
+ 1709 02bc 32       		.byte	0x32
+ 1710 02bd 0E       		.uleb128 0xe
+ 1711 02be 01       		.uleb128 0x1
+ 1712 02bf 53       		.byte	0x53
+ 1713 02c0 02       		.uleb128 0x2
+ 1714 02c1 75       		.byte	0x75
+ 1715 02c2 00       		.sleb128 0
+ 1716 02c3 00       		.byte	0
+ 1717 02c4 0F       		.uleb128 0xf
+ 1718 02c5 20000000 		.4byte	.LVL8
+ 1719 02c9 E6090000 		.4byte	0x9e6
+ 1720 02cd 00       		.byte	0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 41
+
+
+ 1721 02ce 10       		.uleb128 0x10
+ 1722 02cf A9000000 		.4byte	0xa9
+ 1723 02d3 DE020000 		.4byte	0x2de
+ 1724 02d7 11       		.uleb128 0x11
+ 1725 02d8 93010000 		.4byte	0x193
+ 1726 02dc 01       		.byte	0x1
+ 1727 02dd 00       		.byte	0
+ 1728 02de 0A       		.uleb128 0xa
+ 1729 02df 6C000000 		.4byte	.LASF43
+ 1730 02e3 01       		.byte	0x1
+ 1731 02e4 E2       		.byte	0xe2
+ 1732 02e5 00000000 		.4byte	.LFB70
+ 1733 02e9 28000000 		.4byte	.LFE70-.LFB70
+ 1734 02ed 01       		.uleb128 0x1
+ 1735 02ee 9C       		.byte	0x9c
+ 1736 02ef 19030000 		.4byte	0x319
+ 1737 02f3 19       		.uleb128 0x19
+ 1738 02f4 43020000 		.4byte	.LASF44
+ 1739 02f8 01       		.byte	0x1
+ 1740 02f9 E4       		.byte	0xe4
+ 1741 02fa A9000000 		.4byte	0xa9
+ 1742 02fe 9E000000 		.4byte	.LLST4
+ 1743 0302 12       		.uleb128 0x12
+ 1744 0303 14000000 		.4byte	.LVL14
+ 1745 0307 2F020000 		.4byte	0x22f
+ 1746 030b 0E       		.uleb128 0xe
+ 1747 030c 01       		.uleb128 0x1
+ 1748 030d 50       		.byte	0x50
+ 1749 030e 08       		.uleb128 0x8
+ 1750 030f 74       		.byte	0x74
+ 1751 0310 D100     		.sleb128 81
+ 1752 0312 31       		.byte	0x31
+ 1753 0313 24       		.byte	0x24
+ 1754 0314 08       		.byte	0x8
+ 1755 0315 FE       		.byte	0xfe
+ 1756 0316 1A       		.byte	0x1a
+ 1757 0317 00       		.byte	0
+ 1758 0318 00       		.byte	0
+ 1759 0319 13       		.uleb128 0x13
+ 1760 031a AE040000 		.4byte	.LASF46
+ 1761 031e 01       		.byte	0x1
+ 1762 031f 6201     		.2byte	0x162
+ 1763 0321 CA000000 		.4byte	0xca
+ 1764 0325 00000000 		.4byte	.LFB79
+ 1765 0329 40000000 		.4byte	.LFE79-.LFB79
+ 1766 032d 01       		.uleb128 0x1
+ 1767 032e 9C       		.byte	0x9c
+ 1768 032f C8030000 		.4byte	0x3c8
+ 1769 0333 14       		.uleb128 0x14
+ 1770 0334 72656700 		.ascii	"reg\000"
+ 1771 0338 01       		.byte	0x1
+ 1772 0339 6201     		.2byte	0x162
+ 1773 033b A9000000 		.4byte	0xa9
+ 1774 033f C8000000 		.4byte	.LLST5
+ 1775 0343 15       		.uleb128 0x15
+ 1776 0344 17010000 		.4byte	.LASF41
+ 1777 0348 01       		.byte	0x1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 42
+
+
+ 1778 0349 6401     		.2byte	0x164
+ 1779 034b CA000000 		.4byte	0xca
+ 1780 034f E9000000 		.4byte	.LLST6
+ 1781 0353 16       		.uleb128 0x16
+ 1782 0354 C5000000 		.4byte	.LASF42
+ 1783 0358 01       		.byte	0x1
+ 1784 0359 6501     		.2byte	0x165
+ 1785 035b C8030000 		.4byte	0x3c8
+ 1786 035f 02       		.uleb128 0x2
+ 1787 0360 91       		.byte	0x91
+ 1788 0361 74       		.sleb128 -12
+ 1789 0362 18       		.uleb128 0x18
+ 1790 0363 76786100 		.ascii	"vxa\000"
+ 1791 0367 01       		.byte	0x1
+ 1792 0368 6F01     		.2byte	0x16f
+ 1793 036a A9000000 		.4byte	0xa9
+ 1794 036e 01       		.uleb128 0x1
+ 1795 036f 52       		.byte	0x52
+ 1796 0370 17       		.uleb128 0x17
+ 1797 0371 76686100 		.ascii	"vha\000"
+ 1798 0375 01       		.byte	0x1
+ 1799 0376 7001     		.2byte	0x170
+ 1800 0378 A9000000 		.4byte	0xa9
+ 1801 037c 0C010000 		.4byte	.LLST7
+ 1802 0380 17       		.uleb128 0x17
+ 1803 0381 766C6100 		.ascii	"vla\000"
+ 1804 0385 01       		.byte	0x1
+ 1805 0386 7101     		.2byte	0x171
+ 1806 0388 A9000000 		.4byte	0xa9
+ 1807 038c 2B010000 		.4byte	.LLST8
+ 1808 0390 0F       		.uleb128 0xf
+ 1809 0391 12000000 		.4byte	.LVL19
+ 1810 0395 9A010000 		.4byte	0x19a
+ 1811 0399 0D       		.uleb128 0xd
+ 1812 039a 1E000000 		.4byte	.LVL20
+ 1813 039e F1090000 		.4byte	0x9f1
+ 1814 03a2 BE030000 		.4byte	0x3be
+ 1815 03a6 0E       		.uleb128 0xe
+ 1816 03a7 01       		.uleb128 0x1
+ 1817 03a8 50       		.byte	0x50
+ 1818 03a9 02       		.uleb128 0x2
+ 1819 03aa 08       		.byte	0x8
+ 1820 03ab 77       		.byte	0x77
+ 1821 03ac 0E       		.uleb128 0xe
+ 1822 03ad 01       		.uleb128 0x1
+ 1823 03ae 51       		.byte	0x51
+ 1824 03af 02       		.uleb128 0x2
+ 1825 03b0 91       		.byte	0x91
+ 1826 03b1 74       		.sleb128 -12
+ 1827 03b2 0E       		.uleb128 0xe
+ 1828 03b3 01       		.uleb128 0x1
+ 1829 03b4 52       		.byte	0x52
+ 1830 03b5 01       		.uleb128 0x1
+ 1831 03b6 33       		.byte	0x33
+ 1832 03b7 0E       		.uleb128 0xe
+ 1833 03b8 01       		.uleb128 0x1
+ 1834 03b9 53       		.byte	0x53
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 43
+
+
+ 1835 03ba 02       		.uleb128 0x2
+ 1836 03bb 74       		.byte	0x74
+ 1837 03bc 00       		.sleb128 0
+ 1838 03bd 00       		.byte	0
+ 1839 03be 0F       		.uleb128 0xf
+ 1840 03bf 22000000 		.4byte	.LVL21
+ 1841 03c3 E6090000 		.4byte	0x9e6
+ 1842 03c7 00       		.byte	0
+ 1843 03c8 10       		.uleb128 0x10
+ 1844 03c9 A9000000 		.4byte	0xa9
+ 1845 03cd D8030000 		.4byte	0x3d8
+ 1846 03d1 11       		.uleb128 0x11
+ 1847 03d2 93010000 		.4byte	0x193
+ 1848 03d6 02       		.byte	0x2
+ 1849 03d7 00       		.byte	0
+ 1850 03d8 1A       		.uleb128 0x1a
+ 1851 03d9 A8050000 		.4byte	.LASF47
+ 1852 03dd 01       		.byte	0x1
+ 1853 03de BA       		.byte	0xba
+ 1854 03df 00000000 		.4byte	.LFB66
+ 1855 03e3 44000000 		.4byte	.LFE66-.LFB66
+ 1856 03e7 01       		.uleb128 0x1
+ 1857 03e8 9C       		.byte	0x9c
+ 1858 03e9 FB030000 		.4byte	0x3fb
+ 1859 03ed 1B       		.uleb128 0x1b
+ 1860 03ee 6F737200 		.ascii	"osr\000"
+ 1861 03f2 01       		.byte	0x1
+ 1862 03f3 BA       		.byte	0xba
+ 1863 03f4 0B010000 		.4byte	0x10b
+ 1864 03f8 01       		.uleb128 0x1
+ 1865 03f9 50       		.byte	0x50
+ 1866 03fa 00       		.byte	0
+ 1867 03fb 1C       		.uleb128 0x1c
+ 1868 03fc F5040000 		.4byte	.LASF48
+ 1869 0400 01       		.byte	0x1
+ 1870 0401 AB       		.byte	0xab
+ 1871 0402 A9000000 		.4byte	0xa9
+ 1872 0406 00000000 		.4byte	.LFB65
+ 1873 040a 1E000000 		.4byte	.LFE65-.LFB65
+ 1874 040e 01       		.uleb128 0x1
+ 1875 040f 9C       		.byte	0x9c
+ 1876 0410 63040000 		.4byte	0x463
+ 1877 0414 1D       		.uleb128 0x1d
+ 1878 0415 6F737200 		.ascii	"osr\000"
+ 1879 0419 01       		.byte	0x1
+ 1880 041a AE       		.byte	0xae
+ 1881 041b 0B010000 		.4byte	0x10b
+ 1882 041f 02       		.byte	0x2
+ 1883 0420 0F       		.uleb128 0xf
+ 1884 0421 06000000 		.4byte	.LVL30
+ 1885 0425 FC090000 		.4byte	0x9fc
+ 1886 0429 0F       		.uleb128 0xf
+ 1887 042a 0A000000 		.4byte	.LVL31
+ 1888 042e 0A020000 		.4byte	0x20a
+ 1889 0432 0D       		.uleb128 0xd
+ 1890 0433 10000000 		.4byte	.LVL32
+ 1891 0437 D8030000 		.4byte	0x3d8
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 44
+
+
+ 1892 043b 45040000 		.4byte	0x445
+ 1893 043f 0E       		.uleb128 0xe
+ 1894 0440 01       		.uleb128 0x1
+ 1895 0441 50       		.byte	0x50
+ 1896 0442 01       		.uleb128 0x1
+ 1897 0443 32       		.byte	0x32
+ 1898 0444 00       		.byte	0
+ 1899 0445 0D       		.uleb128 0xd
+ 1900 0446 16000000 		.4byte	.LVL33
+ 1901 044a 070A0000 		.4byte	0xa07
+ 1902 044e 59040000 		.4byte	0x459
+ 1903 0452 0E       		.uleb128 0xe
+ 1904 0453 01       		.uleb128 0x1
+ 1905 0454 50       		.byte	0x50
+ 1906 0455 02       		.uleb128 0x2
+ 1907 0456 08       		.byte	0x8
+ 1908 0457 64       		.byte	0x64
+ 1909 0458 00       		.byte	0
+ 1910 0459 0F       		.uleb128 0xf
+ 1911 045a 1A000000 		.4byte	.LVL34
+ 1912 045e DE020000 		.4byte	0x2de
+ 1913 0462 00       		.byte	0
+ 1914 0463 1E       		.uleb128 0x1e
+ 1915 0464 CC030000 		.4byte	.LASF65
+ 1916 0468 01       		.byte	0x1
+ 1917 0469 D3       		.byte	0xd3
+ 1918 046a 0B010000 		.4byte	0x10b
+ 1919 046e 00000000 		.4byte	.LFB67
+ 1920 0472 0C000000 		.4byte	.LFE67-.LFB67
+ 1921 0476 01       		.uleb128 0x1
+ 1922 0477 9C       		.byte	0x9c
+ 1923 0478 1A       		.uleb128 0x1a
+ 1924 0479 DA040000 		.4byte	.LASF49
+ 1925 047d 01       		.byte	0x1
+ 1926 047e D8       		.byte	0xd8
+ 1927 047f 00000000 		.4byte	.LFB68
+ 1928 0483 0C000000 		.4byte	.LFE68-.LFB68
+ 1929 0487 01       		.uleb128 0x1
+ 1930 0488 9C       		.byte	0x9c
+ 1931 0489 9B040000 		.4byte	0x49b
+ 1932 048d 1B       		.uleb128 0x1b
+ 1933 048e 76616C00 		.ascii	"val\000"
+ 1934 0492 01       		.byte	0x1
+ 1935 0493 D8       		.byte	0xd8
+ 1936 0494 A9000000 		.4byte	0xa9
+ 1937 0498 01       		.uleb128 0x1
+ 1938 0499 50       		.byte	0x50
+ 1939 049a 00       		.byte	0
+ 1940 049b 1F       		.uleb128 0x1f
+ 1941 049c B1010000 		.4byte	.LASF50
+ 1942 04a0 01       		.byte	0x1
+ 1943 04a1 EB       		.byte	0xeb
+ 1944 04a2 CA000000 		.4byte	0xca
+ 1945 04a6 00000000 		.4byte	.LFB71
+ 1946 04aa 20000000 		.4byte	.LFE71-.LFB71
+ 1947 04ae 01       		.uleb128 0x1
+ 1948 04af 9C       		.byte	0x9c
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 45
+
+
+ 1949 04b0 D6040000 		.4byte	0x4d6
+ 1950 04b4 0F       		.uleb128 0xf
+ 1951 04b5 0E000000 		.4byte	.LVL36
+ 1952 04b9 9A010000 		.4byte	0x19a
+ 1953 04bd 0F       		.uleb128 0xf
+ 1954 04be 14000000 		.4byte	.LVL37
+ 1955 04c2 070A0000 		.4byte	0xa07
+ 1956 04c6 12       		.uleb128 0x12
+ 1957 04c7 1A000000 		.4byte	.LVL38
+ 1958 04cb 19030000 		.4byte	0x319
+ 1959 04cf 0E       		.uleb128 0xe
+ 1960 04d0 01       		.uleb128 0x1
+ 1961 04d1 50       		.byte	0x50
+ 1962 04d2 01       		.uleb128 0x1
+ 1963 04d3 30       		.byte	0x30
+ 1964 04d4 00       		.byte	0
+ 1965 04d5 00       		.byte	0
+ 1966 04d6 1F       		.uleb128 0x1f
+ 1967 04d7 54020000 		.4byte	.LASF51
+ 1968 04db 01       		.byte	0x1
+ 1969 04dc F2       		.byte	0xf2
+ 1970 04dd CA000000 		.4byte	0xca
+ 1971 04e1 00000000 		.4byte	.LFB72
+ 1972 04e5 20000000 		.4byte	.LFE72-.LFB72
+ 1973 04e9 01       		.uleb128 0x1
+ 1974 04ea 9C       		.byte	0x9c
+ 1975 04eb 11050000 		.4byte	0x511
+ 1976 04ef 0F       		.uleb128 0xf
+ 1977 04f0 0E000000 		.4byte	.LVL39
+ 1978 04f4 9A010000 		.4byte	0x19a
+ 1979 04f8 0F       		.uleb128 0xf
+ 1980 04f9 14000000 		.4byte	.LVL40
+ 1981 04fd 070A0000 		.4byte	0xa07
+ 1982 0501 12       		.uleb128 0x12
+ 1983 0502 1A000000 		.4byte	.LVL41
+ 1984 0506 19030000 		.4byte	0x319
+ 1985 050a 0E       		.uleb128 0xe
+ 1986 050b 01       		.uleb128 0x1
+ 1987 050c 50       		.byte	0x50
+ 1988 050d 01       		.uleb128 0x1
+ 1989 050e 30       		.byte	0x30
+ 1990 050f 00       		.byte	0
+ 1991 0510 00       		.byte	0
+ 1992 0511 1F       		.uleb128 0x1f
+ 1993 0512 9C040000 		.4byte	.LASF52
+ 1994 0516 01       		.byte	0x1
+ 1995 0517 F9       		.byte	0xf9
+ 1996 0518 BF000000 		.4byte	0xbf
+ 1997 051c 00000000 		.4byte	.LFB73
+ 1998 0520 BC010000 		.4byte	.LFE73-.LFB73
+ 1999 0524 01       		.uleb128 0x1
+ 2000 0525 9C       		.byte	0x9c
+ 2001 0526 B3050000 		.4byte	0x5b3
+ 2002 052a 20       		.uleb128 0x20
+ 2003 052b 443100   		.ascii	"D1\000"
+ 2004 052e 01       		.byte	0x1
+ 2005 052f FB       		.byte	0xfb
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 46
+
+
+ 2006 0530 CA000000 		.4byte	0xca
+ 2007 0534 4A010000 		.4byte	.LLST9
+ 2008 0538 20       		.uleb128 0x20
+ 2009 0539 443200   		.ascii	"D2\000"
+ 2010 053c 01       		.byte	0x1
+ 2011 053d FD       		.byte	0xfd
+ 2012 053e CA000000 		.4byte	0xca
+ 2013 0542 75010000 		.4byte	.LLST10
+ 2014 0546 20       		.uleb128 0x20
+ 2015 0547 645400   		.ascii	"dT\000"
+ 2016 054a 01       		.byte	0x1
+ 2017 054b FE       		.byte	0xfe
+ 2018 054c BF000000 		.4byte	0xbf
+ 2019 0550 88010000 		.4byte	.LLST11
+ 2020 0554 17       		.uleb128 0x17
+ 2021 0555 4F464600 		.ascii	"OFF\000"
+ 2022 0559 01       		.byte	0x1
+ 2023 055a 0001     		.2byte	0x100
+ 2024 055c D5000000 		.4byte	0xd5
+ 2025 0560 9B010000 		.4byte	.LLST12
+ 2026 0564 15       		.uleb128 0x15
+ 2027 0565 09020000 		.4byte	.LASF53
+ 2028 0569 01       		.byte	0x1
+ 2029 056a 0101     		.2byte	0x101
+ 2030 056c D5000000 		.4byte	0xd5
+ 2031 0570 C3010000 		.4byte	.LLST13
+ 2032 0574 17       		.uleb128 0x17
+ 2033 0575 5000     		.ascii	"P\000"
+ 2034 0577 01       		.byte	0x1
+ 2035 0578 1A01     		.2byte	0x11a
+ 2036 057a CA000000 		.4byte	0xca
+ 2037 057e EB010000 		.4byte	.LLST14
+ 2038 0582 21       		.uleb128 0x21
+ 2039 0583 98000000 		.4byte	.LBB2
+ 2040 0587 C4000000 		.4byte	.LBE2-.LBB2
+ 2041 058b A0050000 		.4byte	0x5a0
+ 2042 058f 15       		.uleb128 0x15
+ 2043 0590 C9010000 		.4byte	.LASF54
+ 2044 0594 01       		.byte	0x1
+ 2045 0595 0501     		.2byte	0x105
+ 2046 0597 BF000000 		.4byte	0xbf
+ 2047 059b 10020000 		.4byte	.LLST15
+ 2048 059f 00       		.byte	0
+ 2049 05a0 0F       		.uleb128 0xf
+ 2050 05a1 0A000000 		.4byte	.LVL42
+ 2051 05a5 D6040000 		.4byte	0x4d6
+ 2052 05a9 0F       		.uleb128 0xf
+ 2053 05aa 10000000 		.4byte	.LVL44
+ 2054 05ae 9B040000 		.4byte	0x49b
+ 2055 05b2 00       		.byte	0
+ 2056 05b3 22       		.uleb128 0x22
+ 2057 05b4 75010000 		.4byte	.LASF55
+ 2058 05b8 01       		.byte	0x1
+ 2059 05b9 1F01     		.2byte	0x11f
+ 2060 05bb 25000000 		.4byte	0x25
+ 2061 05bf 00000000 		.4byte	.LFB74
+ 2062 05c3 7C000000 		.4byte	.LFE74-.LFB74
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 47
+
+
+ 2063 05c7 01       		.uleb128 0x1
+ 2064 05c8 9C       		.byte	0x9c
+ 2065 05c9 05060000 		.4byte	0x605
+ 2066 05cd 17       		.uleb128 0x17
+ 2067 05ce 443200   		.ascii	"D2\000"
+ 2068 05d1 01       		.byte	0x1
+ 2069 05d2 2101     		.2byte	0x121
+ 2070 05d4 CA000000 		.4byte	0xca
+ 2071 05d8 23020000 		.4byte	.LLST16
+ 2072 05dc 17       		.uleb128 0x17
+ 2073 05dd 645400   		.ascii	"dT\000"
+ 2074 05e0 01       		.byte	0x1
+ 2075 05e1 2201     		.2byte	0x122
+ 2076 05e3 BF000000 		.4byte	0xbf
+ 2077 05e7 36020000 		.4byte	.LLST17
+ 2078 05eb 15       		.uleb128 0x15
+ 2079 05ec C9010000 		.4byte	.LASF54
+ 2080 05f0 01       		.byte	0x1
+ 2081 05f1 2401     		.2byte	0x124
+ 2082 05f3 BF000000 		.4byte	0xbf
+ 2083 05f7 49020000 		.4byte	.LLST18
+ 2084 05fb 0F       		.uleb128 0xf
+ 2085 05fc 06000000 		.4byte	.LVL60
+ 2086 0600 9B040000 		.4byte	0x49b
+ 2087 0604 00       		.byte	0
+ 2088 0605 22       		.uleb128 0x22
+ 2089 0606 7A000000 		.4byte	.LASF56
+ 2090 060a 01       		.byte	0x1
+ 2091 060b 3601     		.2byte	0x136
+ 2092 060d 25000000 		.4byte	0x25
+ 2093 0611 00000000 		.4byte	.LFB75
+ 2094 0615 54000000 		.4byte	.LFE75-.LFB75
+ 2095 0619 01       		.uleb128 0x1
+ 2096 061a 9C       		.byte	0x9c
+ 2097 061b 76060000 		.4byte	0x676
+ 2098 061f 23       		.uleb128 0x23
+ 2099 0620 4E010000 		.4byte	.LASF29
+ 2100 0624 01       		.byte	0x1
+ 2101 0625 3601     		.2byte	0x136
+ 2102 0627 BF000000 		.4byte	0xbf
+ 2103 062b 77020000 		.4byte	.LLST19
+ 2104 062f 24       		.uleb128 0x24
+ 2105 0630 90020000 		.4byte	.LASF57
+ 2106 0634 01       		.byte	0x1
+ 2107 0635 3801     		.2byte	0x138
+ 2108 0637 25000000 		.4byte	0x25
+ 2109 063b 08       		.byte	0x8
+ 2110 063c 00000000 		.4byte	0
+ 2111 0640 D0BCF840 		.4byte	0x40f8bcd0
+ 2112 0644 18       		.uleb128 0x18
+ 2113 0645 72657400 		.ascii	"ret\000"
+ 2114 0649 01       		.byte	0x1
+ 2115 064a 3901     		.2byte	0x139
+ 2116 064c 25000000 		.4byte	0x25
+ 2117 0650 06       		.uleb128 0x6
+ 2118 0651 50       		.byte	0x50
+ 2119 0652 93       		.byte	0x93
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 48
+
+
+ 2120 0653 04       		.uleb128 0x4
+ 2121 0654 51       		.byte	0x51
+ 2122 0655 93       		.byte	0x93
+ 2123 0656 04       		.uleb128 0x4
+ 2124 0657 12       		.uleb128 0x12
+ 2125 0658 1A000000 		.4byte	.LVL73
+ 2126 065c 120A0000 		.4byte	0xa12
+ 2127 0660 0E       		.uleb128 0xe
+ 2128 0661 06       		.uleb128 0x6
+ 2129 0662 52       		.byte	0x52
+ 2130 0663 93       		.byte	0x93
+ 2131 0664 04       		.uleb128 0x4
+ 2132 0665 53       		.byte	0x53
+ 2133 0666 93       		.byte	0x93
+ 2134 0667 04       		.uleb128 0x4
+ 2135 0668 0B       		.uleb128 0xb
+ 2136 0669 F4       		.byte	0xf4
+ 2137 066a 25       		.uleb128 0x25
+ 2138 066b 08       		.byte	0x8
+ 2139 066c 00000060 		.4byte	0x60000000
+ 2140 0670 955BC83F 		.4byte	0x3fc85b95
+ 2141 0674 00       		.byte	0
+ 2142 0675 00       		.byte	0
+ 2143 0676 22       		.uleb128 0x22
+ 2144 0677 69020000 		.4byte	.LASF58
+ 2145 067b 01       		.byte	0x1
+ 2146 067c 3E01     		.2byte	0x13e
+ 2147 067e 25000000 		.4byte	0x25
+ 2148 0682 00000000 		.4byte	.LFB76
+ 2149 0686 54000000 		.4byte	.LFE76-.LFB76
+ 2150 068a 01       		.uleb128 0x1
+ 2151 068b 9C       		.byte	0x9c
+ 2152 068c E2060000 		.4byte	0x6e2
+ 2153 0690 23       		.uleb128 0x23
+ 2154 0691 4E010000 		.4byte	.LASF29
+ 2155 0695 01       		.byte	0x1
+ 2156 0696 3E01     		.2byte	0x13e
+ 2157 0698 BF000000 		.4byte	0xbf
+ 2158 069c 98020000 		.4byte	.LLST20
+ 2159 06a0 23       		.uleb128 0x23
+ 2160 06a1 8A010000 		.4byte	.LASF59
+ 2161 06a5 01       		.byte	0x1
+ 2162 06a6 3E01     		.2byte	0x13e
+ 2163 06a8 BF000000 		.4byte	0xbf
+ 2164 06ac B9020000 		.4byte	.LLST21
+ 2165 06b0 18       		.uleb128 0x18
+ 2166 06b1 72657400 		.ascii	"ret\000"
+ 2167 06b5 01       		.byte	0x1
+ 2168 06b6 4001     		.2byte	0x140
+ 2169 06b8 25000000 		.4byte	0x25
+ 2170 06bc 06       		.uleb128 0x6
+ 2171 06bd 50       		.byte	0x50
+ 2172 06be 93       		.byte	0x93
+ 2173 06bf 04       		.uleb128 0x4
+ 2174 06c0 51       		.byte	0x51
+ 2175 06c1 93       		.byte	0x93
+ 2176 06c2 04       		.uleb128 0x4
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 49
+
+
+ 2177 06c3 12       		.uleb128 0x12
+ 2178 06c4 28000000 		.4byte	.LVL80
+ 2179 06c8 120A0000 		.4byte	0xa12
+ 2180 06cc 0E       		.uleb128 0xe
+ 2181 06cd 06       		.uleb128 0x6
+ 2182 06ce 52       		.byte	0x52
+ 2183 06cf 93       		.byte	0x93
+ 2184 06d0 04       		.uleb128 0x4
+ 2185 06d1 53       		.byte	0x53
+ 2186 06d2 93       		.byte	0x93
+ 2187 06d3 04       		.uleb128 0x4
+ 2188 06d4 0B       		.uleb128 0xb
+ 2189 06d5 F4       		.byte	0xf4
+ 2190 06d6 25       		.uleb128 0x25
+ 2191 06d7 08       		.byte	0x8
+ 2192 06d8 00000060 		.4byte	0x60000000
+ 2193 06dc 955BC83F 		.4byte	0x3fc85b95
+ 2194 06e0 00       		.byte	0
+ 2195 06e1 00       		.byte	0
+ 2196 06e2 25       		.uleb128 0x25
+ 2197 06e3 53040000 		.4byte	.LASF60
+ 2198 06e7 01       		.byte	0x1
+ 2199 06e8 75       		.byte	0x75
+ 2200 06e9 00000000 		.4byte	.LFB64
+ 2201 06ed A8000000 		.4byte	.LFE64-.LFB64
+ 2202 06f1 01       		.uleb128 0x1
+ 2203 06f2 9C       		.byte	0x9c
+ 2204 06f3 B0070000 		.4byte	0x7b0
+ 2205 06f7 19       		.uleb128 0x19
+ 2206 06f8 63040000 		.4byte	.LASF61
+ 2207 06fc 01       		.byte	0x1
+ 2208 06fd 8C       		.byte	0x8c
+ 2209 06fe BF000000 		.4byte	0xbf
+ 2210 0702 E5020000 		.4byte	.LLST22
+ 2211 0706 0D       		.uleb128 0xd
+ 2212 0707 08000000 		.4byte	.LVL84
+ 2213 070b 1D0A0000 		.4byte	0xa1d
+ 2214 070f 1D070000 		.4byte	0x71d
+ 2215 0713 0E       		.uleb128 0xe
+ 2216 0714 01       		.uleb128 0x1
+ 2217 0715 50       		.byte	0x50
+ 2218 0716 05       		.uleb128 0x5
+ 2219 0717 03       		.byte	0x3
+ 2220 0718 00000000 		.4byte	.LC0
+ 2221 071c 00       		.byte	0
+ 2222 071d 0D       		.uleb128 0xd
+ 2223 071e 10000000 		.4byte	.LVL85
+ 2224 0722 1D0A0000 		.4byte	0xa1d
+ 2225 0726 34070000 		.4byte	0x734
+ 2226 072a 0E       		.uleb128 0xe
+ 2227 072b 01       		.uleb128 0x1
+ 2228 072c 50       		.byte	0x50
+ 2229 072d 05       		.uleb128 0x5
+ 2230 072e 03       		.byte	0x3
+ 2231 072f 3C000000 		.4byte	.LC1
+ 2232 0733 00       		.byte	0
+ 2233 0734 0F       		.uleb128 0xf
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 50
+
+
+ 2234 0735 14000000 		.4byte	.LVL86
+ 2235 0739 FB030000 		.4byte	0x3fb
+ 2236 073d 0F       		.uleb128 0xf
+ 2237 073e 1C000000 		.4byte	.LVL87
+ 2238 0742 11050000 		.4byte	0x511
+ 2239 0746 0F       		.uleb128 0xf
+ 2240 0747 24000000 		.4byte	.LVL88
+ 2241 074b 9B040000 		.4byte	0x49b
+ 2242 074f 0F       		.uleb128 0xf
+ 2243 0750 2C000000 		.4byte	.LVL89
+ 2244 0754 D6040000 		.4byte	0x4d6
+ 2245 0758 0F       		.uleb128 0xf
+ 2246 0759 34000000 		.4byte	.LVL90
+ 2247 075d B3050000 		.4byte	0x5b3
+ 2248 0761 0F       		.uleb128 0xf
+ 2249 0762 3E000000 		.4byte	.LVL91
+ 2250 0766 11050000 		.4byte	0x511
+ 2251 076a 0F       		.uleb128 0xf
+ 2252 076b 48000000 		.4byte	.LVL92
+ 2253 076f 05060000 		.4byte	0x605
+ 2254 0773 0F       		.uleb128 0xf
+ 2255 0774 52000000 		.4byte	.LVL93
+ 2256 0778 11050000 		.4byte	0x511
+ 2257 077c 0F       		.uleb128 0xf
+ 2258 077d 58000000 		.4byte	.LVL94
+ 2259 0781 76060000 		.4byte	0x676
+ 2260 0785 0D       		.uleb128 0xd
+ 2261 0786 6E000000 		.4byte	.LVL96
+ 2262 078a 1D0A0000 		.4byte	0xa1d
+ 2263 078e 9C070000 		.4byte	0x79c
+ 2264 0792 0E       		.uleb128 0xe
+ 2265 0793 01       		.uleb128 0x1
+ 2266 0794 50       		.byte	0x50
+ 2267 0795 05       		.uleb128 0x5
+ 2268 0796 03       		.byte	0x3
+ 2269 0797 88000000 		.4byte	.LC2
+ 2270 079b 00       		.byte	0
+ 2271 079c 12       		.uleb128 0x12
+ 2272 079d 74000000 		.4byte	.LVL97
+ 2273 07a1 1D0A0000 		.4byte	0xa1d
+ 2274 07a5 0E       		.uleb128 0xe
+ 2275 07a6 01       		.uleb128 0x1
+ 2276 07a7 50       		.byte	0x50
+ 2277 07a8 05       		.uleb128 0x5
+ 2278 07a9 03       		.byte	0x3
+ 2279 07aa CC000000 		.4byte	.LC3
+ 2280 07ae 00       		.byte	0
+ 2281 07af 00       		.byte	0
+ 2282 07b0 22       		.uleb128 0x22
+ 2283 07b1 E1030000 		.4byte	.LASF62
+ 2284 07b5 01       		.byte	0x1
+ 2285 07b6 4501     		.2byte	0x145
+ 2286 07b8 25000000 		.4byte	0x25
+ 2287 07bc 00000000 		.4byte	.LFB77
+ 2288 07c0 54000000 		.4byte	.LFE77-.LFB77
+ 2289 07c4 01       		.uleb128 0x1
+ 2290 07c5 9C       		.byte	0x9c
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 51
+
+
+ 2291 07c6 1C080000 		.4byte	0x81c
+ 2292 07ca 23       		.uleb128 0x23
+ 2293 07cb 4E010000 		.4byte	.LASF29
+ 2294 07cf 01       		.byte	0x1
+ 2295 07d0 4501     		.2byte	0x145
+ 2296 07d2 BF000000 		.4byte	0xbf
+ 2297 07d6 F8020000 		.4byte	.LLST23
+ 2298 07da 23       		.uleb128 0x23
+ 2299 07db 45010000 		.4byte	.LASF63
+ 2300 07df 01       		.byte	0x1
+ 2301 07e0 4501     		.2byte	0x145
+ 2302 07e2 BF000000 		.4byte	0xbf
+ 2303 07e6 19030000 		.4byte	.LLST24
+ 2304 07ea 18       		.uleb128 0x18
+ 2305 07eb 72657400 		.ascii	"ret\000"
+ 2306 07ef 01       		.byte	0x1
+ 2307 07f0 4701     		.2byte	0x147
+ 2308 07f2 25000000 		.4byte	0x25
+ 2309 07f6 06       		.uleb128 0x6
+ 2310 07f7 50       		.byte	0x50
+ 2311 07f8 93       		.byte	0x93
+ 2312 07f9 04       		.uleb128 0x4
+ 2313 07fa 51       		.byte	0x51
+ 2314 07fb 93       		.byte	0x93
+ 2315 07fc 04       		.uleb128 0x4
+ 2316 07fd 12       		.uleb128 0x12
+ 2317 07fe 32000000 		.4byte	.LVL103
+ 2318 0802 120A0000 		.4byte	0xa12
+ 2319 0806 0E       		.uleb128 0xe
+ 2320 0807 06       		.uleb128 0x6
+ 2321 0808 52       		.byte	0x52
+ 2322 0809 93       		.byte	0x93
+ 2323 080a 04       		.uleb128 0x4
+ 2324 080b 53       		.byte	0x53
+ 2325 080c 93       		.byte	0x93
+ 2326 080d 04       		.uleb128 0x4
+ 2327 080e 0B       		.uleb128 0xb
+ 2328 080f F4       		.byte	0xf4
+ 2329 0810 25       		.uleb128 0x25
+ 2330 0811 08       		.byte	0x8
+ 2331 0812 85EB51B8 		.4byte	0xb851eb85
+ 2332 0816 1E051540 		.4byte	0x4015051e
+ 2333 081a 00       		.byte	0
+ 2334 081b 00       		.byte	0
+ 2335 081c 26       		.uleb128 0x26
+ 2336 081d A1020000 		.4byte	.LASF64
+ 2337 0821 01       		.byte	0x1
+ 2338 0822 7801     		.2byte	0x178
+ 2339 0824 00000000 		.4byte	.LFB80
+ 2340 0828 40000000 		.4byte	.LFE80-.LFB80
+ 2341 082c 01       		.uleb128 0x1
+ 2342 082d 9C       		.byte	0x9c
+ 2343 082e 69080000 		.4byte	0x869
+ 2344 0832 0F       		.uleb128 0xf
+ 2345 0833 06000000 		.4byte	.LVL106
+ 2346 0837 9B040000 		.4byte	0x49b
+ 2347 083b 0F       		.uleb128 0xf
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 52
+
+
+ 2348 083c 0E000000 		.4byte	.LVL107
+ 2349 0840 D6040000 		.4byte	0x4d6
+ 2350 0844 0F       		.uleb128 0xf
+ 2351 0845 14000000 		.4byte	.LVL108
+ 2352 0849 B3050000 		.4byte	0x5b3
+ 2353 084d 0F       		.uleb128 0xf
+ 2354 084e 1C000000 		.4byte	.LVL109
+ 2355 0852 11050000 		.4byte	0x511
+ 2356 0856 0F       		.uleb128 0xf
+ 2357 0857 22000000 		.4byte	.LVL110
+ 2358 085b 05060000 		.4byte	0x605
+ 2359 085f 0F       		.uleb128 0xf
+ 2360 0860 30000000 		.4byte	.LVL111
+ 2361 0864 76060000 		.4byte	0x676
+ 2362 0868 00       		.byte	0
+ 2363 0869 27       		.uleb128 0x27
+ 2364 086a 24010000 		.4byte	.LASF66
+ 2365 086e 01       		.byte	0x1
+ 2366 086f 9E01     		.2byte	0x19e
+ 2367 0871 CA000000 		.4byte	0xca
+ 2368 0875 00000000 		.4byte	.LFB81
+ 2369 0879 0C000000 		.4byte	.LFE81-.LFB81
+ 2370 087d 01       		.uleb128 0x1
+ 2371 087e 9C       		.byte	0x9c
+ 2372 087f 27       		.uleb128 0x27
+ 2373 0880 57010000 		.4byte	.LASF67
+ 2374 0884 01       		.byte	0x1
+ 2375 0885 A201     		.2byte	0x1a2
+ 2376 0887 CA000000 		.4byte	0xca
+ 2377 088b 00000000 		.4byte	.LFB82
+ 2378 088f 0C000000 		.4byte	.LFE82-.LFB82
+ 2379 0893 01       		.uleb128 0x1
+ 2380 0894 9C       		.byte	0x9c
+ 2381 0895 27       		.uleb128 0x27
+ 2382 0896 D9000000 		.4byte	.LASF68
+ 2383 089a 01       		.byte	0x1
+ 2384 089b A601     		.2byte	0x1a6
+ 2385 089d 25000000 		.4byte	0x25
+ 2386 08a1 00000000 		.4byte	.LFB83
+ 2387 08a5 0C000000 		.4byte	.LFE83-.LFB83
+ 2388 08a9 01       		.uleb128 0x1
+ 2389 08aa 9C       		.byte	0x9c
+ 2390 08ab 27       		.uleb128 0x27
+ 2391 08ac 31030000 		.4byte	.LASF69
+ 2392 08b0 01       		.byte	0x1
+ 2393 08b1 AA01     		.2byte	0x1aa
+ 2394 08b3 BF000000 		.4byte	0xbf
+ 2395 08b7 00000000 		.4byte	.LFB84
+ 2396 08bb 0C000000 		.4byte	.LFE84-.LFB84
+ 2397 08bf 01       		.uleb128 0x1
+ 2398 08c0 9C       		.byte	0x9c
+ 2399 08c1 27       		.uleb128 0x27
+ 2400 08c2 3A000000 		.4byte	.LASF70
+ 2401 08c6 01       		.byte	0x1
+ 2402 08c7 AE01     		.2byte	0x1ae
+ 2403 08c9 25000000 		.4byte	0x25
+ 2404 08cd 00000000 		.4byte	.LFB85
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 53
+
+
+ 2405 08d1 0C000000 		.4byte	.LFE85-.LFB85
+ 2406 08d5 01       		.uleb128 0x1
+ 2407 08d6 9C       		.byte	0x9c
+ 2408 08d7 27       		.uleb128 0x27
+ 2409 08d8 CD050000 		.4byte	.LASF71
+ 2410 08dc 01       		.byte	0x1
+ 2411 08dd B201     		.2byte	0x1b2
+ 2412 08df 25000000 		.4byte	0x25
+ 2413 08e3 00000000 		.4byte	.LFB86
+ 2414 08e7 0C000000 		.4byte	.LFE86-.LFB86
+ 2415 08eb 01       		.uleb128 0x1
+ 2416 08ec 9C       		.byte	0x9c
+ 2417 08ed 10       		.uleb128 0x10
+ 2418 08ee B4000000 		.4byte	0xb4
+ 2419 08f2 FD080000 		.4byte	0x8fd
+ 2420 08f6 11       		.uleb128 0x11
+ 2421 08f7 93010000 		.4byte	0x193
+ 2422 08fb 05       		.byte	0x5
+ 2423 08fc 00       		.byte	0
+ 2424 08fd 28       		.uleb128 0x28
+ 2425 08fe 666300   		.ascii	"fc\000"
+ 2426 0901 01       		.byte	0x1
+ 2427 0902 12       		.byte	0x12
+ 2428 0903 ED080000 		.4byte	0x8ed
+ 2429 0907 05       		.uleb128 0x5
+ 2430 0908 03       		.byte	0x3
+ 2431 0909 00000000 		.4byte	fc
+ 2432 090d 28       		.uleb128 0x28
+ 2433 090e 637400   		.ascii	"ct\000"
+ 2434 0911 01       		.byte	0x1
+ 2435 0912 13       		.byte	0x13
+ 2436 0913 A9000000 		.4byte	0xa9
+ 2437 0917 05       		.uleb128 0x5
+ 2438 0918 03       		.byte	0x3
+ 2439 0919 0C000000 		.4byte	ct
+ 2440 091d 0C       		.uleb128 0xc
+ 2441 091e 72040000 		.4byte	.LASF72
+ 2442 0922 01       		.byte	0x1
+ 2443 0923 14       		.byte	0x14
+ 2444 0924 A9000000 		.4byte	0xa9
+ 2445 0928 05       		.uleb128 0x5
+ 2446 0929 03       		.byte	0x3
+ 2447 092a 0D000000 		.4byte	uosr
+ 2448 092e 0C       		.uleb128 0xc
+ 2449 092f 8D040000 		.4byte	.LASF73
+ 2450 0933 01       		.byte	0x1
+ 2451 0934 15       		.byte	0x15
+ 2452 0935 BF000000 		.4byte	0xbf
+ 2453 0939 05       		.uleb128 0x5
+ 2454 093a 03       		.byte	0x3
+ 2455 093b 20000000 		.4byte	TEMP2
+ 2456 093f 0C       		.uleb128 0xc
+ 2457 0940 00050000 		.4byte	.LASF74
+ 2458 0944 01       		.byte	0x1
+ 2459 0945 16       		.byte	0x16
+ 2460 0946 D5000000 		.4byte	0xd5
+ 2461 094a 05       		.uleb128 0x5
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 54
+
+
+ 2462 094b 03       		.byte	0x3
+ 2463 094c 10000000 		.4byte	OFF2
+ 2464 0950 0C       		.uleb128 0xc
+ 2465 0951 EF040000 		.4byte	.LASF75
+ 2466 0955 01       		.byte	0x1
+ 2467 0956 16       		.byte	0x16
+ 2468 0957 D5000000 		.4byte	0xd5
+ 2469 095b 05       		.uleb128 0x5
+ 2470 095c 03       		.byte	0x3
+ 2471 095d 18000000 		.4byte	SENS2
+ 2472 0961 0C       		.uleb128 0xc
+ 2473 0962 82020000 		.4byte	.LASF76
+ 2474 0966 01       		.byte	0x1
+ 2475 0967 17       		.byte	0x17
+ 2476 0968 A9000000 		.4byte	0xa9
+ 2477 096c 05       		.uleb128 0x5
+ 2478 096d 03       		.byte	0x3
+ 2479 096e 0E000000 		.4byte	_COMPENSATION
+ 2480 0972 29       		.uleb128 0x29
+ 2481 0973 05050000 		.4byte	.LASF77
+ 2482 0977 06       		.byte	0x6
+ 2483 0978 1207     		.2byte	0x712
+ 2484 097a 7E090000 		.4byte	0x97e
+ 2485 097e 2A       		.uleb128 0x2a
+ 2486 097f BF000000 		.4byte	0xbf
+ 2487 0983 2B       		.uleb128 0x2b
+ 2488 0984 3F030000 		.4byte	.LASF78
+ 2489 0988 07       		.byte	0x7
+ 2490 0989 19       		.byte	0x19
+ 2491 098a BF000000 		.4byte	0xbf
+ 2492 098e 2B       		.uleb128 0x2b
+ 2493 098f C2040000 		.4byte	.LASF79
+ 2494 0993 07       		.byte	0x7
+ 2495 0994 1C       		.byte	0x1c
+ 2496 0995 CA000000 		.4byte	0xca
+ 2497 0999 2B       		.uleb128 0x2b
+ 2498 099a 00000000 		.4byte	.LASF80
+ 2499 099e 07       		.byte	0x7
+ 2500 099f 1D       		.byte	0x1d
+ 2501 09a0 CA000000 		.4byte	0xca
+ 2502 09a4 2B       		.uleb128 0x2b
+ 2503 09a5 49000000 		.4byte	.LASF81
+ 2504 09a9 07       		.byte	0x7
+ 2505 09aa 20       		.byte	0x20
+ 2506 09ab 25000000 		.4byte	0x25
+ 2507 09af 2B       		.uleb128 0x2b
+ 2508 09b0 24000000 		.4byte	.LASF82
+ 2509 09b4 07       		.byte	0x7
+ 2510 09b5 21       		.byte	0x21
+ 2511 09b6 BF000000 		.4byte	0xbf
+ 2512 09ba 2B       		.uleb128 0x2b
+ 2513 09bb 00040000 		.4byte	.LASF83
+ 2514 09bf 07       		.byte	0x7
+ 2515 09c0 25       		.byte	0x25
+ 2516 09c1 25000000 		.4byte	0x25
+ 2517 09c5 2B       		.uleb128 0x2b
+ 2518 09c6 D9020000 		.4byte	.LASF84
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 55
+
+
+ 2519 09ca 07       		.byte	0x7
+ 2520 09cb 26       		.byte	0x26
+ 2521 09cc 25000000 		.4byte	0x25
+ 2522 09d0 2B       		.uleb128 0x2b
+ 2523 09d1 2B040000 		.4byte	.LASF85
+ 2524 09d5 07       		.byte	0x7
+ 2525 09d6 28       		.byte	0x28
+ 2526 09d7 67010000 		.4byte	0x167
+ 2527 09db 2C       		.uleb128 0x2c
+ 2528 09dc FF020000 		.4byte	.LASF86
+ 2529 09e0 FF020000 		.4byte	.LASF86
+ 2530 09e4 08       		.byte	0x8
+ 2531 09e5 A7       		.byte	0xa7
+ 2532 09e6 2C       		.uleb128 0x2c
+ 2533 09e7 1A040000 		.4byte	.LASF87
+ 2534 09eb 1A040000 		.4byte	.LASF87
+ 2535 09ef 08       		.byte	0x8
+ 2536 09f0 A3       		.byte	0xa3
+ 2537 09f1 2C       		.uleb128 0x2c
+ 2538 09f2 B9020000 		.4byte	.LASF88
+ 2539 09f6 B9020000 		.4byte	.LASF88
+ 2540 09fa 08       		.byte	0x8
+ 2541 09fb A9       		.byte	0xa9
+ 2542 09fc 2C       		.uleb128 0x2c
+ 2543 09fd 0E020000 		.4byte	.LASF89
+ 2544 0a01 0E020000 		.4byte	.LASF89
+ 2545 0a05 09       		.byte	0x9
+ 2546 0a06 0A       		.byte	0xa
+ 2547 0a07 2C       		.uleb128 0x2c
+ 2548 0a08 A0050000 		.4byte	.LASF90
+ 2549 0a0c A0050000 		.4byte	.LASF90
+ 2550 0a10 0A       		.byte	0xa
+ 2551 0a11 76       		.byte	0x76
+ 2552 0a12 2D       		.uleb128 0x2d
+ 2553 0a13 706F7700 		.ascii	"pow\000"
+ 2554 0a17 706F7700 		.ascii	"pow\000"
+ 2555 0a1b 0C       		.byte	0xc
+ 2556 0a1c 86       		.byte	0x86
+ 2557 0a1d 2C       		.uleb128 0x2c
+ 2558 0a1e 00010000 		.4byte	.LASF91
+ 2559 0a22 00010000 		.4byte	.LASF91
+ 2560 0a26 0B       		.byte	0xb
+ 2561 0a27 06       		.byte	0x6
+ 2562 0a28 00       		.byte	0
+ 2563              		.section	.debug_abbrev,"",%progbits
+ 2564              	.Ldebug_abbrev0:
+ 2565 0000 01       		.uleb128 0x1
+ 2566 0001 11       		.uleb128 0x11
+ 2567 0002 01       		.byte	0x1
+ 2568 0003 25       		.uleb128 0x25
+ 2569 0004 0E       		.uleb128 0xe
+ 2570 0005 13       		.uleb128 0x13
+ 2571 0006 0B       		.uleb128 0xb
+ 2572 0007 03       		.uleb128 0x3
+ 2573 0008 0E       		.uleb128 0xe
+ 2574 0009 1B       		.uleb128 0x1b
+ 2575 000a 0E       		.uleb128 0xe
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 56
+
+
+ 2576 000b 55       		.uleb128 0x55
+ 2577 000c 17       		.uleb128 0x17
+ 2578 000d 11       		.uleb128 0x11
+ 2579 000e 01       		.uleb128 0x1
+ 2580 000f 10       		.uleb128 0x10
+ 2581 0010 17       		.uleb128 0x17
+ 2582 0011 00       		.byte	0
+ 2583 0012 00       		.byte	0
+ 2584 0013 02       		.uleb128 0x2
+ 2585 0014 24       		.uleb128 0x24
+ 2586 0015 00       		.byte	0
+ 2587 0016 0B       		.uleb128 0xb
+ 2588 0017 0B       		.uleb128 0xb
+ 2589 0018 3E       		.uleb128 0x3e
+ 2590 0019 0B       		.uleb128 0xb
+ 2591 001a 03       		.uleb128 0x3
+ 2592 001b 0E       		.uleb128 0xe
+ 2593 001c 00       		.byte	0
+ 2594 001d 00       		.byte	0
+ 2595 001e 03       		.uleb128 0x3
+ 2596 001f 16       		.uleb128 0x16
+ 2597 0020 00       		.byte	0
+ 2598 0021 03       		.uleb128 0x3
+ 2599 0022 0E       		.uleb128 0xe
+ 2600 0023 3A       		.uleb128 0x3a
+ 2601 0024 0B       		.uleb128 0xb
+ 2602 0025 3B       		.uleb128 0x3b
+ 2603 0026 0B       		.uleb128 0xb
+ 2604 0027 49       		.uleb128 0x49
+ 2605 0028 13       		.uleb128 0x13
+ 2606 0029 00       		.byte	0
+ 2607 002a 00       		.byte	0
+ 2608 002b 04       		.uleb128 0x4
+ 2609 002c 24       		.uleb128 0x24
+ 2610 002d 00       		.byte	0
+ 2611 002e 0B       		.uleb128 0xb
+ 2612 002f 0B       		.uleb128 0xb
+ 2613 0030 3E       		.uleb128 0x3e
+ 2614 0031 0B       		.uleb128 0xb
+ 2615 0032 03       		.uleb128 0x3
+ 2616 0033 08       		.uleb128 0x8
+ 2617 0034 00       		.byte	0
+ 2618 0035 00       		.byte	0
+ 2619 0036 05       		.uleb128 0x5
+ 2620 0037 04       		.uleb128 0x4
+ 2621 0038 01       		.byte	0x1
+ 2622 0039 0B       		.uleb128 0xb
+ 2623 003a 0B       		.uleb128 0xb
+ 2624 003b 49       		.uleb128 0x49
+ 2625 003c 13       		.uleb128 0x13
+ 2626 003d 3A       		.uleb128 0x3a
+ 2627 003e 0B       		.uleb128 0xb
+ 2628 003f 3B       		.uleb128 0x3b
+ 2629 0040 0B       		.uleb128 0xb
+ 2630 0041 01       		.uleb128 0x1
+ 2631 0042 13       		.uleb128 0x13
+ 2632 0043 00       		.byte	0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 57
+
+
+ 2633 0044 00       		.byte	0
+ 2634 0045 06       		.uleb128 0x6
+ 2635 0046 28       		.uleb128 0x28
+ 2636 0047 00       		.byte	0
+ 2637 0048 03       		.uleb128 0x3
+ 2638 0049 0E       		.uleb128 0xe
+ 2639 004a 1C       		.uleb128 0x1c
+ 2640 004b 0B       		.uleb128 0xb
+ 2641 004c 00       		.byte	0
+ 2642 004d 00       		.byte	0
+ 2643 004e 07       		.uleb128 0x7
+ 2644 004f 13       		.uleb128 0x13
+ 2645 0050 01       		.byte	0x1
+ 2646 0051 0B       		.uleb128 0xb
+ 2647 0052 0B       		.uleb128 0xb
+ 2648 0053 3A       		.uleb128 0x3a
+ 2649 0054 0B       		.uleb128 0xb
+ 2650 0055 3B       		.uleb128 0x3b
+ 2651 0056 0B       		.uleb128 0xb
+ 2652 0057 01       		.uleb128 0x1
+ 2653 0058 13       		.uleb128 0x13
+ 2654 0059 00       		.byte	0
+ 2655 005a 00       		.byte	0
+ 2656 005b 08       		.uleb128 0x8
+ 2657 005c 0D       		.uleb128 0xd
+ 2658 005d 00       		.byte	0
+ 2659 005e 03       		.uleb128 0x3
+ 2660 005f 0E       		.uleb128 0xe
+ 2661 0060 3A       		.uleb128 0x3a
+ 2662 0061 0B       		.uleb128 0xb
+ 2663 0062 3B       		.uleb128 0x3b
+ 2664 0063 0B       		.uleb128 0xb
+ 2665 0064 49       		.uleb128 0x49
+ 2666 0065 13       		.uleb128 0x13
+ 2667 0066 38       		.uleb128 0x38
+ 2668 0067 0B       		.uleb128 0xb
+ 2669 0068 00       		.byte	0
+ 2670 0069 00       		.byte	0
+ 2671 006a 09       		.uleb128 0x9
+ 2672 006b 16       		.uleb128 0x16
+ 2673 006c 00       		.byte	0
+ 2674 006d 03       		.uleb128 0x3
+ 2675 006e 0E       		.uleb128 0xe
+ 2676 006f 3A       		.uleb128 0x3a
+ 2677 0070 0B       		.uleb128 0xb
+ 2678 0071 3B       		.uleb128 0x3b
+ 2679 0072 05       		.uleb128 0x5
+ 2680 0073 49       		.uleb128 0x49
+ 2681 0074 13       		.uleb128 0x13
+ 2682 0075 00       		.byte	0
+ 2683 0076 00       		.byte	0
+ 2684 0077 0A       		.uleb128 0xa
+ 2685 0078 2E       		.uleb128 0x2e
+ 2686 0079 01       		.byte	0x1
+ 2687 007a 03       		.uleb128 0x3
+ 2688 007b 0E       		.uleb128 0xe
+ 2689 007c 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 58
+
+
+ 2690 007d 0B       		.uleb128 0xb
+ 2691 007e 3B       		.uleb128 0x3b
+ 2692 007f 0B       		.uleb128 0xb
+ 2693 0080 27       		.uleb128 0x27
+ 2694 0081 19       		.uleb128 0x19
+ 2695 0082 11       		.uleb128 0x11
+ 2696 0083 01       		.uleb128 0x1
+ 2697 0084 12       		.uleb128 0x12
+ 2698 0085 06       		.uleb128 0x6
+ 2699 0086 40       		.uleb128 0x40
+ 2700 0087 18       		.uleb128 0x18
+ 2701 0088 9742     		.uleb128 0x2117
+ 2702 008a 19       		.uleb128 0x19
+ 2703 008b 01       		.uleb128 0x1
+ 2704 008c 13       		.uleb128 0x13
+ 2705 008d 00       		.byte	0
+ 2706 008e 00       		.byte	0
+ 2707 008f 0B       		.uleb128 0xb
+ 2708 0090 05       		.uleb128 0x5
+ 2709 0091 00       		.byte	0
+ 2710 0092 03       		.uleb128 0x3
+ 2711 0093 08       		.uleb128 0x8
+ 2712 0094 3A       		.uleb128 0x3a
+ 2713 0095 0B       		.uleb128 0xb
+ 2714 0096 3B       		.uleb128 0x3b
+ 2715 0097 0B       		.uleb128 0xb
+ 2716 0098 49       		.uleb128 0x49
+ 2717 0099 13       		.uleb128 0x13
+ 2718 009a 02       		.uleb128 0x2
+ 2719 009b 17       		.uleb128 0x17
+ 2720 009c 00       		.byte	0
+ 2721 009d 00       		.byte	0
+ 2722 009e 0C       		.uleb128 0xc
+ 2723 009f 34       		.uleb128 0x34
+ 2724 00a0 00       		.byte	0
+ 2725 00a1 03       		.uleb128 0x3
+ 2726 00a2 0E       		.uleb128 0xe
+ 2727 00a3 3A       		.uleb128 0x3a
+ 2728 00a4 0B       		.uleb128 0xb
+ 2729 00a5 3B       		.uleb128 0x3b
+ 2730 00a6 0B       		.uleb128 0xb
+ 2731 00a7 49       		.uleb128 0x49
+ 2732 00a8 13       		.uleb128 0x13
+ 2733 00a9 02       		.uleb128 0x2
+ 2734 00aa 18       		.uleb128 0x18
+ 2735 00ab 00       		.byte	0
+ 2736 00ac 00       		.byte	0
+ 2737 00ad 0D       		.uleb128 0xd
+ 2738 00ae 898201   		.uleb128 0x4109
+ 2739 00b1 01       		.byte	0x1
+ 2740 00b2 11       		.uleb128 0x11
+ 2741 00b3 01       		.uleb128 0x1
+ 2742 00b4 31       		.uleb128 0x31
+ 2743 00b5 13       		.uleb128 0x13
+ 2744 00b6 01       		.uleb128 0x1
+ 2745 00b7 13       		.uleb128 0x13
+ 2746 00b8 00       		.byte	0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 59
+
+
+ 2747 00b9 00       		.byte	0
+ 2748 00ba 0E       		.uleb128 0xe
+ 2749 00bb 8A8201   		.uleb128 0x410a
+ 2750 00be 00       		.byte	0
+ 2751 00bf 02       		.uleb128 0x2
+ 2752 00c0 18       		.uleb128 0x18
+ 2753 00c1 9142     		.uleb128 0x2111
+ 2754 00c3 18       		.uleb128 0x18
+ 2755 00c4 00       		.byte	0
+ 2756 00c5 00       		.byte	0
+ 2757 00c6 0F       		.uleb128 0xf
+ 2758 00c7 898201   		.uleb128 0x4109
+ 2759 00ca 00       		.byte	0
+ 2760 00cb 11       		.uleb128 0x11
+ 2761 00cc 01       		.uleb128 0x1
+ 2762 00cd 31       		.uleb128 0x31
+ 2763 00ce 13       		.uleb128 0x13
+ 2764 00cf 00       		.byte	0
+ 2765 00d0 00       		.byte	0
+ 2766 00d1 10       		.uleb128 0x10
+ 2767 00d2 01       		.uleb128 0x1
+ 2768 00d3 01       		.byte	0x1
+ 2769 00d4 49       		.uleb128 0x49
+ 2770 00d5 13       		.uleb128 0x13
+ 2771 00d6 01       		.uleb128 0x1
+ 2772 00d7 13       		.uleb128 0x13
+ 2773 00d8 00       		.byte	0
+ 2774 00d9 00       		.byte	0
+ 2775 00da 11       		.uleb128 0x11
+ 2776 00db 21       		.uleb128 0x21
+ 2777 00dc 00       		.byte	0
+ 2778 00dd 49       		.uleb128 0x49
+ 2779 00de 13       		.uleb128 0x13
+ 2780 00df 2F       		.uleb128 0x2f
+ 2781 00e0 0B       		.uleb128 0xb
+ 2782 00e1 00       		.byte	0
+ 2783 00e2 00       		.byte	0
+ 2784 00e3 12       		.uleb128 0x12
+ 2785 00e4 898201   		.uleb128 0x4109
+ 2786 00e7 01       		.byte	0x1
+ 2787 00e8 11       		.uleb128 0x11
+ 2788 00e9 01       		.uleb128 0x1
+ 2789 00ea 31       		.uleb128 0x31
+ 2790 00eb 13       		.uleb128 0x13
+ 2791 00ec 00       		.byte	0
+ 2792 00ed 00       		.byte	0
+ 2793 00ee 13       		.uleb128 0x13
+ 2794 00ef 2E       		.uleb128 0x2e
+ 2795 00f0 01       		.byte	0x1
+ 2796 00f1 03       		.uleb128 0x3
+ 2797 00f2 0E       		.uleb128 0xe
+ 2798 00f3 3A       		.uleb128 0x3a
+ 2799 00f4 0B       		.uleb128 0xb
+ 2800 00f5 3B       		.uleb128 0x3b
+ 2801 00f6 05       		.uleb128 0x5
+ 2802 00f7 27       		.uleb128 0x27
+ 2803 00f8 19       		.uleb128 0x19
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 60
+
+
+ 2804 00f9 49       		.uleb128 0x49
+ 2805 00fa 13       		.uleb128 0x13
+ 2806 00fb 11       		.uleb128 0x11
+ 2807 00fc 01       		.uleb128 0x1
+ 2808 00fd 12       		.uleb128 0x12
+ 2809 00fe 06       		.uleb128 0x6
+ 2810 00ff 40       		.uleb128 0x40
+ 2811 0100 18       		.uleb128 0x18
+ 2812 0101 9742     		.uleb128 0x2117
+ 2813 0103 19       		.uleb128 0x19
+ 2814 0104 01       		.uleb128 0x1
+ 2815 0105 13       		.uleb128 0x13
+ 2816 0106 00       		.byte	0
+ 2817 0107 00       		.byte	0
+ 2818 0108 14       		.uleb128 0x14
+ 2819 0109 05       		.uleb128 0x5
+ 2820 010a 00       		.byte	0
+ 2821 010b 03       		.uleb128 0x3
+ 2822 010c 08       		.uleb128 0x8
+ 2823 010d 3A       		.uleb128 0x3a
+ 2824 010e 0B       		.uleb128 0xb
+ 2825 010f 3B       		.uleb128 0x3b
+ 2826 0110 05       		.uleb128 0x5
+ 2827 0111 49       		.uleb128 0x49
+ 2828 0112 13       		.uleb128 0x13
+ 2829 0113 02       		.uleb128 0x2
+ 2830 0114 17       		.uleb128 0x17
+ 2831 0115 00       		.byte	0
+ 2832 0116 00       		.byte	0
+ 2833 0117 15       		.uleb128 0x15
+ 2834 0118 34       		.uleb128 0x34
+ 2835 0119 00       		.byte	0
+ 2836 011a 03       		.uleb128 0x3
+ 2837 011b 0E       		.uleb128 0xe
+ 2838 011c 3A       		.uleb128 0x3a
+ 2839 011d 0B       		.uleb128 0xb
+ 2840 011e 3B       		.uleb128 0x3b
+ 2841 011f 05       		.uleb128 0x5
+ 2842 0120 49       		.uleb128 0x49
+ 2843 0121 13       		.uleb128 0x13
+ 2844 0122 02       		.uleb128 0x2
+ 2845 0123 17       		.uleb128 0x17
+ 2846 0124 00       		.byte	0
+ 2847 0125 00       		.byte	0
+ 2848 0126 16       		.uleb128 0x16
+ 2849 0127 34       		.uleb128 0x34
+ 2850 0128 00       		.byte	0
+ 2851 0129 03       		.uleb128 0x3
+ 2852 012a 0E       		.uleb128 0xe
+ 2853 012b 3A       		.uleb128 0x3a
+ 2854 012c 0B       		.uleb128 0xb
+ 2855 012d 3B       		.uleb128 0x3b
+ 2856 012e 05       		.uleb128 0x5
+ 2857 012f 49       		.uleb128 0x49
+ 2858 0130 13       		.uleb128 0x13
+ 2859 0131 02       		.uleb128 0x2
+ 2860 0132 18       		.uleb128 0x18
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 61
+
+
+ 2861 0133 00       		.byte	0
+ 2862 0134 00       		.byte	0
+ 2863 0135 17       		.uleb128 0x17
+ 2864 0136 34       		.uleb128 0x34
+ 2865 0137 00       		.byte	0
+ 2866 0138 03       		.uleb128 0x3
+ 2867 0139 08       		.uleb128 0x8
+ 2868 013a 3A       		.uleb128 0x3a
+ 2869 013b 0B       		.uleb128 0xb
+ 2870 013c 3B       		.uleb128 0x3b
+ 2871 013d 05       		.uleb128 0x5
+ 2872 013e 49       		.uleb128 0x49
+ 2873 013f 13       		.uleb128 0x13
+ 2874 0140 02       		.uleb128 0x2
+ 2875 0141 17       		.uleb128 0x17
+ 2876 0142 00       		.byte	0
+ 2877 0143 00       		.byte	0
+ 2878 0144 18       		.uleb128 0x18
+ 2879 0145 34       		.uleb128 0x34
+ 2880 0146 00       		.byte	0
+ 2881 0147 03       		.uleb128 0x3
+ 2882 0148 08       		.uleb128 0x8
+ 2883 0149 3A       		.uleb128 0x3a
+ 2884 014a 0B       		.uleb128 0xb
+ 2885 014b 3B       		.uleb128 0x3b
+ 2886 014c 05       		.uleb128 0x5
+ 2887 014d 49       		.uleb128 0x49
+ 2888 014e 13       		.uleb128 0x13
+ 2889 014f 02       		.uleb128 0x2
+ 2890 0150 18       		.uleb128 0x18
+ 2891 0151 00       		.byte	0
+ 2892 0152 00       		.byte	0
+ 2893 0153 19       		.uleb128 0x19
+ 2894 0154 34       		.uleb128 0x34
+ 2895 0155 00       		.byte	0
+ 2896 0156 03       		.uleb128 0x3
+ 2897 0157 0E       		.uleb128 0xe
+ 2898 0158 3A       		.uleb128 0x3a
+ 2899 0159 0B       		.uleb128 0xb
+ 2900 015a 3B       		.uleb128 0x3b
+ 2901 015b 0B       		.uleb128 0xb
+ 2902 015c 49       		.uleb128 0x49
+ 2903 015d 13       		.uleb128 0x13
+ 2904 015e 02       		.uleb128 0x2
+ 2905 015f 17       		.uleb128 0x17
+ 2906 0160 00       		.byte	0
+ 2907 0161 00       		.byte	0
+ 2908 0162 1A       		.uleb128 0x1a
+ 2909 0163 2E       		.uleb128 0x2e
+ 2910 0164 01       		.byte	0x1
+ 2911 0165 3F       		.uleb128 0x3f
+ 2912 0166 19       		.uleb128 0x19
+ 2913 0167 03       		.uleb128 0x3
+ 2914 0168 0E       		.uleb128 0xe
+ 2915 0169 3A       		.uleb128 0x3a
+ 2916 016a 0B       		.uleb128 0xb
+ 2917 016b 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 62
+
+
+ 2918 016c 0B       		.uleb128 0xb
+ 2919 016d 27       		.uleb128 0x27
+ 2920 016e 19       		.uleb128 0x19
+ 2921 016f 11       		.uleb128 0x11
+ 2922 0170 01       		.uleb128 0x1
+ 2923 0171 12       		.uleb128 0x12
+ 2924 0172 06       		.uleb128 0x6
+ 2925 0173 40       		.uleb128 0x40
+ 2926 0174 18       		.uleb128 0x18
+ 2927 0175 9742     		.uleb128 0x2117
+ 2928 0177 19       		.uleb128 0x19
+ 2929 0178 01       		.uleb128 0x1
+ 2930 0179 13       		.uleb128 0x13
+ 2931 017a 00       		.byte	0
+ 2932 017b 00       		.byte	0
+ 2933 017c 1B       		.uleb128 0x1b
+ 2934 017d 05       		.uleb128 0x5
+ 2935 017e 00       		.byte	0
+ 2936 017f 03       		.uleb128 0x3
+ 2937 0180 08       		.uleb128 0x8
+ 2938 0181 3A       		.uleb128 0x3a
+ 2939 0182 0B       		.uleb128 0xb
+ 2940 0183 3B       		.uleb128 0x3b
+ 2941 0184 0B       		.uleb128 0xb
+ 2942 0185 49       		.uleb128 0x49
+ 2943 0186 13       		.uleb128 0x13
+ 2944 0187 02       		.uleb128 0x2
+ 2945 0188 18       		.uleb128 0x18
+ 2946 0189 00       		.byte	0
+ 2947 018a 00       		.byte	0
+ 2948 018b 1C       		.uleb128 0x1c
+ 2949 018c 2E       		.uleb128 0x2e
+ 2950 018d 01       		.byte	0x1
+ 2951 018e 3F       		.uleb128 0x3f
+ 2952 018f 19       		.uleb128 0x19
+ 2953 0190 03       		.uleb128 0x3
+ 2954 0191 0E       		.uleb128 0xe
+ 2955 0192 3A       		.uleb128 0x3a
+ 2956 0193 0B       		.uleb128 0xb
+ 2957 0194 3B       		.uleb128 0x3b
+ 2958 0195 0B       		.uleb128 0xb
+ 2959 0196 49       		.uleb128 0x49
+ 2960 0197 13       		.uleb128 0x13
+ 2961 0198 11       		.uleb128 0x11
+ 2962 0199 01       		.uleb128 0x1
+ 2963 019a 12       		.uleb128 0x12
+ 2964 019b 06       		.uleb128 0x6
+ 2965 019c 40       		.uleb128 0x40
+ 2966 019d 18       		.uleb128 0x18
+ 2967 019e 9742     		.uleb128 0x2117
+ 2968 01a0 19       		.uleb128 0x19
+ 2969 01a1 01       		.uleb128 0x1
+ 2970 01a2 13       		.uleb128 0x13
+ 2971 01a3 00       		.byte	0
+ 2972 01a4 00       		.byte	0
+ 2973 01a5 1D       		.uleb128 0x1d
+ 2974 01a6 34       		.uleb128 0x34
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 63
+
+
+ 2975 01a7 00       		.byte	0
+ 2976 01a8 03       		.uleb128 0x3
+ 2977 01a9 08       		.uleb128 0x8
+ 2978 01aa 3A       		.uleb128 0x3a
+ 2979 01ab 0B       		.uleb128 0xb
+ 2980 01ac 3B       		.uleb128 0x3b
+ 2981 01ad 0B       		.uleb128 0xb
+ 2982 01ae 49       		.uleb128 0x49
+ 2983 01af 13       		.uleb128 0x13
+ 2984 01b0 1C       		.uleb128 0x1c
+ 2985 01b1 0B       		.uleb128 0xb
+ 2986 01b2 00       		.byte	0
+ 2987 01b3 00       		.byte	0
+ 2988 01b4 1E       		.uleb128 0x1e
+ 2989 01b5 2E       		.uleb128 0x2e
+ 2990 01b6 00       		.byte	0
+ 2991 01b7 3F       		.uleb128 0x3f
+ 2992 01b8 19       		.uleb128 0x19
+ 2993 01b9 03       		.uleb128 0x3
+ 2994 01ba 0E       		.uleb128 0xe
+ 2995 01bb 3A       		.uleb128 0x3a
+ 2996 01bc 0B       		.uleb128 0xb
+ 2997 01bd 3B       		.uleb128 0x3b
+ 2998 01be 0B       		.uleb128 0xb
+ 2999 01bf 27       		.uleb128 0x27
+ 3000 01c0 19       		.uleb128 0x19
+ 3001 01c1 49       		.uleb128 0x49
+ 3002 01c2 13       		.uleb128 0x13
+ 3003 01c3 11       		.uleb128 0x11
+ 3004 01c4 01       		.uleb128 0x1
+ 3005 01c5 12       		.uleb128 0x12
+ 3006 01c6 06       		.uleb128 0x6
+ 3007 01c7 40       		.uleb128 0x40
+ 3008 01c8 18       		.uleb128 0x18
+ 3009 01c9 9742     		.uleb128 0x2117
+ 3010 01cb 19       		.uleb128 0x19
+ 3011 01cc 00       		.byte	0
+ 3012 01cd 00       		.byte	0
+ 3013 01ce 1F       		.uleb128 0x1f
+ 3014 01cf 2E       		.uleb128 0x2e
+ 3015 01d0 01       		.byte	0x1
+ 3016 01d1 3F       		.uleb128 0x3f
+ 3017 01d2 19       		.uleb128 0x19
+ 3018 01d3 03       		.uleb128 0x3
+ 3019 01d4 0E       		.uleb128 0xe
+ 3020 01d5 3A       		.uleb128 0x3a
+ 3021 01d6 0B       		.uleb128 0xb
+ 3022 01d7 3B       		.uleb128 0x3b
+ 3023 01d8 0B       		.uleb128 0xb
+ 3024 01d9 27       		.uleb128 0x27
+ 3025 01da 19       		.uleb128 0x19
+ 3026 01db 49       		.uleb128 0x49
+ 3027 01dc 13       		.uleb128 0x13
+ 3028 01dd 11       		.uleb128 0x11
+ 3029 01de 01       		.uleb128 0x1
+ 3030 01df 12       		.uleb128 0x12
+ 3031 01e0 06       		.uleb128 0x6
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 64
+
+
+ 3032 01e1 40       		.uleb128 0x40
+ 3033 01e2 18       		.uleb128 0x18
+ 3034 01e3 9742     		.uleb128 0x2117
+ 3035 01e5 19       		.uleb128 0x19
+ 3036 01e6 01       		.uleb128 0x1
+ 3037 01e7 13       		.uleb128 0x13
+ 3038 01e8 00       		.byte	0
+ 3039 01e9 00       		.byte	0
+ 3040 01ea 20       		.uleb128 0x20
+ 3041 01eb 34       		.uleb128 0x34
+ 3042 01ec 00       		.byte	0
+ 3043 01ed 03       		.uleb128 0x3
+ 3044 01ee 08       		.uleb128 0x8
+ 3045 01ef 3A       		.uleb128 0x3a
+ 3046 01f0 0B       		.uleb128 0xb
+ 3047 01f1 3B       		.uleb128 0x3b
+ 3048 01f2 0B       		.uleb128 0xb
+ 3049 01f3 49       		.uleb128 0x49
+ 3050 01f4 13       		.uleb128 0x13
+ 3051 01f5 02       		.uleb128 0x2
+ 3052 01f6 17       		.uleb128 0x17
+ 3053 01f7 00       		.byte	0
+ 3054 01f8 00       		.byte	0
+ 3055 01f9 21       		.uleb128 0x21
+ 3056 01fa 0B       		.uleb128 0xb
+ 3057 01fb 01       		.byte	0x1
+ 3058 01fc 11       		.uleb128 0x11
+ 3059 01fd 01       		.uleb128 0x1
+ 3060 01fe 12       		.uleb128 0x12
+ 3061 01ff 06       		.uleb128 0x6
+ 3062 0200 01       		.uleb128 0x1
+ 3063 0201 13       		.uleb128 0x13
+ 3064 0202 00       		.byte	0
+ 3065 0203 00       		.byte	0
+ 3066 0204 22       		.uleb128 0x22
+ 3067 0205 2E       		.uleb128 0x2e
+ 3068 0206 01       		.byte	0x1
+ 3069 0207 3F       		.uleb128 0x3f
+ 3070 0208 19       		.uleb128 0x19
+ 3071 0209 03       		.uleb128 0x3
+ 3072 020a 0E       		.uleb128 0xe
+ 3073 020b 3A       		.uleb128 0x3a
+ 3074 020c 0B       		.uleb128 0xb
+ 3075 020d 3B       		.uleb128 0x3b
+ 3076 020e 05       		.uleb128 0x5
+ 3077 020f 27       		.uleb128 0x27
+ 3078 0210 19       		.uleb128 0x19
+ 3079 0211 49       		.uleb128 0x49
+ 3080 0212 13       		.uleb128 0x13
+ 3081 0213 11       		.uleb128 0x11
+ 3082 0214 01       		.uleb128 0x1
+ 3083 0215 12       		.uleb128 0x12
+ 3084 0216 06       		.uleb128 0x6
+ 3085 0217 40       		.uleb128 0x40
+ 3086 0218 18       		.uleb128 0x18
+ 3087 0219 9642     		.uleb128 0x2116
+ 3088 021b 19       		.uleb128 0x19
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 65
+
+
+ 3089 021c 01       		.uleb128 0x1
+ 3090 021d 13       		.uleb128 0x13
+ 3091 021e 00       		.byte	0
+ 3092 021f 00       		.byte	0
+ 3093 0220 23       		.uleb128 0x23
+ 3094 0221 05       		.uleb128 0x5
+ 3095 0222 00       		.byte	0
+ 3096 0223 03       		.uleb128 0x3
+ 3097 0224 0E       		.uleb128 0xe
+ 3098 0225 3A       		.uleb128 0x3a
+ 3099 0226 0B       		.uleb128 0xb
+ 3100 0227 3B       		.uleb128 0x3b
+ 3101 0228 05       		.uleb128 0x5
+ 3102 0229 49       		.uleb128 0x49
+ 3103 022a 13       		.uleb128 0x13
+ 3104 022b 02       		.uleb128 0x2
+ 3105 022c 17       		.uleb128 0x17
+ 3106 022d 00       		.byte	0
+ 3107 022e 00       		.byte	0
+ 3108 022f 24       		.uleb128 0x24
+ 3109 0230 34       		.uleb128 0x34
+ 3110 0231 00       		.byte	0
+ 3111 0232 03       		.uleb128 0x3
+ 3112 0233 0E       		.uleb128 0xe
+ 3113 0234 3A       		.uleb128 0x3a
+ 3114 0235 0B       		.uleb128 0xb
+ 3115 0236 3B       		.uleb128 0x3b
+ 3116 0237 05       		.uleb128 0x5
+ 3117 0238 49       		.uleb128 0x49
+ 3118 0239 13       		.uleb128 0x13
+ 3119 023a 1C       		.uleb128 0x1c
+ 3120 023b 0A       		.uleb128 0xa
+ 3121 023c 00       		.byte	0
+ 3122 023d 00       		.byte	0
+ 3123 023e 25       		.uleb128 0x25
+ 3124 023f 2E       		.uleb128 0x2e
+ 3125 0240 01       		.byte	0x1
+ 3126 0241 3F       		.uleb128 0x3f
+ 3127 0242 19       		.uleb128 0x19
+ 3128 0243 03       		.uleb128 0x3
+ 3129 0244 0E       		.uleb128 0xe
+ 3130 0245 3A       		.uleb128 0x3a
+ 3131 0246 0B       		.uleb128 0xb
+ 3132 0247 3B       		.uleb128 0x3b
+ 3133 0248 0B       		.uleb128 0xb
+ 3134 0249 27       		.uleb128 0x27
+ 3135 024a 19       		.uleb128 0x19
+ 3136 024b 11       		.uleb128 0x11
+ 3137 024c 01       		.uleb128 0x1
+ 3138 024d 12       		.uleb128 0x12
+ 3139 024e 06       		.uleb128 0x6
+ 3140 024f 40       		.uleb128 0x40
+ 3141 0250 18       		.uleb128 0x18
+ 3142 0251 9642     		.uleb128 0x2116
+ 3143 0253 19       		.uleb128 0x19
+ 3144 0254 01       		.uleb128 0x1
+ 3145 0255 13       		.uleb128 0x13
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 66
+
+
+ 3146 0256 00       		.byte	0
+ 3147 0257 00       		.byte	0
+ 3148 0258 26       		.uleb128 0x26
+ 3149 0259 2E       		.uleb128 0x2e
+ 3150 025a 01       		.byte	0x1
+ 3151 025b 3F       		.uleb128 0x3f
+ 3152 025c 19       		.uleb128 0x19
+ 3153 025d 03       		.uleb128 0x3
+ 3154 025e 0E       		.uleb128 0xe
+ 3155 025f 3A       		.uleb128 0x3a
+ 3156 0260 0B       		.uleb128 0xb
+ 3157 0261 3B       		.uleb128 0x3b
+ 3158 0262 05       		.uleb128 0x5
+ 3159 0263 27       		.uleb128 0x27
+ 3160 0264 19       		.uleb128 0x19
+ 3161 0265 11       		.uleb128 0x11
+ 3162 0266 01       		.uleb128 0x1
+ 3163 0267 12       		.uleb128 0x12
+ 3164 0268 06       		.uleb128 0x6
+ 3165 0269 40       		.uleb128 0x40
+ 3166 026a 18       		.uleb128 0x18
+ 3167 026b 9742     		.uleb128 0x2117
+ 3168 026d 19       		.uleb128 0x19
+ 3169 026e 01       		.uleb128 0x1
+ 3170 026f 13       		.uleb128 0x13
+ 3171 0270 00       		.byte	0
+ 3172 0271 00       		.byte	0
+ 3173 0272 27       		.uleb128 0x27
+ 3174 0273 2E       		.uleb128 0x2e
+ 3175 0274 00       		.byte	0
+ 3176 0275 3F       		.uleb128 0x3f
+ 3177 0276 19       		.uleb128 0x19
+ 3178 0277 03       		.uleb128 0x3
+ 3179 0278 0E       		.uleb128 0xe
+ 3180 0279 3A       		.uleb128 0x3a
+ 3181 027a 0B       		.uleb128 0xb
+ 3182 027b 3B       		.uleb128 0x3b
+ 3183 027c 05       		.uleb128 0x5
+ 3184 027d 27       		.uleb128 0x27
+ 3185 027e 19       		.uleb128 0x19
+ 3186 027f 49       		.uleb128 0x49
+ 3187 0280 13       		.uleb128 0x13
+ 3188 0281 11       		.uleb128 0x11
+ 3189 0282 01       		.uleb128 0x1
+ 3190 0283 12       		.uleb128 0x12
+ 3191 0284 06       		.uleb128 0x6
+ 3192 0285 40       		.uleb128 0x40
+ 3193 0286 18       		.uleb128 0x18
+ 3194 0287 9742     		.uleb128 0x2117
+ 3195 0289 19       		.uleb128 0x19
+ 3196 028a 00       		.byte	0
+ 3197 028b 00       		.byte	0
+ 3198 028c 28       		.uleb128 0x28
+ 3199 028d 34       		.uleb128 0x34
+ 3200 028e 00       		.byte	0
+ 3201 028f 03       		.uleb128 0x3
+ 3202 0290 08       		.uleb128 0x8
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 67
+
+
+ 3203 0291 3A       		.uleb128 0x3a
+ 3204 0292 0B       		.uleb128 0xb
+ 3205 0293 3B       		.uleb128 0x3b
+ 3206 0294 0B       		.uleb128 0xb
+ 3207 0295 49       		.uleb128 0x49
+ 3208 0296 13       		.uleb128 0x13
+ 3209 0297 02       		.uleb128 0x2
+ 3210 0298 18       		.uleb128 0x18
+ 3211 0299 00       		.byte	0
+ 3212 029a 00       		.byte	0
+ 3213 029b 29       		.uleb128 0x29
+ 3214 029c 34       		.uleb128 0x34
+ 3215 029d 00       		.byte	0
+ 3216 029e 03       		.uleb128 0x3
+ 3217 029f 0E       		.uleb128 0xe
+ 3218 02a0 3A       		.uleb128 0x3a
+ 3219 02a1 0B       		.uleb128 0xb
+ 3220 02a2 3B       		.uleb128 0x3b
+ 3221 02a3 05       		.uleb128 0x5
+ 3222 02a4 49       		.uleb128 0x49
+ 3223 02a5 13       		.uleb128 0x13
+ 3224 02a6 3F       		.uleb128 0x3f
+ 3225 02a7 19       		.uleb128 0x19
+ 3226 02a8 3C       		.uleb128 0x3c
+ 3227 02a9 19       		.uleb128 0x19
+ 3228 02aa 00       		.byte	0
+ 3229 02ab 00       		.byte	0
+ 3230 02ac 2A       		.uleb128 0x2a
+ 3231 02ad 35       		.uleb128 0x35
+ 3232 02ae 00       		.byte	0
+ 3233 02af 49       		.uleb128 0x49
+ 3234 02b0 13       		.uleb128 0x13
+ 3235 02b1 00       		.byte	0
+ 3236 02b2 00       		.byte	0
+ 3237 02b3 2B       		.uleb128 0x2b
+ 3238 02b4 34       		.uleb128 0x34
+ 3239 02b5 00       		.byte	0
+ 3240 02b6 03       		.uleb128 0x3
+ 3241 02b7 0E       		.uleb128 0xe
+ 3242 02b8 3A       		.uleb128 0x3a
+ 3243 02b9 0B       		.uleb128 0xb
+ 3244 02ba 3B       		.uleb128 0x3b
+ 3245 02bb 0B       		.uleb128 0xb
+ 3246 02bc 49       		.uleb128 0x49
+ 3247 02bd 13       		.uleb128 0x13
+ 3248 02be 3F       		.uleb128 0x3f
+ 3249 02bf 19       		.uleb128 0x19
+ 3250 02c0 3C       		.uleb128 0x3c
+ 3251 02c1 19       		.uleb128 0x19
+ 3252 02c2 00       		.byte	0
+ 3253 02c3 00       		.byte	0
+ 3254 02c4 2C       		.uleb128 0x2c
+ 3255 02c5 2E       		.uleb128 0x2e
+ 3256 02c6 00       		.byte	0
+ 3257 02c7 3F       		.uleb128 0x3f
+ 3258 02c8 19       		.uleb128 0x19
+ 3259 02c9 3C       		.uleb128 0x3c
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 68
+
+
+ 3260 02ca 19       		.uleb128 0x19
+ 3261 02cb 6E       		.uleb128 0x6e
+ 3262 02cc 0E       		.uleb128 0xe
+ 3263 02cd 03       		.uleb128 0x3
+ 3264 02ce 0E       		.uleb128 0xe
+ 3265 02cf 3A       		.uleb128 0x3a
+ 3266 02d0 0B       		.uleb128 0xb
+ 3267 02d1 3B       		.uleb128 0x3b
+ 3268 02d2 0B       		.uleb128 0xb
+ 3269 02d3 00       		.byte	0
+ 3270 02d4 00       		.byte	0
+ 3271 02d5 2D       		.uleb128 0x2d
+ 3272 02d6 2E       		.uleb128 0x2e
+ 3273 02d7 00       		.byte	0
+ 3274 02d8 3F       		.uleb128 0x3f
+ 3275 02d9 19       		.uleb128 0x19
+ 3276 02da 3C       		.uleb128 0x3c
+ 3277 02db 19       		.uleb128 0x19
+ 3278 02dc 6E       		.uleb128 0x6e
+ 3279 02dd 08       		.uleb128 0x8
+ 3280 02de 03       		.uleb128 0x3
+ 3281 02df 08       		.uleb128 0x8
+ 3282 02e0 3A       		.uleb128 0x3a
+ 3283 02e1 0B       		.uleb128 0xb
+ 3284 02e2 3B       		.uleb128 0x3b
+ 3285 02e3 0B       		.uleb128 0xb
+ 3286 02e4 00       		.byte	0
+ 3287 02e5 00       		.byte	0
+ 3288 02e6 00       		.byte	0
+ 3289              		.section	.debug_loc,"",%progbits
+ 3290              	.Ldebug_loc0:
+ 3291              	.LLST0:
+ 3292 0000 00000000 		.4byte	.LVL0
+ 3293 0004 10000000 		.4byte	.LVL1
+ 3294 0008 0100     		.2byte	0x1
+ 3295 000a 50       		.byte	0x50
+ 3296 000b 10000000 		.4byte	.LVL1
+ 3297 000f 13000000 		.4byte	.LVL2-1
+ 3298 0013 0200     		.2byte	0x2
+ 3299 0015 71       		.byte	0x71
+ 3300 0016 00       		.sleb128 0
+ 3301 0017 13000000 		.4byte	.LVL2-1
+ 3302 001b 24000000 		.4byte	.LFE63
+ 3303 001f 0400     		.2byte	0x4
+ 3304 0021 F3       		.byte	0xf3
+ 3305 0022 01       		.uleb128 0x1
+ 3306 0023 50       		.byte	0x50
+ 3307 0024 9F       		.byte	0x9f
+ 3308 0025 00000000 		.4byte	0
+ 3309 0029 00000000 		.4byte	0
+ 3310              	.LLST1:
+ 3311 002d 00000000 		.4byte	.LVL5
+ 3312 0031 0F000000 		.4byte	.LVL6-1
+ 3313 0035 0100     		.2byte	0x1
+ 3314 0037 50       		.byte	0x50
+ 3315 0038 0F000000 		.4byte	.LVL6-1
+ 3316 003c 36000000 		.4byte	.LFE78
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 69
+
+
+ 3317 0040 0400     		.2byte	0x4
+ 3318 0042 F3       		.byte	0xf3
+ 3319 0043 01       		.uleb128 0x1
+ 3320 0044 50       		.byte	0x50
+ 3321 0045 9F       		.byte	0x9f
+ 3322 0046 00000000 		.4byte	0
+ 3323 004a 00000000 		.4byte	0
+ 3324              	.LLST2:
+ 3325 004e 2E000000 		.4byte	.LVL10
+ 3326 0052 32000000 		.4byte	.LVL11
+ 3327 0056 0800     		.2byte	0x8
+ 3328 0058 70       		.byte	0x70
+ 3329 0059 00       		.sleb128 0
+ 3330 005a 38       		.byte	0x38
+ 3331 005b 24       		.byte	0x24
+ 3332 005c 73       		.byte	0x73
+ 3333 005d 00       		.sleb128 0
+ 3334 005e 21       		.byte	0x21
+ 3335 005f 9F       		.byte	0x9f
+ 3336 0060 32000000 		.4byte	.LVL11
+ 3337 0064 36000000 		.4byte	.LFE78
+ 3338 0068 0D00     		.2byte	0xd
+ 3339 006a 91       		.byte	0x91
+ 3340 006b 6C       		.sleb128 -20
+ 3341 006c 94       		.byte	0x94
+ 3342 006d 01       		.byte	0x1
+ 3343 006e 08       		.byte	0x8
+ 3344 006f FF       		.byte	0xff
+ 3345 0070 1A       		.byte	0x1a
+ 3346 0071 38       		.byte	0x38
+ 3347 0072 24       		.byte	0x24
+ 3348 0073 73       		.byte	0x73
+ 3349 0074 00       		.sleb128 0
+ 3350 0075 21       		.byte	0x21
+ 3351 0076 9F       		.byte	0x9f
+ 3352 0077 00000000 		.4byte	0
+ 3353 007b 00000000 		.4byte	0
+ 3354              	.LLST3:
+ 3355 007f 2A000000 		.4byte	.LVL9
+ 3356 0083 32000000 		.4byte	.LVL11
+ 3357 0087 0100     		.2byte	0x1
+ 3358 0089 50       		.byte	0x50
+ 3359 008a 32000000 		.4byte	.LVL11
+ 3360 008e 36000000 		.4byte	.LFE78
+ 3361 0092 0200     		.2byte	0x2
+ 3362 0094 91       		.byte	0x91
+ 3363 0095 6C       		.sleb128 -20
+ 3364 0096 00000000 		.4byte	0
+ 3365 009a 00000000 		.4byte	0
+ 3366              	.LLST4:
+ 3367 009e 02000000 		.4byte	.LVL12
+ 3368 00a2 06000000 		.4byte	.LVL13
+ 3369 00a6 0200     		.2byte	0x2
+ 3370 00a8 30       		.byte	0x30
+ 3371 00a9 9F       		.byte	0x9f
+ 3372 00aa 06000000 		.4byte	.LVL13
+ 3373 00ae 1C000000 		.4byte	.LVL15
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 70
+
+
+ 3374 00b2 0100     		.2byte	0x1
+ 3375 00b4 54       		.byte	0x54
+ 3376 00b5 1E000000 		.4byte	.LVL16
+ 3377 00b9 24000000 		.4byte	.LVL17
+ 3378 00bd 0100     		.2byte	0x1
+ 3379 00bf 54       		.byte	0x54
+ 3380 00c0 00000000 		.4byte	0
+ 3381 00c4 00000000 		.4byte	0
+ 3382              	.LLST5:
+ 3383 00c8 00000000 		.4byte	.LVL18
+ 3384 00cc 11000000 		.4byte	.LVL19-1
+ 3385 00d0 0100     		.2byte	0x1
+ 3386 00d2 50       		.byte	0x50
+ 3387 00d3 11000000 		.4byte	.LVL19-1
+ 3388 00d7 40000000 		.4byte	.LFE79
+ 3389 00db 0400     		.2byte	0x4
+ 3390 00dd F3       		.byte	0xf3
+ 3391 00de 01       		.uleb128 0x1
+ 3392 00df 50       		.byte	0x50
+ 3393 00e0 9F       		.byte	0x9f
+ 3394 00e1 00000000 		.4byte	0
+ 3395 00e5 00000000 		.4byte	0
+ 3396              	.LLST6:
+ 3397 00e9 3A000000 		.4byte	.LVL26
+ 3398 00ed 3C000000 		.4byte	.LVL27
+ 3399 00f1 0600     		.2byte	0x6
+ 3400 00f3 70       		.byte	0x70
+ 3401 00f4 00       		.sleb128 0
+ 3402 00f5 73       		.byte	0x73
+ 3403 00f6 00       		.sleb128 0
+ 3404 00f7 21       		.byte	0x21
+ 3405 00f8 9F       		.byte	0x9f
+ 3406 00f9 3C000000 		.4byte	.LVL27
+ 3407 00fd 40000000 		.4byte	.LFE79
+ 3408 0101 0100     		.2byte	0x1
+ 3409 0103 50       		.byte	0x50
+ 3410 0104 00000000 		.4byte	0
+ 3411 0108 00000000 		.4byte	0
+ 3412              	.LLST7:
+ 3413 010c 30000000 		.4byte	.LVL23
+ 3414 0110 36000000 		.4byte	.LVL25
+ 3415 0114 0100     		.2byte	0x1
+ 3416 0116 53       		.byte	0x53
+ 3417 0117 36000000 		.4byte	.LVL25
+ 3418 011b 40000000 		.4byte	.LFE79
+ 3419 011f 0200     		.2byte	0x2
+ 3420 0121 91       		.byte	0x91
+ 3421 0122 75       		.sleb128 -11
+ 3422 0123 00000000 		.4byte	0
+ 3423 0127 00000000 		.4byte	0
+ 3424              	.LLST8:
+ 3425 012b 34000000 		.4byte	.LVL24
+ 3426 012f 3C000000 		.4byte	.LVL27
+ 3427 0133 0100     		.2byte	0x1
+ 3428 0135 50       		.byte	0x50
+ 3429 0136 3C000000 		.4byte	.LVL27
+ 3430 013a 40000000 		.4byte	.LFE79
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 71
+
+
+ 3431 013e 0200     		.2byte	0x2
+ 3432 0140 91       		.byte	0x91
+ 3433 0141 76       		.sleb128 -10
+ 3434 0142 00000000 		.4byte	0
+ 3435 0146 00000000 		.4byte	0
+ 3436              	.LLST9:
+ 3437 014a 0C000000 		.4byte	.LVL43
+ 3438 014e 0F000000 		.4byte	.LVL44-1
+ 3439 0152 0100     		.2byte	0x1
+ 3440 0154 50       		.byte	0x50
+ 3441 0155 0F000000 		.4byte	.LVL44-1
+ 3442 0159 AA010000 		.4byte	.LVL59
+ 3443 015d 0200     		.2byte	0x2
+ 3444 015f 91       		.byte	0x91
+ 3445 0160 54       		.sleb128 -44
+ 3446 0161 AA010000 		.4byte	.LVL59
+ 3447 0165 BC010000 		.4byte	.LFE73
+ 3448 0169 0200     		.2byte	0x2
+ 3449 016b 7D       		.byte	0x7d
+ 3450 016c 54       		.sleb128 -44
+ 3451 016d 00000000 		.4byte	0
+ 3452 0171 00000000 		.4byte	0
+ 3453              	.LLST10:
+ 3454 0175 10000000 		.4byte	.LVL44
+ 3455 0179 18000000 		.4byte	.LVL45
+ 3456 017d 0100     		.2byte	0x1
+ 3457 017f 50       		.byte	0x50
+ 3458 0180 00000000 		.4byte	0
+ 3459 0184 00000000 		.4byte	0
+ 3460              	.LLST11:
+ 3461 0188 18000000 		.4byte	.LVL45
+ 3462 018c A2000000 		.4byte	.LVL48
+ 3463 0190 0100     		.2byte	0x1
+ 3464 0192 50       		.byte	0x50
+ 3465 0193 00000000 		.4byte	0
+ 3466 0197 00000000 		.4byte	0
+ 3467              	.LLST12:
+ 3468 019b 50000000 		.4byte	.LVL46
+ 3469 019f 4E010000 		.4byte	.LVL51
+ 3470 01a3 0600     		.2byte	0x6
+ 3471 01a5 54       		.byte	0x54
+ 3472 01a6 93       		.byte	0x93
+ 3473 01a7 04       		.uleb128 0x4
+ 3474 01a8 55       		.byte	0x55
+ 3475 01a9 93       		.byte	0x93
+ 3476 01aa 04       		.uleb128 0x4
+ 3477 01ab 52010000 		.4byte	.LVL52
+ 3478 01af 84010000 		.4byte	.LVL56
+ 3479 01b3 0600     		.2byte	0x6
+ 3480 01b5 54       		.byte	0x54
+ 3481 01b6 93       		.byte	0x93
+ 3482 01b7 04       		.uleb128 0x4
+ 3483 01b8 55       		.byte	0x55
+ 3484 01b9 93       		.byte	0x93
+ 3485 01ba 04       		.uleb128 0x4
+ 3486 01bb 00000000 		.4byte	0
+ 3487 01bf 00000000 		.4byte	0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 72
+
+
+ 3488              	.LLST13:
+ 3489 01c3 90000000 		.4byte	.LVL47
+ 3490 01c7 58010000 		.4byte	.LVL53
+ 3491 01cb 0600     		.2byte	0x6
+ 3492 01cd 52       		.byte	0x52
+ 3493 01ce 93       		.byte	0x93
+ 3494 01cf 04       		.uleb128 0x4
+ 3495 01d0 53       		.byte	0x53
+ 3496 01d1 93       		.byte	0x93
+ 3497 01d2 04       		.uleb128 0x4
+ 3498 01d3 5C010000 		.4byte	.LVL54
+ 3499 01d7 80010000 		.4byte	.LVL55
+ 3500 01db 0600     		.2byte	0x6
+ 3501 01dd 52       		.byte	0x52
+ 3502 01de 93       		.byte	0x93
+ 3503 01df 04       		.uleb128 0x4
+ 3504 01e0 53       		.byte	0x53
+ 3505 01e1 93       		.byte	0x93
+ 3506 01e2 04       		.uleb128 0x4
+ 3507 01e3 00000000 		.4byte	0
+ 3508 01e7 00000000 		.4byte	0
+ 3509              	.LLST14:
+ 3510 01eb A0010000 		.4byte	.LVL57
+ 3511 01ef A4010000 		.4byte	.LVL58
+ 3512 01f3 0800     		.2byte	0x8
+ 3513 01f5 73       		.byte	0x73
+ 3514 01f6 00       		.sleb128 0
+ 3515 01f7 41       		.byte	0x41
+ 3516 01f8 24       		.byte	0x24
+ 3517 01f9 70       		.byte	0x70
+ 3518 01fa 00       		.sleb128 0
+ 3519 01fb 21       		.byte	0x21
+ 3520 01fc 9F       		.byte	0x9f
+ 3521 01fd A4010000 		.4byte	.LVL58
+ 3522 0201 BC010000 		.4byte	.LFE73
+ 3523 0205 0100     		.2byte	0x1
+ 3524 0207 50       		.byte	0x50
+ 3525 0208 00000000 		.4byte	0
+ 3526 020c 00000000 		.4byte	0
+ 3527              	.LLST15:
+ 3528 0210 C4000000 		.4byte	.LVL49
+ 3529 0214 26010000 		.4byte	.LVL50
+ 3530 0218 0100     		.2byte	0x1
+ 3531 021a 51       		.byte	0x51
+ 3532 021b 00000000 		.4byte	0
+ 3533 021f 00000000 		.4byte	0
+ 3534              	.LLST16:
+ 3535 0223 06000000 		.4byte	.LVL60
+ 3536 0227 16000000 		.4byte	.LVL62
+ 3537 022b 0100     		.2byte	0x1
+ 3538 022d 50       		.byte	0x50
+ 3539 022e 00000000 		.4byte	0
+ 3540 0232 00000000 		.4byte	0
+ 3541              	.LLST17:
+ 3542 0236 0E000000 		.4byte	.LVL61
+ 3543 023a 4C000000 		.4byte	.LVL64
+ 3544 023e 0100     		.2byte	0x1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 73
+
+
+ 3545 0240 53       		.byte	0x53
+ 3546 0241 00000000 		.4byte	0
+ 3547 0245 00000000 		.4byte	0
+ 3548              	.LLST18:
+ 3549 0249 38000000 		.4byte	.LVL63
+ 3550 024d 5E000000 		.4byte	.LVL65
+ 3551 0251 0100     		.2byte	0x1
+ 3552 0253 50       		.byte	0x50
+ 3553 0254 5E000000 		.4byte	.LVL65
+ 3554 0258 60000000 		.4byte	.LVL66
+ 3555 025c 0600     		.2byte	0x6
+ 3556 025e 70       		.byte	0x70
+ 3557 025f 00       		.sleb128 0
+ 3558 0260 73       		.byte	0x73
+ 3559 0261 00       		.sleb128 0
+ 3560 0262 1C       		.byte	0x1c
+ 3561 0263 9F       		.byte	0x9f
+ 3562 0264 60000000 		.4byte	.LVL66
+ 3563 0268 63000000 		.4byte	.LVL67-1
+ 3564 026c 0100     		.2byte	0x1
+ 3565 026e 50       		.byte	0x50
+ 3566 026f 00000000 		.4byte	0
+ 3567 0273 00000000 		.4byte	0
+ 3568              	.LLST19:
+ 3569 0277 00000000 		.4byte	.LVL69
+ 3570 027b 05000000 		.4byte	.LVL71-1
+ 3571 027f 0100     		.2byte	0x1
+ 3572 0281 50       		.byte	0x50
+ 3573 0282 05000000 		.4byte	.LVL71-1
+ 3574 0286 54000000 		.4byte	.LFE75
+ 3575 028a 0400     		.2byte	0x4
+ 3576 028c F3       		.byte	0xf3
+ 3577 028d 01       		.uleb128 0x1
+ 3578 028e 50       		.byte	0x50
+ 3579 028f 9F       		.byte	0x9f
+ 3580 0290 00000000 		.4byte	0
+ 3581 0294 00000000 		.4byte	0
+ 3582              	.LLST20:
+ 3583 0298 00000000 		.4byte	.LVL76
+ 3584 029c 07000000 		.4byte	.LVL77-1
+ 3585 02a0 0100     		.2byte	0x1
+ 3586 02a2 50       		.byte	0x50
+ 3587 02a3 07000000 		.4byte	.LVL77-1
+ 3588 02a7 54000000 		.4byte	.LFE76
+ 3589 02ab 0400     		.2byte	0x4
+ 3590 02ad F3       		.byte	0xf3
+ 3591 02ae 01       		.uleb128 0x1
+ 3592 02af 50       		.byte	0x50
+ 3593 02b0 9F       		.byte	0x9f
+ 3594 02b1 00000000 		.4byte	0
+ 3595 02b5 00000000 		.4byte	0
+ 3596              	.LLST21:
+ 3597 02b9 00000000 		.4byte	.LVL76
+ 3598 02bd 07000000 		.4byte	.LVL77-1
+ 3599 02c1 0100     		.2byte	0x1
+ 3600 02c3 51       		.byte	0x51
+ 3601 02c4 07000000 		.4byte	.LVL77-1
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 74
+
+
+ 3602 02c8 40000000 		.4byte	.LVL83
+ 3603 02cc 0100     		.2byte	0x1
+ 3604 02ce 56       		.byte	0x56
+ 3605 02cf 40000000 		.4byte	.LVL83
+ 3606 02d3 54000000 		.4byte	.LFE76
+ 3607 02d7 0400     		.2byte	0x4
+ 3608 02d9 F3       		.byte	0xf3
+ 3609 02da 01       		.uleb128 0x1
+ 3610 02db 51       		.byte	0x51
+ 3611 02dc 9F       		.byte	0x9f
+ 3612 02dd 00000000 		.4byte	0
+ 3613 02e1 00000000 		.4byte	0
+ 3614              	.LLST22:
+ 3615 02e5 52000000 		.4byte	.LVL93
+ 3616 02e9 57000000 		.4byte	.LVL94-1
+ 3617 02ed 0100     		.2byte	0x1
+ 3618 02ef 50       		.byte	0x50
+ 3619 02f0 00000000 		.4byte	0
+ 3620 02f4 00000000 		.4byte	0
+ 3621              	.LLST23:
+ 3622 02f8 00000000 		.4byte	.LVL98
+ 3623 02fc 07000000 		.4byte	.LVL99-1
+ 3624 0300 0100     		.2byte	0x1
+ 3625 0302 50       		.byte	0x50
+ 3626 0303 07000000 		.4byte	.LVL99-1
+ 3627 0307 54000000 		.4byte	.LFE77
+ 3628 030b 0400     		.2byte	0x4
+ 3629 030d F3       		.byte	0xf3
+ 3630 030e 01       		.uleb128 0x1
+ 3631 030f 50       		.byte	0x50
+ 3632 0310 9F       		.byte	0x9f
+ 3633 0311 00000000 		.4byte	0
+ 3634 0315 00000000 		.4byte	0
+ 3635              	.LLST24:
+ 3636 0319 00000000 		.4byte	.LVL98
+ 3637 031d 07000000 		.4byte	.LVL99-1
+ 3638 0321 0100     		.2byte	0x1
+ 3639 0323 51       		.byte	0x51
+ 3640 0324 07000000 		.4byte	.LVL99-1
+ 3641 0328 40000000 		.4byte	.LVL105
+ 3642 032c 0100     		.2byte	0x1
+ 3643 032e 56       		.byte	0x56
+ 3644 032f 40000000 		.4byte	.LVL105
+ 3645 0333 54000000 		.4byte	.LFE77
+ 3646 0337 0400     		.2byte	0x4
+ 3647 0339 F3       		.byte	0xf3
+ 3648 033a 01       		.uleb128 0x1
+ 3649 033b 51       		.byte	0x51
+ 3650 033c 9F       		.byte	0x9f
+ 3651 033d 00000000 		.4byte	0
+ 3652 0341 00000000 		.4byte	0
+ 3653              		.section	.debug_aranges,"",%progbits
+ 3654 0000 D4000000 		.4byte	0xd4
+ 3655 0004 0200     		.2byte	0x2
+ 3656 0006 00000000 		.4byte	.Ldebug_info0
+ 3657 000a 04       		.byte	0x4
+ 3658 000b 00       		.byte	0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 75
+
+
+ 3659 000c 0000     		.2byte	0
+ 3660 000e 0000     		.2byte	0
+ 3661 0010 00000000 		.4byte	.LFB63
+ 3662 0014 24000000 		.4byte	.LFE63-.LFB63
+ 3663 0018 00000000 		.4byte	.LFB69
+ 3664 001c 0A000000 		.4byte	.LFE69-.LFB69
+ 3665 0020 00000000 		.4byte	.LFB78
+ 3666 0024 36000000 		.4byte	.LFE78-.LFB78
+ 3667 0028 00000000 		.4byte	.LFB70
+ 3668 002c 28000000 		.4byte	.LFE70-.LFB70
+ 3669 0030 00000000 		.4byte	.LFB79
+ 3670 0034 40000000 		.4byte	.LFE79-.LFB79
+ 3671 0038 00000000 		.4byte	.LFB66
+ 3672 003c 44000000 		.4byte	.LFE66-.LFB66
+ 3673 0040 00000000 		.4byte	.LFB65
+ 3674 0044 1E000000 		.4byte	.LFE65-.LFB65
+ 3675 0048 00000000 		.4byte	.LFB67
+ 3676 004c 0C000000 		.4byte	.LFE67-.LFB67
+ 3677 0050 00000000 		.4byte	.LFB68
+ 3678 0054 0C000000 		.4byte	.LFE68-.LFB68
+ 3679 0058 00000000 		.4byte	.LFB71
+ 3680 005c 20000000 		.4byte	.LFE71-.LFB71
+ 3681 0060 00000000 		.4byte	.LFB72
+ 3682 0064 20000000 		.4byte	.LFE72-.LFB72
+ 3683 0068 00000000 		.4byte	.LFB73
+ 3684 006c BC010000 		.4byte	.LFE73-.LFB73
+ 3685 0070 00000000 		.4byte	.LFB74
+ 3686 0074 7C000000 		.4byte	.LFE74-.LFB74
+ 3687 0078 00000000 		.4byte	.LFB75
+ 3688 007c 54000000 		.4byte	.LFE75-.LFB75
+ 3689 0080 00000000 		.4byte	.LFB76
+ 3690 0084 54000000 		.4byte	.LFE76-.LFB76
+ 3691 0088 00000000 		.4byte	.LFB64
+ 3692 008c A8000000 		.4byte	.LFE64-.LFB64
+ 3693 0090 00000000 		.4byte	.LFB77
+ 3694 0094 54000000 		.4byte	.LFE77-.LFB77
+ 3695 0098 00000000 		.4byte	.LFB80
+ 3696 009c 40000000 		.4byte	.LFE80-.LFB80
+ 3697 00a0 00000000 		.4byte	.LFB81
+ 3698 00a4 0C000000 		.4byte	.LFE81-.LFB81
+ 3699 00a8 00000000 		.4byte	.LFB82
+ 3700 00ac 0C000000 		.4byte	.LFE82-.LFB82
+ 3701 00b0 00000000 		.4byte	.LFB83
+ 3702 00b4 0C000000 		.4byte	.LFE83-.LFB83
+ 3703 00b8 00000000 		.4byte	.LFB84
+ 3704 00bc 0C000000 		.4byte	.LFE84-.LFB84
+ 3705 00c0 00000000 		.4byte	.LFB85
+ 3706 00c4 0C000000 		.4byte	.LFE85-.LFB85
+ 3707 00c8 00000000 		.4byte	.LFB86
+ 3708 00cc 0C000000 		.4byte	.LFE86-.LFB86
+ 3709 00d0 00000000 		.4byte	0
+ 3710 00d4 00000000 		.4byte	0
+ 3711              		.section	.debug_ranges,"",%progbits
+ 3712              	.Ldebug_ranges0:
+ 3713 0000 00000000 		.4byte	.LFB63
+ 3714 0004 24000000 		.4byte	.LFE63
+ 3715 0008 00000000 		.4byte	.LFB69
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 76
+
+
+ 3716 000c 0A000000 		.4byte	.LFE69
+ 3717 0010 00000000 		.4byte	.LFB78
+ 3718 0014 36000000 		.4byte	.LFE78
+ 3719 0018 00000000 		.4byte	.LFB70
+ 3720 001c 28000000 		.4byte	.LFE70
+ 3721 0020 00000000 		.4byte	.LFB79
+ 3722 0024 40000000 		.4byte	.LFE79
+ 3723 0028 00000000 		.4byte	.LFB66
+ 3724 002c 44000000 		.4byte	.LFE66
+ 3725 0030 00000000 		.4byte	.LFB65
+ 3726 0034 1E000000 		.4byte	.LFE65
+ 3727 0038 00000000 		.4byte	.LFB67
+ 3728 003c 0C000000 		.4byte	.LFE67
+ 3729 0040 00000000 		.4byte	.LFB68
+ 3730 0044 0C000000 		.4byte	.LFE68
+ 3731 0048 00000000 		.4byte	.LFB71
+ 3732 004c 20000000 		.4byte	.LFE71
+ 3733 0050 00000000 		.4byte	.LFB72
+ 3734 0054 20000000 		.4byte	.LFE72
+ 3735 0058 00000000 		.4byte	.LFB73
+ 3736 005c BC010000 		.4byte	.LFE73
+ 3737 0060 00000000 		.4byte	.LFB74
+ 3738 0064 7C000000 		.4byte	.LFE74
+ 3739 0068 00000000 		.4byte	.LFB75
+ 3740 006c 54000000 		.4byte	.LFE75
+ 3741 0070 00000000 		.4byte	.LFB76
+ 3742 0074 54000000 		.4byte	.LFE76
+ 3743 0078 00000000 		.4byte	.LFB64
+ 3744 007c A8000000 		.4byte	.LFE64
+ 3745 0080 00000000 		.4byte	.LFB77
+ 3746 0084 54000000 		.4byte	.LFE77
+ 3747 0088 00000000 		.4byte	.LFB80
+ 3748 008c 40000000 		.4byte	.LFE80
+ 3749 0090 00000000 		.4byte	.LFB81
+ 3750 0094 0C000000 		.4byte	.LFE81
+ 3751 0098 00000000 		.4byte	.LFB82
+ 3752 009c 0C000000 		.4byte	.LFE82
+ 3753 00a0 00000000 		.4byte	.LFB83
+ 3754 00a4 0C000000 		.4byte	.LFE83
+ 3755 00a8 00000000 		.4byte	.LFB84
+ 3756 00ac 0C000000 		.4byte	.LFE84
+ 3757 00b0 00000000 		.4byte	.LFB85
+ 3758 00b4 0C000000 		.4byte	.LFE85
+ 3759 00b8 00000000 		.4byte	.LFB86
+ 3760 00bc 0C000000 		.4byte	.LFE86
+ 3761 00c0 00000000 		.4byte	0
+ 3762 00c4 00000000 		.4byte	0
+ 3763              		.section	.debug_line,"",%progbits
+ 3764              	.Ldebug_line0:
+ 3765 0000 28040000 		.section	.debug_str,"MS",%progbits,1
+ 3765      02000D02 
+ 3765      00000201 
+ 3765      FB0E0D00 
+ 3765      01010101 
+ 3766              	.LASF80:
+ 3767 0000 696E6974 		.ascii	"initial_raw_pressure\000"
+ 3767      69616C5F 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 77
+
+
+ 3767      7261775F 
+ 3767      70726573 
+ 3767      73757265 
+ 3768              	.LASF0:
+ 3769 0015 646F7562 		.ascii	"double\000"
+ 3769      6C6500
+ 3770              	.LASF26:
+ 3771 001c 72617754 		.ascii	"rawTemp\000"
+ 3771      656D7000 
+ 3772              	.LASF82:
+ 3773 0024 696E6974 		.ascii	"initial_real_pressure\000"
+ 3773      69616C5F 
+ 3773      7265616C 
+ 3773      5F707265 
+ 3773      73737572 
+ 3774              	.LASF70:
+ 3775 003a 6261726F 		.ascii	"baro_getAbsAlt\000"
+ 3775      5F676574 
+ 3775      41627341 
+ 3775      6C7400
+ 3776              	.LASF81:
+ 3777 0049 696E6974 		.ascii	"initial_real_temprature\000"
+ 3777      69616C5F 
+ 3777      7265616C 
+ 3777      5F74656D 
+ 3777      70726174 
+ 3778              	.LASF39:
+ 3779 0061 6261726F 		.ascii	"baro_reset\000"
+ 3779      5F726573 
+ 3779      657400
+ 3780              	.LASF43:
+ 3781 006c 6261726F 		.ascii	"baro_readPROM\000"
+ 3781      5F726561 
+ 3781      6450524F 
+ 3781      4D00
+ 3782              	.LASF56:
+ 3783 007a 6261726F 		.ascii	"baro_getAbsoluteAltitude\000"
+ 3783      5F676574 
+ 3783      4162736F 
+ 3783      6C757465 
+ 3783      416C7469 
+ 3784              	.LASF40:
+ 3785 0093 57726974 		.ascii	"Write_Buf\000"
+ 3785      655F4275 
+ 3785      6600
+ 3786              	.LASF23:
+ 3787 009d 4D533536 		.ascii	"MS5611_LOW_POWER\000"
+ 3787      31315F4C 
+ 3787      4F575F50 
+ 3787      4F574552 
+ 3787      00
+ 3788              	.LASF9:
+ 3789 00ae 5F5F7569 		.ascii	"__uint32_t\000"
+ 3789      6E743332 
+ 3789      5F7400
+ 3790              	.LASF93:
+ 3791 00b9 6261726F 		.ascii	"barometer.c\000"
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 78
+
+
+ 3791      6D657465 
+ 3791      722E6300 
+ 3792              	.LASF42:
+ 3793 00c5 52656164 		.ascii	"Read_Buf\000"
+ 3793      5F427566 
+ 3793      00
+ 3794              	.LASF5:
+ 3795 00ce 5F5F7569 		.ascii	"__uint16_t\000"
+ 3795      6E743136 
+ 3795      5F7400
+ 3796              	.LASF68:
+ 3797 00d9 6261726F 		.ascii	"baro_getTemp\000"
+ 3797      5F676574 
+ 3797      54656D70 
+ 3797      00
+ 3798              	.LASF21:
+ 3799 00e6 4D533536 		.ascii	"MS5611_HIGH_RES\000"
+ 3799      31315F48 
+ 3799      4947485F 
+ 3799      52455300 
+ 3800              	.LASF3:
+ 3801 00f6 73686F72 		.ascii	"short int\000"
+ 3801      7420696E 
+ 3801      7400
+ 3802              	.LASF91:
+ 3803 0100 73657269 		.ascii	"serial_println\000"
+ 3803      616C5F70 
+ 3803      72696E74 
+ 3803      6C6E00
+ 3804              	.LASF19:
+ 3805 010f 696E7436 		.ascii	"int64_t\000"
+ 3805      345F7400 
+ 3806              	.LASF41:
+ 3807 0117 76616C75 		.ascii	"value\000"
+ 3807      6500
+ 3808              	.LASF31:
+ 3809 011d 72656C41 		.ascii	"relAlt\000"
+ 3809      6C7400
+ 3810              	.LASF66:
+ 3811 0124 6261726F 		.ascii	"baro_getRawTemp\000"
+ 3811      5F676574 
+ 3811      52617754 
+ 3811      656D7000 
+ 3812              	.LASF27:
+ 3813 0134 72617750 		.ascii	"rawPress\000"
+ 3813      72657373 
+ 3813      00
+ 3814              	.LASF15:
+ 3815 013d 75696E74 		.ascii	"uint8_t\000"
+ 3815      385F7400 
+ 3816              	.LASF63:
+ 3817 0145 616C7469 		.ascii	"altitude\000"
+ 3817      74756465 
+ 3817      00
+ 3818              	.LASF29:
+ 3819 014e 70726573 		.ascii	"pressure\000"
+ 3819      73757265 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 79
+
+
+ 3819      00
+ 3820              	.LASF67:
+ 3821 0157 6261726F 		.ascii	"baro_getRawPress\000"
+ 3821      5F676574 
+ 3821      52617750 
+ 3821      72657373 
+ 3821      00
+ 3822              	.LASF25:
+ 3823 0168 6D733536 		.ascii	"ms5611_osr_t\000"
+ 3823      31315F6F 
+ 3823      73725F74 
+ 3823      00
+ 3824              	.LASF55:
+ 3825 0175 6261726F 		.ascii	"baro_readTemperature\000"
+ 3825      5F726561 
+ 3825      6454656D 
+ 3825      70657261 
+ 3825      74757265 
+ 3826              	.LASF59:
+ 3827 018a 696E6974 		.ascii	"initialPressure\000"
+ 3827      69616C50 
+ 3827      72657373 
+ 3827      75726500 
+ 3828              	.LASF38:
+ 3829 019a 6261726F 		.ascii	"baro_sendCommand\000"
+ 3829      5F73656E 
+ 3829      64436F6D 
+ 3829      6D616E64 
+ 3829      00
+ 3830              	.LASF34:
+ 3831 01ab 666C6F61 		.ascii	"float\000"
+ 3831      7400
+ 3832              	.LASF50:
+ 3833 01b1 6261726F 		.ascii	"baro_readRawTemperature\000"
+ 3833      5F726561 
+ 3833      64526177 
+ 3833      54656D70 
+ 3833      65726174 
+ 3834              	.LASF54:
+ 3835 01c9 54454D50 		.ascii	"TEMP\000"
+ 3835      00
+ 3836              	.LASF20:
+ 3837 01ce 4D533536 		.ascii	"MS5611_ULTRA_HIGH_RES\000"
+ 3837      31315F55 
+ 3837      4C545241 
+ 3837      5F484947 
+ 3837      485F5245 
+ 3838              	.LASF12:
+ 3839 01e4 6C6F6E67 		.ascii	"long long int\000"
+ 3839      206C6F6E 
+ 3839      6720696E 
+ 3839      7400
+ 3840              	.LASF13:
+ 3841 01f2 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 3841      206C6F6E 
+ 3841      6720756E 
+ 3841      7369676E 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 80
+
+
+ 3841      65642069 
+ 3842              	.LASF53:
+ 3843 0209 53454E53 		.ascii	"SENS\000"
+ 3843      00
+ 3844              	.LASF89:
+ 3845 020e 57697265 		.ascii	"Wire_begin\000"
+ 3845      5F626567 
+ 3845      696E00
+ 3846              	.LASF8:
+ 3847 0219 6C6F6E67 		.ascii	"long int\000"
+ 3847      20696E74 
+ 3847      00
+ 3848              	.LASF11:
+ 3849 0222 5F5F696E 		.ascii	"__int64_t\000"
+ 3849      7436345F 
+ 3849      7400
+ 3850              	.LASF24:
+ 3851 022c 4D533536 		.ascii	"MS5611_ULTRA_LOW_POWER\000"
+ 3851      31315F55 
+ 3851      4C545241 
+ 3851      5F4C4F57 
+ 3851      5F504F57 
+ 3852              	.LASF44:
+ 3853 0243 6F666673 		.ascii	"offset\000"
+ 3853      657400
+ 3854              	.LASF4:
+ 3855 024a 5F5F7569 		.ascii	"__uint8_t\000"
+ 3855      6E74385F 
+ 3855      7400
+ 3856              	.LASF51:
+ 3857 0254 6261726F 		.ascii	"baro_readRawPressure\000"
+ 3857      5F726561 
+ 3857      64526177 
+ 3857      50726573 
+ 3857      73757265 
+ 3858              	.LASF58:
+ 3859 0269 6261726F 		.ascii	"baro_getRelativeAltitude\000"
+ 3859      5F676574 
+ 3859      52656C61 
+ 3859      74697665 
+ 3859      416C7469 
+ 3860              	.LASF76:
+ 3861 0282 5F434F4D 		.ascii	"_COMPENSATION\000"
+ 3861      50454E53 
+ 3861      4154494F 
+ 3861      4E00
+ 3862              	.LASF57:
+ 3863 0290 7365614C 		.ascii	"seaLevelPressure\000"
+ 3863      6576656C 
+ 3863      50726573 
+ 3863      73757265 
+ 3863      00
+ 3864              	.LASF64:
+ 3865 02a1 6261726F 		.ascii	"baro_update\000"
+ 3865      5F757064 
+ 3865      61746500 
+ 3866              	.LASF36:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 81
+
+
+ 3867 02ad 6C6F6E67 		.ascii	"long double\000"
+ 3867      20646F75 
+ 3867      626C6500 
+ 3868              	.LASF88:
+ 3869 02b9 4932435F 		.ascii	"I2C_MasterReadBuf\000"
+ 3869      4D617374 
+ 3869      65725265 
+ 3869      61644275 
+ 3869      6600
+ 3870              	.LASF2:
+ 3871 02cb 756E7369 		.ascii	"unsigned char\000"
+ 3871      676E6564 
+ 3871      20636861 
+ 3871      7200
+ 3872              	.LASF84:
+ 3873 02d9 696E6974 		.ascii	"initial_relative_altitude\000"
+ 3873      69616C5F 
+ 3873      72656C61 
+ 3873      74697665 
+ 3873      5F616C74 
+ 3874              	.LASF1:
+ 3875 02f3 7369676E 		.ascii	"signed char\000"
+ 3875      65642063 
+ 3875      68617200 
+ 3876              	.LASF86:
+ 3877 02ff 4932435F 		.ascii	"I2C_MasterWriteBuf\000"
+ 3877      4D617374 
+ 3877      65725772 
+ 3877      69746542 
+ 3877      756600
+ 3878              	.LASF18:
+ 3879 0312 75696E74 		.ascii	"uint32_t\000"
+ 3879      33325F74 
+ 3879      00
+ 3880              	.LASF14:
+ 3881 031b 756E7369 		.ascii	"unsigned int\000"
+ 3881      676E6564 
+ 3881      20696E74 
+ 3881      00
+ 3882              	.LASF16:
+ 3883 0328 75696E74 		.ascii	"uint16_t\000"
+ 3883      31365F74 
+ 3883      00
+ 3884              	.LASF69:
+ 3885 0331 6261726F 		.ascii	"baro_getPress\000"
+ 3885      5F676574 
+ 3885      50726573 
+ 3885      7300
+ 3886              	.LASF78:
+ 3887 033f 72656665 		.ascii	"reference_pressure\000"
+ 3887      72656E63 
+ 3887      655F7072 
+ 3887      65737375 
+ 3887      726500
+ 3888              	.LASF30:
+ 3889 0352 61627341 		.ascii	"absAlt\000"
+ 3889      6C7400
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 82
+
+
+ 3890              	.LASF6:
+ 3891 0359 73686F72 		.ascii	"short unsigned int\000"
+ 3891      7420756E 
+ 3891      7369676E 
+ 3891      65642069 
+ 3891      6E7400
+ 3892              	.LASF45:
+ 3893 036c 6261726F 		.ascii	"baro_readRegister16\000"
+ 3893      5F726561 
+ 3893      64526567 
+ 3893      69737465 
+ 3893      72313600 
+ 3894              	.LASF94:
+ 3895 0380 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\PSoC Creator\\SensorF"
+ 3895      73657273 
+ 3895      5C413835 
+ 3895      3539305C 
+ 3895      446F6375 
+ 3896 03ae 7573696F 		.ascii	"usion\\SensorFusion.cydsn\000"
+ 3896      6E5C5365 
+ 3896      6E736F72 
+ 3896      46757369 
+ 3896      6F6E2E63 
+ 3897              	.LASF35:
+ 3898 03c7 63686172 		.ascii	"char\000"
+ 3898      00
+ 3899              	.LASF65:
+ 3900 03cc 6261726F 		.ascii	"baro_getOversampling\000"
+ 3900      5F676574 
+ 3900      4F766572 
+ 3900      73616D70 
+ 3900      6C696E67 
+ 3901              	.LASF62:
+ 3902 03e1 6261726F 		.ascii	"baro_getSeaLevel\000"
+ 3902      5F676574 
+ 3902      5365614C 
+ 3902      6576656C 
+ 3902      00
+ 3903              	.LASF17:
+ 3904 03f2 696E7433 		.ascii	"int32_t\000"
+ 3904      325F7400 
+ 3905              	.LASF33:
+ 3906 03fa 75696E74 		.ascii	"uint8\000"
+ 3906      3800
+ 3907              	.LASF83:
+ 3908 0400 696E6974 		.ascii	"initial_absolute_altitude\000"
+ 3908      69616C5F 
+ 3908      6162736F 
+ 3908      6C757465 
+ 3908      5F616C74 
+ 3909              	.LASF87:
+ 3910 041a 4932435F 		.ascii	"I2C_MasterStatus\000"
+ 3910      4D617374 
+ 3910      65725374 
+ 3910      61747573 
+ 3910      00
+ 3911              	.LASF85:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 83
+
+
+ 3912 042b 6261726F 		.ascii	"baro\000"
+ 3912      00
+ 3913              	.LASF10:
+ 3914 0430 6C6F6E67 		.ascii	"long unsigned int\000"
+ 3914      20756E73 
+ 3914      69676E65 
+ 3914      6420696E 
+ 3914      7400
+ 3915              	.LASF32:
+ 3916 0442 6261726F 		.ascii	"barometricData_t\000"
+ 3916      6D657472 
+ 3916      69634461 
+ 3916      74615F74 
+ 3916      00
+ 3917              	.LASF60:
+ 3918 0453 6261726F 		.ascii	"baro_initialize\000"
+ 3918      5F696E69 
+ 3918      7469616C 
+ 3918      697A6500 
+ 3919              	.LASF61:
+ 3920 0463 63686563 		.ascii	"check_pressure\000"
+ 3920      6B5F7072 
+ 3920      65737375 
+ 3920      726500
+ 3921              	.LASF72:
+ 3922 0472 756F7372 		.ascii	"uosr\000"
+ 3922      00
+ 3923              	.LASF28:
+ 3924 0477 74656D70 		.ascii	"temperature\000"
+ 3924      65726174 
+ 3924      75726500 
+ 3925              	.LASF7:
+ 3926 0483 5F5F696E 		.ascii	"__int32_t\000"
+ 3926      7433325F 
+ 3926      7400
+ 3927              	.LASF73:
+ 3928 048d 54454D50 		.ascii	"TEMP2\000"
+ 3928      3200
+ 3929              	.LASF37:
+ 3930 0493 73697A65 		.ascii	"sizetype\000"
+ 3930      74797065 
+ 3930      00
+ 3931              	.LASF52:
+ 3932 049c 6261726F 		.ascii	"baro_readPressure\000"
+ 3932      5F726561 
+ 3932      64507265 
+ 3932      73737572 
+ 3932      6500
+ 3933              	.LASF46:
+ 3934 04ae 6261726F 		.ascii	"baro_readRegister24\000"
+ 3934      5F726561 
+ 3934      64526567 
+ 3934      69737465 
+ 3934      72323400 
+ 3935              	.LASF79:
+ 3936 04c2 696E6974 		.ascii	"initial_raw_temperature\000"
+ 3936      69616C5F 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 84
+
+
+ 3936      7261775F 
+ 3936      74656D70 
+ 3936      65726174 
+ 3937              	.LASF49:
+ 3938 04da 6261726F 		.ascii	"baro_setCompensation\000"
+ 3938      5F736574 
+ 3938      436F6D70 
+ 3938      656E7361 
+ 3938      74696F6E 
+ 3939              	.LASF75:
+ 3940 04ef 53454E53 		.ascii	"SENS2\000"
+ 3940      3200
+ 3941              	.LASF48:
+ 3942 04f5 6261726F 		.ascii	"baro_begin\000"
+ 3942      5F626567 
+ 3942      696E00
+ 3943              	.LASF74:
+ 3944 0500 4F464632 		.ascii	"OFF2\000"
+ 3944      00
+ 3945              	.LASF77:
+ 3946 0505 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 3946      52784275 
+ 3946      66666572 
+ 3946      00
+ 3947              	.LASF92:
+ 3948 0512 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 3948      43313120 
+ 3948      352E342E 
+ 3948      31203230 
+ 3948      31363036 
+ 3949 0545 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 3949      20726576 
+ 3949      6973696F 
+ 3949      6E203233 
+ 3949      37373135 
+ 3950 0578 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 3950      66756E63 
+ 3950      74696F6E 
+ 3950      2D736563 
+ 3950      74696F6E 
+ 3951              	.LASF90:
+ 3952 05a0 43794465 		.ascii	"CyDelay\000"
+ 3952      6C617900 
+ 3953              	.LASF47:
+ 3954 05a8 6261726F 		.ascii	"baro_setOversampling\000"
+ 3954      5F736574 
+ 3954      4F766572 
+ 3954      73616D70 
+ 3954      6C696E67 
+ 3955              	.LASF22:
+ 3956 05bd 4D533536 		.ascii	"MS5611_STANDARD\000"
+ 3956      31315F53 
+ 3956      54414E44 
+ 3956      41524400 
+ 3957              	.LASF71:
+ 3958 05cd 6261726F 		.ascii	"baro_getRelAlt\000"
+ 3958      5F676574 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccr0hRls.s 			page 85
+
+
+ 3958      52656C41 
+ 3958      6C7400
+ 3959              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
