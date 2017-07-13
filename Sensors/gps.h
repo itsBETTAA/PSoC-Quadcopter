@@ -21,7 +21,7 @@ All text above must be included in any redistribution
 #ifndef GPS_H
 #define GPS_H
 
-#define GPS_DEBUG 1
+#define GPS_DEBUG 0
 #include "stdint.h"
 // different commands to set the update rate from once a second (1 Hz) to 10 times a second (10Hz)
 // Note that these only control the rate at which the position is echoed, to actually speed up the
@@ -135,5 +135,6 @@ uint8_t GPS_LOCUS_ReadStatus(void);
 
 uint8_t GPS_start();
 uint8_t GPS_update();
+void setGPSEcho(uint8_t val);
 
 #endif

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CyXmlSerializer>
+<!--This file is machine generated and read. It is not intended to be edited by hand.-->
+<!--Due to this, there is no schema for this file.-->
+<CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWrkspcCustomData" version="4">
+<CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
+<userData>
+<dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
+<TreeKeys>
+<v>Source</v>
+<v>Components</v>
+<v>Output</v>
+</TreeKeys>
+<TreeStates>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>Sensor Test</v>
+<v>Sensor Test\All_sensor_test</v>
+<v>Sensor Test\All_sensor_testv2</v>
+<v>Sensor Test\All_sensor_testv2\TopDesign</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Pins</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Analog</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Clocks</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Interrupts</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\DMA</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\System</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Directives</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Flash Security</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\EEPROM</v>
+<v>Sensor Test\All_sensor_testv2\Header Files</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\accel_mag.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\barometer.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\cyapicallbacks.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\debSerial.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\gps.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\gyroscope.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\millis.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\SensorVal.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\twi.h</v>
+<v>Sensor Test\All_sensor_testv2\Source Files</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\accel_mag.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\barometer.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\debSerial.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\gps.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\gyroscope.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\main.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\millis.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\SensorVal.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\twi.c</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5</v>
+<v>Sensor Test\Base Station</v>
+<v>Sensor Test\Base Station_v2</v>
+<v>Sensor Test\LED STRIP TEST</v>
+<v>Sensor Test\UART TEST</v>
+<v>Sensor Test\UART TEST\TopDesign</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\Pins</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\Analog</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\Clocks</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\Interrupts</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\DMA</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\System</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\Directives</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\Flash Security</v>
+<v>Sensor Test\UART TEST\UART TEST.cydwr\EEPROM</v>
+<v>Sensor Test\UART TEST\Header Files</v>
+<v>Sensor Test\UART TEST\Header Files\cyapicallbacks.h</v>
+<v>Sensor Test\UART TEST\Source Files</v>
+<v>Sensor Test\UART TEST\Source Files\main.c</v>
+<v>Sensor Test\UART TEST\Generated_Source</v>
+<v>Sensor Test\UART TEST\Generated_Source\PSoC5</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Sensor Test</v>
+<v>Sensor Test\All_sensor_test</v>
+<v>Sensor Test\All_sensor_testv2</v>
+<v>Sensor Test\All_sensor_testv2\TopDesign</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Pins</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Analog</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Clocks</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Interrupts</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\DMA</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\System</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Directives</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\Flash Security</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.cydwr\EEPROM</v>
+<v>Sensor Test\All_sensor_testv2\Header Files</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\accel_mag.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\barometer.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\cyapicallbacks.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\debSerial.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\gps.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\gyroscope.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\millis.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\SensorVal.h</v>
+<v>Sensor Test\All_sensor_testv2\Header Files\twi.h</v>
+<v>Sensor Test\All_sensor_testv2\Source Files</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\accel_mag.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\barometer.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\debSerial.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\gps.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\gyroscope.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\main.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\millis.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\SensorVal.c</v>
+<v>Sensor Test\All_sensor_testv2\Source Files\twi.c</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\accel_mag_rst</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\cy_boot</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\debugSerial</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\debugSerial_IntClock</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\deltaTimer</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\deltTime</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\gpsSerial</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\gpsSerial_IntClock</v>
+<v>Sensor Test\All_sensor_testv2\Generated_Source\PSoC5\I2C</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>Sensor Test</v>
+<v>Sensor Test\All_sensor_test</v>
+<v>Sensor Test\All_sensor_testv2</v>
+<v>Sensor Test\All_sensor_testv2\TopDesign</v>
+<v>Sensor Test\All_sensor_testv2\TopDesign\TopDesign.cysch</v>
+<v>Sensor Test\Base Station</v>
+<v>Sensor Test\Base Station_v2</v>
+<v>Sensor Test\LED STRIP TEST</v>
+<v>Sensor Test\UART TEST</v>
+<v>Sensor Test\UART TEST\TopDesign</v>
+<v>Sensor Test\UART TEST\TopDesign\TopDesign.cysch</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Sensor Test</v>
+<v>Sensor Test\All_sensor_test</v>
+<v>Sensor Test\All_sensor_testv2</v>
+<v>Sensor Test\All_sensor_testv2\TopDesign</v>
+<v>Sensor Test\All_sensor_testv2\TopDesign\TopDesign.cysch</v>
+<v>Sensor Test\Base Station</v>
+<v>Sensor Test\Base Station_v2</v>
+<v>Sensor Test\LED STRIP TEST</v>
+<v>Sensor Test\UART TEST</v>
+<v>Sensor Test\UART TEST\TopDesign</v>
+<v>Sensor Test\UART TEST\TopDesign\TopDesign.cysch</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>Sensor Test</v>
+<v>Sensor Test\All_sensor_test</v>
+<v>Sensor Test\All_sensor_testv2</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\accel_mag.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\accel_mag_rst.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\barometer.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debSerial.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_BOOT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_INT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_IntClock.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\deltaTimer.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\deltaTimer_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\deltTime.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gps.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_BOOT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_INT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_IntClock.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gyroscope.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_BOOT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_INT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_MASTER.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_SLAVE.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\left_arm_led.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\millis.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\right_arm_led.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\SCL.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\SDA.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\SensorVal.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\twi.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\xbeeSerial.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\xbeeSerial_BOOT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\xbeeSerial_INT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\xbeeSerial_IntClock.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\xbeeSerial_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\All_sensor_testv2.elf</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\All_sensor_testv2.hex</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\All_sensor_testv2.map</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.gpdsc</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2.rpt</v>
+<v>Sensor Test\All_sensor_testv2\All_sensor_testv2_timing.html</v>
+<v>Sensor Test\Base Station</v>
+<v>Sensor Test\Base Station_v2</v>
+<v>Sensor Test\LED STRIP TEST</v>
+<v>Sensor Test\UART TEST</v>
+<v>Sensor Test\UART TEST\UART TEST.gpdsc</v>
+<v>Sensor Test\UART TEST\UART TEST.rpt</v>
+<v>Sensor Test\UART TEST\UART TEST_timing.html</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Sensor Test</v>
+<v>Sensor Test\All_sensor_test</v>
+<v>Sensor Test\All_sensor_testv2</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\accel_mag.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\accel_mag_rst.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\barometer.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debSerial.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_BOOT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_INT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_IntClock.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\debugSerial_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\deltaTimer.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\deltaTimer_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\deltTime.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gps.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_BOOT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_INT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_IntClock.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gpsSerial_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\gyroscope.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_BOOT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_INT.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_MASTER.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_PM.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_SLAVE.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\left_arm_led.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>Sensor Test\All_sensor_testv2\CortexM3\ARM_GCC_541\Debug\Listing Files\millis.lst</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStates>
+<TreeKeysV2>
+<v>Datasheet</v>
+</TreeKeysV2>
+<TreeStatesV2>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>Sensor Test</v>
+<v>Sensor Test\All_sensor_testv2</v>
+<v>Sensor Test\All_sensor_testv2\PSoC 5LP Architecture TRM</v>
+<v>Sensor Test\All_sensor_testv2\CY8C58LP Family Datasheet</v>
+<v>Sensor Test\All_sensor_testv2\System Reference Guides</v>
+<v>Sensor Test\All_sensor_testv2\System Reference Guides\cy_boot_v5_50</v>
+<v>Sensor Test\All_sensor_testv2\cy_clock_v2_20.pdf</v>
+<v>Sensor Test\All_sensor_testv2\cy_isr_v1_70.pdf</v>
+<v>Sensor Test\All_sensor_testv2\cy_pins_v2_20</v>
+<v>Sensor Test\All_sensor_testv2\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>Sensor Test\All_sensor_testv2\Gnd_v1_0.pdf</v>
+<v>Sensor Test\All_sensor_testv2\I2C_v3_50.pdf</v>
+<v>Sensor Test\All_sensor_testv2\LED_v1_0</v>
+<v>Sensor Test\All_sensor_testv2\LED_v1_0\LED_v1_0.pdf</v>
+<v>Sensor Test\All_sensor_testv2\Resistor_v1_0</v>
+<v>Sensor Test\All_sensor_testv2\Resistor_v1_0\Resistor_v1_0.pdf</v>
+<v>Sensor Test\All_sensor_testv2\Timer_v2_70.pdf</v>
+<v>Sensor Test\All_sensor_testv2\UART_v2_50</v>
+<v>Sensor Test\All_sensor_testv2\UART_v2_50\UART_v2_50.pdf</v>
+<v>Sensor Test\All_sensor_testv2\ZeroTerminal.pdf</v>
+<v>Sensor Test\UART TEST</v>
+<v>Sensor Test\UART TEST\PSoC 5LP Architecture TRM</v>
+<v>Sensor Test\UART TEST\CY8C58LP Family Datasheet</v>
+<v>Sensor Test\UART TEST\System Reference Guides</v>
+<v>Sensor Test\UART TEST\System Reference Guides\cy_boot_v5_60</v>
+<v>Sensor Test\UART TEST\cy_pins_v2_20</v>
+<v>Sensor Test\UART TEST\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>Sensor Test\UART TEST\UART_v2_50.pdf</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>Sensor Test</v>
+<v>Sensor Test\All_sensor_testv2</v>
+<v>Sensor Test\All_sensor_testv2\PSoC 5LP Architecture TRM</v>
+<v>Sensor Test\All_sensor_testv2\CY8C58LP Family Datasheet</v>
+<v>Sensor Test\All_sensor_testv2\System Reference Guides</v>
+<v>Sensor Test\All_sensor_testv2\System Reference Guides\cy_boot_v5_50</v>
+<v>Sensor Test\All_sensor_testv2\cy_clock_v2_20.pdf</v>
+<v>Sensor Test\All_sensor_testv2\cy_isr_v1_70.pdf</v>
+<v>Sensor Test\All_sensor_testv2\cy_pins_v2_20</v>
+<v>Sensor Test\All_sensor_testv2\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>Sensor Test\All_sensor_testv2\Gnd_v1_0.pdf</v>
+<v>Sensor Test\All_sensor_testv2\I2C_v3_50.pdf</v>
+<v>Sensor Test\All_sensor_testv2\LED_v1_0</v>
+<v>Sensor Test\All_sensor_testv2\LED_v1_0\LED_v1_0.pdf</v>
+<v>Sensor Test\All_sensor_testv2\Resistor_v1_0</v>
+<v>Sensor Test\All_sensor_testv2\Resistor_v1_0\Resistor_v1_0.pdf</v>
+<v>Sensor Test\All_sensor_testv2\Timer_v2_70.pdf</v>
+<v>Sensor Test\All_sensor_testv2\UART_v2_50</v>
+<v>Sensor Test\All_sensor_testv2\UART_v2_50\UART_v2_50.pdf</v>
+<v>Sensor Test\All_sensor_testv2\ZeroTerminal.pdf</v>
+<v>Sensor Test\UART TEST</v>
+<v>Sensor Test\UART TEST\PSoC 5LP Architecture TRM</v>
+<v>Sensor Test\UART TEST\CY8C58LP Family Datasheet</v>
+<v>Sensor Test\UART TEST\System Reference Guides</v>
+<v>Sensor Test\UART TEST\System Reference Guides\cy_boot_v5_60</v>
+<v>Sensor Test\UART TEST\cy_pins_v2_20</v>
+<v>Sensor Test\UART TEST\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>Sensor Test\UART TEST\UART_v2_50.pdf</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStatesV2>
+</CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35>
+</dataGuid>
+</userData>
+</CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
+<Unloaded>
+<project v=".\LED STRIP TEST.cydsn\LED STRIP TEST.cyprj" />
+<project v=".\Base Station_v2.cydsn\Base Station_v2.cyprj" />
+<project v=".\Base Station.cydsn\Base Station.cyprj" />
+<project v=".\All_sensor_test.cydsn\All_sensor_test.cyprj" />
+</Unloaded>
+<OpenDocs />
+<config v="" />
+<AutoUpdate v="true" />
+</CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
+</CyXmlSerializer>

@@ -23,6 +23,8 @@ All text above must be included in any redistribution
 #include "SensorVal.h"
 #include "millis.h"
 
+uint8_t GPSECHO = 1;
+
 #ifndef true
 #define true 1
 #endif
@@ -70,7 +72,9 @@ static volatile char *lastline;
 static volatile uint8_t recvdflag; //should uint8_t remain uint8_t?
 static volatile uint8_t inStandbyMode;
 
-uint8_t GPSECHO = 1;
+void setGPSEcho(uint8_t val){
+    GPSECHO = val;
+}
 
 //static uint8_t GPS_parseResponse(char *response);
 
@@ -353,7 +357,7 @@ char GPS_read(void)
     return c;
   }
 
-  c = gpsSerial_GetByte();
+  c = gpsSerial_GetChar();
 
   if (c == '\n')
   {
@@ -566,12 +570,12 @@ uint8_t GPS_start()
   // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
   // the parser doesn't care about other sentences at this time
   // Set the update rate
-  GPS_sendCommand(PMTK_SET_NMEA_UPDATE_5HZ); // 5 Hz update rate
+  GPS_sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 5 Hz update rate
   // For the parsing code to work nicely and have time to sort thru the data, and
   // print it out we don't suggest using anything higher than 1 Hz
 
   // Request updates on antenna status, comment out to keep quiet
-  GPS_sendCommand(PGCMD_ANTENNA);
+  //GPS_sendCommand(PGCMD_ANTENNA);
 
   CyDelay(1000);
 
@@ -586,12 +590,13 @@ uint8_t GPS_update()
 {
   //This function will be used to update the GPS data
   // read data from the GPS in the 'main loop'
-  //char c = GPS_read();
-  GPS_read();
+  char c = GPS_read();
+  //char c = gpsSerial_GetByte();
+  //GPS_read();
   // if you want to debug, this is a good time to do it!
   /**/
-  //if (GPSECHO)
-    //{if(c) {serial_printChar(c);}}
+  if (GPSECHO)
+    {if(c)serial_printChar(c);}
   /**/
 
   // if a sentence is received, we can check the checksum, parse it...
@@ -600,7 +605,7 @@ uint8_t GPS_update()
     // a tricky thing here is if we print the NMEA sentence, or data
     // we end up not listening and catching other sentences!
     // so be very wary if using OUTPUT_ALLDATA and trytng to print out data
-    /*Serial.println(GPS.lastNMEA());*/ // this also sets the newNMEAreceived() flag to false
+    //serial_println(GPS_lastNMEA()); // this also sets the newNMEAreceived() flag to false
 
     if (!GPS_parse(GPS_lastNMEA())) // this also sets the newNMEAreceived() flag to false
     {
@@ -684,6 +689,5 @@ uint8_t GPS_update()
     serial_printIntln((int)GPS.satellites);
   }
 #endif
-
   return 1;
 }

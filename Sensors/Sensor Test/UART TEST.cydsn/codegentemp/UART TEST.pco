@@ -1,0 +1,42 @@
+# UART TEST
+# 2017-07-13 15:46:08Z
+
+# IO_0@[IOP=(1)][IoId=(0)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 0
+# IO_1@[IOP=(1)][IoId=(1)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 1
+# IO_3@[IOP=(1)][IoId=(3)] is reserved: SWDDebugEnabled
+dont_use_io iocell 1 3
+set_location "ClockBlock" clockblockcell -1 -1 0
+set_io "Rx_1(0)" iocell 15 0
+set_io "Tx_1(0)" iocell 15 1
+set_location "Net_2" 2 2 0 3
+set_location "\debSerial:BUART:counter_load_not\" 2 1 1 1
+set_location "\debSerial:BUART:tx_status_0\" 3 1 0 1
+set_location "\debSerial:BUART:tx_status_2\" 2 2 1 0
+set_location "\debSerial:BUART:rx_counter_load\" 3 1 1 1
+set_location "\debSerial:BUART:rx_postpoll\" 3 2 0 1
+set_location "\debSerial:BUART:rx_status_4\" 2 2 0 1
+set_location "\debSerial:BUART:rx_status_5\" 3 1 1 3
+set_location "\debSerial:BUART:sTX:TxShifter:u0\" 3 1 2
+set_location "\debSerial:BUART:sTX:sCLOCK:TxBitClkGen\" 2 1 2
+set_location "\debSerial:BUART:sTX:TxSts\" 3 1 4
+set_location "\debSerial:BUART:sRX:RxShifter:u0\" 3 2 2
+set_location "\debSerial:BUART:sRX:RxBitCounter\" 3 2 7
+set_location "\debSerial:BUART:sRX:RxSts\" 2 2 4
+set_location "\debSerial:BUART:txn\" 2 1 0 0
+set_location "\debSerial:BUART:tx_state_1\" 2 1 0 1
+set_location "\debSerial:BUART:tx_state_0\" 3 1 0 0
+set_location "\debSerial:BUART:tx_state_2\" 2 1 1 0
+set_location "\debSerial:BUART:tx_bitclk\" 2 1 1 2
+set_location "\debSerial:BUART:tx_ctrl_mark_last\" 2 2 0 2
+set_location "\debSerial:BUART:rx_state_0\" 3 2 0 0
+set_location "\debSerial:BUART:rx_load_fifo\" 3 2 1 1
+set_location "\debSerial:BUART:rx_state_3\" 3 2 0 2
+set_location "\debSerial:BUART:rx_state_2\" 3 2 1 0
+set_location "\debSerial:BUART:rx_bitclk_enable\" 2 2 0 0
+set_location "\debSerial:BUART:rx_state_stop1_reg\" 3 1 1 0
+set_location "\debSerial:BUART:pollcount_1\" 3 1 0 2
+set_location "\debSerial:BUART:pollcount_0\" 3 1 1 2
+set_location "\debSerial:BUART:rx_status_3\" 3 2 1 2
+set_location "\debSerial:BUART:rx_last\" 3 2 0 3

@@ -1,0 +1,13 @@
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\LED STRIP TEST.cyprj|da12cb59-c582-4e5a-b362-db16143e6c5b
+C:\Users\a85495\Downloads\StripLightLib\StripLightLib.cylib\StripLightLib.cyprj|3de458d3-9387-4e3f-8a58-1a71b136f63e
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|f9f00b41-6b7f-4f7b-a5a4-1e7af3682248
+C:\Users\a85495\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|a0eecd2b-bd43-4c07-8bdb-912b0b0e91f7
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|3e4edcdb-4f9b-4c5a-92ea-c5a8755982e6
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|7d914f83-e14c-44cc-b3c5-18a9243ddfd6
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|872fa097-45ac-4ac7-bf29-69e5fe5de83a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|dce89e82-109b-4936-8f4b-44636e83d8e9
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station_v2.cydsn\Base Station_v2.cyprj|4e902cbb-b470-4676-a1b6-ae6b87a3d04d
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\Base Station.cyprj|3bf29384-183e-432f-a44c-e056951afc4e
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\All_sensor_testv2.cyprj|7c3601c0-7dbc-498e-99aa-22fd8f08f206
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\All_sensor_test.cyprj|a33aa687-dd55-4447-91ce-6395f962093e
+C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\UART TEST.cydsn\UART TEST.cyprj|b3e47938-f035-451c-8cc6-128bad39a74d
