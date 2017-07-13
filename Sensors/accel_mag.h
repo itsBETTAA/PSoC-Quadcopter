@@ -4,7 +4,7 @@
 
 #include <stdint.h>
     
-#define ACCEL_MAG_DEBUG 0
+#define ACCEL_MAG_DEBUG 1
 
 #ifndef byte
 #define byte uint8_t

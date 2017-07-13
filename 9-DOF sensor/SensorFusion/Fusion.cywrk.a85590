@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Fusion\SensorFusion\Source Files\debSerial.c">
 <ExpandedNodeIds>
 <v>Fusion</v>
 <v>Fusion\SensorFusion</v>
@@ -55,18 +55,6 @@
 <v>Fusion\SensorFusion\Generated_Source\PSoC5</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
-<v>Fusion</v>
-<v>Fusion\SensorFusion</v>
-<v>Fusion\SensorFusion\TopDesign</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr\Pins</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr\Analog</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr\Clocks</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr\Interrupts</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr\DMA</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr\System</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr\Directives</v>
-<v>Fusion\SensorFusion\SensorFusion.cydwr\Flash Security</v>
 <v>Fusion\SensorFusion\SensorFusion.cydwr\EEPROM</v>
 <v>Fusion\SensorFusion\Header Files</v>
 <v>Fusion\SensorFusion\Header Files\accel_mag.h</v>
@@ -100,6 +88,18 @@
 <v>Fusion\SensorFusion\Generated_Source\PSoC4\cydevice_trm.h</v>
 <v>Fusion\SensorFusion\Generated_Source\PSoC4\cydevicegnu_trm.inc</v>
 <v>Fusion\SensorFusion\Generated_Source\PSoC4\cydeviceiar_trm.inc</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cydevicerv_trm.inc</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cydisabledsheets.h</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfitter.h</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfitter_cfg.c</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfitter_cfg.h</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfittergnu.inc</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfitteriar.inc</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cyfitterrv.inc</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\cymetadata.c</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC4\project.h</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC5</v>
+<v>Fusion\SensorFusion\Generated_Source\PSoC5\cy_boot</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
@@ -288,6 +288,9 @@
 <OpenDocs>
 <name v=".\SensorFusion.cydsn\TopDesign\TopDesign.cysch" />
 <name v=".\SensorFusion.cydsn\SensorFusion.cydwr" />
+<name v=".\SensorFusion.cydsn\barometer.c" />
+<name v=".\SensorFusion.cydsn\main.c" />
+<name v=".\SensorFusion.cydsn\debSerial.c" />
 </OpenDocs>
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
@@ -295,7 +298,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1602, 597" SelectedTabbedMdiWindow="e26f71ea-b3a2-40c9-82d0-0756b3b184b3"><ToolWindow Key="CyNoticeWindow:44d3d453-9474-4f2b-b928-4356f496bef0:Notice Window" Guid="e26f71ea-b3a2-40c9-82d0-0756b3b184b3" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="dfb3ea00-b055-477c-9e05-50cd89987a51" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\TopDesign\TopDesign.cysch" Guid="5251893d-0e7e-41f0-97eb-19da37cb1586" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\SensorFusion.cydwr" Guid="ad16576c-b4b5-4903-9043-89a0cb77d89c" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1578, 597" SelectedTabbedMdiWindow="f3984d50-6c85-487c-8aa6-25c2cd397a67"><ToolWindow Key="CyNoticeWindow:44d3d453-9474-4f2b-b928-4356f496bef0:Notice Window" Guid="e26f71ea-b3a2-40c9-82d0-0756b3b184b3" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="dfb3ea00-b055-477c-9e05-50cd89987a51" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\TopDesign\TopDesign.cysch" Guid="5251893d-0e7e-41f0-97eb-19da37cb1586" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\SensorFusion.cydwr" Guid="ad16576c-b4b5-4903-9043-89a0cb77d89c" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\barometer.c" Guid="5045f7a7-80b6-4f0c-b15e-22c00ee4f5cf" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\main.c" Guid="f3984d50-6c85-487c-8aa6-25c2cd397a67" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\debSerial.c" Guid="62662f28-70ad-4839-bf86-aee0c5ace58c" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

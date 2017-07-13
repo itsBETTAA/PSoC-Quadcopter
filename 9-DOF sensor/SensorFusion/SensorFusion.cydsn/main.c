@@ -28,6 +28,23 @@
 void quad_init(void);        //initializes all quadcopter 
 void quad_sensor_init(void); //initializes all of the quadcopter sensors //called in function quad_init()
 void sensors_update(void);   //Updates all of the sensor data (values can be extracted when needed)
+
+int main(void)
+{
+    CyGlobalIntEnable; /* Enable global interrupts. */
+    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    quad_init();
+    serial_println("Quadcopter Sensors Initialized");
+    for(;;)
+    
+    { //Calling functions below...
+        //sensors_update();
+        CyDelay(1000); 
+       // accel_mag_initialize(ACCEL_RANGE_2G);
+       // gyro_initialize(GYRO_RANGE_250DPS); 
+        serial_println("Work correctly!");
+    }
+}
 void quad_init(void){
     I2C_Start();       //initializes the I2C block
     serial_begin();    //initializes the debug Serial block
@@ -49,20 +66,4 @@ void sensors_update(void){
     gyro_update();      //Update the gyroscope data
     baro_update();      //Update the barometer data
 }
-int main(void)
-{
-    CyGlobalIntEnable; /* Enable global interrupts. */
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-    quad_init();
-    serial_println("Quadcopter Sensors Initialized");
-    for(;;)
-    
-    { //Calling functions below...
-        sensors_update();
-        CyDelay(1000); 
-        accel_mag_initialize(ACCEL_RANGE_2G);
-        gyro_initialize(GYRO_RANGE_250DPS); 
-    }
-}
-
 /* [] END OF FILE */

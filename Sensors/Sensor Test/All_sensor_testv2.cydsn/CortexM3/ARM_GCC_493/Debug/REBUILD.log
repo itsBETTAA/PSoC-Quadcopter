@@ -1,6 +1,0 @@
---------------- Rebuild Started: 07/07/2017 18:16:09 Project: debug_Serial.c, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
-arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -I..\.. -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/debug_Serial.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c ..\..\debug_Serial.c -o .\CortexM3\ARM_GCC_493\Debug\debug_Serial.o
-..\..\debug_Serial.c:15:5: warning: "/*" within comment [-Wcomment]
-     /*
- ^
---------------- Rebuild Succeeded: 07/07/2017 18:16:09 ---------------
