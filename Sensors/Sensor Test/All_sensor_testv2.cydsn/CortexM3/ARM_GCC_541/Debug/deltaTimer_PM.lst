@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 1
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
    1              		.syntax unified
@@ -58,7 +62,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
   28:Generated_Source\PSoC5/deltaTimer_PM.c **** * Summary:
   29:Generated_Source\PSoC5/deltaTimer_PM.c **** *     Save the current user configuration
   30:Generated_Source\PSoC5/deltaTimer_PM.c **** *
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 2
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 2
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
   31:Generated_Source\PSoC5/deltaTimer_PM.c **** * Parameters:
@@ -110,7 +118,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
   51              		.align	2
   52              	.L3:
   53 0018 00000000 		.word	.LANCHOR0
+<<<<<<< HEAD
   54 001c 8B640040 		.word	1073767563
+=======
+  54 001c 85640040 		.word	1073767557
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
   55              		.cfi_endproc
   56              	.LFE0:
   57              		.size	deltaTimer_SaveConfig, .-deltaTimer_SaveConfig
@@ -118,7 +130,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
   59              		.align	2
   60              		.global	deltaTimer_RestoreConfig
   61              		.thumb
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 3
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 3
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
   62              		.thumb_func
@@ -178,7 +194,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
   87:Generated_Source\PSoC5/deltaTimer_PM.c ****         #if(!deltaTimer_UDB_CONTROL_REG_REMOVED)
   88:Generated_Source\PSoC5/deltaTimer_PM.c ****             deltaTimer_WriteControlRegister(deltaTimer_backup.TimerControlRegister);
   83              		.loc 1 88 0
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 4
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 4
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
   84 0010 607A     		ldrb	r0, [r4, #9]	@ zero_extendqisi2
@@ -189,7 +209,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
   89              		.align	2
   90              	.L7:
   91 0018 00000000 		.word	.LANCHOR0
+<<<<<<< HEAD
   92 001c 8B640040 		.word	1073767563
+=======
+  92 001c 85640040 		.word	1073767557
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
   93              		.cfi_endproc
   94              	.LFE1:
   95              		.size	deltaTimer_RestoreConfig, .-deltaTimer_RestoreConfig
@@ -238,7 +262,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  115:Generated_Source\PSoC5/deltaTimer_PM.c ****         /* Save Counter's enable state */
  116:Generated_Source\PSoC5/deltaTimer_PM.c ****         if(deltaTimer_CTRL_ENABLE == (deltaTimer_CONTROL & deltaTimer_CTRL_ENABLE))
  112              		.loc 1 116 0
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 5
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 5
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  113 0002 084B     		ldr	r3, .L13
@@ -278,7 +306,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  135              	.L14:
  136              		.align	2
  137              	.L13:
+<<<<<<< HEAD
  138 0024 79640040 		.word	1073767545
+=======
+ 138 0024 74640040 		.word	1073767540
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  139 0028 00000000 		.word	.LANCHOR0
  140              		.cfi_endproc
  141              	.LFE2:
@@ -298,7 +330,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  133:Generated_Source\PSoC5/deltaTimer_PM.c **** * Function Name: deltaTimer_Wakeup
  134:Generated_Source\PSoC5/deltaTimer_PM.c **** ********************************************************************************
  135:Generated_Source\PSoC5/deltaTimer_PM.c **** *
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 6
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 6
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  136:Generated_Source\PSoC5/deltaTimer_PM.c **** * Summary:
@@ -358,7 +394,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  184              	deltaTimer_backup:
  185 0000 00000000 		.space	12
  185      00000000 
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 7
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 7
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  185      00000000 
@@ -373,16 +413,24 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  194 0006 00000000 		.4byte	.Ldebug_abbrev0
  195 000a 04       		.byte	0x4
  196 000b 01       		.uleb128 0x1
+<<<<<<< HEAD
  197 000c 05010000 		.4byte	.LASF32
  198 0010 0C       		.byte	0xc
  199 0011 30000000 		.4byte	.LASF33
  200 0015 9D000000 		.4byte	.LASF34
+=======
+ 197 000c 0F010000 		.4byte	.LASF32
+ 198 0010 0C       		.byte	0xc
+ 199 0011 8E000000 		.4byte	.LASF33
+ 200 0015 1F000000 		.4byte	.LASF34
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  201 0019 00000000 		.4byte	.Ldebug_ranges0+0
  202 001d 00000000 		.4byte	0
  203 0021 00000000 		.4byte	.Ldebug_line0
  204 0025 02       		.uleb128 0x2
  205 0026 01       		.byte	0x1
  206 0027 06       		.byte	0x6
+<<<<<<< HEAD
  207 0028 E0020000 		.4byte	.LASF0
  208 002c 02       		.uleb128 0x2
  209 002d 01       		.byte	0x1
@@ -412,12 +460,44 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  233 0057 08       		.byte	0x8
  234 0058 07       		.byte	0x7
  235 0059 34020000 		.4byte	.LASF7
+=======
+ 207 0028 EA020000 		.4byte	.LASF0
+ 208 002c 02       		.uleb128 0x2
+ 209 002d 01       		.byte	0x1
+ 210 002e 08       		.byte	0x8
+ 211 002f 01010000 		.4byte	.LASF1
+ 212 0033 02       		.uleb128 0x2
+ 213 0034 02       		.byte	0x2
+ 214 0035 05       		.byte	0x5
+ 215 0036 CB020000 		.4byte	.LASF2
+ 216 003a 02       		.uleb128 0x2
+ 217 003b 02       		.byte	0x2
+ 218 003c 07       		.byte	0x7
+ 219 003d B5000000 		.4byte	.LASF3
+ 220 0041 02       		.uleb128 0x2
+ 221 0042 04       		.byte	0x4
+ 222 0043 05       		.byte	0x5
+ 223 0044 D5020000 		.4byte	.LASF4
+ 224 0048 02       		.uleb128 0x2
+ 225 0049 04       		.byte	0x4
+ 226 004a 07       		.byte	0x7
+ 227 004b C2010000 		.4byte	.LASF5
+ 228 004f 02       		.uleb128 0x2
+ 229 0050 08       		.byte	0x8
+ 230 0051 05       		.byte	0x5
+ 231 0052 75020000 		.4byte	.LASF6
+ 232 0056 02       		.uleb128 0x2
+ 233 0057 08       		.byte	0x8
+ 234 0058 07       		.byte	0x7
+ 235 0059 3E020000 		.4byte	.LASF7
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  236 005d 03       		.uleb128 0x3
  237 005e 04       		.byte	0x4
  238 005f 05       		.byte	0x5
  239 0060 696E7400 		.ascii	"int\000"
  240 0064 02       		.uleb128 0x2
  241 0065 04       		.byte	0x4
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 8
 
 
@@ -425,17 +505,31 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  243 0067 16020000 		.4byte	.LASF8
  244 006b 04       		.uleb128 0x4
  245 006c CA010000 		.4byte	.LASF9
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 8
+
+
+ 242 0066 07       		.byte	0x7
+ 243 0067 20020000 		.4byte	.LASF8
+ 244 006b 04       		.uleb128 0x4
+ 245 006c D4010000 		.4byte	.LASF9
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  246 0070 02       		.byte	0x2
  247 0071 9201     		.2byte	0x192
  248 0073 2C000000 		.4byte	0x2c
  249 0077 04       		.uleb128 0x4
+<<<<<<< HEAD
  250 0078 FF010000 		.4byte	.LASF10
+=======
+ 250 0078 09020000 		.4byte	.LASF10
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  251 007c 02       		.byte	0x2
  252 007d 9401     		.2byte	0x194
  253 007f 48000000 		.4byte	0x48
  254 0083 02       		.uleb128 0x2
  255 0084 04       		.byte	0x4
  256 0085 04       		.byte	0x4
+<<<<<<< HEAD
  257 0086 F1000000 		.4byte	.LASF11
  258 008a 02       		.uleb128 0x2
  259 008b 08       		.byte	0x8
@@ -447,6 +541,19 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  265 0094 79020000 		.4byte	.LASF13
  266 0098 04       		.uleb128 0x4
  267 0099 93010000 		.4byte	.LASF14
+=======
+ 257 0086 FB000000 		.4byte	.LASF11
+ 258 008a 02       		.uleb128 0x2
+ 259 008b 08       		.byte	0x8
+ 260 008c 04       		.byte	0x4
+ 261 008d F0010000 		.4byte	.LASF12
+ 262 0091 02       		.uleb128 0x2
+ 263 0092 01       		.byte	0x1
+ 264 0093 08       		.byte	0x8
+ 265 0094 83020000 		.4byte	.LASF13
+ 266 0098 04       		.uleb128 0x4
+ 267 0099 9D010000 		.4byte	.LASF14
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  268 009d 02       		.byte	0x2
  269 009e 3C02     		.2byte	0x23c
  270 00a0 A4000000 		.4byte	0xa4
@@ -455,51 +562,86 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  273 00a9 02       		.uleb128 0x2
  274 00aa 08       		.byte	0x8
  275 00ab 04       		.byte	0x4
+<<<<<<< HEAD
  276 00ac D4020000 		.4byte	.LASF15
  277 00b0 02       		.uleb128 0x2
  278 00b1 04       		.byte	0x4
  279 00b2 07       		.byte	0x7
  280 00b3 62020000 		.4byte	.LASF16
+=======
+ 276 00ac DE020000 		.4byte	.LASF15
+ 277 00b0 02       		.uleb128 0x2
+ 278 00b1 04       		.byte	0x4
+ 279 00b2 07       		.byte	0x7
+ 280 00b3 6C020000 		.4byte	.LASF16
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  281 00b7 06       		.uleb128 0x6
  282 00b8 0C       		.byte	0xc
  283 00b9 03       		.byte	0x3
  284 00ba 43       		.byte	0x43
  285 00bb F0000000 		.4byte	0xf0
  286 00bf 07       		.uleb128 0x7
+<<<<<<< HEAD
  287 00c0 1F000000 		.4byte	.LASF17
+=======
+ 287 00c0 7D000000 		.4byte	.LASF17
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  288 00c4 03       		.byte	0x3
  289 00c5 45       		.byte	0x45
  290 00c6 6B000000 		.4byte	0x6b
  291 00ca 00       		.byte	0
  292 00cb 07       		.uleb128 0x7
+<<<<<<< HEAD
  293 00cc 94000000 		.4byte	.LASF18
+=======
+ 293 00cc F2000000 		.4byte	.LASF18
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  294 00d0 03       		.byte	0x3
  295 00d1 48       		.byte	0x48
  296 00d2 77000000 		.4byte	0x77
  297 00d6 04       		.byte	0x4
  298 00d7 07       		.uleb128 0x7
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 9
 
 
  299 00d8 EC020000 		.4byte	.LASF19
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 9
+
+
+ 299 00d8 F6020000 		.4byte	.LASF19
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  300 00dc 03       		.byte	0x3
  301 00dd 49       		.byte	0x49
  302 00de 6B000000 		.4byte	0x6b
  303 00e2 08       		.byte	0x8
  304 00e3 07       		.uleb128 0x7
+<<<<<<< HEAD
  305 00e4 FF020000 		.4byte	.LASF20
+=======
+ 305 00e4 09030000 		.4byte	.LASF20
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  306 00e8 03       		.byte	0x3
  307 00e9 4F       		.byte	0x4f
  308 00ea 6B000000 		.4byte	0x6b
  309 00ee 09       		.byte	0x9
  310 00ef 00       		.byte	0
  311 00f0 08       		.uleb128 0x8
+<<<<<<< HEAD
  312 00f1 7C000000 		.4byte	.LASF21
+=======
+ 312 00f1 DA000000 		.4byte	.LASF21
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  313 00f5 03       		.byte	0x3
  314 00f6 53       		.byte	0x53
  315 00f7 B7000000 		.4byte	0xb7
  316 00fb 09       		.uleb128 0x9
+<<<<<<< HEAD
  317 00fc D0010000 		.4byte	.LASF22
+=======
+ 317 00fc DA010000 		.4byte	.LASF22
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  318 0100 01       		.byte	0x1
  319 0101 2B       		.byte	0x2b
  320 0102 00000000 		.4byte	.LFB0
@@ -515,7 +657,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  330 011e B7010000 		.4byte	0x1b7
  331 0122 00       		.byte	0
  332 0123 09       		.uleb128 0x9
+<<<<<<< HEAD
  333 0124 A8020000 		.4byte	.LASF23
+=======
+ 333 0124 B2020000 		.4byte	.LASF23
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  334 0128 01       		.byte	0x1
  335 0129 4D       		.byte	0x4d
  336 012a 00000000 		.4byte	.LFB1
@@ -531,14 +677,22 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  346 0146 CD010000 		.4byte	0x1cd
  347 014a 00       		.byte	0
  348 014b 09       		.uleb128 0x9
+<<<<<<< HEAD
  349 014c 23020000 		.4byte	.LASF24
+=======
+ 349 014c 2D020000 		.4byte	.LASF24
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  350 0150 01       		.byte	0x1
  351 0151 70       		.byte	0x70
  352 0152 00000000 		.4byte	.LFB2
  353 0156 2C000000 		.4byte	.LFE2-.LFB2
  354 015a 01       		.uleb128 0x1
  355 015b 9C       		.byte	0x9c
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 10
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 10
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  356 015c 73010000 		.4byte	0x173
@@ -550,7 +704,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  362 016e FB000000 		.4byte	0xfb
  363 0172 00       		.byte	0
  364 0173 09       		.uleb128 0x9
+<<<<<<< HEAD
  365 0174 7E020000 		.4byte	.LASF25
+=======
+ 365 0174 88020000 		.4byte	.LASF25
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  366 0178 01       		.byte	0x1
  367 0179 96       		.byte	0x96
  368 017a 00000000 		.4byte	.LFB3
@@ -566,7 +724,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  378 0196 E3010000 		.4byte	0x1e3
  379 019a 00       		.byte	0
  380 019b 0B       		.uleb128 0xb
+<<<<<<< HEAD
  381 019c ED010000 		.4byte	.LASF35
+=======
+ 381 019c F7010000 		.4byte	.LASF35
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  382 01a0 01       		.byte	0x1
  383 01a1 15       		.byte	0x15
  384 01a2 F0000000 		.4byte	0xf0
@@ -574,8 +736,13 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  386 01a7 03       		.byte	0x3
  387 01a8 00000000 		.4byte	deltaTimer_backup
  388 01ac 0C       		.uleb128 0xc
+<<<<<<< HEAD
  389 01ad 4B020000 		.4byte	.LASF26
  390 01b1 4B020000 		.4byte	.LASF26
+=======
+ 389 01ad 55020000 		.4byte	.LASF26
+ 390 01b1 55020000 		.4byte	.LASF26
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  391 01b5 03       		.byte	0x3
  392 01b6 69       		.byte	0x69
  393 01b7 0C       		.uleb128 0xc
@@ -584,6 +751,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  396 01c0 03       		.byte	0x3
  397 01c1 63       		.byte	0x63
  398 01c2 0C       		.uleb128 0xc
+<<<<<<< HEAD
  399 01c3 90020000 		.4byte	.LASF28
  400 01c7 90020000 		.4byte	.LASF28
  401 01cb 03       		.byte	0x3
@@ -604,6 +772,28 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  413 01e3 0C       		.uleb128 0xc
  414 01e4 6A000000 		.4byte	.LASF31
  415 01e8 6A000000 		.4byte	.LASF31
+=======
+ 399 01c3 9A020000 		.4byte	.LASF28
+ 400 01c7 9A020000 		.4byte	.LASF28
+ 401 01cb 03       		.byte	0x3
+ 402 01cc 6A       		.byte	0x6a
+ 403 01cd 0C       		.uleb128 0xc
+ 404 01ce A2010000 		.4byte	.LASF29
+ 405 01d2 A2010000 		.4byte	.LASF29
+ 406 01d6 03       		.byte	0x3
+ 407 01d7 64       		.byte	0x64
+ 408 01d8 0C       		.uleb128 0xc
+ 409 01d9 10020000 		.4byte	.LASF30
+ 410 01dd 10020000 		.4byte	.LASF30
+ 411 01e1 03       		.byte	0x3
+ 412 01e2 5B       		.byte	0x5b
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 11
+
+
+ 413 01e3 0C       		.uleb128 0xc
+ 414 01e4 C8000000 		.4byte	.LASF31
+ 415 01e8 C8000000 		.4byte	.LASF31
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  416 01ec 03       		.byte	0x3
  417 01ed 8B       		.byte	0x8b
  418 01ee 00       		.byte	0
@@ -658,7 +848,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  467 002e 3A       		.uleb128 0x3a
  468 002f 0B       		.uleb128 0xb
  469 0030 3B       		.uleb128 0x3b
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 12
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 12
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  470 0031 05       		.uleb128 0x5
@@ -718,7 +912,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  524 0067 2E       		.uleb128 0x2e
  525 0068 01       		.byte	0x1
  526 0069 3F       		.uleb128 0x3f
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 13
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 13
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  527 006a 19       		.uleb128 0x19
@@ -778,7 +976,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  581 00a3 03       		.uleb128 0x3
  582 00a4 0E       		.uleb128 0xe
  583 00a5 3A       		.uleb128 0x3a
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 14
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 14
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  584 00a6 0B       		.uleb128 0xb
@@ -830,6 +1032,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  624      65725F52 
  624      65616443 
  624      6F6E7472 
+<<<<<<< HEAD
  625              	.LASF17:
  626 001f 54696D65 		.ascii	"TimerEnableState\000"
  626      72456E61 
@@ -883,22 +1086,90 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  641      7400
  642              	.LASF1:
  643 00f7 756E7369 		.ascii	"unsigned char\000"
+=======
+ 625              	.LASF34:
+ 626 001f 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\MyCodes\\PSoC-Quadcop"
+ 626      73657273 
+ 626      5C413835 
+ 626      3539305C 
+ 626      446F6375 
+ 627 004d 7465725C 		.ascii	"ter\\Sensors\\Sensor Test\\All_sensor_testv2.cydsn\000"
+ 627      53656E73 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 15
+
+
+ 627      6F72735C 
+ 627      53656E73 
+ 627      6F722054 
+ 628              	.LASF17:
+ 629 007d 54696D65 		.ascii	"TimerEnableState\000"
+ 629      72456E61 
+ 629      626C6553 
+ 629      74617465 
+ 629      00
+ 630              	.LASF33:
+ 631 008e 47656E65 		.ascii	"Generated_Source\\PSoC5\\deltaTimer_PM.c\000"
+ 631      72617465 
+ 631      645F536F 
+ 631      75726365 
+ 631      5C50536F 
+ 632              	.LASF3:
+ 633 00b5 73686F72 		.ascii	"short unsigned int\000"
+ 633      7420756E 
+ 633      7369676E 
+ 633      65642069 
+ 633      6E7400
+ 634              	.LASF31:
+ 635 00c8 64656C74 		.ascii	"deltaTimer_Enable\000"
+ 635      6154696D 
+ 635      65725F45 
+ 635      6E61626C 
+ 635      6500
+ 636              	.LASF21:
+ 637 00da 64656C74 		.ascii	"deltaTimer_backupStruct\000"
+ 637      6154696D 
+ 637      65725F62 
+ 637      61636B75 
+ 637      70537472 
+ 638              	.LASF18:
+ 639 00f2 54696D65 		.ascii	"TimerUdb\000"
+ 639      72556462 
+ 639      00
+ 640              	.LASF11:
+ 641 00fb 666C6F61 		.ascii	"float\000"
+ 641      7400
+ 642              	.LASF1:
+ 643 0101 756E7369 		.ascii	"unsigned char\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  643      676E6564 
  643      20636861 
  643      7200
  644              	.LASF32:
+<<<<<<< HEAD
  645 0105 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+=======
+ 645 010f 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  645      43313120 
  645      352E342E 
  645      31203230 
  645      31363036 
+<<<<<<< HEAD
  646 0138 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+=======
+ 646 0142 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  646      20726576 
  646      6973696F 
  646      6E203233 
  646      37373135 
+<<<<<<< HEAD
  647 016b 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 16
+=======
+ 647 0175 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 16
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  647      66756E63 
@@ -906,103 +1177,178 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
  647      2D736563 
  647      74696F6E 
  648              	.LASF14:
+<<<<<<< HEAD
  649 0193 72656738 		.ascii	"reg8\000"
  649      00
  650              	.LASF29:
  651 0198 64656C74 		.ascii	"deltaTimer_WriteControlRegister\000"
+=======
+ 649 019d 72656738 		.ascii	"reg8\000"
+ 649      00
+ 650              	.LASF29:
+ 651 01a2 64656C74 		.ascii	"deltaTimer_WriteControlRegister\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  651      6154696D 
  651      65725F57 
  651      72697465 
  651      436F6E74 
  652              	.LASF5:
+<<<<<<< HEAD
  653 01b8 6C6F6E67 		.ascii	"long unsigned int\000"
+=======
+ 653 01c2 6C6F6E67 		.ascii	"long unsigned int\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  653      20756E73 
  653      69676E65 
  653      6420696E 
  653      7400
  654              	.LASF9:
+<<<<<<< HEAD
  655 01ca 75696E74 		.ascii	"uint8\000"
  655      3800
  656              	.LASF22:
  657 01d0 64656C74 		.ascii	"deltaTimer_SaveConfig\000"
+=======
+ 655 01d4 75696E74 		.ascii	"uint8\000"
+ 655      3800
+ 656              	.LASF22:
+ 657 01da 64656C74 		.ascii	"deltaTimer_SaveConfig\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  657      6154696D 
  657      65725F53 
  657      61766543 
  657      6F6E6669 
  658              	.LASF12:
+<<<<<<< HEAD
  659 01e6 646F7562 		.ascii	"double\000"
  659      6C6500
  660              	.LASF35:
  661 01ed 64656C74 		.ascii	"deltaTimer_backup\000"
+=======
+ 659 01f0 646F7562 		.ascii	"double\000"
+ 659      6C6500
+ 660              	.LASF35:
+ 661 01f7 64656C74 		.ascii	"deltaTimer_backup\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  661      6154696D 
  661      65725F62 
  661      61636B75 
  661      7000
  662              	.LASF10:
+<<<<<<< HEAD
  663 01ff 75696E74 		.ascii	"uint32\000"
  663      333200
  664              	.LASF30:
  665 0206 64656C74 		.ascii	"deltaTimer_Stop\000"
+=======
+ 663 0209 75696E74 		.ascii	"uint32\000"
+ 663      333200
+ 664              	.LASF30:
+ 665 0210 64656C74 		.ascii	"deltaTimer_Stop\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  665      6154696D 
  665      65725F53 
  665      746F7000 
  666              	.LASF8:
+<<<<<<< HEAD
  667 0216 756E7369 		.ascii	"unsigned int\000"
+=======
+ 667 0220 756E7369 		.ascii	"unsigned int\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  667      676E6564 
  667      20696E74 
  667      00
  668              	.LASF24:
+<<<<<<< HEAD
  669 0223 64656C74 		.ascii	"deltaTimer_Sleep\000"
+=======
+ 669 022d 64656C74 		.ascii	"deltaTimer_Sleep\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  669      6154696D 
  669      65725F53 
  669      6C656570 
  669      00
  670              	.LASF7:
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 17
 
 
  671 0234 6C6F6E67 		.ascii	"long long unsigned int\000"
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 17
+
+
+ 671 023e 6C6F6E67 		.ascii	"long long unsigned int\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  671      206C6F6E 
  671      6720756E 
  671      7369676E 
  671      65642069 
  672              	.LASF26:
+<<<<<<< HEAD
  673 024b 64656C74 		.ascii	"deltaTimer_ReadCounter\000"
+=======
+ 673 0255 64656C74 		.ascii	"deltaTimer_ReadCounter\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  673      6154696D 
  673      65725F52 
  673      65616443 
  673      6F756E74 
  674              	.LASF16:
+<<<<<<< HEAD
  675 0262 73697A65 		.ascii	"sizetype\000"
  675      74797065 
  675      00
  676              	.LASF6:
  677 026b 6C6F6E67 		.ascii	"long long int\000"
+=======
+ 675 026c 73697A65 		.ascii	"sizetype\000"
+ 675      74797065 
+ 675      00
+ 676              	.LASF6:
+ 677 0275 6C6F6E67 		.ascii	"long long int\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  677      206C6F6E 
  677      6720696E 
  677      7400
  678              	.LASF13:
+<<<<<<< HEAD
  679 0279 63686172 		.ascii	"char\000"
  679      00
  680              	.LASF25:
  681 027e 64656C74 		.ascii	"deltaTimer_Wakeup\000"
+=======
+ 679 0283 63686172 		.ascii	"char\000"
+ 679      00
+ 680              	.LASF25:
+ 681 0288 64656C74 		.ascii	"deltaTimer_Wakeup\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  681      6154696D 
  681      65725F57 
  681      616B6575 
  681      7000
  682              	.LASF28:
+<<<<<<< HEAD
  683 0290 64656C74 		.ascii	"deltaTimer_WriteCounter\000"
+=======
+ 683 029a 64656C74 		.ascii	"deltaTimer_WriteCounter\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  683      6154696D 
  683      65725F57 
  683      72697465 
  683      436F756E 
  684              	.LASF23:
+<<<<<<< HEAD
  685 02a8 64656C74 		.ascii	"deltaTimer_RestoreConfig\000"
+=======
+ 685 02b2 64656C74 		.ascii	"deltaTimer_RestoreConfig\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  685      6154696D 
  685      65725F52 
  685      6573746F 
  685      7265436F 
  686              	.LASF2:
+<<<<<<< HEAD
  687 02c1 73686F72 		.ascii	"short int\000"
  687      7420696E 
  687      7400
@@ -1023,12 +1369,38 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc2OEvR3.s 			page 1
 
  694              	.LASF19:
  695 02ec 496E7465 		.ascii	"InterruptMaskValue\000"
+=======
+ 687 02cb 73686F72 		.ascii	"short int\000"
+ 687      7420696E 
+ 687      7400
+ 688              	.LASF4:
+ 689 02d5 6C6F6E67 		.ascii	"long int\000"
+ 689      20696E74 
+ 689      00
+ 690              	.LASF15:
+ 691 02de 6C6F6E67 		.ascii	"long double\000"
+ 691      20646F75 
+ 691      626C6500 
+ 692              	.LASF0:
+ 693 02ea 7369676E 		.ascii	"signed char\000"
+ 693      65642063 
+ 693      68617200 
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccrmirjL.s 			page 18
+
+
+ 694              	.LASF19:
+ 695 02f6 496E7465 		.ascii	"InterruptMaskValue\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  695      72727570 
  695      744D6173 
  695      6B56616C 
  695      756500
  696              	.LASF20:
+<<<<<<< HEAD
  697 02ff 54696D65 		.ascii	"TimerControlRegister\000"
+=======
+ 697 0309 54696D65 		.ascii	"TimerControlRegister\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  697      72436F6E 
  697      74726F6C 
  697      52656769 

@@ -13,6 +13,7 @@ I1206: Completed Reading of file All_sensor_testv2.sdc
 I1204: Reading architecture from file C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\psoc5/psoc5lp/route_arch-rrg.cydata
 I1206: Completed Reading of file C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\psoc5/psoc5lp/route_arch-rrg.cydata
 I1209: Started routing
+<<<<<<< HEAD
 I1223: Total Nets : 170 
 I1212: Iteration  1 :   114 unrouted : 1 seconds
 I1212: Iteration  2 :    52 unrouted : 0 seconds
@@ -21,6 +22,16 @@ I1212: Iteration  4 :    24 unrouted : 0 seconds
 I1212: Iteration  5 :     7 unrouted : 0 seconds
 I1212: Iteration  6 :     4 unrouted : 0 seconds
 I1212: Iteration  7 :     4 unrouted : 0 seconds
+=======
+I1223: Total Nets : 168 
+I1212: Iteration  1 :   110 unrouted : 0 seconds
+I1212: Iteration  2 :    34 unrouted : 1 seconds
+I1212: Iteration  3 :    20 unrouted : 0 seconds
+I1212: Iteration  4 :    20 unrouted : 0 seconds
+I1212: Iteration  5 :    10 unrouted : 0 seconds
+I1212: Iteration  6 :     3 unrouted : 0 seconds
+I1212: Iteration  7 :     2 unrouted : 0 seconds
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 I1212: Iteration  8 :     2 unrouted : 0 seconds
 I1212: Iteration  9 :     2 unrouted : 0 seconds
 I1212: Iteration 10 :     0 unrouted : 0 seconds

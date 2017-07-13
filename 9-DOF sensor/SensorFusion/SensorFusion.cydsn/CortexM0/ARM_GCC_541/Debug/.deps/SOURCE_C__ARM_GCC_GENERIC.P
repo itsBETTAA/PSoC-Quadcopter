@@ -1,0 +1,6 @@
+C:/Users/A85590/Documents/PSoC\ Creator/AHRS/SensorFusion.cydsn/CortexM0/ARM_GCC_541/Debug/Madgwick.o : C:/Users/A85590/Documents/PSoC\ Creator/AHRS/SensorFusion.cydsn/Madgwick.c C:/Users/A85590/Documents/PSoC\ Creator/AHRS/SensorFusion.cydsn/Madgwick.h 
+
+C:/Users/A85590/Documents/PSoC\ Creator/AHRS/SensorFusion.cydsn/Madgwick.c : 
+
+C:/Users/A85590/Documents/PSoC\ Creator/AHRS/SensorFusion.cydsn/Madgwick.h : 
+

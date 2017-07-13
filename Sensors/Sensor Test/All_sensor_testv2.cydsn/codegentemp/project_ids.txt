@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\LED STRIP TEST.cyprj|da12cb59-c582-4e5a-b362-db16143e6c5b
 C:\Users\a85495\Downloads\StripLightLib\StripLightLib.cylib\StripLightLib.cyprj|3de458d3-9387-4e3f-8a58-1a71b136f63e
 C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|f9f00b41-6b7f-4f7b-a5a4-1e7af3682248
@@ -10,3 +11,16 @@ C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station_v2.cyds
 C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\Base Station.cyprj|3bf29384-183e-432f-a44c-e056951afc4e
 C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\All_sensor_testv2.cyprj|7c3601c0-7dbc-498e-99aa-22fd8f08f206
 C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\All_sensor_test.cyprj|a33aa687-dd55-4447-91ce-6395f962093e
+=======
+C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\LED STRIP TEST.cydsn\LED STRIP TEST.cyprj|ed74dfb5-a16d-45db-904a-f8179df29e65
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|5adb3419-4262-4e07-be94-6f8a9e20acea
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|7cc789e4-e689-4cde-9ebd-8e7dc6afd503
+C:\Users\A85590\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|51b32c01-133b-4788-9db0-245d87d1cda9
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|be75ad7d-a391-41e2-8fe0-f6a4613b128c
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|f29d49dc-f82f-4d6b-ab7d-9415354ffda5
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|2391b06d-fe7c-449a-b2f9-82368ea19b8d
+C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\Base Station_v2.cydsn\Base Station_v2.cyprj|05681028-6294-4961-8bcd-de63b5012767
+C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\Base Station.cydsn\Base Station.cyprj|4498281d-5882-4c27-a724-81aa51512dd5
+C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\All_sensor_testv2.cyprj|01f0a715-18f0-403e-8a96-1aa7411c6418
+C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_test.cydsn\All_sensor_test.cyprj|d0c89e28-b7c4-4598-94cc-293fda263f9d
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0

@@ -1,0 +1,6 @@
+C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\9-DOF sensor\SensorFusion\SensorFusion.cydsn\SensorFusion.cyprj|d0a6ad8a-6698-428e-a2b8-8a0151aa4f31
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|46de098c-8561-4bef-9131-10b73ef28bbf
+C:\Users\A85590\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|53c3a685-d21b-446b-be4b-9d4ac68773b7
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|c7d91838-5213-4336-995f-11e1f0a85afd
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|f459410f-544e-461a-ab32-ca971e9a9c9a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|df7b8b72-d5d1-48d6-8035-02bc1169d81b

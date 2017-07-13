@@ -1,5 +1,9 @@
 -- Project:   All_sensor_testv2
+<<<<<<< HEAD
 -- Generated: 07/13/2017 09:38:18
+=======
+-- Generated: 07/11/2017 16:26:53
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 -- PSoC Creator  4.1
 
 ENTITY All_sensor_testv2 IS

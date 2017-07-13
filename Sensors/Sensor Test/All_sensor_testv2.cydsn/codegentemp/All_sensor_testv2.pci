@@ -1,5 +1,9 @@
 # All_sensor_testv2
+<<<<<<< HEAD
 # 2017-07-13 15:38:16Z
+=======
+# 2017-07-11 22:26:50Z
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 # IO_0@[IOP=(1)][IoId=(0)] is reserved: SWDDebugEnabled
 dont_use_io iocell 1 0

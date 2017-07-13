@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 1
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
    1              		.syntax unified
@@ -58,7 +62,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
   28:Generated_Source\PSoC5/left_arm_led.c **** *
   29:Generated_Source\PSoC5/left_arm_led.c **** * \brief Writes the value to the physical port (data output register), masking
   30:Generated_Source\PSoC5/left_arm_led.c **** *  and shifting the bits appropriately. 
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 2
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 2
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
   31:Generated_Source\PSoC5/left_arm_led.c **** *
@@ -118,7 +126,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
   52              		.size	left_arm_led_Write, .-left_arm_led_Write
   53              		.section	.text.left_arm_led_SetDriveMode,"ax",%progbits
   54              		.align	2
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 3
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 3
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
   55              		.global	left_arm_led_SetDriveMode
@@ -178,7 +190,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
   77 0012 00BF     		.align	2
   78              	.L5:
   79 0014 17500040 		.word	1073762327
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 4
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 4
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
   80              		.cfi_endproc
@@ -238,7 +254,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  110              		.align	2
  111              		.global	left_arm_led_ReadDataReg
  112              		.thumb
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 5
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 5
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  113              		.thumb_func
@@ -298,22 +318,34 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  139              	.Ldebug_info0:
  140 0000 1B010000 		.4byte	0x11b
  141 0004 0400     		.2byte	0x4
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 6
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 6
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  142 0006 00000000 		.4byte	.Ldebug_abbrev0
  143 000a 04       		.byte	0x4
  144 000b 01       		.uleb128 0x1
+<<<<<<< HEAD
  145 000c 79000000 		.4byte	.LASF20
  146 0010 0C       		.byte	0xc
  147 0011 4B010000 		.4byte	.LASF21
  148 0015 11000000 		.4byte	.LASF22
+=======
+ 145 000c 25000000 		.4byte	.LASF20
+ 146 0010 0C       		.byte	0xc
+ 147 0011 F7000000 		.4byte	.LASF21
+ 148 0015 9E010000 		.4byte	.LASF22
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  149 0019 00000000 		.4byte	.Ldebug_ranges0+0
  150 001d 00000000 		.4byte	0
  151 0021 00000000 		.4byte	.Ldebug_line0
  152 0025 02       		.uleb128 0x2
  153 0026 01       		.byte	0x1
  154 0027 06       		.byte	0x6
+<<<<<<< HEAD
  155 0028 F2010000 		.4byte	.LASF0
  156 002c 02       		.uleb128 0x2
  157 002d 01       		.byte	0x1
@@ -343,6 +375,37 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  181 0057 08       		.byte	0x8
  182 0058 07       		.byte	0x7
  183 0059 7E010000 		.4byte	.LASF7
+=======
+ 155 0028 FC010000 		.4byte	.LASF0
+ 156 002c 02       		.uleb128 0x2
+ 157 002d 01       		.byte	0x1
+ 158 002e 08       		.byte	0x8
+ 159 002f 17000000 		.4byte	.LASF1
+ 160 0033 02       		.uleb128 0x2
+ 161 0034 02       		.byte	0x2
+ 162 0035 05       		.byte	0x5
+ 163 0036 85010000 		.4byte	.LASF2
+ 164 003a 02       		.uleb128 0x2
+ 165 003b 02       		.byte	0x2
+ 166 003c 07       		.byte	0x7
+ 167 003d CA000000 		.4byte	.LASF3
+ 168 0041 02       		.uleb128 0x2
+ 169 0042 04       		.byte	0x4
+ 170 0043 05       		.byte	0x5
+ 171 0044 95010000 		.4byte	.LASF4
+ 172 0048 02       		.uleb128 0x2
+ 173 0049 04       		.byte	0x4
+ 174 004a 07       		.byte	0x7
+ 175 004b B8000000 		.4byte	.LASF5
+ 176 004f 02       		.uleb128 0x2
+ 177 0050 08       		.byte	0x8
+ 178 0051 05       		.byte	0x5
+ 179 0052 72010000 		.4byte	.LASF6
+ 180 0056 02       		.uleb128 0x2
+ 181 0057 08       		.byte	0x8
+ 182 0058 07       		.byte	0x7
+ 183 0059 2A010000 		.4byte	.LASF7
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  184 005d 03       		.uleb128 0x3
  185 005e 04       		.byte	0x4
  186 005f 05       		.byte	0x5
@@ -350,14 +413,21 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  188 0064 02       		.uleb128 0x2
  189 0065 04       		.byte	0x4
  190 0066 07       		.byte	0x7
+<<<<<<< HEAD
  191 0067 71010000 		.4byte	.LASF8
  192 006b 04       		.uleb128 0x4
  193 006c E3010000 		.4byte	.LASF12
+=======
+ 191 0067 1D010000 		.4byte	.LASF8
+ 192 006b 04       		.uleb128 0x4
+ 193 006c 8F010000 		.4byte	.LASF12
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  194 0070 02       		.byte	0x2
  195 0071 9201     		.2byte	0x192
  196 0073 2C000000 		.4byte	0x2c
  197 0077 02       		.uleb128 0x2
  198 0078 04       		.byte	0x4
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 7
 
 
@@ -373,13 +443,34 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  208 0088 D4010000 		.4byte	.LASF11
  209 008c 04       		.uleb128 0x4
  210 008d 07010000 		.4byte	.LASF13
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 7
+
+
+ 199 0079 04       		.byte	0x4
+ 200 007a 11000000 		.4byte	.LASF9
+ 201 007e 02       		.uleb128 0x2
+ 202 007f 08       		.byte	0x8
+ 203 0080 04       		.byte	0x4
+ 204 0081 DD000000 		.4byte	.LASF10
+ 205 0085 02       		.uleb128 0x2
+ 206 0086 01       		.byte	0x1
+ 207 0087 08       		.byte	0x8
+ 208 0088 80010000 		.4byte	.LASF11
+ 209 008c 04       		.uleb128 0x4
+ 210 008d B3000000 		.4byte	.LASF13
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  211 0091 02       		.byte	0x2
  212 0092 3C02     		.2byte	0x23c
  213 0094 98000000 		.4byte	0x98
  214 0098 05       		.uleb128 0x5
  215 0099 6B000000 		.4byte	0x6b
  216 009d 06       		.uleb128 0x6
+<<<<<<< HEAD
  217 009e 38010000 		.4byte	.LASF14
+=======
+ 217 009e E4000000 		.4byte	.LASF14
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  218 00a2 01       		.byte	0x1
  219 00a3 39       		.byte	0x39
  220 00a4 00000000 		.4byte	.LFB0
@@ -402,7 +493,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  237 00cd 53       		.byte	0x53
  238 00ce 00       		.byte	0
  239 00cf 06       		.uleb128 0x6
+<<<<<<< HEAD
  240 00d0 A7010000 		.4byte	.LASF15
+=======
+ 240 00d0 53010000 		.4byte	.LASF15
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  241 00d4 01       		.byte	0x1
  242 00d5 5A       		.byte	0x5a
  243 00d6 00000000 		.4byte	.LFB1
@@ -411,17 +506,28 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  246 00df 9C       		.byte	0x9c
  247 00e0 F4000000 		.4byte	0xf4
  248 00e4 07       		.uleb128 0x7
+<<<<<<< HEAD
  249 00e5 C1010000 		.4byte	.LASF17
+=======
+ 249 00e5 6D010000 		.4byte	.LASF17
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  250 00e9 01       		.byte	0x1
  251 00ea 5A       		.byte	0x5a
  252 00eb 6B000000 		.4byte	0x6b
  253 00ef 21000000 		.4byte	.LLST1
  254 00f3 00       		.byte	0
  255 00f4 09       		.uleb128 0x9
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 8
 
 
  256 00f5 95010000 		.4byte	.LASF18
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 8
+
+
+ 256 00f5 41010000 		.4byte	.LASF18
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  257 00f9 01       		.byte	0x1
  258 00fa 71       		.byte	0x71
  259 00fb 6B000000 		.4byte	0x6b
@@ -430,7 +536,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  262 0107 01       		.uleb128 0x1
  263 0108 9C       		.byte	0x9c
  264 0109 09       		.uleb128 0x9
+<<<<<<< HEAD
  265 010a FE010000 		.4byte	.LASF19
+=======
+ 265 010a 08020000 		.4byte	.LASF19
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  266 010e 01       		.byte	0x1
  267 010f 8D       		.byte	0x8d
  268 0110 6B000000 		.4byte	0x6b
@@ -478,7 +588,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  310 0022 0B       		.uleb128 0xb
  311 0023 3E       		.uleb128 0x3e
  312 0024 0B       		.uleb128 0xb
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 9
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 9
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  313 0025 03       		.uleb128 0x3
@@ -538,7 +652,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  367 005c 3A       		.uleb128 0x3a
  368 005d 0B       		.uleb128 0xb
  369 005e 3B       		.uleb128 0x3b
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 10
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 10
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  370 005f 0B       		.uleb128 0xb
@@ -598,7 +716,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  424 000a 50       		.byte	0x50
  425 000b 0A000000 		.4byte	.LVL2
  426 000f 18000000 		.4byte	.LFE0
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 11
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 11
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  427 0013 0400     		.2byte	0x4
@@ -658,7 +780,11 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  480      02004900 
  480      00000201 
  480      FB0E0D00 
+<<<<<<< HEAD
 ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 12
+=======
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 12
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
  480      01010101 
@@ -669,6 +795,7 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  484 0006 73746174 		.ascii	"staticBits\000"
  484      69634269 
  484      747300
+<<<<<<< HEAD
  485              	.LASF22:
  486 0011 433A5C55 		.ascii	"C:\\Users\\a85495\\Desktop\\PSoC-Quadcopter\\Sensor"
  486      73657273 
@@ -791,6 +918,130 @@ ARM GAS  C:\Users\a85495\AppData\Local\Temp\cc1QnRkx.s 			page 1
  529      68617200 
  530              	.LASF19:
  531 01fe 6C656674 		.ascii	"left_arm_led_ReadDataReg\000"
+=======
+ 485              	.LASF9:
+ 486 0011 666C6F61 		.ascii	"float\000"
+ 486      7400
+ 487              	.LASF1:
+ 488 0017 756E7369 		.ascii	"unsigned char\000"
+ 488      676E6564 
+ 488      20636861 
+ 488      7200
+ 489              	.LASF20:
+ 490 0025 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 490      43313120 
+ 490      352E342E 
+ 490      31203230 
+ 490      31363036 
+ 491 0058 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 491      20726576 
+ 491      6973696F 
+ 491      6E203233 
+ 491      37373135 
+ 492 008b 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 492      66756E63 
+ 492      74696F6E 
+ 492      2D736563 
+ 492      74696F6E 
+ 493              	.LASF13:
+ 494 00b3 72656738 		.ascii	"reg8\000"
+ 494      00
+ 495              	.LASF5:
+ 496 00b8 6C6F6E67 		.ascii	"long unsigned int\000"
+ 496      20756E73 
+ 496      69676E65 
+ 496      6420696E 
+ 496      7400
+ 497              	.LASF3:
+ 498 00ca 73686F72 		.ascii	"short unsigned int\000"
+ 498      7420756E 
+ 498      7369676E 
+ 498      65642069 
+ 498      6E7400
+ 499              	.LASF10:
+ 500 00dd 646F7562 		.ascii	"double\000"
+ 500      6C6500
+ 501              	.LASF14:
+ 502 00e4 6C656674 		.ascii	"left_arm_led_Write\000"
+ 502      5F61726D 
+ 502      5F6C6564 
+ 502      5F577269 
+ 502      746500
+ 503              	.LASF21:
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 13
+
+
+ 504 00f7 47656E65 		.ascii	"Generated_Source\\PSoC5\\left_arm_led.c\000"
+ 504      72617465 
+ 504      645F536F 
+ 504      75726365 
+ 504      5C50536F 
+ 505              	.LASF8:
+ 506 011d 756E7369 		.ascii	"unsigned int\000"
+ 506      676E6564 
+ 506      20696E74 
+ 506      00
+ 507              	.LASF7:
+ 508 012a 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 508      206C6F6E 
+ 508      6720756E 
+ 508      7369676E 
+ 508      65642069 
+ 509              	.LASF18:
+ 510 0141 6C656674 		.ascii	"left_arm_led_Read\000"
+ 510      5F61726D 
+ 510      5F6C6564 
+ 510      5F526561 
+ 510      6400
+ 511              	.LASF15:
+ 512 0153 6C656674 		.ascii	"left_arm_led_SetDriveMode\000"
+ 512      5F61726D 
+ 512      5F6C6564 
+ 512      5F536574 
+ 512      44726976 
+ 513              	.LASF17:
+ 514 016d 6D6F6465 		.ascii	"mode\000"
+ 514      00
+ 515              	.LASF6:
+ 516 0172 6C6F6E67 		.ascii	"long long int\000"
+ 516      206C6F6E 
+ 516      6720696E 
+ 516      7400
+ 517              	.LASF11:
+ 518 0180 63686172 		.ascii	"char\000"
+ 518      00
+ 519              	.LASF2:
+ 520 0185 73686F72 		.ascii	"short int\000"
+ 520      7420696E 
+ 520      7400
+ 521              	.LASF12:
+ 522 018f 75696E74 		.ascii	"uint8\000"
+ 522      3800
+ 523              	.LASF4:
+ 524 0195 6C6F6E67 		.ascii	"long int\000"
+ 524      20696E74 
+ 524      00
+ 525              	.LASF22:
+ 526 019e 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\MyCodes\\PSoC-Quadcop"
+ 526      73657273 
+ 526      5C413835 
+ 526      3539305C 
+ 526      446F6375 
+ 527 01cc 7465725C 		.ascii	"ter\\Sensors\\Sensor Test\\All_sensor_testv2.cydsn\000"
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccS2aoWm.s 			page 14
+
+
+ 527      53656E73 
+ 527      6F72735C 
+ 527      53656E73 
+ 527      6F722054 
+ 528              	.LASF0:
+ 529 01fc 7369676E 		.ascii	"signed char\000"
+ 529      65642063 
+ 529      68617200 
+ 530              	.LASF19:
+ 531 0208 6C656674 		.ascii	"left_arm_led_ReadDataReg\000"
+>>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  531      5F61726D 
  531      5F6C6564 
  531      5F526561 
