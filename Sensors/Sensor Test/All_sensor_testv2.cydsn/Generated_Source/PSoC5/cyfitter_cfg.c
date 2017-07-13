@@ -22,7 +22,6 @@
 #include "cyfitter.h"
 #include "CyLib.h"
 #include "cyfitter_cfg.h"
-#include "cyapicallbacks.h"
 
 #define CY_NEED_CYCLOCKSTARTUPERROR 1
 
@@ -162,7 +161,6 @@ CYPACKED typedef struct
 #define cy_cfg_data_table ((const cy_cfg_addrvalue_t CYFAR *)0x4800008Cu)
 
 /* IOPORT_7 Address: CYDEV_PRTDSI_PRT12_BASE Size (bytes): 6 */
-<<<<<<< HEAD
 #define BS_IOPORT_7_VAL ((const uint8 CYFAR *)0x48000CDCu)
 
 /* UDB_1_1_0_CONFIG Address: CYDEV_UCFG_B1_P3_U1_BASE Size (bytes): 128 */
@@ -188,27 +186,6 @@ CYPACKED typedef struct
 
 /* IOPINS0_2 Address: CYREG_PRT2_DM0 Size (bytes): 8 */
 #define BS_IOPINS0_2_VAL ((const uint8 CYFAR *)0x48000E20u)
-=======
-#define BS_IOPORT_7_VAL ((const uint8 CYFAR *)0x48000C08u)
-
-/* UDB_0_1_0_CONFIG Address: CYDEV_UCFG_B1_P4_U1_BASE Size (bytes): 128 */
-#define BS_UDB_0_1_0_CONFIG_VAL ((const uint8 CYFAR *)0x48000C10u)
-
-/* IOPINS0_0 Address: CYREG_PRT0_DR Size (bytes): 10 */
-#define BS_IOPINS0_0_VAL ((const uint8 CYFAR *)0x48000C90u)
-
-/* IOPINS0_7 Address: CYREG_PRT12_DR Size (bytes): 10 */
-#define BS_IOPINS0_7_VAL ((const uint8 CYFAR *)0x48000C9Cu)
-
-/* IOPINS0_8 Address: CYREG_PRT15_DR Size (bytes): 10 */
-#define BS_IOPINS0_8_VAL ((const uint8 CYFAR *)0x48000CA8u)
-
-/* IOPINS0_1 Address: CYREG_PRT1_DM0 Size (bytes): 8 */
-#define BS_IOPINS0_1_VAL ((const uint8 CYFAR *)0x48000CB4u)
-
-/* IOPINS0_2 Address: CYREG_PRT2_DM0 Size (bytes): 8 */
-#define BS_IOPINS0_2_VAL ((const uint8 CYFAR *)0x48000CBCu)
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 
 
 /*******************************************************************************

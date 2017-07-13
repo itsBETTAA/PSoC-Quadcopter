@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 1
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 1
 
 
    1              		.syntax unified
@@ -62,11 +58,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
   28:Generated_Source\PSoC5/gpsSerial_PM.c **** };
   29:Generated_Source\PSoC5/gpsSerial_PM.c **** 
   30:Generated_Source\PSoC5/gpsSerial_PM.c **** 
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 2
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 2
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 2
 
 
   31:Generated_Source\PSoC5/gpsSerial_PM.c **** 
@@ -126,11 +118,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
   68:Generated_Source\PSoC5/gpsSerial_PM.c **** *  Does not restore the FIFO which is a set of nonretention registers.
   69:Generated_Source\PSoC5/gpsSerial_PM.c **** *
   70:Generated_Source\PSoC5/gpsSerial_PM.c **** * Parameters:
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 3
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 3
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 3
 
 
   71:Generated_Source\PSoC5/gpsSerial_PM.c **** *  None.
@@ -190,11 +178,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  108:Generated_Source\PSoC5/gpsSerial_PM.c **** *  None.
  109:Generated_Source\PSoC5/gpsSerial_PM.c **** *
  110:Generated_Source\PSoC5/gpsSerial_PM.c **** * Return:
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 4
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 4
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 4
 
 
  111:Generated_Source\PSoC5/gpsSerial_PM.c **** *  None.
@@ -254,11 +238,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  140:Generated_Source\PSoC5/gpsSerial_PM.c ****     #endif /* End gpsSerial_RX_ENABLED || gpsSerial_HD_ENABLED*/
  141:Generated_Source\PSoC5/gpsSerial_PM.c **** 
  142:Generated_Source\PSoC5/gpsSerial_PM.c ****     gpsSerial_Stop();
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 5
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 5
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 5
 
 
   87              		.loc 1 142 0
@@ -268,11 +248,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
   91              	.L8:
   92              		.align	2
   93              	.L7:
-<<<<<<< HEAD
   94 0020 95650040 		.word	1073767829
-=======
-  94 0020 96640040 		.word	1073767574
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
   95 0024 00000000 		.word	.LANCHOR0
   96              		.cfi_endproc
   97              	.LFE2:
@@ -322,11 +298,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  110              		@ frame_needed = 0, uses_anonymous_args = 0
  111 0000 08B5     		push	{r3, lr}
  112              		.cfi_def_cfa_offset 8
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 6
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 6
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 6
 
 
  113              		.cfi_offset 3, -8
@@ -382,19 +354,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  152 0006 00000000 		.4byte	.Ldebug_abbrev0
  153 000a 04       		.byte	0x4
  154 000b 01       		.uleb128 0x1
-<<<<<<< HEAD
- 155 000c 86000000 		.4byte	.LASF25
- 156 0010 0C       		.byte	0xc
- 157 0011 3B000000 		.4byte	.LASF26
- 158 0015 0D020000 		.4byte	.LASF27
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 7
-=======
  155 000c E4000000 		.4byte	.LASF25
  156 0010 0C       		.byte	0xc
  157 0011 99000000 		.4byte	.LASF26
  158 0015 00000000 		.4byte	.LASF27
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 7
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 7
 
 
  159 0019 00000000 		.4byte	.Ldebug_ranges0+0
@@ -403,37 +367,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  162 0025 02       		.uleb128 0x2
  163 0026 01       		.byte	0x1
  164 0027 06       		.byte	0x6
-<<<<<<< HEAD
- 165 0028 85020000 		.4byte	.LASF0
- 166 002c 02       		.uleb128 0x2
- 167 002d 01       		.byte	0x1
- 168 002e 08       		.byte	0x8
- 169 002f 78000000 		.4byte	.LASF1
- 170 0033 02       		.uleb128 0x2
- 171 0034 02       		.byte	0x2
- 172 0035 05       		.byte	0x5
- 173 0036 03020000 		.4byte	.LASF2
- 174 003a 02       		.uleb128 0x2
- 175 003b 02       		.byte	0x2
- 176 003c 07       		.byte	0x7
- 177 003d 28000000 		.4byte	.LASF3
- 178 0041 02       		.uleb128 0x2
- 179 0042 04       		.byte	0x4
- 180 0043 05       		.byte	0x5
- 181 0044 61020000 		.4byte	.LASF4
- 182 0048 02       		.uleb128 0x2
- 183 0049 04       		.byte	0x4
- 184 004a 07       		.byte	0x7
- 185 004b 19010000 		.4byte	.LASF5
- 186 004f 02       		.uleb128 0x2
- 187 0050 08       		.byte	0x8
- 188 0051 05       		.byte	0x5
- 189 0052 D8010000 		.4byte	.LASF6
- 190 0056 02       		.uleb128 0x2
- 191 0057 08       		.byte	0x8
- 192 0058 07       		.byte	0x7
- 193 0059 77010000 		.4byte	.LASF7
-=======
  165 0028 8F020000 		.4byte	.LASF0
  166 002c 02       		.uleb128 0x2
  167 002d 01       		.byte	0x1
@@ -463,7 +396,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  191 0057 08       		.byte	0x8
  192 0058 07       		.byte	0x7
  193 0059 D5010000 		.4byte	.LASF7
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  194 005d 03       		.uleb128 0x3
  195 005e 04       		.byte	0x4
  196 005f 05       		.byte	0x5
@@ -471,51 +403,29 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  198 0064 02       		.uleb128 0x2
  199 0065 04       		.byte	0x4
  200 0066 07       		.byte	0x7
-<<<<<<< HEAD
- 201 0067 59010000 		.4byte	.LASF8
- 202 006b 04       		.uleb128 0x4
- 203 006c 2B010000 		.4byte	.LASF12
-=======
  201 0067 B7010000 		.4byte	.LASF8
  202 006b 04       		.uleb128 0x4
  203 006c 89010000 		.4byte	.LASF12
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  204 0070 02       		.byte	0x2
  205 0071 9201     		.2byte	0x192
  206 0073 2C000000 		.4byte	0x2c
  207 0077 02       		.uleb128 0x2
  208 0078 04       		.byte	0x4
  209 0079 04       		.byte	0x4
-<<<<<<< HEAD
- 210 007a 72000000 		.4byte	.LASF9
- 211 007e 02       		.uleb128 0x2
- 212 007f 08       		.byte	0x8
- 213 0080 04       		.byte	0x4
- 214 0081 46010000 		.4byte	.LASF10
- 215 0085 02       		.uleb128 0x2
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 8
-=======
  210 007a D0000000 		.4byte	.LASF9
  211 007e 02       		.uleb128 0x2
  212 007f 08       		.byte	0x8
  213 0080 04       		.byte	0x4
  214 0081 A4010000 		.4byte	.LASF10
  215 0085 02       		.uleb128 0x2
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 8
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 8
 
 
  216 0086 01       		.byte	0x1
  217 0087 08       		.byte	0x8
-<<<<<<< HEAD
- 218 0088 E6010000 		.4byte	.LASF11
- 219 008c 04       		.uleb128 0x4
- 220 008d 14010000 		.4byte	.LASF13
-=======
  218 0088 44020000 		.4byte	.LASF11
  219 008c 04       		.uleb128 0x4
  220 008d 72010000 		.4byte	.LASF13
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  221 0091 02       		.byte	0x2
  222 0092 3C02     		.2byte	0x23c
  223 0094 98000000 		.4byte	0x98
@@ -524,15 +434,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  226 009d 02       		.uleb128 0x2
  227 009e 08       		.byte	0x8
  228 009f 04       		.byte	0x4
-<<<<<<< HEAD
- 229 00a0 4D010000 		.4byte	.LASF14
- 230 00a4 02       		.uleb128 0x2
- 231 00a5 04       		.byte	0x4
- 232 00a6 07       		.byte	0x7
- 233 00a7 B7010000 		.4byte	.LASF15
- 234 00ab 06       		.uleb128 0x6
- 235 00ac C0010000 		.4byte	.LASF28
-=======
  229 00a0 AB010000 		.4byte	.LASF14
  230 00a4 02       		.uleb128 0x2
  231 00a5 04       		.byte	0x4
@@ -540,37 +441,24 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  233 00a7 15020000 		.4byte	.LASF15
  234 00ab 06       		.uleb128 0x6
  235 00ac 1E020000 		.4byte	.LASF28
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  236 00b0 01       		.byte	0x1
  237 00b1 03       		.byte	0x3
  238 00b2 45       		.byte	0x45
  239 00b3 C4000000 		.4byte	0xc4
  240 00b7 07       		.uleb128 0x7
-<<<<<<< HEAD
- 241 00b8 6A020000 		.4byte	.LASF29
-=======
  241 00b8 74020000 		.4byte	.LASF29
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  242 00bc 03       		.byte	0x3
  243 00bd 47       		.byte	0x47
  244 00be 6B000000 		.4byte	0x6b
  245 00c2 00       		.byte	0
  246 00c3 00       		.byte	0
  247 00c4 08       		.uleb128 0x8
-<<<<<<< HEAD
- 248 00c5 EB010000 		.4byte	.LASF16
-=======
  248 00c5 49020000 		.4byte	.LASF16
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  249 00c9 03       		.byte	0x3
  250 00ca 4D       		.byte	0x4d
  251 00cb AB000000 		.4byte	0xab
  252 00cf 09       		.uleb128 0x9
-<<<<<<< HEAD
- 253 00d0 31010000 		.4byte	.LASF17
-=======
  253 00d0 8F010000 		.4byte	.LASF17
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  254 00d4 01       		.byte	0x1
  255 00d5 36       		.byte	0x36
  256 00d6 00000000 		.4byte	.LFB0
@@ -578,11 +466,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  258 00de 01       		.uleb128 0x1
  259 00df 9C       		.byte	0x9c
  260 00e0 09       		.uleb128 0x9
-<<<<<<< HEAD
- 261 00e1 91020000 		.4byte	.LASF18
-=======
  261 00e1 9B020000 		.4byte	.LASF18
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  262 00e5 01       		.byte	0x1
  263 00e6 57       		.byte	0x57
  264 00e7 00000000 		.4byte	.LFB1
@@ -590,19 +474,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  266 00ef 01       		.uleb128 0x1
  267 00f0 9C       		.byte	0x9c
  268 00f1 0A       		.uleb128 0xa
-<<<<<<< HEAD
- 269 00f2 00000000 		.4byte	.LASF19
- 270 00f6 01       		.byte	0x1
- 271 00f7 78       		.byte	0x78
- 272 00f8 00000000 		.4byte	.LFB2
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 9
-=======
  269 00f2 5E000000 		.4byte	.LASF19
  270 00f6 01       		.byte	0x1
  271 00f7 78       		.byte	0x78
  272 00f8 00000000 		.4byte	.LFB2
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 9
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 9
 
 
  273 00fc 28000000 		.4byte	.LFE2-.LFB2
@@ -614,11 +490,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  279 010b 52010000 		.4byte	0x152
  280 010f 00       		.byte	0
  281 0110 0A       		.uleb128 0xa
-<<<<<<< HEAD
- 282 0111 A6010000 		.4byte	.LASF20
-=======
  282 0111 04020000 		.4byte	.LASF20
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  283 0115 01       		.byte	0x1
  284 0116 AC       		.byte	0xac
  285 0117 00000000 		.4byte	.LFB3
@@ -637,11 +509,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  298 013c 73010000 		.4byte	0x173
  299 0140 00       		.byte	0
  300 0141 0C       		.uleb128 0xc
-<<<<<<< HEAD
- 301 0142 66010000 		.4byte	.LASF30
-=======
  301 0142 C4010000 		.4byte	.LASF30
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  302 0146 01       		.byte	0x1
  303 0147 18       		.byte	0x18
  304 0148 C4000000 		.4byte	0xc4
@@ -649,25 +517,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  306 014d 03       		.byte	0x3
  307 014e 00000000 		.4byte	gpsSerial_backup
  308 0152 0D       		.uleb128 0xd
-<<<<<<< HEAD
- 309 0153 76020000 		.4byte	.LASF21
- 310 0157 76020000 		.4byte	.LASF21
- 311 015b 03       		.byte	0x3
- 312 015c 55       		.byte	0x55
- 313 015d 0D       		.uleb128 0xd
- 314 015e 10000000 		.4byte	.LASF22
- 315 0162 10000000 		.4byte	.LASF22
- 316 0166 03       		.byte	0x3
- 317 0167 75       		.byte	0x75
- 318 0168 0D       		.uleb128 0xd
- 319 0169 8E010000 		.4byte	.LASF23
- 320 016d 8E010000 		.4byte	.LASF23
- 321 0171 03       		.byte	0x3
- 322 0172 8F       		.byte	0x8f
- 323 0173 0D       		.uleb128 0xd
- 324 0174 61000000 		.4byte	.LASF24
- 325 0178 61000000 		.4byte	.LASF24
-=======
  309 0153 80020000 		.4byte	.LASF21
  310 0157 80020000 		.4byte	.LASF21
  311 015b 03       		.byte	0x3
@@ -685,16 +534,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  323 0173 0D       		.uleb128 0xd
  324 0174 BF000000 		.4byte	.LASF24
  325 0178 BF000000 		.4byte	.LASF24
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  326 017c 03       		.byte	0x3
  327 017d 5A       		.byte	0x5a
  328 017e 00       		.byte	0
  329              		.section	.debug_abbrev,"",%progbits
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 10
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 10
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 10
 
 
  330              	.Ldebug_abbrev0:
@@ -754,11 +598,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  384 0035 00       		.byte	0
  385 0036 05       		.uleb128 0x5
  386 0037 35       		.uleb128 0x35
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 11
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 11
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 11
 
 
  387 0038 00       		.byte	0
@@ -818,11 +658,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  441 006e 0E       		.uleb128 0xe
  442 006f 3A       		.uleb128 0x3a
  443 0070 0B       		.uleb128 0xb
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 12
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 12
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 12
 
 
  444 0071 3B       		.uleb128 0x3b
@@ -882,11 +718,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  498 00ab 0B       		.uleb128 0xb
  499 00ac 3B       		.uleb128 0x3b
  500 00ad 0B       		.uleb128 0xb
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 13
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 13
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 13
 
 
  501 00ae 49       		.uleb128 0x49
@@ -946,181 +778,13 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  555              		.section	.debug_line,"",%progbits
  556              	.Ldebug_line0:
  557 0000 A8000000 		.section	.debug_str,"MS",%progbits,1
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 14
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 14
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 14
 
 
  557      02005800 
  557      00000201 
  557      FB0E0D00 
  557      01010101 
-<<<<<<< HEAD
- 558              	.LASF19:
- 559 0000 67707353 		.ascii	"gpsSerial_Sleep\000"
- 559      65726961 
- 559      6C5F536C 
- 559      65657000 
- 560              	.LASF22:
- 561 0010 67707353 		.ascii	"gpsSerial_ClearRxBuffer\000"
- 561      65726961 
- 561      6C5F436C 
- 561      65617252 
- 561      78427566 
- 562              	.LASF3:
- 563 0028 73686F72 		.ascii	"short unsigned int\000"
- 563      7420756E 
- 563      7369676E 
- 563      65642069 
- 563      6E7400
- 564              	.LASF26:
- 565 003b 47656E65 		.ascii	"Generated_Source\\PSoC5\\gpsSerial_PM.c\000"
- 565      72617465 
- 565      645F536F 
- 565      75726365 
- 565      5C50536F 
- 566              	.LASF24:
- 567 0061 67707353 		.ascii	"gpsSerial_Enable\000"
- 567      65726961 
- 567      6C5F456E 
- 567      61626C65 
- 567      00
- 568              	.LASF9:
- 569 0072 666C6F61 		.ascii	"float\000"
- 569      7400
- 570              	.LASF1:
- 571 0078 756E7369 		.ascii	"unsigned char\000"
- 571      676E6564 
- 571      20636861 
- 571      7200
- 572              	.LASF25:
- 573 0086 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 573      43313120 
- 573      352E342E 
- 573      31203230 
- 573      31363036 
- 574 00b9 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
- 574      20726576 
- 574      6973696F 
- 574      6E203233 
- 574      37373135 
- 575 00ec 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
- 575      66756E63 
- 575      74696F6E 
- 575      2D736563 
- 575      74696F6E 
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 15
-
-
- 576              	.LASF13:
- 577 0114 72656738 		.ascii	"reg8\000"
- 577      00
- 578              	.LASF5:
- 579 0119 6C6F6E67 		.ascii	"long unsigned int\000"
- 579      20756E73 
- 579      69676E65 
- 579      6420696E 
- 579      7400
- 580              	.LASF12:
- 581 012b 75696E74 		.ascii	"uint8\000"
- 581      3800
- 582              	.LASF17:
- 583 0131 67707353 		.ascii	"gpsSerial_SaveConfig\000"
- 583      65726961 
- 583      6C5F5361 
- 583      7665436F 
- 583      6E666967 
- 584              	.LASF10:
- 585 0146 646F7562 		.ascii	"double\000"
- 585      6C6500
- 586              	.LASF14:
- 587 014d 6C6F6E67 		.ascii	"long double\000"
- 587      20646F75 
- 587      626C6500 
- 588              	.LASF8:
- 589 0159 756E7369 		.ascii	"unsigned int\000"
- 589      676E6564 
- 589      20696E74 
- 589      00
- 590              	.LASF30:
- 591 0166 67707353 		.ascii	"gpsSerial_backup\000"
- 591      65726961 
- 591      6C5F6261 
- 591      636B7570 
- 591      00
- 592              	.LASF7:
- 593 0177 6C6F6E67 		.ascii	"long long unsigned int\000"
- 593      206C6F6E 
- 593      6720756E 
- 593      7369676E 
- 593      65642069 
- 594              	.LASF23:
- 595 018e 67707353 		.ascii	"gpsSerial_ClearTxBuffer\000"
- 595      65726961 
- 595      6C5F436C 
- 595      65617254 
- 595      78427566 
- 596              	.LASF20:
- 597 01a6 67707353 		.ascii	"gpsSerial_Wakeup\000"
- 597      65726961 
- 597      6C5F5761 
- 597      6B657570 
- 597      00
- 598              	.LASF15:
- 599 01b7 73697A65 		.ascii	"sizetype\000"
- 599      74797065 
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 16
-
-
- 599      00
- 600              	.LASF28:
- 601 01c0 67707353 		.ascii	"gpsSerial_backupStruct_\000"
- 601      65726961 
- 601      6C5F6261 
- 601      636B7570 
- 601      53747275 
- 602              	.LASF6:
- 603 01d8 6C6F6E67 		.ascii	"long long int\000"
- 603      206C6F6E 
- 603      6720696E 
- 603      7400
- 604              	.LASF11:
- 605 01e6 63686172 		.ascii	"char\000"
- 605      00
- 606              	.LASF16:
- 607 01eb 67707353 		.ascii	"gpsSerial_BACKUP_STRUCT\000"
- 607      65726961 
- 607      6C5F4241 
- 607      434B5550 
- 607      5F535452 
- 608              	.LASF2:
- 609 0203 73686F72 		.ascii	"short int\000"
- 609      7420696E 
- 609      7400
- 610              	.LASF27:
- 611 020d 433A5C55 		.ascii	"C:\\Users\\a85495\\Desktop\\PSoC-Quadcopter\\Sensor"
- 611      73657273 
- 611      5C613835 
- 611      3439355C 
- 611      4465736B 
- 612 023b 735C5365 		.ascii	"s\\Sensor Test\\All_sensor_testv2.cydsn\000"
- 612      6E736F72 
- 612      20546573 
- 612      745C416C 
- 612      6C5F7365 
- 613              	.LASF4:
- 614 0261 6C6F6E67 		.ascii	"long int\000"
- 614      20696E74 
- 614      00
- 615              	.LASF29:
- 616 026a 656E6162 		.ascii	"enableState\000"
- 616      6C655374 
- 616      61746500 
- 617              	.LASF21:
- 618 0276 67707353 		.ascii	"gpsSerial_Stop\000"
-=======
  558              	.LASF27:
  559 0000 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\MyCodes\\PSoC-Quadcop"
  559      73657273 
@@ -1174,7 +838,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  576      43313120 
  576      352E342E 
  576      31203230 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 15
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 15
 
 
  576      31363036 
@@ -1234,7 +898,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  598 01ec 67707353 		.ascii	"gpsSerial_ClearTxBuffer\000"
  598      65726961 
  598      6C5F436C 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 16
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 16
 
 
  598      65617254 
@@ -1283,21 +947,10 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  616      61746500 
  617              	.LASF21:
  618 0280 67707353 		.ascii	"gpsSerial_Stop\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  618      65726961 
  618      6C5F5374 
  618      6F7000
  619              	.LASF0:
-<<<<<<< HEAD
- 620 0285 7369676E 		.ascii	"signed char\000"
- 620      65642063 
- 620      68617200 
- 621              	.LASF18:
- 622 0291 67707353 		.ascii	"gpsSerial_RestoreConfig\000"
- 622      65726961 
- 622      6C5F5265 
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccod8in0.s 			page 17
-=======
  620 028f 7369676E 		.ascii	"signed char\000"
  620      65642063 
  620      68617200 
@@ -1305,8 +958,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 1
  622 029b 67707353 		.ascii	"gpsSerial_RestoreConfig\000"
  622      65726961 
  622      6C5F5265 
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccb9QT0X.s 			page 17
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\cchcrEf5.s 			page 17
 
 
  622      73746F72 

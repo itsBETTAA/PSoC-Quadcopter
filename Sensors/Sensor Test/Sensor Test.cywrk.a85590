@@ -346,7 +346,16 @@
 <project v=".\Base Station.cydsn\Base Station.cyprj" />
 <project v=".\All_sensor_test.cydsn\All_sensor_test.cyprj" />
 </Unloaded>
-<OpenDocs />
+<OpenDocs>
+<name v=".\All_sensor_testv2.cydsn\main.c" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1602, 597" SelectedTabbedMdiWindow="dfb3ea00-b055-477c-9e05-50cd89987a51"><ToolWindow Key="CyNoticeWindow:44d3d453-9474-4f2b-b928-4356f496bef0:Notice Window" Guid="e26f71ea-b3a2-40c9-82d0-0756b3b184b3" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="dfb3ea00-b055-477c-9e05-50cd89987a51" /><DocumentWindow Key="C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\main.c" Guid="6e4bca44-c415-47e7-9725-98af7aa5b213" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

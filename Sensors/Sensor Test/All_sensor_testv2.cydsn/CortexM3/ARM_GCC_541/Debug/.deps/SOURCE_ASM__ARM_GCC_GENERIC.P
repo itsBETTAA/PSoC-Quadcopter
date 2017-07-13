@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/CortexM3/ARM_GCC_541/Debug/CyBootAsmGnu.o : C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/CyBootAsmGnu.s C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cydevicegnu.inc C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cydevicegnu_trm.inc C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cyfittergnu.inc 
-
-C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/CyBootAsmGnu.s : 
-
-C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cydevicegnu.inc : 
-
-C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cydevicegnu_trm.inc : 
-
-C:/Users/a85495/Desktop/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cyfittergnu.inc : 
-=======
 C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/CortexM3/ARM_GCC_541/Debug/CyBootAsmGnu.o : C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/CyBootAsmGnu.s C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cydevicegnu.inc C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cydevicegnu_trm.inc C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cyfittergnu.inc 
 
 C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/CyBootAsmGnu.s : 
@@ -18,5 +7,4 @@ C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_senso
 C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cydevicegnu_trm.inc : 
 
 C:/Users/A85590/Documents/MyCodes/PSoC-Quadcopter/Sensors/Sensor\ Test/All_sensor_testv2.cydsn/Generated_Source/PSoC5/cyfittergnu.inc : 
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
 

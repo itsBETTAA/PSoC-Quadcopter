@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 1
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 1
 
 
    1              		.syntax unified
@@ -62,11 +58,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
   18:..\../millis.c ****     deltaTimer_STATUS;
   38              		.loc 1 18 0
   39 0008 024B     		ldr	r3, .L2+4
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 2
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 2
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 2
 
 
   40 000a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
@@ -75,11 +67,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
   43 000e 00BF     		.align	2
   44              	.L2:
   45 0010 00000000 		.word	.LANCHOR0
-<<<<<<< HEAD
   46 0014 6B640040 		.word	1073767531
-=======
-  46 0014 65640040 		.word	1073767525
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
   47              		.cfi_endproc
   48              	.LFE63:
   49              		.size	timerISR, .-timerISR
@@ -130,11 +118,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
   24:..\../millis.c **** }
   25:..\../millis.c **** 
   26:..\../millis.c **** uint32_t millis(){
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 3
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 3
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 3
 
 
   89              		.loc 1 26 0
@@ -178,53 +162,27 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  125 0006 00000000 		.4byte	.Ldebug_abbrev0
  126 000a 04       		.byte	0x4
  127 000b 01       		.uleb128 0x1
-<<<<<<< HEAD
- 128 000c 10010000 		.4byte	.LASF24
- 129 0010 0C       		.byte	0xc
- 130 0011 C2010000 		.4byte	.LASF25
- 131 0015 16000000 		.4byte	.LASF26
-=======
  128 000c 1A010000 		.4byte	.LASF24
  129 0010 0C       		.byte	0xc
  130 0011 CC010000 		.4byte	.LASF25
  131 0015 00000000 		.4byte	.LASF26
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  132 0019 00000000 		.4byte	.Ldebug_ranges0+0
  133 001d 00000000 		.4byte	0
  134 0021 00000000 		.4byte	.Ldebug_line0
  135 0025 02       		.uleb128 0x2
  136 0026 01       		.byte	0x1
  137 0027 06       		.byte	0x6
-<<<<<<< HEAD
- 138 0028 81000000 		.4byte	.LASF0
- 139 002c 02       		.uleb128 0x2
- 140 002d 01       		.byte	0x1
- 141 002e 08       		.byte	0x8
- 142 002f 8D000000 		.4byte	.LASF1
- 143 0033 02       		.uleb128 0x2
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 4
-=======
  138 0028 8B000000 		.4byte	.LASF0
  139 002c 02       		.uleb128 0x2
  140 002d 01       		.byte	0x1
  141 002e 08       		.byte	0x8
  142 002f 97000000 		.4byte	.LASF1
  143 0033 02       		.uleb128 0x2
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 4
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 4
 
 
  144 0034 02       		.byte	0x2
  145 0035 05       		.byte	0x5
-<<<<<<< HEAD
- 146 0036 D1010000 		.4byte	.LASF2
- 147 003a 02       		.uleb128 0x2
- 148 003b 02       		.byte	0x2
- 149 003c 07       		.byte	0x7
- 150 003d BA000000 		.4byte	.LASF3
- 151 0041 03       		.uleb128 0x3
- 152 0042 0C000000 		.4byte	.LASF5
-=======
  146 0036 DB010000 		.4byte	.LASF2
  147 003a 02       		.uleb128 0x2
  148 003b 02       		.byte	0x2
@@ -232,39 +190,21 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  150 003d C4000000 		.4byte	.LASF3
  151 0041 03       		.uleb128 0x3
  152 0042 6A000000 		.4byte	.LASF5
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  153 0046 02       		.byte	0x2
  154 0047 3F       		.byte	0x3f
  155 0048 4C000000 		.4byte	0x4c
  156 004c 02       		.uleb128 0x2
  157 004d 04       		.byte	0x4
  158 004e 05       		.byte	0x5
-<<<<<<< HEAD
- 159 004f FB010000 		.4byte	.LASF4
- 160 0053 03       		.uleb128 0x3
- 161 0054 E1000000 		.4byte	.LASF6
-=======
  159 004f 05020000 		.4byte	.LASF4
  160 0053 03       		.uleb128 0x3
  161 0054 EB000000 		.4byte	.LASF6
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  162 0058 02       		.byte	0x2
  163 0059 41       		.byte	0x41
  164 005a 5E000000 		.4byte	0x5e
  165 005e 02       		.uleb128 0x2
  166 005f 04       		.byte	0x4
  167 0060 07       		.byte	0x7
-<<<<<<< HEAD
- 168 0061 A8000000 		.4byte	.LASF7
- 169 0065 02       		.uleb128 0x2
- 170 0066 08       		.byte	0x8
- 171 0067 05       		.byte	0x5
- 172 0068 AF010000 		.4byte	.LASF8
- 173 006c 02       		.uleb128 0x2
- 174 006d 08       		.byte	0x8
- 175 006e 07       		.byte	0x7
- 176 006f F9000000 		.4byte	.LASF9
-=======
  168 0061 B2000000 		.4byte	.LASF7
  169 0065 02       		.uleb128 0x2
  170 0066 08       		.byte	0x8
@@ -274,7 +214,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  174 006d 08       		.byte	0x8
  175 006e 07       		.byte	0x7
  176 006f 03010000 		.4byte	.LASF9
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  177 0073 04       		.uleb128 0x4
  178 0074 04       		.byte	0x4
  179 0075 05       		.byte	0x5
@@ -282,59 +221,28 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  181 007a 02       		.uleb128 0x2
  182 007b 04       		.byte	0x4
  183 007c 07       		.byte	0x7
-<<<<<<< HEAD
- 184 007d EC000000 		.4byte	.LASF10
- 185 0081 03       		.uleb128 0x3
- 186 0082 9E010000 		.4byte	.LASF11
-=======
  184 007d F6000000 		.4byte	.LASF10
  185 0081 03       		.uleb128 0x3
  186 0082 A8010000 		.4byte	.LASF11
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  187 0086 03       		.byte	0x3
  188 0087 2C       		.byte	0x2c
  189 0088 41000000 		.4byte	0x41
  190 008c 03       		.uleb128 0x3
-<<<<<<< HEAD
- 191 008d F2010000 		.4byte	.LASF12
-=======
  191 008d FC010000 		.4byte	.LASF12
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  192 0091 03       		.byte	0x3
  193 0092 30       		.byte	0x30
  194 0093 53000000 		.4byte	0x53
  195 0097 05       		.uleb128 0x5
-<<<<<<< HEAD
- 196 0098 DB010000 		.4byte	.LASF13
-=======
  196 0098 E5010000 		.4byte	.LASF13
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  197 009c 04       		.byte	0x4
  198 009d 9201     		.2byte	0x192
  199 009f 2C000000 		.4byte	0x2c
  200 00a3 02       		.uleb128 0x2
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 5
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 5
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 5
 
 
  201 00a4 04       		.byte	0x4
  202 00a5 04       		.byte	0x4
-<<<<<<< HEAD
- 203 00a6 7B000000 		.4byte	.LASF14
- 204 00aa 02       		.uleb128 0x2
- 205 00ab 08       		.byte	0x8
- 206 00ac 04       		.byte	0x4
- 207 00ad DA000000 		.4byte	.LASF15
- 208 00b1 02       		.uleb128 0x2
- 209 00b2 01       		.byte	0x1
- 210 00b3 08       		.byte	0x8
- 211 00b4 BD010000 		.4byte	.LASF16
- 212 00b8 05       		.uleb128 0x5
- 213 00b9 A3000000 		.4byte	.LASF17
-=======
  203 00a6 85000000 		.4byte	.LASF14
  204 00aa 02       		.uleb128 0x2
  205 00ab 08       		.byte	0x8
@@ -346,7 +254,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  211 00b4 C7010000 		.4byte	.LASF16
  212 00b8 05       		.uleb128 0x5
  213 00b9 AD000000 		.4byte	.LASF17
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  214 00bd 04       		.byte	0x4
  215 00be 3C02     		.2byte	0x23c
  216 00c0 C4000000 		.4byte	0xc4
@@ -355,17 +262,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  219 00c9 02       		.uleb128 0x2
  220 00ca 08       		.byte	0x8
  221 00cb 04       		.byte	0x4
-<<<<<<< HEAD
- 222 00cc 0B020000 		.4byte	.LASF18
- 223 00d0 02       		.uleb128 0x2
- 224 00d1 04       		.byte	0x4
- 225 00d2 07       		.byte	0x7
- 226 00d3 A6010000 		.4byte	.LASF19
- 227 00d7 06       		.uleb128 0x6
- 228 00d8 8C000000 		.4byte	0x8c
- 229 00dc 07       		.uleb128 0x7
- 230 00dd 17020000 		.4byte	.LASF20
-=======
  222 00cc 15020000 		.4byte	.LASF18
  223 00d0 02       		.uleb128 0x2
  224 00d1 04       		.byte	0x4
@@ -375,7 +271,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  228 00d8 8C000000 		.4byte	0x8c
  229 00dc 07       		.uleb128 0x7
  230 00dd 21020000 		.4byte	.LASF20
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  231 00e1 01       		.byte	0x1
  232 00e2 10       		.byte	0x10
  233 00e3 00000000 		.4byte	.LFB63
@@ -383,11 +278,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  235 00eb 01       		.uleb128 0x1
  236 00ec 9C       		.byte	0x9c
  237 00ed 08       		.uleb128 0x8
-<<<<<<< HEAD
- 238 00ee 00000000 		.4byte	.LASF27
-=======
  238 00ee 5E000000 		.4byte	.LASF27
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  239 00f2 01       		.byte	0x1
  240 00f3 15       		.byte	0x15
  241 00f4 00000000 		.4byte	.LFB64
@@ -407,21 +298,13 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  255 0117 05       		.uleb128 0x5
  256 0118 03       		.byte	0x3
  257 0119 00000000 		.4byte	timerISR
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 6
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 6
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 6
 
 
  258 011d 00       		.byte	0
  259 011e 00       		.byte	0
  260 011f 0C       		.uleb128 0xc
-<<<<<<< HEAD
- 261 0120 04020000 		.4byte	.LASF21
-=======
  261 0120 0E020000 		.4byte	.LASF21
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  262 0124 01       		.byte	0x1
  263 0125 1A       		.byte	0x1a
  264 0126 8C000000 		.4byte	0x8c
@@ -430,11 +313,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  267 0132 01       		.uleb128 0x1
  268 0133 9C       		.byte	0x9c
  269 0134 0D       		.uleb128 0xd
-<<<<<<< HEAD
- 270 0135 9B000000 		.4byte	.LASF28
-=======
  270 0135 A5000000 		.4byte	.LASF28
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  271 0139 01       		.byte	0x1
  272 013a 07       		.byte	0x7
  273 013b D7000000 		.4byte	0xd7
@@ -442,26 +321,13 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  275 0140 03       		.byte	0x3
  276 0141 00000000 		.4byte	mscount
  277 0145 0E       		.uleb128 0xe
-<<<<<<< HEAD
- 278 0146 CD000000 		.4byte	.LASF29
-=======
  278 0146 D7000000 		.4byte	.LASF29
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  279 014a 07       		.byte	0x7
  280 014b 9606     		.2byte	0x696
  281 014d 51010000 		.4byte	0x151
  282 0151 06       		.uleb128 0x6
  283 0152 81000000 		.4byte	0x81
  284 0156 0F       		.uleb128 0xf
-<<<<<<< HEAD
- 285 0157 6A000000 		.4byte	.LASF22
- 286 015b 6A000000 		.4byte	.LASF22
- 287 015f 05       		.byte	0x5
- 288 0160 5A       		.byte	0x5a
- 289 0161 0F       		.uleb128 0xf
- 290 0162 E1010000 		.4byte	.LASF23
- 291 0166 E1010000 		.4byte	.LASF23
-=======
  285 0157 74000000 		.4byte	.LASF22
  286 015b 74000000 		.4byte	.LASF22
  287 015f 05       		.byte	0x5
@@ -469,7 +335,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  289 0161 0F       		.uleb128 0xf
  290 0162 EB010000 		.4byte	.LASF23
  291 0166 EB010000 		.4byte	.LASF23
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  292 016a 06       		.byte	0x6
  293 016b 18       		.byte	0x18
  294 016c 00       		.byte	0
@@ -493,11 +358,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  312 000f 10       		.uleb128 0x10
  313 0010 17       		.uleb128 0x17
  314 0011 00       		.byte	0
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 7
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 7
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 7
 
 
  315 0012 00       		.byte	0
@@ -557,11 +418,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  369 0048 00       		.byte	0
  370 0049 00       		.byte	0
  371 004a 07       		.uleb128 0x7
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 8
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 8
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 8
 
 
  372 004b 2E       		.uleb128 0x2e
@@ -621,11 +478,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  426 0085 0A       		.uleb128 0xa
  427 0086 898201   		.uleb128 0x4109
  428 0089 01       		.byte	0x1
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 9
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 9
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 9
 
 
  429 008a 11       		.uleb128 0x11
@@ -685,11 +538,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  483 00c4 34       		.uleb128 0x34
  484 00c5 00       		.byte	0
  485 00c6 03       		.uleb128 0x3
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 10
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 10
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 10
 
 
  486 00c7 0E       		.uleb128 0xe
@@ -749,11 +598,7 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  540 0014 0C000000 		.4byte	.LFE65
  541 0018 00000000 		.4byte	0
  542 001c 00000000 		.4byte	0
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 11
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 11
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 11
 
 
  543              		.section	.debug_line,"",%progbits
@@ -763,29 +608,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  545      00000201 
  545      FB0E0D00 
  545      01010101 
-<<<<<<< HEAD
- 546              	.LASF27:
- 547 0000 6D696C6C 		.ascii	"millis_init\000"
- 547      69735F69 
- 547      6E697400 
- 548              	.LASF5:
- 549 000c 5F5F696E 		.ascii	"__int32_t\000"
- 549      7433325F 
- 549      7400
- 550              	.LASF26:
- 551 0016 433A5C55 		.ascii	"C:\\Users\\a85495\\Desktop\\PSoC-Quadcopter\\Sensor"
- 551      73657273 
- 551      5C613835 
- 551      3439355C 
- 551      4465736B 
- 552 0044 735C5365 		.ascii	"s\\Sensor Test\\All_sensor_testv2.cydsn\000"
- 552      6E736F72 
- 552      20546573 
- 552      745C416C 
- 552      6C5F7365 
- 553              	.LASF22:
- 554 006a 64656C74 		.ascii	"deltaTimer_Start\000"
-=======
  546              	.LASF26:
  547 0000 433A5C55 		.ascii	"C:\\Users\\A85590\\Documents\\MyCodes\\PSoC-Quadcop"
  547      73657273 
@@ -807,22 +629,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  552      7400
  553              	.LASF22:
  554 0074 64656C74 		.ascii	"deltaTimer_Start\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  554      6154696D 
  554      65725F53 
  554      74617274 
  554      00
  555              	.LASF14:
-<<<<<<< HEAD
- 556 007b 666C6F61 		.ascii	"float\000"
- 556      7400
- 557              	.LASF0:
- 558 0081 7369676E 		.ascii	"signed char\000"
- 558      65642063 
- 558      68617200 
- 559              	.LASF1:
- 560 008d 756E7369 		.ascii	"unsigned char\000"
-=======
  556 0085 666C6F61 		.ascii	"float\000"
  556      7400
  557              	.LASF0:
@@ -831,20 +642,10 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  558      68617200 
  559              	.LASF1:
  560 0097 756E7369 		.ascii	"unsigned char\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  560      676E6564 
  560      20636861 
  560      7200
  561              	.LASF28:
-<<<<<<< HEAD
- 562 009b 6D73636F 		.ascii	"mscount\000"
- 562      756E7400 
- 563              	.LASF17:
- 564 00a3 72656738 		.ascii	"reg8\000"
- 564      00
- 565              	.LASF7:
- 566 00a8 6C6F6E67 		.ascii	"long unsigned int\000"
-=======
  562 00a5 6D73636F 		.ascii	"mscount\000"
  562      756E7400 
  563              	.LASF17:
@@ -852,47 +653,25 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  564      00
  565              	.LASF7:
  566 00b2 6C6F6E67 		.ascii	"long unsigned int\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  566      20756E73 
  566      69676E65 
  566      6420696E 
  566      7400
  567              	.LASF3:
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 12
-
-
- 568 00ba 73686F72 		.ascii	"short unsigned int\000"
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 12
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 12
 
 
  568 00c4 73686F72 		.ascii	"short unsigned int\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  568      7420756E 
  568      7369676E 
  568      65642069 
  568      6E7400
  569              	.LASF29:
-<<<<<<< HEAD
- 570 00cd 49544D5F 		.ascii	"ITM_RxBuffer\000"
-=======
  570 00d7 49544D5F 		.ascii	"ITM_RxBuffer\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  570      52784275 
  570      66666572 
  570      00
  571              	.LASF15:
-<<<<<<< HEAD
- 572 00da 646F7562 		.ascii	"double\000"
- 572      6C6500
- 573              	.LASF6:
- 574 00e1 5F5F7569 		.ascii	"__uint32_t\000"
- 574      6E743332 
- 574      5F7400
- 575              	.LASF10:
- 576 00ec 756E7369 		.ascii	"unsigned int\000"
-=======
  572 00e4 646F7562 		.ascii	"double\000"
  572      6C6500
  573              	.LASF6:
@@ -901,59 +680,32 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  574      5F7400
  575              	.LASF10:
  576 00f6 756E7369 		.ascii	"unsigned int\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  576      676E6564 
  576      20696E74 
  576      00
  577              	.LASF9:
-<<<<<<< HEAD
- 578 00f9 6C6F6E67 		.ascii	"long long unsigned int\000"
-=======
  578 0103 6C6F6E67 		.ascii	"long long unsigned int\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  578      206C6F6E 
  578      6720756E 
  578      7369676E 
  578      65642069 
  579              	.LASF24:
-<<<<<<< HEAD
- 580 0110 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
-=======
  580 011a 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  580      43313120 
  580      352E342E 
  580      31203230 
  580      31363036 
-<<<<<<< HEAD
- 581 0143 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
-=======
  581 014d 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  581      20726576 
  581      6973696F 
  581      6E203233 
  581      37373135 
-<<<<<<< HEAD
- 582 0176 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
-=======
  582 0180 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  582      66756E63 
  582      74696F6E 
  582      2D736563 
  582      74696F6E 
  583              	.LASF11:
-<<<<<<< HEAD
- 584 019e 696E7433 		.ascii	"int32_t\000"
- 584      325F7400 
- 585              	.LASF19:
- 586 01a6 73697A65 		.ascii	"sizetype\000"
- 586      74797065 
- 586      00
- 587              	.LASF8:
- 588 01af 6C6F6E67 		.ascii	"long long int\000"
-=======
  584 01a8 696E7433 		.ascii	"int32_t\000"
  584      325F7400 
  585              	.LASF19:
@@ -962,42 +714,21 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  586      00
  587              	.LASF8:
  588 01b9 6C6F6E67 		.ascii	"long long int\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  588      206C6F6E 
  588      6720696E 
  588      7400
  589              	.LASF16:
-<<<<<<< HEAD
-ARM GAS  C:\Users\a85495\AppData\Local\Temp\ccRlDWVS.s 			page 13
-
-
- 590 01bd 63686172 		.ascii	"char\000"
- 590      00
- 591              	.LASF25:
- 592 01c2 2E2E5C2E 		.ascii	"..\\..\\millis.c\000"
-=======
-ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 13
+ARM GAS  C:\Users\A85590\AppData\Local\Temp\ccGmFBs4.s 			page 13
 
 
  590 01c7 63686172 		.ascii	"char\000"
  590      00
  591              	.LASF25:
  592 01cc 2E2E5C2E 		.ascii	"..\\..\\millis.c\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  592      2E5C6D69 
  592      6C6C6973 
  592      2E6300
  593              	.LASF2:
-<<<<<<< HEAD
- 594 01d1 73686F72 		.ascii	"short int\000"
- 594      7420696E 
- 594      7400
- 595              	.LASF13:
- 596 01db 75696E74 		.ascii	"uint8\000"
- 596      3800
- 597              	.LASF23:
- 598 01e1 64656C74 		.ascii	"deltTime_StartEx\000"
-=======
  594 01db 73686F72 		.ascii	"short int\000"
  594      7420696E 
  594      7400
@@ -1006,30 +737,11 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  596      3800
  597              	.LASF23:
  598 01eb 64656C74 		.ascii	"deltTime_StartEx\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  598      54696D65 
  598      5F537461 
  598      72744578 
  598      00
  599              	.LASF12:
-<<<<<<< HEAD
- 600 01f2 75696E74 		.ascii	"uint32_t\000"
- 600      33325F74 
- 600      00
- 601              	.LASF4:
- 602 01fb 6C6F6E67 		.ascii	"long int\000"
- 602      20696E74 
- 602      00
- 603              	.LASF21:
- 604 0204 6D696C6C 		.ascii	"millis\000"
- 604      697300
- 605              	.LASF18:
- 606 020b 6C6F6E67 		.ascii	"long double\000"
- 606      20646F75 
- 606      626C6500 
- 607              	.LASF20:
- 608 0217 74696D65 		.ascii	"timerISR\000"
-=======
  600 01fc 75696E74 		.ascii	"uint32_t\000"
  600      33325F74 
  600      00
@@ -1046,7 +758,6 @@ ARM GAS  C:\Users\A85590\AppData\Local\Temp\cccv1TnS.s 			page 1
  606      626C6500 
  607              	.LASF20:
  608 0221 74696D65 		.ascii	"timerISR\000"
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
  608      72495352 
  608      00
  609              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

@@ -1,10 +1,5 @@
-<<<<<<< HEAD
--- Project:   C:\Users\a85495\Desktop\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\All_sensor_testv2.cyprj
--- Generated: 07/13/2017 09:38:22
-=======
 -- Project:   C:\Users\A85590\Documents\MyCodes\PSoC-Quadcopter\Sensors\Sensor Test\All_sensor_testv2.cydsn\All_sensor_testv2.cyprj
--- Generated: 07/11/2017 16:26:56
->>>>>>> 6765c86c158e72ebd2438584a7341d17ff362fc0
+-- Generated: 07/13/2017 14:25:08
 -- PSoC Creator  4.1
 
 ENTITY All_sensor_testv2 IS
