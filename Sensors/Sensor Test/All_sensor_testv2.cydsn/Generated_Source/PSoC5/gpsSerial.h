@@ -19,9 +19,9 @@
 #if !defined(CY_UART_gpsSerial_H)
 #define CY_UART_gpsSerial_H
 
-#include "cytypes.h"
 #include "cyfitter.h"
-#include "CyLib.h"
+#include "cytypes.h"
+#include "CyLib.h" /* For CyEnterCriticalSection() and CyExitCriticalSection() functions */
 
 
 /***************************************
@@ -31,8 +31,8 @@
 #define gpsSerial_RX_ENABLED                     (1u)
 #define gpsSerial_TX_ENABLED                     (1u)
 #define gpsSerial_HD_ENABLED                     (0u)
-#define gpsSerial_RX_INTERRUPT_ENABLED           (0u)
-#define gpsSerial_TX_INTERRUPT_ENABLED           (0u)
+#define gpsSerial_RX_INTERRUPT_ENABLED           (1u)
+#define gpsSerial_TX_INTERRUPT_ENABLED           (1u)
 #define gpsSerial_INTERNAL_CLOCK_USED            (1u)
 #define gpsSerial_RXHW_ADDRESS_ENABLED           (0u)
 #define gpsSerial_OVER_SAMPLE_COUNT              (8u)
@@ -45,8 +45,8 @@
 #define gpsSerial_USE23POLLING                   (1u)
 #define gpsSerial_FLOW_CONTROL                   (0u)
 #define gpsSerial_CLK_FREQ                       (0u)
-#define gpsSerial_TX_BUFFER_SIZE                 (4u)
-#define gpsSerial_RX_BUFFER_SIZE                 (4u)
+#define gpsSerial_TX_BUFFER_SIZE                 (100u)
+#define gpsSerial_RX_BUFFER_SIZE                 (100u)
 
 /* Check to see if required defines such as CY_PSOC5LP are available */
 /* They are defined starting with cy_boot v3.0 */
@@ -369,7 +369,7 @@ extern uint8 gpsSerial_initVar;
 
 #define gpsSerial_INIT_TX_INTERRUPTS_MASK \
                                   (uint8)((0 << gpsSerial_TX_STS_COMPLETE_SHIFT) \
-                                        | (0 << gpsSerial_TX_STS_FIFO_EMPTY_SHIFT) \
+                                        | (1 << gpsSerial_TX_STS_FIFO_EMPTY_SHIFT) \
                                         | (0 << gpsSerial_TX_STS_FIFO_FULL_SHIFT) \
                                         | (0 << gpsSerial_TX_STS_FIFO_NOT_FULL_SHIFT))
 

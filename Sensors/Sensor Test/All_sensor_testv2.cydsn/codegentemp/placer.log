@@ -4,9 +4,9 @@
 
 #Version:            1.1
 
-#Build Date:         Apr 29 2016 09:00:55
+#Build Date:         Feb 27 2017 11:02:10
 
-#File Generated:     Jul 10 2017 12:46:57
+#File Generated:     Jul 13 2017 09:38:16
 
 #Purpose:            
 
@@ -14,16 +14,16 @@
 
 #***************************************************************************
 
-Executing : C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\bin/sjplacer.exe --proj-name All_sensor_testv2 --netlist-vh2 All_sensor_testv2_p.vh2 --arch-file C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\dev/arch/p35_udb4x6.ark --rrg-file C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\dev/psoc5/psoc5lp/route_arch-rrg.cydata --irq-file C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\dev/psoc5/psoc5lp/irqconn.cydata --drq-file C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\dev/psoc5/psoc5lp/dmaconn.cydata --dsi-conn-file C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\dev/psoc5/psoc5lp/dsiconn.cydata --pins-file pins_68-QFN.xml --lib-file All_sensor_testv2_p.lib --sdc-file All_sensor_testv2.sdc --io-pcf All_sensor_testv2.pci --outdir .
+Executing : C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\bin/sjplacer.exe --proj-name All_sensor_testv2 --netlist-vh2 All_sensor_testv2_p.vh2 --arch p35_udb4x6 --arch-file C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\arch/udbdsi_4x6_24.cydata --ip-file C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\psoc5/psoc5lp/ip_blocks.cydata --rrg-file C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\psoc5/psoc5lp/route_arch-rrg.cydata --irq-file C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\psoc5/psoc5lp/irqconn.cydata --drq-file C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\psoc5/psoc5lp/dmaconn.cydata --dsi-conn-file C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\psoc5/psoc5lp/dsiconn.cydata --pins-file pins_68-QFN.xml --lib-file All_sensor_testv2_p.lib --sdc-file All_sensor_testv2.sdc --io-pcf All_sensor_testv2.pci --outdir .
 
 		Softjin Techologies Placer, Version 1.1
 
-Build Date : Apr 29 2016	08:58:44
+Build Date : Feb 27 2017	11:00:30
 
 D2004: Option and Settings Summary
 =============================================================
 Netlist vh2 file          - All_sensor_testv2_p.vh2
-Architecture file         - C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\dev/arch/p35_udb4x6.ark
+Architecture file         - C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\arch/udbdsi_4x6_24.cydata
 Package                   - 
 Defparam file             - 
 SDC file                  - All_sensor_testv2.sdc
@@ -34,7 +34,7 @@ IO Placement file         - All_sensor_testv2.pci
 D2050: Starting reading inputs for placer
 =============================================================
 D2065: Reading netlist file : "All_sensor_testv2_p.vh2"
-D2065: Reading arch file : "C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\dev/arch/p35_udb4x6.ark"
+D2065: Reading arch file : "C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\arch/udbdsi_4x6_24.cydata"
 D2051: Reading of inputs for placer completed successfully
 
 D2053: Starting placement of the design
@@ -86,9 +86,9 @@ Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
-Clock: debugSerial_IntClock | Frequency:  52.1 MHz | Target:   0.9 MHz
-Clock: gpsSerial_IntClock   | Frequency:  34.1 MHz | Target:   0.1 MHz
-Clock: xbeeSerial_IntClock  | Frequency:  42.9 MHz | Target:   0.9 MHz
+Clock: debugSerial_IntClock | Frequency:  55.5 MHz | Target:   0.9 MHz
+Clock: gpsSerial_IntClock   | Frequency:  39.7 MHz | Target:   0.1 MHz
+Clock: xbeeSerial_IntClock  | Frequency:  44.0 MHz | Target:   0.9 MHz
 
 ======================================================================
                      End of Clock Summary
@@ -101,20 +101,20 @@ Phase 7
                      Clock Summary 
 ======================================================================
 Number of clocks: 9
-Clock: CyBUS_CLK            | Frequency:   1.1 MHz | Target:  24.0 MHz
+Clock: CyBUS_CLK            | Frequency:   1.3 MHz | Target:  24.0 MHz
 Clock: CyBUS_CLK(fixed-function) | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
 Clock: debugSerial_IntClock | Frequency:   1.4 MHz | Target:   0.9 MHz
-Clock: gpsSerial_IntClock   | Frequency:   1.1 MHz | Target:   0.1 MHz
-Clock: xbeeSerial_IntClock  | Frequency:   1.4 MHz | Target:   0.9 MHz
+Clock: gpsSerial_IntClock   | Frequency:   1.4 MHz | Target:   0.1 MHz
+Clock: xbeeSerial_IntClock  | Frequency:   1.3 MHz | Target:   0.9 MHz
 
 ======================================================================
                      End of Clock Summary
 ######################################################################
-D2088: Phase 7, elapsed time : 1.2 (sec)
+D2088: Phase 7, elapsed time : 1.0 (sec)
 
 Final Design Statistics
     Number of Combinational MCs 	:	25
@@ -151,8 +151,8 @@ Clock: CyILO                | Frequency: N/A       | Target:   0.0 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:   3.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
-Clock: debugSerial_IntClock | Frequency:   1.5 MHz | Target:   0.9 MHz
-Clock: gpsSerial_IntClock   | Frequency:   1.4 MHz | Target:   0.1 MHz
+Clock: debugSerial_IntClock | Frequency:   1.4 MHz | Target:   0.9 MHz
+Clock: gpsSerial_IntClock   | Frequency:   1.5 MHz | Target:   0.1 MHz
 Clock: xbeeSerial_IntClock  | Frequency:   1.4 MHz | Target:   0.9 MHz
 
 ======================================================================
@@ -164,5 +164,5 @@ D2088: Phase 8, elapsed time : 0.0 (sec)
 
 D2054: Placement of the design completed successfully
 
-I2076: Total run-time: 2.0 sec.
+I2076: Total run-time: 1.7 sec.
 

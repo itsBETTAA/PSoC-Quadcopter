@@ -2,7 +2,7 @@
 --	Conversion of All_sensor_testv2.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Mon Jul 10 12:46:56 2017
+--	Thu Jul 13 09:38:15 2017
 --
 
 USE cypress.cypress.all;
@@ -749,7 +749,9 @@ SIGNAL \debugSerial:BUART:sRX:MODULE_10:gte\ : bit;
 ATTRIBUTE port_state_att of \debugSerial:BUART:sRX:MODULE_10:gte\:SIGNAL IS 2;
 SIGNAL \debugSerial:BUART:sRX:MODULE_10:lte\ : bit;
 ATTRIBUTE port_state_att of \debugSerial:BUART:sRX:MODULE_10:lte\:SIGNAL IS 2;
+SIGNAL Net_56 : bit;
 SIGNAL \gpsSerial:Net_9\ : bit;
+SIGNAL Net_57 : bit;
 SIGNAL \gpsSerial:Net_61\ : bit;
 SIGNAL \gpsSerial:BUART:clock_op\ : bit;
 SIGNAL \gpsSerial:BUART:reset_reg\ : bit;
@@ -765,9 +767,7 @@ SIGNAL \gpsSerial:BUART:reset_sr\ : bit;
 SIGNAL \gpsSerial:BUART:HalfDuplexSend_last\ : bit;
 SIGNAL Net_39 : bit;
 SIGNAL \gpsSerial:BUART:txn\ : bit;
-SIGNAL Net_56 : bit;
 SIGNAL \gpsSerial:BUART:tx_interrupt_out\ : bit;
-SIGNAL Net_57 : bit;
 SIGNAL \gpsSerial:BUART:rx_interrupt_out\ : bit;
 SIGNAL \gpsSerial:BUART:tx_state_1\ : bit;
 SIGNAL \gpsSerial:BUART:tx_state_0\ : bit;
@@ -3008,6 +3008,10 @@ to_debug_tx:cy_psoc3_pins_v1_10
 		status=>(zero, \debugSerial:BUART:rx_status_5\, \debugSerial:BUART:rx_status_4\, \debugSerial:BUART:rx_status_3\,
 			\debugSerial:BUART:rx_status_2\, zero, zero),
 		interrupt=>\debugSerial:BUART:rx_interrupt_out\);
+\gpsSerial:TXInternalInterrupt\:cy_isr_v1_0
+	GENERIC MAP(int_type=>"10",
+		is_nmi=>'0')
+	PORT MAP(int_signal=>Net_56);
 \gpsSerial:IntClock\:cy_clock_v1_0
 	GENERIC MAP(cy_registers=>"",
 		id=>"9fa9e446-746e-4a22-ba29-dbae4b579ae9/be0a0e37-ad17-42ca-b5a1-1a654d736358",
@@ -3018,6 +3022,10 @@ to_debug_tx:cy_psoc3_pins_v1_10
 		is_digital=>'1')
 	PORT MAP(clock_out=>\gpsSerial:Net_9\,
 		dig_domain_out=>open);
+\gpsSerial:RXInternalInterrupt\:cy_isr_v1_0
+	GENERIC MAP(int_type=>"10",
+		is_nmi=>'0')
+	PORT MAP(int_signal=>Net_57);
 \gpsSerial:BUART:ClkSync\:cy_psoc3_udb_clock_enable_v1_0
 	GENERIC MAP(sync_mode=>'1')
 	PORT MAP(clock_in=>\gpsSerial:Net_9\,
@@ -3204,7 +3212,7 @@ to_debug_tx:cy_psoc3_pins_v1_10
 		clock=>\gpsSerial:BUART:clock_op\,
 		status=>(zero, zero, zero, \gpsSerial:BUART:tx_fifo_notfull\,
 			\gpsSerial:BUART:tx_status_2\, \gpsSerial:BUART:tx_fifo_empty\, \gpsSerial:BUART:tx_status_0\),
-		interrupt=>\gpsSerial:BUART:tx_interrupt_out\);
+		interrupt=>Net_56);
 \gpsSerial:BUART:sRX:RxShifter:u0\:cy_psoc3_dp
 	GENERIC MAP(cy_dpconfig=>"0000000000000000000000000000000000000000000000000000001001000000000100000000000000010000001100000001000000000000000100100001000011111111000000001111111111111111101000000110001001000001111100000000000000001100",
 		d0_init=>"00000000",
@@ -3312,7 +3320,7 @@ to_debug_tx:cy_psoc3_pins_v1_10
 		clock=>\gpsSerial:BUART:clock_op\,
 		status=>(zero, \gpsSerial:BUART:rx_status_5\, \gpsSerial:BUART:rx_status_4\, \gpsSerial:BUART:rx_status_3\,
 			\gpsSerial:BUART:rx_status_2\, zero, zero),
-		interrupt=>\gpsSerial:BUART:rx_interrupt_out\);
+		interrupt=>Net_57);
 to_gps_tx:cy_psoc3_pins_v1_10
 	GENERIC MAP(id=>"5ca611b2-252b-4423-b6f2-ec22d0e72189",
 		drive_mode=>"001",

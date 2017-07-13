@@ -1,6 +1,6 @@
 -- Project:   All_sensor_testv2
--- Generated: 07/10/2017 12:46:57
--- PSoC Creator  4.0 Update 1
+-- Generated: 07/13/2017 09:38:16
+-- PSoC Creator  4.1
 
 ENTITY All_sensor_testv2 IS
     PORT(
@@ -56,6 +56,8 @@ ARCHITECTURE __DEFAULT__ OF All_sensor_testv2 IS
     SIGNAL Net_18 : bit;
     SIGNAL Net_39 : bit;
     SIGNAL Net_44 : bit;
+    SIGNAL Net_56 : bit;
+    SIGNAL Net_57 : bit;
     SIGNAL Net_63 : bit;
     SIGNAL Net_68 : bit;
     SIGNAL SCL(0)__PA : bit;
@@ -2362,6 +2364,22 @@ BEGIN
             status_1 => open,
             status_0 => open);
 
+    \gpsSerial:TXInternalInterrupt\:interrupt
+        GENERIC MAP(
+            int_type => "10",
+            is_nmi => 0)
+        PORT MAP(
+            interrupt => Net_56,
+            clock => ClockBlock_BUS_CLK);
+
+    \gpsSerial:RXInternalInterrupt\:interrupt
+        GENERIC MAP(
+            int_type => "10",
+            is_nmi => 0)
+        PORT MAP(
+            interrupt => Net_57,
+            clock => ClockBlock_BUS_CLK);
+
     \gpsSerial:BUART:sTX:TxShifter:u0\:datapathcell
         GENERIC MAP(
             a0_init => "00000000",
@@ -2451,7 +2469,8 @@ BEGIN
             status_3 => \gpsSerial:BUART:tx_fifo_notfull\,
             status_2 => \gpsSerial:BUART:tx_status_2\,
             status_1 => \gpsSerial:BUART:tx_fifo_empty\,
-            status_0 => \gpsSerial:BUART:tx_status_0\);
+            status_0 => \gpsSerial:BUART:tx_status_0\,
+            interrupt => Net_56);
 
     \gpsSerial:BUART:sRX:RxShifter:u0\:datapathcell
         GENERIC MAP(
@@ -2531,7 +2550,8 @@ BEGIN
             status_3 => \gpsSerial:BUART:rx_status_3\,
             status_2 => open,
             status_1 => open,
-            status_0 => open);
+            status_0 => open,
+            interrupt => Net_57);
 
     \deltaTimer:TimerUDB:sCTRLReg:SyncCtl:ctrlreg\:controlcell
         GENERIC MAP(

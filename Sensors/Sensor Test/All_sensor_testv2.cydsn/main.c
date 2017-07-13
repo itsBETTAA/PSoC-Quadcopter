@@ -39,13 +39,11 @@ int main(void)
 {
     quad_init();
     serial_println("Quadcopter Sensors Initialized");
-    
     for(;;)
     {
         sensors_update();
-        CyDelay(100);
+        CyDelay(1000);
     }
-    return 0;
 }
 
 void quad_init(void){
@@ -55,9 +53,10 @@ void quad_init(void){
     gpsSerial_Start(); //initializes the gps Serial block
     xbeeSerial_Start();//initializes the xbee Serial block
     
-    millis_init();
-    quad_sensor_init();//initializes all of the quadcopter sensors
+    setGPSEcho(false);
     
+    millis_init();
+    quad_sensor_init();//initializes all of the quadcopter sensors 
 }
 
 void quad_sensor_init(void){
